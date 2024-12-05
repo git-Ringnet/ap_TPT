@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('tax_code')->nullable();
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

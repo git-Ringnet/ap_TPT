@@ -22,7 +22,7 @@ class GroupsController extends Controller
     public function index()
     {
         $title = 'Nhóm đối tượng';
-        $groups = $this->groups->getAll();  
+        $groups = $this->groups->getAll();
         $groupedGroups = $this->groups->getAllGroupedByType();
         return view('setup.groups.index', compact('title', 'groups', 'groupedGroups'));
     }
@@ -54,6 +54,20 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
+        // $validatedData = $request->validate(
+        //     [
+        //         'group_type_id' => 'required|integer|exists:group_types,id',
+        //         'group_code'    => 'required|string|max:255|unique:groups,group_code',
+        //         'group_name'    => 'required|string|max:255',
+        //         'description'   => 'nullable|string|max:500',
+        //     ],
+        //     [
+        //         'group_type_id.required' => 'Loại nhóm là bắt buộc.',
+        //         'group_code.required'    => 'Mã nhóm là bắt buộc.',
+        //         'group_name.required'    => 'Tên nhóm là bắt buộc.',
+        //     ]
+        // );
+
         $result = $this->groups->addGroup($request->all());
         if ($result == true) {
             $msg = redirect()->back()->with('warning', 'Nhóm đối tượng đã tồn tại');
@@ -69,14 +83,13 @@ class GroupsController extends Controller
     public function show(Request $request, string $id)
     {
         $group = Groups::where('id', $id)
-            ->where('workspace_id', Auth::user()->current_workspace)
             ->first();
         if ($group) {
             $title = $group->name;
         } else {
             abort('404');
             $title = '';
-            return view('tables.groups.show', compact('title', 'group', 'workspacename'));
+            return view('setup.groups.show', compact('title', 'group'));
         }
     }
 
@@ -86,7 +99,6 @@ class GroupsController extends Controller
     public function edit(string $id, Request $request)
     {
         $group = Groups::where('id', $id)
-            ->where('workspace_id', Auth::user()->current_workspace)
             ->first();
         if ($group) {
             $title = $group->name;
@@ -98,7 +110,7 @@ class GroupsController extends Controller
         $request->session()->put('idGr', $id);
         $grouptypes = Grouptype::all();
         $dataGroup = $this->groups->getDataGroup($id);
-        return view('tables.groups.edit', compact('title', 'group', 'dataGroup', 'grouptypes', 'workspacename'));
+        return view('setup.groups.edit', compact('title', 'group', 'dataGroup', 'grouptypes'));
     }
 
     /**
@@ -110,14 +122,13 @@ class GroupsController extends Controller
         $currentGroup = $this->groups->find($id);
         $data = [
             'group_code' => $request->group_code,
-            'name' => $request->group_name_display,
+            'group_name' => $request->group_name_display,
             'description' => $request->group_desc,
-            'workspace_id' => Auth::user()->current_workspace,
         ];
-        if (!empty($request->grouptype_id)) {
-            $data['grouptype_id'] = $request->grouptype_id;
+        if (!empty($request->group_type_id)) {
+            $data['group_type_id'] = $request->group_type_id;
         } else {
-            $data['grouptype_id'] = $currentGroup->grouptype_id;
+            $data['group_type_id'] = $currentGroup->group_type_id;
         }
         $this->groups->updateGroup($data, $id);
         session()->forget('idGr');
@@ -128,7 +139,7 @@ class GroupsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $workspace, string $id)
+    public function destroy(string $id)
     {
         $group = Groups::find($id);
         if (!$group) {
@@ -142,7 +153,7 @@ class GroupsController extends Controller
         //     4 => Products::where('group_id', $id)->first(),
         // ];
         // Kiểm tra nếu group type tồn tại và có bản ghi sử dụng group_id
-        if (isset($conditions[$group->grouptype_id]) && $conditions[$group->grouptype_id]) {
+        if (isset($conditions[$group->group_type_id]) && $conditions[$group->group_type_id]) {
             return back()->with('warning', 'Xóa thất bại do loại đối tượng vẫn đang còn sử dụng!');
         }
         $group->delete();

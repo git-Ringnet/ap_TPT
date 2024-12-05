@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\ProvidersController;
 use Illuminate\Support\Facades\Route;
 
 // Products
@@ -28,5 +30,12 @@ Route::middleware('auth')->group(function () {
 
 //Groups
 Route::resource('groups', GroupsController::class);
+Route::get('/dataObj', [GroupsController::class, 'dataObj'])->name('dataObj');
+Route::get('/updateDataGroup', [GroupsController::class, 'updateDataGroup'])->name('updateDataGroup');
+Route::get('/deleteOJ', [GroupsController::class, 'deleteOJ'])->name('deleteOJ');
+//Customers
+Route::resource('customers', CustomersController::class);
+//Providers
+Route::resource('providers', ProvidersController::class);
 
 require __DIR__ . '/auth.php';

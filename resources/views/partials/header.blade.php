@@ -106,19 +106,19 @@
                 <div class=" d-flex ">
                     <a href="{{ route('groups.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  active ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'groups') active @endif ">
                             Nhóm đối tượng
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('customers.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'customers') active @endif ">
                             Khách hàng
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('providers.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'providers') active @endif">
                             Nhà cung cấp
                         </button>
                     </a>
@@ -144,3 +144,70 @@
             </div>
         </div>
     </div>
+    <div class="alert notification d-flex justify-content-center align-items-center m-0 w-100"
+        style="position: absolute;top: 0;">
+        <div class="success">
+            @if (Session::has('msg'))
+                <div id="notification" class="alert alert-success alert-dismissible fade show" role="alert"
+                    style="z-index: 999999;">
+                    <div class="icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 4.38462C7.79374 4.38462 4.38462 7.79374 4.38462 12C4.38462 16.2063 7.79374 19.6154 12 19.6154C16.2063 19.6154 19.6154 16.2063 19.6154 12C19.6154 7.79374 16.2063 4.38462 12 4.38462ZM3 12C3 7.02903 7.02903 3 12 3C16.971 3 21 7.02903 21 12C21 16.971 16.971 21 12 21C7.02903 21 3 16.971 3 12Z"
+                                fill="#ffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M16.1818 9.66432C16.4522 9.93468 16.4522 10.373 16.1818 10.6434L11.5664 15.2588C11.2961 15.5291 10.8577 15.5291 10.5874 15.2588L7.81813 12.4895C7.54777 12.2192 7.54777 11.7808 7.81813 11.5105C8.08849 11.2401 8.52684 11.2401 8.7972 11.5105L11.0769 13.7902L15.2027 9.66432C15.4731 9.39396 15.9115 9.39396 16.1818 9.66432Z"
+                                fill="#ffff" />
+                        </svg>
+                    </div>
+                    <div class="message pl-3">
+                        {{ Session::get('msg') }}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span class="d-flex" aria-hidden="true"><svg width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            @endif
+        </div>
+        <div class="warning">
+            @if (Session::has('warning'))
+                <div id="notification" class="alert alert-warning alert-dismissible fade show m-0" role="alert"
+                    style="z-index: 999999;">
+                    <div class="icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 4.38462C7.79374 4.38462 4.38462 7.79374 4.38462 12C4.38462 16.2063 7.79374 19.6154 12 19.6154C16.2063 19.6154 19.6154 16.2063 19.6154 12C19.6154 7.79374 16.2063 4.38462 12 4.38462ZM12 21C7.02903 21 3 16.971 3 12C3 7.02903 7.02903 3 12 3C16.971 3 21 7.02903 21 12C21 16.971 16.971 21 12 21Z"
+                                fill="#ffff" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M12 7.15384C12.3824 7.15384 12.6923 7.4638 12.6923 7.84615V12.4615C12.6923 12.8439 12.3824 13.1538 12 13.1538C11.6177 13.1538 11.3077 12.8439 11.3077 12.4615V7.84615C11.3077 7.4638 11.6177 7.15384 12 7.15384Z"
+                                fill="#ffff" />
+                            <circle cx="12" cy="15.6923" r="0.923077" fill="#ffff" />
+                        </svg>
+                    </div>
+                    <div class="message pl-3">
+                        {{ Session::get('warning') }}
+                    </div>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span class="d-flex" aria-hidden="true"><svg width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M18 6L6 18" stroke="white" stroke-width="1.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+</body>

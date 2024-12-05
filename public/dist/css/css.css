@@ -1680,20 +1680,20 @@ input[type="number"] {
 }
 
 .custom-btn:hover {
-    color: #6e79d6 !important;
+    color: #25406E !important;
     background-color: white;
-    border: 1px solid #6e79d6;
+    border: 1px solid #25406E;
 }
 
 .custom-btn:hover span,
 .custom-btn:hover p {
-    color: #6e79d6 !important;
+    color: #25406E !important;
     font-weight: 500;
     font-size: 13px;
 }
 
 .custom-btn:hover path {
-    fill: #6e79d6;
+    fill: #25406E;
 }
 
 .btn-destroy {
