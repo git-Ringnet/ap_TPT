@@ -122,19 +122,19 @@
                             Nhà cung cấp
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('products.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
                             Hàng hóa
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('users.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
                             Nhân viên
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('warehouses.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
                             Kho

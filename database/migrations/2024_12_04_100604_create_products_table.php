@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('product_code');
             $table->text('product_name')->nullable();
             $table->text('brand')->nullable();
-            $table->integer('warranty')->nullable();
+            $table->integer('warranty')->default(0);
             $table->timestamps();
         });
     }
