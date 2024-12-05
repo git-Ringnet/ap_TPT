@@ -6,8 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Trang chủ')</title>
-<<<<<<< Updated upstream
-=======
     <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/favicon.ico') }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
@@ -43,7 +41,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
     <!-- Thêm các CSS chung cho toàn bộ trang -->
->>>>>>> Stashed changes
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Thêm jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="

@@ -5,8 +5,7 @@
         <!-- Main Sidebar Container -->
         <div class="d-flex align-items-center justify-content-between w-100 height-47">
             <div class="align-baseline opacity-0">
-                <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M15 28.125C18.481 28.125 21.8194 26.7422 24.2808 24.2808C26.7422 21.8194 28.125 18.481 28.125 15C28.125 11.519 26.7422 8.18064 24.2808 5.71922C21.8194 3.25781 18.481 1.875 15 1.875C11.519 1.875 8.18064 3.25781 5.71922 5.71922C3.25781 8.18064 1.875 11.519 1.875 15C1.875 18.481 3.25781 21.8194 5.71922 24.2808C8.18064 26.7422 11.519 28.125 15 28.125ZM9.60187 20.3981L7.70813 22.2919C6.26585 20.8497 5.28363 19.0122 4.88569 17.0117C4.48774 15.0113 4.69193 12.9377 5.47245 11.0534C6.25296 9.16897 7.57474 7.55835 9.27063 6.42517C10.9665 5.292 12.9604 4.68717 15 4.68717C17.0396 4.68717 19.0335 5.292 20.7294 6.42517C22.4253 7.55835 23.747 9.16897 24.5276 11.0534C25.3081 12.9377 25.5123 15.0113 25.1143 17.0117C24.7164 19.0122 23.7341 20.8497 22.2919 22.2919L20.3981 20.3981C19.8757 19.8755 19.2554 19.461 18.5727 19.1782C17.89 18.8954 17.1583 18.7499 16.4194 18.75H13.5806C12.8417 18.7499 12.11 18.8954 11.4273 19.1782C10.7446 19.461 10.1243 19.8755 9.60187 20.3981Z"
                         fill="#151516" />
@@ -59,20 +58,42 @@
                 </svg>
             </div>
         </div>
-        <div class="px-3 py-2 border-bottom border-top d-flex">
-            <div>
+        <div class="px-3 py-2 border-bottom border-top bg-grey  d-block ">
+            <div class=" d-flex ">
                 <a href="#" class="height-36">
                     <button type="button"
-                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  active ">
                         Nhóm đối tượng
                     </button>
                 </a>
-            </div>
-            <div>
                 <a href="#" class="height-36">
                     <button type="button"
-                        class="p-1 my-1 h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
-                        Công nợ khách hàng
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                        Khách hàng
+                    </button>
+                </a>
+                <a href="#" class="height-36">
+                    <button type="button"
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                        Nhà cung cấp
+                    </button>
+                </a>
+                <a href="#" class="height-36">
+                    <button type="button"
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                        Hàng hóa
+                    </button>
+                </a>
+                <a href="#" class="height-36">
+                    <button type="button"
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                        Nhân viên
+                    </button>
+                </a>
+                <a href="#" class="height-36">
+                    <button type="button"
+                        class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                        Kho
                     </button>
                 </a>
             </div>
