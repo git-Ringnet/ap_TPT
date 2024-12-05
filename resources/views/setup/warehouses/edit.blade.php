@@ -1,5 +1,4 @@
-@include('partials.header')
-@section('title', $title)
+@include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'warehouses'])
 
 <!-- Assuming $warehouse is passed from the controller -->
 <form action="{{ route('warehouses.update', $warehouse->id) }}" method="POST">

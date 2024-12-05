@@ -1,6 +1,4 @@
-@include('partials.header')
-@section('title', $title)
-
+@include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'products'])
 <!-- Assuming $product is passed from the controller -->
 <form action="{{ route('products.update', $product->id) }}" method="POST">
     @csrf

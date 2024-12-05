@@ -1,5 +1,4 @@
-@include('partials.header')
-@section('title', $title)
+@include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'users'])
 <form action="{{ route('users.update', $user->id) }}" method="POST">
     @csrf
     @method('PUT')

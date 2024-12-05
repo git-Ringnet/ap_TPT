@@ -1,5 +1,4 @@
-@include('partials.header')
-@section('title', $title)
+@include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'products'])
 <form action="{{ route('products.store') }}" method="POST">
     @csrf
     <div class="content-wrapper m-0 min-height--none" style="background: none;">

@@ -1,5 +1,4 @@
-@include('partials.header')
-@section('title', $title)
+@include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'warehouses'])
 <div class="content-header-fixed px-1">
     <div class="content__header--inner">
         <div class="d-flex align-items-center ml-3">

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Trang chủ')</title>
+    <title>@yield('title', $title ?? 'Trang chủ')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/favicon.ico') }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
@@ -124,19 +124,19 @@
                     </a>
                     <a href="{{ route('products.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'products') active @endif">
                             Hàng hóa
                         </button>
                     </a>
                     <a href="{{ route('users.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'users') active @endif">
                             Nhân viên
                         </button>
                     </a>
                     <a href="{{ route('warehouses.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 ">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'warehouses') active @endif">
                             Kho
                         </button>
                     </a>
@@ -144,4 +144,3 @@
             </div>
         </div>
     </div>
-</body>
