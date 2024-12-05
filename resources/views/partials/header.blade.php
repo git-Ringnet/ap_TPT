@@ -55,7 +55,7 @@
         </div>
         <div class="px-3 py-2 border-bottom border-top bg-grey  d-block ">
             <div class=" d-flex ">
-                <a href="#" class="height-36">
+                <a href="{{ route('groups.index') }}" class="height-36">
                     <button type="button"
                         class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  active ">
                         Nhóm đối tượng
