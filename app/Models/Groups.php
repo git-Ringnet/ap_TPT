@@ -17,14 +17,18 @@ class Groups extends Model
         'group_name',
         'description',
     ];
+    public function grouptype()
+    {
+        return $this->belongsTo(GroupType::class, 'group_type_id', 'id');
+    }
     public function getAll()
     {
-        return Groups::with('group_types')->get();
+        return Groups::with('grouptype')->get();
     }
 
     public function getAllGroupedByType()
     {
-        $groups = Groups::with('group_types')->get();
+        $groups = Groups::with('grouptype')->get();
 
         $groupedGroups = $groups->groupBy(function ($item) {
             return $item->groupType->group_name;
