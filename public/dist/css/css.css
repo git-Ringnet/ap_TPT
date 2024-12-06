@@ -961,7 +961,7 @@ td p {
 }
 .content-header-fixed-report-1 {
     position: fixed;
-    top: 138px;
+    top: 95px;
     left: 0;
     right: 0;
     z-index: 99;
@@ -970,7 +970,7 @@ td p {
 }
 
 .margin-top-118{
-    margin-top: 11.8rem;
+    margin-top: 9.2rem;
 }
 
 .margin-top-75 {
@@ -1000,7 +1000,7 @@ td p {
 @media (min-width: 1921px) {
     .content-header-fixed-report {
         position: fixed;
-        top: 100px;
+        top: 95px;
         left: 0;
         right: 0;
         z-index: 99;
@@ -1009,7 +1009,7 @@ td p {
     }
     .content-header-fixed-report-1 {
         position: fixed;
-        top: 100px;
+        top: 95px;
         left: 0;
         right: 0;
         z-index: 99;

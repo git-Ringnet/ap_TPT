@@ -79,7 +79,7 @@
                             NGHIỆP VỤ
                         </a>
                         <div class="dropdown-menu" style="">
-                            <a class="dropdown-item text-13-black" href="#">Phiếu nhập hàng
+                            <a class="dropdown-item text-13-black" href="{{ route('imports.index') }}">Phiếu nhập hàng
                             </a>
                             <a class="dropdown-item text-13-black" href="#">Phiếu xuất hàng
                             </a>
@@ -120,8 +120,12 @@
                     </div>
                 </div>
             </div>
-            <div class="px-3 py-2 border-bottom border-top bg-grey  d-block ">
-                <div class=" d-flex ">
+            <div
+                class="px-3 py-2 border-bottom border-top bg-grey @if (
+                    (!empty($activeGroup) && $activeGroup == 'systemFirst') ||
+                        (!empty($activeGroup) && $activeGroup == 'manageProfess') ||
+                        (!empty($activeGroup) && $activeGroup == 'statistic')) d-block @else d-none @endif">
+                <div class="@if (!empty($activeGroup) && $activeGroup == 'systemFirst') d-flex @else d-none @endif">
                     <a href="{{ route('groups.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'groups') active @endif ">
@@ -156,6 +160,14 @@
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'warehouses') active @endif">
                             Kho
+                        </button>
+                    </a>
+                </div>
+                <div class="@if (!empty($activeGroup) && $activeGroup == 'manageProfess') d-flex @else d-none @endif">
+                    <a href="{{ route('imports.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'imports') active @endif ">
+                            Phiếu nhập hàng
                         </button>
                     </a>
                 </div>

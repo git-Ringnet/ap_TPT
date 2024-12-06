@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -37,5 +38,7 @@ Route::get('/deleteOJ', [GroupsController::class, 'deleteOJ'])->name('deleteOJ')
 Route::resource('customers', CustomersController::class);
 //Providers
 Route::resource('providers', ProvidersController::class);
+//Imports
+Route::resource('imports', ImportsController::class);
 
 require __DIR__ . '/auth.php';
