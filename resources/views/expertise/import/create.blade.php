@@ -1,8 +1,8 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'imports'])
 @section('title', $title)
-<form id="form-submit" action="#" method="POST">
+<form id="form-submit" action="{{ route('imports.store') }}" method="POST">
     @csrf
-    <div class="content-wrapper--2Column m-0 min-height--none">
+    <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
                 <div class="content__heading--left opacity-0">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="#">
+                        <a href="{{ route('imports.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -53,10 +53,6 @@
             </div>
         </div>
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
-            <div id="contextMenuPBH" class="dropdown-menu"
-                style="display: none; background: #ffffff; position: absolute; width:13%;  padding: 3px 10px;  box-shadow: 0 0 10px -3px rgba(0, 0, 0, .3); border: 1px solid #ccc;">
-                <a class="dropdown-item text-13-black" href="#" data-option="donhang">Tạo phiếu xuất kho</a>
-            </div>
             {{-- Thông tin khách hàng --}}
             <div class="border">
                 <div>
@@ -65,91 +61,99 @@
                             THÔNG TIN PHIẾU NHẬP HÀNG
                         </p>
                     </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3 required-label" style="flex: 1.5;">Mã phiếu</span>
-                            <input type="text" id="datePicker" style="flex:2;" placeholder="Nhập thông tin"
-                                class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3 required-label" style="flex: 1.5;">Người lập
-                                phiếu</span>
-                            <input value="" autocomplete="off" placeholder="Nhập thông tin"
-                                class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;"
-                                name="quotation_number" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
-                            <input id="date_delivery" placeholder="Nhập thông tin"
-                                class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;" />
-                        </div>
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
-                                phiếu</span>
-                            <input name="guestName" placeholder="Nhập thông tin" autocomplete="off"
-                                class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style=" flex:2;" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 btn-click required-label" style="flex: 1.6;"> Nhà cung cấp </span>
-                            <input name="guestName" placeholder="Nhập thông tin" autocomplete="off"
-                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style="flex:2;" />
-                            <div class="">
-                                <div id="myUL"
-                                    class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                    style="z-index: 99;display: none;">
-                                    <div class="p-1">
-                                        <div class="position-relative">
-                                            <input type="text" placeholder="Nhập công ty"
-                                                class="pr-4 w-100 input-search bg-input-guest" id="companyFilter">
-                                            <span id="search-icon" class="search-icon">
-                                                <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <ul class="m-0 p-0 scroll-data">
-                                        {{-- @foreach ($guest as $guest_value)
-                                            <li class="p-2 align-items-center text-wrap border-top"
-                                                data-id="{{ $guest_value->id }}">
-                                                <a href="#" title="{{ $guest_value->guest_name_display }}"
-                                                    style="flex:2;" id="{{ $guest_value->id }}"
-                                                    name="search-info" class="search-info">
-                                                    <span
-                                                        class="text-13-black">{{ $guest_value->guest_name_display }}</span>
-                                                </a>
-                                            </li>
-                                        @endforeach --}}
-                                    </ul>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-4 m-0 p-0">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
+                                    style="flex: 1.5;">Mã phiếu</span>
+                                <input type="text" name="import_code" style="flex:2;" placeholder="Nhập thông tin"
+                                    required value="{{ $import_code }}"
+                                    class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
+                                    style="flex: 1.5;">Ngày lập phiếu</span>
+                                <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style=" flex:2;" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">Ghi
+                                    chú</span>
+                                <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="note" />
                             </div>
                         </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3" style="flex: 1.5;">Địa chỉ</span>
-                            <input name="address_delivery" placeholder="Nhập thông tin" autocomplete="off"
-                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                        <div class="col-md-4 m-0 p-0">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
+                                    style="flex: 1.5;">Người lập phiếu</span>
+                                <input autocomplete="off" placeholder="Nhập thông tin" required
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;"
+                                    name="user_id" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black btn-click required-label font-weight-bold"
+                                    style="flex: 1.6;">Nhà cung cấp</span>
+                                <input name="provider_id" placeholder="Nhập thông tin" autocomplete="off" required
+                                    class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    style="flex:2;" />
+                                <div class="">
+                                    <div id="myUL"
+                                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
+                                        style="z-index: 99;display: none;">
+                                        <div class="p-1">
+                                            <div class="position-relative">
+                                                <input type="text" placeholder="Nhập công ty"
+                                                    class="pr-4 w-100 input-search bg-input-guest" id="companyFilter">
+                                                <span id="search-icon" class="search-icon">
+                                                    <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <ul class="m-0 p-0 scroll-data">
+                                            @foreach ($providers as $provider_value)
+                                                <li class="p-2 align-items-center text-wrap border-top"
+                                                    data-id="{{ $provider_value->id }}">
+                                                    <a href="#" title="{{ $provider_value->provider_name }}"
+                                                        style="flex:2;" id="{{ $provider_value->id }}"
+                                                        name="search-info" class="search-info">
+                                                        <span
+                                                            class="text-13-black">{{ $provider_value->provider_name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13 text-nowrap mr-3" style="flex: 1.5;">Ghi chú</span>
-                            <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;"
-                                name="reference_number" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                        <div class="col-md-4 m-0 p-0">
+                            <div style="width: 99%;"
+                                class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">SĐT
+                                    liên hệ</span>
+                                <input name="phone" placeholder="Nhập thông tin" type="number"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    style="flex:2;" />
+                            </div>
+                            <div style="width: 99%;"
+                                class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Địa
+                                    chỉ</span>
+                                <input name="address" placeholder="Nhập thông tin" autocomplete="off"
+                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                            </div>
+                            <div style="width: 99%;"
+                                class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -165,37 +169,25 @@
                         <table class="table" id="inputcontent">
                             <thead>
                                 <tr style="height:44px;">
-                                    <th class="border-right px-2 p-0" style="width: 10%">
-                                        <span class="text-table text-secondary">Mã hàng</span>
+                                    <th class="border-right px-2 p-0" style="width: 8%">
+                                        <span class="text-table text-13-black font-weight-bold pl-3">Mã hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width: 15%;z-index:99;">
-                                        <span class="text-table text-secondary">Tên hàng</span>
+                                    <th class="border-right px-2 p-0 text-left" style="width: 15%; z-index:99;">
+                                        <span class="text-table text-13-black font-weight-bold">Tên hàng</span>
                                     </th>
                                     <th class="border-right px-2 p-0 text-left" style="width: 8%;">
-                                        <span class="text-table text-secondary">Hãng</span>
+                                        <span class="text-table text-13-black font-weight-bold">Hãng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width: 8%;">
-                                        <span class="text-table text-secondary">Số lượng</span>
+                                    <th class="border-right px-2 p-0" style="width: 8%;">
+                                        <span class="text-table text-13-black font-weight-bold">Số lượng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width: 10%;">
-                                        <span class="text-table text-secondary">Đơn giá</span>
+                                    <th class="border-right px-2 p-0" style="width: 10%;">
+                                        <span class="text-table text-13-black font-weight-bold">Serial Number</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width: 10%;">
-                                        <span class="text-table text-secondary">KM</span>
+                                    <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
+                                        <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-center" style="width: 6%;">
-                                        <span class="text-table text-secondary">Thuế</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width: 10%;">
-                                        <span class="text-table text-secondary">Thành tiền</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-center"style="width: 10%;">
-                                        <span class="text-table text-secondary">Kho</span>
-                                    </th>
-                                    <th class="border-right note px-2 p-0 text-left">
-                                        <span class="text-table text-secondary">Ghi chú</span>
-                                    </th>
-                                    <th class=""></th>
+                                    <th class="" style="width: 5%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -218,7 +210,7 @@
                                                 d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
                                                 fill="#42526E" />
                                         </svg>
-                                        <span class="text-table">Thêm sản phẩm</span>
+                                        <span class="text-table font-weight-bold">Thêm sản phẩm</span>
                                     </button>
                                 </div>
                             </div>

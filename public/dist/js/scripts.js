@@ -3,12 +3,12 @@ function handleSmallScreen() {
     $("#sideGuest").on("click", function () {
         if (countClick === 1) {
             $("#mySidenav").css({
-                width: "310px",
-                cssText: "width: 310px !important",
+                width: "352px",
+                cssText: "width: 352px !important",
             });
             $("#main").css({
-                marginRight: "290px",
-                cssText: "margin-right: 290px !important",
+                marginRight: "352px",
+                cssText: "margin-right: 352px !important",
             });
             $("#show_info_Guest").css({
                 opacity: "1",
@@ -36,8 +36,8 @@ function handleLargeScreen() {
         if (countClick === 1) {
             $("#mySidenav").css({ width: "0", cssText: "width: 0 !important" });
             $("#main").css({
-                marginRight: "0",
-                cssText: "margin-right: 0 !important;",
+                marginRight: "10px",
+                cssText: "margin-right: 10px !important;",
             });
             $("#show_info_Guest").css({
                 opacity: "0",
@@ -47,18 +47,18 @@ function handleLargeScreen() {
             countClick += 1;
         } else if (countClick === 2) {
             $("#mySidenav").css({
-                width: "310px",
-                cssText: "width: 310px !important",
+                width: "352px",
+                cssText: "width: 352px !important",
             });
             $("#main").css({
-                marginRight: "310px",
-                cssText: "margin-right: 310px !important;",
+                marginRight: "352px",
+                cssText: "margin-right: 352px !important;",
             });
             $("#show_info_Guest").css({
                 opacity: "1",
                 cssText: "opacity: 1 !important",
             });
-            $("#title--fixed").css({ cssText: "right: 310px" });
+            $("#title--fixed").css({ cssText: "right: 352px" });
             countClick = 1;
         }
     });

@@ -3,17 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Imports;
+use App\Models\Providers;
 use Illuminate\Http\Request;
 
 class ImportsController extends Controller
 {
+    private $imports;
+
+    public function __construct()
+    {
+        $this->imports = new Imports();
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $title = "Phiếu nhập hàng";
-        return view('expertise.import.index', compact('title'));
+        $imports = $this->imports->getAllImports();
+        return view('expertise.import.index', compact('title', 'imports'));
     }
 
     /**
@@ -22,7 +30,9 @@ class ImportsController extends Controller
     public function create()
     {
         $title = "Tạo phiếu nhập hàng";
-        return view('expertise.import.create', compact('title'));
+        $providers = Providers::all();
+        $import_code = $this->imports->generateImportCode();
+        return view('expertise.import.create', compact('title', 'providers', 'import_code'));
     }
 
     /**
@@ -30,15 +40,18 @@ class ImportsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->imports->addImport($request->all());
+        return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Imports $imports)
+    public function show(String $id)
     {
-        //
+        $import = Imports::findOrFail($id);
+        $title = "Xem chi tiết phiếu nhập hàng";
+        return view('expertise.import.see', compact('title', 'import'));
     }
 
     /**

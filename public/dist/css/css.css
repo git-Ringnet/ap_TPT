@@ -1486,7 +1486,7 @@ input[type="number"] {
 .text-13-black {
     font-size: 13px;
     color: #282a30 !important;
-    font-weight: 500 !important;
+    font-weight: 500;
 }
 
 .text-13-red {
@@ -2674,7 +2674,7 @@ input[type="checkbox"]:checked {
 
 /*Sidenav*/
 #mySidenav {
-    width: 310px;
+    width: 352px;
     height: 100vh;
 }
 
@@ -2702,7 +2702,7 @@ input[type="checkbox"]:checked {
 
 #main {
     transition: margin-right 0.5s;
-    margin-right: 310px;
+    margin-right: 352px;
 }
 
 #show_info_Guest {
