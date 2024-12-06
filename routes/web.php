@@ -5,6 +5,7 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ProvidersController;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::resource('products', ProductController::class);
 Route::resource('users', UserController::class);
 Route::resource('warehouses', WarehouseController::class);
+Route::resource('receivings', ReceivingController::class);
 
 Route::get('/', function () {
     return view('welcome');
