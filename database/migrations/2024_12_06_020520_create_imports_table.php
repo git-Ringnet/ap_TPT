@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('import_code');
             $table->integer('user_id');
-            $table->integer('phone')->nullable();
+            $table->string('phone')->nullable();
             $table->dateTime('date_create');
             $table->integer('provider_id');
             $table->text('address')->nullable();

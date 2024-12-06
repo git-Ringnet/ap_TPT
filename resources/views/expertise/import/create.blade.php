@@ -5,27 +5,7 @@
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
-                <div class="content__heading--left opacity-0">
-                    <span class="ml-4">Quản lý nghiệp vụ</span>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                            fill="none">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M7.69269 13.9741C7.43577 13.7171 7.43577 13.3006 7.69269 13.0437L10.7363 10.0001L7.69269 6.95651C7.43577 6.69959 7.43577 6.28303 7.69269 6.02611C7.94962 5.76918 8.36617 5.76918 8.6231 6.02611L12.1319 9.53488C12.3888 9.7918 12.3888 10.2084 12.1319 10.4653L8.6231 13.9741C8.36617 14.231 7.94962 14.231 7.69269 13.9741Z"
-                                fill="#26273B" fill-opacity="0.8" />
-                        </svg>
-                    </span>
-                    <span class="nearLast-span">Phiếu bán hàng</span>
-                    <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                            fill="none">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                d="M7.69269 13.9741C7.43577 13.7171 7.43577 13.3006 7.69269 13.0437L10.7363 10.0001L7.69269 6.95651C7.43577 6.69959 7.43577 6.28303 7.69269 6.02611C7.94962 5.76918 8.36617 5.76918 8.6231 6.02611L12.1319 9.53488C12.3888 9.7918 12.3888 10.2084 12.1319 10.4653L8.6231 13.9741C8.36617 14.231 7.94962 14.231 7.69269 13.9741Z"
-                                fill="#26273B" fill-opacity="0.8" />
-                        </svg>
-                    </span>
-                    <span class="last-span">Tạo phiếu bán hàng</span>
-                </div>
+                <div class="content__heading--left opacity-0"></div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
                         <a href="{{ route('imports.index') }}">
@@ -197,8 +177,7 @@
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
-                                    <button type="button" data-toggle="dropdown" id="add-field-btn" data-name1="BG"
-                                        data-des="Thêm sản phẩm"
+                                    <button type="button" data-toggle="modal" data-target="#modal-id"
                                         class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                         style="margin-right:10px">
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -215,9 +194,11 @@
                                 </div>
                             </div>
                         </section>
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" />
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
+<script src="{{ asset('js/addproduct.js') }}"></script>

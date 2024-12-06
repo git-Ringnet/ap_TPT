@@ -18,7 +18,7 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
-                        <button type="" class="custom-btn d-flex align-items-center h-100 ml-1">
+                        <button type="button" class="custom-btn d-flex align-items-center h-100 ml-1">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"

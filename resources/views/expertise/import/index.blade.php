@@ -190,7 +190,7 @@
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
-                                                    <a href="#">
+                                                    <a href="{{ route('imports.edit', $item->id) }}">
                                                         <div class="m-0 px-2 py-1 mx-2 rounded">
                                                             <svg width="16" height="16" viewBox="0 0 16 16"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -209,7 +209,8 @@
                                                         <div class="rounded">
                                                             <form
                                                                 onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                                action="#" method="POST" class="d-inline">
+                                                                action="{{ route('imports.destroy', $item->id) }}"
+                                                                method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-sm">
