@@ -229,8 +229,7 @@
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
-                                    <button type="button" data-toggle="dropdown" id="add-field-btn" data-name1="BG"
-                                        data-des="Thêm sản phẩm"
+                                    <button type="button" data-toggle="modal" data-target="#modal-id"
                                         class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                         style="margin-right:10px">
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -247,12 +246,14 @@
                                 </div>
                             </div>
                         </section>
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" />
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
+<script src="{{ asset('js/addproduct.js') }}"></script>
 <script>
     // Checkbox hãng tiếp nhận và loại phiếu
     function toggleCheckbox(clickedCheckbox, groupName) {
