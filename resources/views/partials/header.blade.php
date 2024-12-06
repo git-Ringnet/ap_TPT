@@ -63,8 +63,14 @@
                             THIẾT LẬP
                         </a>
                         <div class="dropdown-menu" style="">
-                            <a class="dropdown-item text-13-black" href="#">Nhóm
+                            <a class="dropdown-item text-13-black" href="{{ route('groups.index') }}">Nhóm
                                 đối tượng</a>
+                            <a class="dropdown-item text-13-black" href="{{ route('customers.index') }}">Khách hàng</a>
+                            <a class="dropdown-item text-13-black" href="{{ route('providers.index') }}">Nhà cung
+                                cấp</a>
+                            <a class="dropdown-item text-13-black" href="{{ route('products.index') }}">Hàng hoá</a>
+                            <a class="dropdown-item text-13-black" href="{{ route('users.index') }}">Nhân viên</a>
+                            <a class="dropdown-item text-13-black" href="{{ route('warehouses.index') }}">Kho</a>
                         </div>
                     </div>
                     <div class="dropdown">
@@ -73,7 +79,19 @@
                             NGHIỆP VỤ
                         </a>
                         <div class="dropdown-menu" style="">
-                            <a class="dropdown-item text-13-black" href="#">Phiếu bán hàng
+                            <a class="dropdown-item text-13-black" href="#">Phiếu nhập hàng
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Phiếu xuất hàng
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Tra cứu tồn kho
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Tra cứu bảo hành
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Phiếu tiếp nhận
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Phiếu trả hàng
+                            </a>
+                            <a class="dropdown-item text-13-black" href="#">Phiếu báo giá
                             </a>
                         </div>
                     </div>
