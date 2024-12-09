@@ -214,15 +214,16 @@
         // Khởi tạo một Map để lưu sản phẩm duy nhất
         const uniqueProducts = new Map();
 
-        // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
+        // Duyệt qua từng hàng có thuộc tính data-product-id trong tbody
         $('#tbody-product-data tr[data-product-id]').each(function() {
             const $row = $(this); // Dòng hiện tại
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val();
             const note_seri = $row.find('.note_seri').val();
 
-            // Tạo khóa duy nhất (có thể thay đổi theo yêu cầu)
-            const uniqueKey = `${product_id}-${serial}`;
+            // Tạo khóa duy nhất bao gồm cả note_seri
+            const uniqueKey = `${product_id}-${serial}-${note_seri}`;
+
             // Thêm vào Map nếu chưa tồn tại
             if (!uniqueProducts.has(uniqueKey)) {
                 uniqueProducts.set(uniqueKey, {
@@ -232,6 +233,7 @@
                 });
             }
         });
+
         // Chuyển Map thành mảng
         const uniqueProductsArray = Array.from(uniqueProducts.values());
 

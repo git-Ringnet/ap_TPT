@@ -178,7 +178,7 @@ function createSerialRow(index, product, serial) {
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
-                    class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue"
+                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
                     name="note_seri[]" value="">
             </td>
             <td class="p-2 align-top activity border-bottom border-top-0">
