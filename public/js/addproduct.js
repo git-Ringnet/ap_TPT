@@ -143,11 +143,13 @@ function createSerialRow(index, product, serial) {
     return `
         <tr id="serials-data" class="bg-white" data-index="${
             index + 1
-        }" data-product-code="${product.product_code}">
+        }" data-product-code="${product.product_code}"  data-product-id="${
+        product.id
+    }">
          <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly
-                    name="product_id" value="${product.id || ""}">
+                    name="product_id[]" value="${product.id || ""}">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <input type="text" autocomplete="off"

@@ -210,37 +210,26 @@
 <script>
     // Khi bấm vào nút
     $('#btn-get-unique-products').click(function(e) {
-        // e.preventDefault();
+        // e.preventDefault(); // Nếu cần, hãy giữ lại để ngăn mặc định
         // Khởi tạo một Map để lưu sản phẩm duy nhất
         const uniqueProducts = new Map();
-        // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
-        $('#tbody-product-data tr[data-product-code]').each(function() {
-            const $row = $(this); // Dòng hiện tại
-            const productId = $row.find('.product_id').val(); // Mã sản phẩm
-            const productCode = $row.find('.product_code').val(); // Mã sản phẩm
-            const productName = $row.find('.product_name').val(); // Tên sản phẩm
-            const brand = $row.find('.brand').val(); // Hãng
-            const quantity = $row.find('input[name=""][readonly]').val(); // Số lượng
-            const serial = $row.find('.serial').val(); // Serial Number
-            const note_seri = $row.find('.note_seri_seri').val(); // Ghi chú
 
-            // Kiểm tra xem sản phẩm đã tồn tại trong Map hay chưa
-            if (!uniqueProducts.has(productCode)) {
-                // Nếu chưa, thêm sản phẩm mới vào Map
-                uniqueProducts.set(productCode, {
-                    productId,
-                    productCode,
-                    productName,
-                    brand,
-                    quantity,
-                    serial: [serial], // Danh sách serial numbers
-                    note_seri: [note_seri] // Danh sách ghi chú
+        // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
+        $('#tbody-product-data tr[data-product-id]').each(function() {
+            const $row = $(this); // Dòng hiện tại
+            const product_id = $row.find('.product_id').val();
+            const serial = $row.find('.serial').val();
+            const note_seri = $row.find('.note_seri').val();
+
+            // Tạo khóa duy nhất (có thể thay đổi theo yêu cầu)
+            const uniqueKey = `${product_id}-${serial}`;
+            // Thêm vào Map nếu chưa tồn tại
+            if (!uniqueProducts.has(uniqueKey)) {
+                uniqueProducts.set(uniqueKey, {
+                    product_id,
+                    serial,
+                    note_seri
                 });
-            } else {
-                // Nếu đã tồn tại, cập nhật serial và note_seri
-                const existingProduct = uniqueProducts.get(productCode);
-                existingProduct.serial.push(serial);
-                existingProduct.note_seri.push(note_seri);
             }
         });
         // Chuyển Map thành mảng
