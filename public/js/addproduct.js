@@ -34,9 +34,26 @@ $(document).ready(function () {
 
     // Hàm xóa dòng
     $(document).on("click", ".delete-row", function (event) {
-        event.preventDefault(); // Ngăn nút submit form
-        $(this).closest("tr").remove(); // Xóa dòng chứa nút "Xoá" được bấm
-        updateRowNumbers(); // Cập nhật lại số thứ tự
+        event.preventDefault();
+        const currentRow = $(this).closest("tr");
+        const productCode = currentRow.data("product-code");
+        currentRow.remove();
+        const remainingRows = $(
+            `#tbody-product-data tr[data-product-code="${productCode}"]`
+        ).not("#serials-count");
+
+        if (remainingRows.length === 0) {
+            $(
+                `#tbody-product-data tr#serials-count[data-product-code="${productCode}"]`
+            ).remove();
+        } else {
+            const serialCount = remainingRows.length;
+            const serialCountRow = $(
+                `#tbody-product-data tr#serials-count[data-product-code="${productCode}"]`
+            );
+            serialCountRow.find('input[name="serial_count"]').val(serialCount);
+        }
+        updateRowNumbers();
     });
 
     // Hàm cập nhật số thứ tự
@@ -68,6 +85,7 @@ function getProduct() {
     let productCode = $("#product_code_input").val().trim();
     let productName = $("#product_name_input").val().trim();
     let productBrand = $("#product_brand_input").val().trim();
+    let productId = $("#product_id_input").val().trim();
     if (productCode !== "") {
         product.product_code = productCode;
     }
@@ -76,6 +94,9 @@ function getProduct() {
     }
     if (productBrand !== "") {
         product.product_brand = productBrand;
+    }
+    if (productId !== "") {
+        product.id = productId;
     }
 
     return product;
@@ -111,7 +132,7 @@ $(document).on("click", ".submit-button", function (event) {
         $tbody.append(newRow); // Thêm dòng mới vào tbody
     });
     // Thêm hàng cuối cùng để đếm số lượng serial
-    let countRow = createCountRow(serialNumbers.length);
+    let countRow = createCountRow(serialNumbers.length, product.product_code);
     $tbody.append(countRow); // Thêm dòng đếm số lượng vào cuối bảng
 
     $(".btn-destroy-modal").click(); // Đóng modal
@@ -123,6 +144,11 @@ function createSerialRow(index, product, serial) {
         <tr id="serials-data" class="bg-white" data-index="${
             index + 1
         }" data-product-code="${product.product_code}">
+         <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly
+                    name="product_id" value="${product.id || ""}">
+            </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly
@@ -165,16 +191,16 @@ function createSerialRow(index, product, serial) {
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
-function createCountRow(count) {
+function createCountRow(count, product_code) {
     return `
-        <tr id="serials-count" class="bg-white">
-            <td colspan="4" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">Số lượng serial:</td>
+        <tr id="serials-count" class="bg-white" data-product-code="${product_code}">
+            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">Số lượng serial:</td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="serial_count" value="${count}">
             </td>
-            <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
     `;
 }
@@ -218,8 +244,10 @@ $(document).ready(function () {
         const dataName = $(this).data("name");
         const dataCode = $(this).data("code");
         const dataBrand = $(this).data("brand");
+        const data_id = $(this).data("id");
         $("#product_code_input").val(dataCode);
         $("#product_name_input").val(dataName);
         $("#product_brand_input").val(dataBrand);
+        $("#product_id_input").val(data_id);
     });
 });

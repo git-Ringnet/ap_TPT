@@ -50,6 +50,7 @@
                             </thead>
                             <tbody>
                                 <tr class="height-40 position-relative">
+                                    <input type="hidden" name="product_id" id="product_id_input">
                                     <td class="text-13-black border py-0 pl-3">
                                         <input type="text" id="product_code_input" name="product_code_input"
                                             style="flex:2;" placeholder="Chọn thông tin" readonly
@@ -78,7 +79,8 @@
                                                                 data-code="{{ $product_value->product_code }}"
                                                                 data-name="{{ $product_value->product_name }}"
                                                                 data-brand="{{ $product_value->brand }}"
-                                                                name="info-product" class="search-info">
+                                                                data-id="{{ $product_value->id }}" name="info-product"
+                                                                class="search-info">
                                                                 <span
                                                                     class="text-13-black">{{ $product_value->product_name }}</span>
                                                             </a>
@@ -128,8 +130,7 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row"
-                                            onclick="deleteRow(this)">Xoá</button>
+                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -139,8 +140,7 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row"
-                                            onclick="deleteRow(this)">Xoá</button>
+                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -150,8 +150,7 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row"
-                                            onclick="deleteRow(this)">Xoá</button>
+                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -161,8 +160,7 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row"
-                                            onclick="deleteRow(this)">Xoá</button>
+                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -172,8 +170,7 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row"
-                                            onclick="deleteRow(this)">Xoá</button>
+                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
                                     </td>
                                 </tr>
                             </tbody>

@@ -216,6 +216,7 @@
         // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
         $('#tbody-product-data tr[data-product-code]').each(function() {
             const $row = $(this); // Dòng hiện tại
+            const productId = $row.find('.product_id').val(); // Mã sản phẩm
             const productCode = $row.find('.product_code').val(); // Mã sản phẩm
             const productName = $row.find('.product_name').val(); // Tên sản phẩm
             const brand = $row.find('.brand').val(); // Hãng
@@ -227,6 +228,7 @@
             if (!uniqueProducts.has(productCode)) {
                 // Nếu chưa, thêm sản phẩm mới vào Map
                 uniqueProducts.set(productCode, {
+                    productId,
                     productCode,
                     productName,
                     brand,
