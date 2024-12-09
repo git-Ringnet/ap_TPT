@@ -99,7 +99,11 @@ class ImportsController extends Controller
      */
     public function show(String $id)
     {
-        $import = Imports::findOrFail($id);
+        $import = Imports::leftJoin("providers", "providers.id", "imports.provider_id")
+            ->leftJoin("users", "users.id", "imports.user_id")
+            ->select("providers.provider_name", "users.name", "imports.*")
+            ->where("imports.id", $id)
+            ->first();
         $title = "Xem chi tiết phiếu nhập hàng";
         return view('expertise.import.see', compact('title', 'import'));
     }

@@ -118,29 +118,14 @@
                                     phiếu</span>
                                 <input autocomplete="off"
                                     class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"style="flex:2;"
-                                    readonly name="user_id" />
+                                    readonly name="user_id" value="{{ $import->name }}" />
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click font-weight-bold" style="flex: 1.6;">Nhà
                                     cung cấp</span>
-                                <input name="provider_id" autocomplete="off" readonly
+                                <input name="provider_id" autocomplete="off" readonly value="{{ $import->provider_name }}"
                                     class="text-13-black w-100 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
-                                <div class="">
-                                    <div id="myUL"
-                                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                        style="z-index: 99;display: none;">
-                                        <div class="p-1">
-                                            <div class="position-relative">
-                                                <input type="text" placeholder="Nhập công ty"
-                                                    class="pr-4 w-100 input-search bg-input-guest" id="companyFilter">
-                                                <span id="search-icon" class="search-icon">
-                                                    <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
