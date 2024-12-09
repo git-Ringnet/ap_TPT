@@ -19,7 +19,8 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
-                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
+                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
+                            id="btn-get-unique-products">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -175,7 +176,6 @@
                             <tbody id="tbody-product-data">
                             </tbody>
                         </table>
-                        <button id="btn-get-unique-products">Lấy danh sách sản phẩm</button>
                         <input type="hidden" name="data-test" id="data-test">
                         <section class="content mt-2">
                             <div class="container-fluided">
@@ -208,7 +208,7 @@
 <script>
     // Khi bấm vào nút
     $('#btn-get-unique-products').click(function(e) {
-        e.preventDefault();
+        // e.preventDefault();
         // Khởi tạo một Map để lưu sản phẩm duy nhất
         const uniqueProducts = new Map();
         // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
