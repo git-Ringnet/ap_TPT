@@ -56,7 +56,9 @@
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Ngày lập phiếu</span>
                                 <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
-                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style=" flex:2;" />
+                                    type="date"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    style=" flex:2;" />
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -170,10 +172,11 @@
                                     <th class="" style="width: 5%;"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="dynamic-fields" class="bg-white"></tr>
+                            <tbody id="tbody-product-data">
                             </tbody>
                         </table>
+                        <button id="btn-get-unique-products">Lấy danh sách sản phẩm</button>
+                        <input type="hidden" name="data-test" id="data-test">
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
@@ -202,3 +205,47 @@
     </div>
 </form>
 <script src="{{ asset('js/addproduct.js') }}"></script>
+<script>
+    // Khi bấm vào nút
+    $('#btn-get-unique-products').click(function(e) {
+        e.preventDefault();
+        // Khởi tạo một Map để lưu sản phẩm duy nhất
+        const uniqueProducts = new Map();
+        // Duyệt qua từng hàng có thuộc tính data-product-code trong tbody
+        $('#tbody-product-data tr[data-product-code]').each(function() {
+            const $row = $(this); // Dòng hiện tại
+            const productCode = $row.find('.product_code').val(); // Mã sản phẩm
+            const productName = $row.find('.product_name').val(); // Tên sản phẩm
+            const brand = $row.find('.brand').val(); // Hãng
+            const quantity = $row.find('input[name=""][readonly]').val(); // Số lượng
+            const serial = $row.find('.serial').val(); // Serial Number
+            const note_seri = $row.find('.note_seri_seri').val(); // Ghi chú
+
+            // Kiểm tra xem sản phẩm đã tồn tại trong Map hay chưa
+            if (!uniqueProducts.has(productCode)) {
+                // Nếu chưa, thêm sản phẩm mới vào Map
+                uniqueProducts.set(productCode, {
+                    productCode,
+                    productName,
+                    brand,
+                    quantity,
+                    serial: [serial], // Danh sách serial numbers
+                    note_seri: [note_seri] // Danh sách ghi chú
+                });
+            } else {
+                // Nếu đã tồn tại, cập nhật serial và note_seri
+                const existingProduct = uniqueProducts.get(productCode);
+                existingProduct.serial.push(serial);
+                existingProduct.note_seri.push(note_seri);
+            }
+        });
+        // Chuyển Map thành mảng
+        const uniqueProductsArray = Array.from(uniqueProducts.values());
+
+        // Chuyển mảng thành chuỗi JSON và gán vào data-test
+        $('#data-test').val(JSON.stringify(uniqueProductsArray));
+        console.log(uniqueProductsArray);
+
+        alert('Kết quả đã được log ra console!');
+    });
+</script>

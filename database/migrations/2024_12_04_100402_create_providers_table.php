@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->integer('group_id')->nullable();
+            $table->integer('group_id')->default(0);
             $table->string('provider_code');
             $table->string('provider_name');
             $table->text('address')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('tax_code')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
-        });        
+        });
     }
 
     /**

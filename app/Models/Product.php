@@ -22,7 +22,12 @@ class Product extends Model
      * Thiết lập quan hệ nếu cần
      */
 
-    // Giả sử mỗi sản phẩm thuộc về một group
+    public function serialNumbers()
+    {
+        return $this->hasMany(SerialNumber::class, 'product_id');
+    }
+
+
     // public function group()
     // {
     //     return $this->belongsTo(Group::class, 'group_id');

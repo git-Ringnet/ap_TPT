@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             //
-            $table->integer('group_id')->nullable();
+            $table->integer('group_id')->default(0);
             $table->string('employee_code')->nullable();
             $table->integer('role')->default(0);
             $table->text('address')->nullable();

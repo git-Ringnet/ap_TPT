@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Imports;
+use App\Models\Product;
 use App\Models\Providers;
+use App\Models\SerialNumber;
 use Illuminate\Http\Request;
 
 class ImportsController extends Controller
@@ -60,7 +62,33 @@ class ImportsController extends Controller
         // );
 
         // $import = Imports::create($validatedData);
-        
+        // dd($request->all());
+        $dataTest = $request->input('data-test');
+
+        // Giải mã chuỗi JSON thành mảng
+        $uniqueProductsArray = json_decode($dataTest, true);
+
+        // Duyệt qua từng sản phẩm trong mảng
+        foreach ($uniqueProductsArray as $productData) {
+            // Lưu vào bảng 'products'
+            $product = Product::create([
+                'product_code' => $productData['productCode'],
+                'product_name' => $productData['productName'],
+                'brand' => $productData['brand'],
+                'quantity' => $productData['quantity'],
+            ]);
+
+            // Duyệt qua các số serial của sản phẩm và lưu vào bảng 'serial_numbers'
+            foreach ($productData['serial'] as $index => $serial) {
+                SerialNumber::create([
+                    'serial_code' => $serial,
+                    'product_id' => $product->id,  // Liên kết với sản phẩm vừa lưu
+                    'note' => $productData['note_seri'][$index] ?? '',  // Nếu không có ghi chú, mặc định là rỗng
+                ]);
+            }
+        }
+
+
         $this->imports->addImport($request->all());
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
     }

@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class SerialNumber extends Model
+{
+    use HasFactory;
+
+    /**
+     * Tên bảng liên kết với model.
+     *
+     * @var string
+     */
+    protected $table = 'serial_numbers';
+
+    /**
+     * Các thuộc tính có thể gán giá trị hàng loạt.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'serial_code',
+        'product_id',
+        'status',
+    ];
+
+    /**
+     * Định nghĩa mối quan hệ với Product (nếu có bảng products).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+}
