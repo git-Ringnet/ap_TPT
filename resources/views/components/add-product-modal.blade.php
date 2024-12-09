@@ -49,11 +49,44 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="height-40">
+                                <tr class="height-40 position-relative">
                                     <td class="text-13-black border py-0 pl-3">
                                         <input type="text" id="product_code_input" name="product_code_input"
-                                            style="flex:2;" placeholder="Nhập thông tin"
+                                            style="flex:2;" placeholder="Chọn thông tin" readonly
                                             class="text-13-black w-100 border-0">
+                                        <div class="">
+                                            <div id="listProducts"
+                                                class="bg-white position-absolute rounded list-product shadow p-1 z-index-block"
+                                                style="z-index: 99;display: none;">
+                                                <div class="p-1">
+                                                    <div class="position-relative">
+                                                        <input type="text" placeholder="Nhập thông tin"
+                                                            autocomplete="off"
+                                                            class="pr-4 w-100 input-search bg-input-guest"
+                                                            id="searchProduct">
+                                                        <span id="search-icon" class="search-icon">
+                                                            <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <ul class="m-0 p-0 scroll-data">
+                                                    @foreach ($dataProduct as $product_value)
+                                                        <li class="p-2 align-items-center text-wrap border-top"
+                                                            data-id="{{ $product_value->id }}">
+                                                            <a href="#" title="{{ $product_value->product_name }}"
+                                                                style="flex:2;" id="{{ $product_value->id }}"
+                                                                data-code="{{ $product_value->product_code }}"
+                                                                data-name="{{ $product_value->product_name }}"
+                                                                data-brand="{{ $product_value->brand }}"
+                                                                name="info-product" class="search-info">
+                                                                <span
+                                                                    class="text-13-black">{{ $product_value->product_name }}</span>
+                                                            </a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="text-13-black border py-0 pl-3">
                                         <input type="text" id="product_name_input" name="product_name_input"

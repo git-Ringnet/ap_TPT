@@ -77,22 +77,24 @@
                                 <input autocomplete="off" placeholder="Nhập thông tin" required
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;"
                                     name="user_id" />
+
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Nhà cung cấp</span>
-                                <input name="provider_id" placeholder="Nhập thông tin" autocomplete="off" required
+                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
+                                <input type="hidden" name="provider_id" id="provider_id">
                                 <div class="">
-                                    <div id="myUL"
+                                    <div id="listProvider"
                                         class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
                                         style="z-index: 99;display: none;">
                                         <div class="p-1">
                                             <div class="position-relative">
                                                 <input type="text" placeholder="Nhập công ty"
-                                                    class="pr-4 w-100 input-search bg-input-guest" id="companyFilter">
+                                                    class="pr-4 w-100 input-search bg-input-guest" id="searchProvider">
                                                 <span id="search-icon" class="search-icon">
                                                     <i class="fas fa-search text-table" aria-hidden="true"></i>
                                                 </span>
@@ -104,6 +106,7 @@
                                                     data-id="{{ $provider_value->id }}">
                                                     <a href="#" title="{{ $provider_value->provider_name }}"
                                                         style="flex:2;" id="{{ $provider_value->id }}"
+                                                        data-name="{{ $provider_value->provider_name }}"
                                                         name="search-info" class="search-info">
                                                         <span
                                                             class="text-13-black">{{ $provider_value->provider_name }}</span>
@@ -144,8 +147,7 @@
             {{-- Thông tin sản phẩm --}}
             <div class="content">
                 <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
-                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG
-                    </p>
+                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG</p>
                 </div>
                 <div class="container-fluided">
                     <section class="content overflow-content-quote">
@@ -197,7 +199,7 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" />
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" />
                     </section>
                 </div>
             </div>
@@ -245,7 +247,6 @@
         // Chuyển mảng thành chuỗi JSON và gán vào data-test
         $('#data-test').val(JSON.stringify(uniqueProductsArray));
         console.log(uniqueProductsArray);
-
-        alert('Kết quả đã được log ra console!');
     });
 </script>
+<script src="{{ asset('js/imports.js') }}"></script>

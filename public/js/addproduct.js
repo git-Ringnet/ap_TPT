@@ -178,3 +178,48 @@ function createCountRow(count) {
         </tr>
     `;
 }
+
+//lấy thông tin hàng
+$(document).ready(function () {
+    function toggleListGuest(input, list, filterInput) {
+        input.on("click", function () {
+            list.show();
+        });
+
+        $(document).click(function (event) {
+            if (
+                !$(event.target).closest(input).length &&
+                !$(event.target).closest(filterInput).length
+            ) {
+                list.hide();
+            }
+        });
+
+        var applyFilter = function () {
+            var value = filterInput.val().toUpperCase();
+            list.find("li").each(function () {
+                var text = $(this).find("a").text().toUpperCase();
+                $(this).toggle(text.indexOf(value) > -1);
+            });
+        };
+
+        input.on("keyup", applyFilter);
+        filterInput.on("keyup", applyFilter);
+    }
+
+    //nhà cung cấp
+    toggleListGuest(
+        $("#product_code_input"),
+        $("#listProducts"),
+        $("#searchProduct")
+    );
+    //lấy tên nhà cung cấp và id
+    $('a[name="info-product"]').on("click", function () {
+        const dataName = $(this).data("name");
+        const dataCode = $(this).data("code");
+        const dataBrand = $(this).data("brand");
+        $("#product_code_input").val(dataCode);
+        $("#product_name_input").val(dataName);
+        $("#product_brand_input").val(dataBrand);
+    });
+});

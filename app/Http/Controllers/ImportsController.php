@@ -34,7 +34,9 @@ class ImportsController extends Controller
         $title = "Tạo phiếu nhập hàng";
         $providers = Providers::all();
         $import_code = $this->imports->generateImportCode();
-        return view('expertise.import.create', compact('title', 'providers', 'import_code'));
+        //Lấy data products
+        $products = Product::all();
+        return view('expertise.import.create', compact('title', 'providers', 'import_code', "products"));
     }
 
     /**
@@ -87,7 +89,6 @@ class ImportsController extends Controller
                 ]);
             }
         }
-
 
         $this->imports->addImport($request->all());
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
