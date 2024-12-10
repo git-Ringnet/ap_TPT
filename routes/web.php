@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomersController;
+use App\Http\Controllers\ExportsController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\ProductController;
@@ -42,5 +43,7 @@ Route::resource('customers', CustomersController::class);
 Route::resource('providers', ProvidersController::class);
 //Imports
 Route::resource('imports', ImportsController::class);
+//Exports
+Route::resource('exports', ExportsController::class);
 
 require __DIR__ . '/auth.php';

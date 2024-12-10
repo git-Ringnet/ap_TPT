@@ -74,10 +74,37 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Người lập phiếu</span>
-                                <input autocomplete="off" placeholder="Nhập thông tin" required
-                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;"
-                                    name="user_id" />
-
+                                <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    style="flex:2;" />
+                                <input type="hidden" name="user_id" id="user_id">
+                                <div class="">
+                                    <div id="listUser"
+                                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
+                                        style="z-index: 99;display: none;">
+                                        <div class="p-1">
+                                            <div class="position-relative">
+                                                <input type="text" placeholder="Nhập thông tin"
+                                                    class="pr-4 w-100 input-search bg-input-guest" id="searchUser">
+                                                <span id="search-icon" class="search-icon">
+                                                    <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <ul class="m-0 p-0 scroll-data">
+                                            @foreach ($users as $user_value)
+                                                <li class="p-2 align-items-center text-wrap border-top"
+                                                    data-id="{{ $user_value->id }}">
+                                                    <a href="#" title="{{ $user_value->name }}" style="flex:2;"
+                                                        id="{{ $user_value->id }}" data-name="{{ $user_value->name }}"
+                                                        name="create-info" class="search-info">
+                                                        <span class="text-13-black">{{ $user_value->name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -93,8 +120,9 @@
                                         style="z-index: 99;display: none;">
                                         <div class="p-1">
                                             <div class="position-relative">
-                                                <input type="text" placeholder="Nhập công ty"
-                                                    class="pr-4 w-100 input-search bg-input-guest" id="searchProvider">
+                                                <input type="text" placeholder="Nhập thông tin"
+                                                    class="pr-4 w-100 input-search bg-input-guest"
+                                                    id="searchProvider">
                                                 <span id="search-icon" class="search-icon">
                                                     <i class="fas fa-search text-table" aria-hidden="true"></i>
                                                 </span>

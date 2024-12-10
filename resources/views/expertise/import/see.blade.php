@@ -124,7 +124,8 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click font-weight-bold" style="flex: 1.6;">Nhà
                                     cung cấp</span>
-                                <input name="provider_id" autocomplete="off" readonly value="{{ $import->provider_name }}"
+                                <input name="provider_id" autocomplete="off" readonly
+                                    value="{{ $import->provider_name }}"
                                     class="text-13-black w-100 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
                             </div>
                             <div
@@ -182,11 +183,59 @@
                                     <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
                                         <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width: 5%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="dynamic-fields" class="bg-white"></tr>
+                                <?php $count = 0; ?>
+                                @foreach ($products as $product_value)
+                                    <tr class="bg-white">
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->product_code }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->product_name }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->brand }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="1">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->serial_code }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->ghichu }}">
+                                        </td>
+                                    </tr>
+                                    <?php $count++; ?>
+                                @endforeach
+                                <tr>
+                                    <td colspan="2"
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                        <span class="text-purble">Tổng số lượng:</span>
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                        <span class="text-purble">{{ $count }}</span>
+                                    </td>
+                                    <td colspan="2"
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </section>

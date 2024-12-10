@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Imports;
 use App\Models\Product;
+use App\Models\ProductImport;
 use App\Models\Providers;
 use App\Models\SerialNumber;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ImportsController extends Controller
@@ -36,7 +38,9 @@ class ImportsController extends Controller
         $import_code = $this->imports->generateImportCode();
         //Lấy data products
         $products = Product::all();
-        return view('expertise.import.create', compact('title', 'providers', 'import_code', "products"));
+        //
+        $users = User::all();
+        return view('expertise.import.create', compact('title', 'providers', 'import_code', "products", "users"));
     }
 
     /**
@@ -64,33 +68,28 @@ class ImportsController extends Controller
         // );
 
         // $import = Imports::create($validatedData);
-        dd($request->all());
+        // dd($request->all()); 
+        $import_id = $this->imports->addImport($request->all());
         $dataTest = $request->input('data-test');
 
         // Giải mã chuỗi JSON thành mảng
         $uniqueProductsArray = json_decode($dataTest, true);
 
         // Duyệt qua từng sản phẩm trong mảng
-        foreach ($uniqueProductsArray as $productData) {
-            // Lưu vào bảng 'products'
-            $product = Product::create([
-                'product_code' => $productData['productCode'],
-                'product_name' => $productData['productName'],
-                'brand' => $productData['brand'],
-                'quantity' => $productData['quantity'],
+        foreach ($uniqueProductsArray as $serial) {
+            $newSerial = SerialNumber::create([
+                'serial_code' => $serial['serial'],
+                'product_id' => $serial['product_id'],
+                'note' => $serial['note_seri'],
             ]);
-
-            // Duyệt qua các số serial của sản phẩm và lưu vào bảng 'serial_numbers'
-            foreach ($productData['serial'] as $index => $serial) {
-                SerialNumber::create([
-                    'serial_code' => $serial,
-                    'product_id' => $product->id,  // Liên kết với sản phẩm vừa lưu
-                    'note' => $productData['note_seri'][$index] ?? '',  // Nếu không có ghi chú, mặc định là rỗng
-                ]);
-            }
+            ProductImport::create([
+                'import_id' => $import_id,
+                'product_id' => $serial['product_id'],
+                'quantity' => 1,
+                'sn_id' => $newSerial->id,
+                'note' => $serial['note_seri'],
+            ]);
         }
-
-        $this->imports->addImport($request->all());
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
     }
 
@@ -104,8 +103,14 @@ class ImportsController extends Controller
             ->select("providers.provider_name", "users.name", "imports.*")
             ->where("imports.id", $id)
             ->first();
+        $products = ProductImport::where('import_id', $id)
+            ->leftJoin("imports", "product_import.product_id", "imports.id")
+            ->leftJoin("serial_numbers", "product_import.sn_id", "serial_numbers.id")
+            ->leftJoin("products", "products.id", "product_import.product_id")
+            ->select("serial_numbers.serial_code", "product_import.note as ghichu", "imports.*", "products.*")
+            ->get();
         $title = "Xem chi tiết phiếu nhập hàng";
-        return view('expertise.import.see', compact('title', 'import'));
+        return view('expertise.import.see', compact('title', 'import', 'products'));
     }
 
     /**
@@ -113,9 +118,15 @@ class ImportsController extends Controller
      */
     public function edit(String $id)
     {
-        $import = Imports::findOrFail($id);
+        $import = Imports::leftJoin("providers", "providers.id", "imports.provider_id")
+            ->leftJoin("users", "users.id", "imports.user_id")
+            ->select("providers.provider_name", "users.name", "imports.*")
+            ->where("imports.id", $id)
+            ->first();
         $title = "Sửa phiếu nhập hàng";
-        return view('expertise.import.edit', compact('title', 'import'));
+        $users = User::all();
+        $providers = Providers::all();
+        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers'));
     }
 
     /**

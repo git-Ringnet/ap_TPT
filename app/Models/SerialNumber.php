@@ -25,6 +25,7 @@ class SerialNumber extends Model
         'serial_code',
         'product_id',
         'status',
+        'note'
     ];
 
     /**

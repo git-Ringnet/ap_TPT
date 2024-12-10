@@ -170,6 +170,42 @@
                             Phiếu nhập hàng
                         </button>
                     </a>
+                    <a href="{{ route('exports.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
+                            Phiếu xuất hàng
+                        </button>
+                    </a>
+                    <a href="#" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            Tra cứu tồn kho
+                        </button>
+                    </a>
+                    <a href="#" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            Tra cứu bảo hành
+                        </button>
+                    </a>
+                    <a href="#" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            Phiếu tiếp nhận
+                        </button>
+                    </a>
+                    <a href="#" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            Phiếu trả hàng
+                        </button>
+                    </a>
+                    <a href="#" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            Phiếu báo giá
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>

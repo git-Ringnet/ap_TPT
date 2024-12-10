@@ -130,7 +130,14 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
+                                        <button class="btn btn-sm delete-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z"
+                                                    fill="#151516" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -140,7 +147,14 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
+                                        <button class="btn btn-sm delete-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z"
+                                                    fill="#151516" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -150,7 +164,14 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
+                                        <button class="btn btn-sm delete-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z"
+                                                    fill="#151516" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -160,7 +181,14 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
+                                        <button class="btn btn-sm delete-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z"
+                                                    fill="#151516" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                                 <tr class="height-40">
@@ -170,19 +198,26 @@
                                             placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
-                                        <button class="btn btn-danger btn-sm delete-row">Xoá</button>
+                                        <button class="btn btn-sm delete-row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z"
+                                                    fill="#151516" />
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="my-2 d-flex justify-content-between">
                             <span>
-                                <button id="add-rows" class="border-0 bg-transparent pl-3">Thêm</button>
+                                <button id="add-rows" class="border-0 bg-transparent pl-3 text-purble font-weight-bold">Thêm</button>
                                 <input type="number" id="row-count" class="rounded d-inline-block p-0 text-center"
                                     style="width: 36px; height: 22px; font-size: 12px;" value="5">
                                 dòng
                             </span>
-                            <span class="mr-5">Số lượng : 3</span>
+                            <span class="mr-5 text-danger font-weight-bold">Số lượng : 3</span>
                         </div>
                     </div>
                 </div>
