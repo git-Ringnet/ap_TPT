@@ -169,18 +169,18 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-guest">
-                                    {{-- @foreach ($imports as $item)
+                                    @foreach ($exports as $item)
                                         <tr class="position-relative guest-info height-30">
                                             <td class="text-13-black border-right border-bottom py-0">
                                                 <a
-                                                    href="{{ route('imports.show', $item->id) }}">{{ $item->import_code }}</a>
+                                                    href="{{ route('exports.show', $item->id) }}">{{ $item->export_code }}</a>
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 text-left border-bottom py-0">
                                                 {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->provider_name }}
+                                                {{ $item->customer_name }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
                                                 {{ $item->name }}
@@ -241,7 +241,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

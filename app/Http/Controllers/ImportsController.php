@@ -146,7 +146,7 @@ class ImportsController extends Controller
                 'note'        => 'nullable|string|max:500',
             ],
             [
-                'import_code.required' => 'Mã nhập kho là bắt buộc.',
+                'import_code.required' => 'Mã phiếu là bắt buộc.',
                 'user_id.required'     => 'Người nhập là bắt buộc.',
                 'date_create.required' => 'Ngày tạo là bắt buộc.',
             ]

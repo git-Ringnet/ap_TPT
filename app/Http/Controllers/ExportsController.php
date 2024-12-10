@@ -22,7 +22,7 @@ class ExportsController extends Controller
     public function index()
     {
         $title = "Phiếu xuất hàng";
-        $exports = "";
+        $exports = $this->exports->getAllExports();
         return view('expertise.export.index', compact('title', 'exports'));
     }
 
@@ -44,38 +44,77 @@ class ExportsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $export_id = $this->exports->addExport($request->all());
+        return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Exports $exports)
+    public function show(String $id)
     {
-        //
+        $export = Exports::leftJoin("customers", "customers.id", "exports.customer_id")
+            ->leftJoin("users", "users.id", "exports.user_id")
+            ->select("customers.customer_name", "users.name", "exports.*")
+            ->where("exports.id", $id)
+            ->first();
+        $title = "Xem chi tiết phiếu xuất hàng";
+        return view('expertise.export.show', compact('title', 'export'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Exports $exports)
+    public function edit(String $id)
     {
-        //
+        $export = Exports::leftJoin("customers", "customers.id", "exports.customer_id")
+            ->leftJoin("users", "users.id", "exports.user_id")
+            ->select("customers.customer_name", "users.name", "exports.*")
+            ->where("exports.id", $id)
+            ->first();
+        $users = User::all();
+        $cumtomers = Customers::all();
+        $title = "Sửa phiếu xuất hàng";
+        return view('expertise.export.edit', compact('title', 'export', 'users', 'cumtomers'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Exports $exports)
+    public function update(Request $request, String $id)
     {
-        //
+        // Validate dữ liệu đầu vào
+        $validatedData = $request->validate(
+            [
+                'export_code' => 'required|string|max:255|unique:exports,export_code,' . $id,
+                'user_id'     => 'required|integer|exists:users,id',
+                'phone'       => 'nullable|string|max:15',
+                'date_create' => 'required|date',
+                'customer_id' => 'required|integer|exists:customers,id',
+                'address'     => 'nullable|string|max:255',
+                'note'        => 'nullable|string|max:500',
+            ],
+            [
+                'export_code.required' => 'Mã phiếu là bắt buộc.',
+                'user_id.required'     => 'Người nhập là bắt buộc.',
+                'date_create.required' => 'Ngày tạo là bắt buộc.',
+            ]
+        );
+        $export = Exports::findOrFail($id);
+
+        // Cập nhật dữ liệu
+        $export->update($validatedData);
+
+        return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Exports $exports)
+    public function destroy(String $id)
     {
-        //
+        $export = Exports::findOrFail($id);
+        $export->delete();
+        return redirect()->route('exports.index')->with('msg', 'Xóa thành công phiếu xuất hàng!');
     }
 }

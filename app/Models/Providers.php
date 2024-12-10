@@ -22,6 +22,10 @@ class Providers extends Model
         'tax_code',
         'note',
     ];
+    public function inventoryLookups()
+    {
+        return $this->hasMany(InventoryLookup::class, 'provider_id', 'id');
+    }
     public function getGroup()
     {
         return $this->hasOne(Groups::class, 'id', 'group_id');

@@ -27,6 +27,10 @@ class Product extends Model
         return $this->hasMany(SerialNumber::class, 'product_id');
     }
 
+    public function inventoryLookups()
+    {
+        return $this->hasMany(InventoryLookup::class, 'product_id', 'id');
+    }
 
     // public function group()
     // {

@@ -4,6 +4,8 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\ExportsController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ImportsController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryLookupController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReceivingController;
@@ -45,5 +47,7 @@ Route::resource('providers', ProvidersController::class);
 Route::resource('imports', ImportsController::class);
 //Exports
 Route::resource('exports', ExportsController::class);
+//Inventory
+Route::resource('invenroryLookup', InventoryLookupController::class);
 
 require __DIR__ . '/auth.php';

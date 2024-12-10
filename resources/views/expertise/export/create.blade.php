@@ -1,6 +1,6 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'exports'])
 @section('title', $title)
-<form id="form-submit" action="{{ route('imports.store') }}" method="POST">
+<form id="form-submit" action="{{ route('exports.store') }}" method="POST">
     @csrf
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
@@ -8,7 +8,7 @@
                 <div class="content__heading--left opacity-0"></div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="{{ route('imports.index') }}">
+                        <a href="{{ route('exports.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +48,7 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Mã phiếu</span>
-                                <input type="text" name="import_code" style="flex:2;" placeholder="Nhập thông tin"
+                                <input type="text" name="export_code" style="flex:2;" placeholder="Nhập thông tin"
                                     required value="{{ $export_code }}"
                                     class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                             </div>
@@ -74,7 +74,7 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Người lập phiếu</span>
-                                <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name"
+                                <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name" readonly
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="user_id" id="user_id">
@@ -110,10 +110,10 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Khách hàng</span>
-                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
+                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name" readonly
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
-                                <input type="hidden" name="provider_id" id="provider_id">
+                                <input type="hidden" name="customer_id" id="provider_id">
                                 <div class="">
                                     <div id="listProvider"
                                         class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
@@ -132,12 +132,12 @@
                                             @foreach ($cumtomers as $customer_value)
                                                 <li class="p-2 align-items-center text-wrap border-top"
                                                     data-id="{{ $customer_value->id }}">
-                                                    <a href="#" title="{{ $customer_value->provider_name }}"
+                                                    <a href="#" title="{{ $customer_value->customer_name }}"
                                                         style="flex:2;" id="{{ $customer_value->id }}"
-                                                        data-name="{{ $customer_value->provider_name }}"
+                                                        data-name="{{ $customer_value->customer_name }}"
                                                         name="search-info" class="search-info">
                                                         <span
-                                                            class="text-13-black">{{ $customer_value->provider_name }}</span>
+                                                            class="text-13-black">{{ $customer_value->customer_name }}</span>
                                                     </a>
                                                 </li>
                                             @endforeach

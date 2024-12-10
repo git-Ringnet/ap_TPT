@@ -3136,7 +3136,7 @@ input[type="checkbox"]:checked {
     font-size: 13px !important;
 }
 .text-purble {
-    color: #25406E !important;
+    color: #25406e !important;
 }
 .margin-top-114 {
     margin-top: 11.4rem;
@@ -3150,4 +3150,25 @@ input[type="checkbox"]:checked {
     top: 40px;
     left: 0;
     width: 65%;
+}
+.navbar-badge {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EC212D;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    border-radius: 50%;
+    top: 7px;
+    right: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 3px;
+    box-sizing: border-box;
 }

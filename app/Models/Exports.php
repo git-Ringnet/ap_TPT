@@ -2,12 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Exports extends Model
 {
-    //
+
+    use HasFactory;
+    protected $table = 'exports';
+
+    protected $fillable = [
+        'export_code',
+        'user_id',
+        'phone',
+        'date_create',
+        'customer_id',
+        'address',
+        'note',
+    ];
+
     public static function generateExportCode()
     {
         $prefix = 'PXH';
@@ -31,5 +45,28 @@ class Exports extends Model
 
         // Kết hợp thành mã mới
         return "{$prefix}{$formattedNumber}-{$date}";
+    }
+
+    public function addExport($data)
+    {
+        $arrExport = [
+            'export_code' => $data['export_code'],
+            'user_id' => $data['user_id'],
+            'phone' => $data['phone'],
+            'date_create' => $data['date_create'],
+            'customer_id' => $data['customer_id'],
+            'address' => $data['address'],
+            'note' => $data['note'],
+            'created_at' => now()
+        ];
+        $import = DB::table($this->table)->insertGetId($arrExport);
+        return $import;
+    }
+    function getAllExports()
+    {
+        return Exports::leftJoin("customers", "customers.id", "exports.customer_id")
+            ->leftJoin("users", "users.id", "exports.user_id")
+            ->select("customers.customer_name", "users.name", "exports.*")
+            ->get();
     }
 }
