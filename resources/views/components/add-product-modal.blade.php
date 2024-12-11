@@ -92,13 +92,11 @@
                                     </td>
                                     <td class="text-13-black border py-0 pl-3">
                                         <input type="text" id="product_name_input" name="product_name_input"
-                                            style="flex:2;" placeholder="Nhập thông tin"
-                                            class="text-13-black w-100 border-0">
+                                            style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
                                     <td class="text-13-black border py-0 pl-3">
                                         <input type="text" id="product_brand_input" name="product_brand_input"
-                                            style="flex:2;" placeholder="Nhập thông tin"
-                                            class="text-13-black w-100 border-0">
+                                            style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
                                 </tr>
                             </tbody>
@@ -212,7 +210,8 @@
                         </table>
                         <div class="my-2 d-flex justify-content-between">
                             <span>
-                                <button id="add-rows" class="border-0 bg-transparent pl-3 text-purble font-weight-bold">Thêm</button>
+                                <button id="add-rows"
+                                    class="border-0 bg-transparent pl-3 text-purble font-weight-bold">Thêm</button>
                                 <input type="number" id="row-count" class="rounded d-inline-block p-0 text-center"
                                     style="width: 36px; height: 22px; font-size: 12px;" value="5">
                                 dòng

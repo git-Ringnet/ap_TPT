@@ -43,20 +43,23 @@ $(document).ready(function () {
     $(document).on("click", ".delete-row", function (event) {
         event.preventDefault();
         const currentRow = $(this).closest("tr");
+        const productId = currentRow.data("product-id");
         const productCode = currentRow.data("product-code");
         currentRow.remove();
         const remainingRows = $(
-            `#tbody-product-data tr[data-product-code="${productCode}"]`
-        ).not("#serials-count");
-
+            `#tbody-product-data tr[data-product-id="${productId}"]`
+        ).not("#serials-count, #add-row-product");
         if (remainingRows.length === 0) {
             $(
-                `#tbody-product-data tr#serials-count[data-product-code="${productCode}"]`
+                `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
+            ).remove();
+            $(
+                `#tbody-product-data tr#add-row-product[data-product-code="${productCode}"]`
             ).remove();
         } else {
             const serialCount = remainingRows.length;
             const serialCountRow = $(
-                `#tbody-product-data tr#serials-count[data-product-code="${productCode}"]`
+                `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
             );
             serialCountRow.find('input[name="serial_count"]').val(serialCount);
         }
@@ -122,24 +125,32 @@ $(document).on("click", ".submit-button", function (event) {
     let serialNumbers = getSerialNumbers(); // Lấy mảng serial numbers
     let product = getProduct(); // Lấy thông tin sản phẩm
 
-    if (
-        serialNumbers.length === 0 &&
-        (!product || Object.keys(product).length === 0)
-    ) {
-        alert(
-            "Vui lòng nhập ít nhất một serial number hoặc thông tin sản phẩm."
-        );
+    if (serialNumbers.length === 0) {
+        alert("Vui lòng nhập ít nhất một serial number.");
         return;
     }
 
-    // Render dữ liệu vào tbody-product-data
-    let $tbody = $("#tbody-product-data"); // Lấy tbody bằng jQuery
+    if (!product || Object.keys(product).length === 0) {
+        alert("Vui lòng nhập thông tin sản phẩm.");
+        return;
+    }
+
+    let $tbody = $("#tbody-product-data");
+
+    let dataType = $("#modal-id").attr("data-type");
+    if (dataType === "update") {
+        console.log(product);
+        $tbody.find("tr[data-product-id='" + product.id + "']").remove();
+        $("#modal-id").attr("data-type", "create");
+    }
+    // Thêm các hàng mới từ serialNumbers
     serialNumbers.forEach(function (serial, index) {
-        let newRow = createSerialRow(index, product, serial);
+        let newRow = createSerialRow(index, product, serial); // Hàm tạo dòng mới
         $tbody.append(newRow); // Thêm dòng mới vào tbody
     });
+
     // Thêm hàng cuối cùng để đếm số lượng serial
-    let countRow = createCountRow(serialNumbers.length, product.product_code);
+    let countRow = createCountRow(serialNumbers.length, product);
     $tbody.append(countRow); // Thêm dòng đếm số lượng vào cuối bảng
 
     $(".btn-destroy-modal").click(); // Đóng modal
@@ -148,7 +159,7 @@ $(document).on("click", ".submit-button", function (event) {
 // Hàm tạo hàng dữ liệu với serial
 function createSerialRow(index, product, serial) {
     return `
-        <tr id="serials-data" class="bg-white" data-index="${
+        <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
         }" data-product-code="${product.product_code}"  data-product-id="${
         product.id
@@ -200,16 +211,30 @@ function createSerialRow(index, product, serial) {
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
-function createCountRow(count, product_code) {
+function createCountRow(count, product) {
     return `
-        <tr id="serials-count" class="bg-white" data-product-code="${product_code}">
-            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">Số lượng serial:</td>
-            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+        <tr id="serials-count" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
+            <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4"></td>
+            <td class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">Số lượng serial:</td>
+            <td class="border-right p-2 text-13 align-center border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="serial_count" value="${count}">
             </td>
             <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+        </tr>
+        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}" class="bg-white">
+             <td colspan="7" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                <button type="button" class="save-info-product" data-product-id="${product.id}" data-product-code="${product.product_code}"
+                 data-product-name="${product.product_name}" data-product-brand="${product.product_brand}">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
+                    1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
+                    12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
+                    6.34375H7.65625V2.625Z" fill="#151516"/>
+                </svg>
+                </button>
+            </td>
         </tr>
     `;
 }
@@ -259,4 +284,61 @@ $(document).ready(function () {
         $("#product_brand_input").val(dataBrand);
         $("#product_id_input").val(data_id);
     });
+});
+$(document).on("click", ".save-info-product", function (e) {
+    e.preventDefault();
+    // Lấy giá trị của data-product-id từ phần tử được click
+    const productId = $(this).data("product-id");
+    const productName = $(this).data("product-name");
+    const productCode = $(this).data("product-code");
+    const productBrand = $(this).data("product-brand");
+    // Khai báo mảng để lưu thông tin sản phẩm
+    const products = [];
+    // Duyệt qua từng dòng có data-product-id trùng với productId
+    $(
+        "#tbody-product-data .row-product[data-product-id='" + productId + "']"
+    ).each(function () {
+        const $row = $(this); // Dòng hiện tại
+        // Lấy tất cả thông tin sản phẩm trong dòng này
+        const productInfo = {
+            serial: $row.find(".serial").val(), // Chỉ lấy thông tin serial
+        };
+        // Thêm thông tin sản phẩm vào mảng
+        products.push(productInfo);
+    });
+
+    // Xóa nội dung cũ trong tbody trước khi đổ dữ liệu mới
+    $("#table-body").empty();
+    // Đổ dữ liệu chỉ với serial vào tbody
+    products.forEach((product, index) => {
+        const row = `
+            <tr class="height-40">
+                <td class="text-13-black border py-0 text-center">${
+                    index + 1
+                }</td>
+                <td class="text-13-black border py-0 pl-3">
+                    <input type="text" name="form_code"value="${
+                        product.serial
+                    }" class="text-13-black w-100 border-0 serial-input" placeholder="Nhập thông tin">
+                </td>
+                <td class="text-13-black border py-0 text-center">
+                    <button class="btn btn-sm delete-row">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.8226 5.6875C11.0642 5.6875 11.2601 5.88338 11.2601 6.125C11.2601 6.15874 11.2562 6.19237 11.2485 6.2252L9.94245 11.7758C9.75642 12.5663 9.05109 13.125 8.23897 13.125H5.76103C4.94894 13.125 4.24355 12.5663 4.05755 11.7758L2.75152 6.2252C2.69618 5.99001 2.84198 5.75447 3.07718 5.69913C3.11002 5.6914 3.14365 5.6875 3.17739 5.6875H10.8226ZM7.4375 0.875C8.64562 0.875 9.625 1.85438 9.625 3.0625H11.375C11.8583 3.0625 12.25 3.45426 12.25 3.9375V4.375C12.25 4.61662 12.0541 4.8125 11.8125 4.8125H2.1875C1.94588 4.8125 1.75 4.61662 1.75 4.375V3.9375C1.75 3.45426 2.14175 3.0625 2.625 3.0625H4.375C4.375 1.85438 5.35438 0.875 6.5625 0.875H7.4375ZM7.4375 2.1875H6.5625C6.07926 2.1875 5.6875 2.57925 5.6875 3.0625H8.3125C8.3125 2.57925 7.92074 2.1875 7.4375 2.1875Z" fill="#151516"></path>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        `;
+        $("#table-body").append(row);
+    });
+    // Log thông tin sản phẩm tìm được
+
+    $(".btn-save-print").click();
+    $("#product_code_input").val(productCode);
+    $("#product_name_input").val(productName);
+    $("#product_brand_input").val(productBrand);
+    $("#product_id_input").val(productId);
+    $("#modal-id").attr("data-type", "update");
+    console.log(products); // Log ra mảng products để kiểm tra
 });
