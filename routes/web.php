@@ -12,6 +12,7 @@ use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ProvidersController;
+use App\Http\Controllers\SerialNumberController;
 use Illuminate\Support\Facades\Route;
 
 // Products
@@ -49,5 +50,7 @@ Route::resource('imports', ImportsController::class);
 Route::resource('exports', ExportsController::class);
 //Inventory
 Route::resource('invenroryLookup', InventoryLookupController::class);
+//Check S/N exist
+Route::get('/checkSN', [SerialNumberController::class, 'checkSN'])->name('checkSN');
 
 require __DIR__ . '/auth.php';

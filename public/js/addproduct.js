@@ -125,8 +125,32 @@ $(document).on("click", ".submit-button", function (event) {
     let serialNumbers = getSerialNumbers(); // Lấy mảng serial numbers
     let product = getProduct(); // Lấy thông tin sản phẩm
 
+    if (!product || Object.keys(product).length === 0) {
+        alert("Vui lòng nhập thông tin sản phẩm.");
+        return;
+    }
     if (serialNumbers.length === 0) {
-        alert("Vui lòng nhập ít nhất một serial number.");
+        alert("Vui lòng nhập ít nhất một serial number");
+        return;
+    }
+
+    // Kiểm tra nhập S/N trùng
+    let duplicates = [];
+    let seen = new Set();
+
+    // Duyệt qua từng input để lấy giá trị
+    $('input[name="form_code"]').each(function () {
+        let value = $(this).val().trim().toLowerCase(); // Chuẩn hóa về chữ thường
+        if (seen.has(value) && value !== "") {
+            duplicates.push(value); // Thêm giá trị trùng vào mảng
+        } else {
+            seen.add(value); // Thêm giá trị vào tập hợp
+        }
+    });
+
+    // Nếu có giá trị trùng, thông báo
+    if (duplicates.length > 0) {
+        alert("Các S/N bị trùng: " + duplicates.join(", "));
         return;
     }
 

@@ -126,7 +126,13 @@ class ImportsController extends Controller
         $title = "Sửa phiếu nhập hàng";
         $users = User::all();
         $providers = Providers::all();
-        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers'));
+        $products = ProductImport::where('import_id', $id)
+            ->leftJoin("imports", "product_import.product_id", "imports.id")
+            ->leftJoin("serial_numbers", "product_import.sn_id", "serial_numbers.id")
+            ->leftJoin("products", "products.id", "product_import.product_id")
+            ->select("serial_numbers.serial_code", "product_import.note as ghichu", "imports.*", "products.*")
+            ->get();
+        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'products'));
     }
 
     /**
@@ -167,6 +173,7 @@ class ImportsController extends Controller
     public function destroy(String $id)
     {
         $import = Imports::findOrFail($id);
+        ProductImport::where('import_id', $id)->delete();
         $import->delete();
         return redirect()->route('imports.index')->with('msg', 'Xóa thành công phiếu nhập hàng!');
     }

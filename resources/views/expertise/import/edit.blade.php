@@ -122,7 +122,8 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Nhà cung cấp</span>
-                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name" readonly
+                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
+                                    readonly
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" value="{{ $import->provider_name }}" />
                                 <input type="hidden" name="provider_id" id="provider_id"
@@ -216,18 +217,66 @@
                                     <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
                                         <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width: 5%;"></th>
+                                    <th class="border-right note px-2 p-0" style="width: 5%;"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="dynamic-fields" class="bg-white"></tr>
+                            <tbody id="tbody-product-data">
+                                @foreach ($products as $product_value)
+                                    <tr class="bg-white">
+                                        <td
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" name="product_id[]" value="1">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                readonly="" value="{{ $product_value->product_code }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->product_name }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="{{ $product_value->brand }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                readonly="" value="1">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly=""
+                                                value="{{ $product_value->serial_code }}">
+                                        </td>
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                value="{{ $product_value->ghichu }}">
+                                        </td>
+                                        <td class="p-2 align-top border-bottom border-top-0">
+                                            <svg class="delete-row" width="17" height="17"
+                                                viewBox="0 0 17 17" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                                                    fill="#6B6F76"></path>
+                                            </svg>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
+                        <input type="hidden" name="data-test" id="data-test">
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
-                                    <button type="button" data-toggle="dropdown" id="add-field-btn" data-name1="BG"
-                                        data-des="Thêm sản phẩm"
+                                    <button type="button" data-toggle="modal" data-target="#modal-id"
                                         class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                         style="margin-right:10px">
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
@@ -244,6 +293,7 @@
                                 </div>
                             </div>
                         </section>
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" />
                     </section>
                 </div>
             </div>
@@ -251,3 +301,4 @@
     </div>
 </form>
 <script src="{{ asset('js/imports.js') }}"></script>
+<script src="{{ asset('js/addproduct.js') }}"></script>

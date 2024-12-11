@@ -74,7 +74,7 @@
                                                     @foreach ($dataProduct as $product_value)
                                                         <li class="p-2 align-items-center text-wrap border-top"
                                                             data-id="{{ $product_value->id }}">
-                                                            <a href="#" title="{{ $product_value->product_name }}"
+                                                            <a href="#" title="{{ $product_value->product_code }}"
                                                                 style="flex:2;" id="{{ $product_value->id }}"
                                                                 data-code="{{ $product_value->product_code }}"
                                                                 data-name="{{ $product_value->product_name }}"
@@ -82,7 +82,7 @@
                                                                 data-id="{{ $product_value->id }}" name="info-product"
                                                                 class="search-info">
                                                                 <span
-                                                                    class="text-13-black">{{ $product_value->product_name }}</span>
+                                                                    class="text-13-black">{{ $product_value->product_code }}</span>
                                                             </a>
                                                         </li>
                                                     @endforeach
