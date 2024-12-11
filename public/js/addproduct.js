@@ -112,7 +112,7 @@ function getProduct() {
     return product;
 }
 
-$(document).on("click", ".btn-destroy-modal", function () {
+$(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
     let modalId = $(this).data("modal-id");
     $("#" + modalId)
         .find("input")
@@ -333,11 +333,18 @@ $(document).on("click", ".save-info-product", function (e) {
 
     // Xóa nội dung cũ trong tbody trước khi đổ dữ liệu mới
     $("#table-body").empty();
+    $(".btn-save-print").click();
+    $("#product_code_input").val(productCode);
+    $("#product_name_input").val(productName || "");
+    $("#product_brand_input").val(productBrand || "");
+    $("#product_id_input").val(productId);
+    $("#modal-id").attr("data-type", "update");
+
     // Đổ dữ liệu chỉ với serial vào tbody
     products.forEach((product, index) => {
         const row = `
             <tr class="height-40">
-                <td class="text-13-black border py-0 text-center">${
+                <td class="text-13-black border py-0 text-center">0${
                     index + 1
                 }</td>
                 <td class="text-13-black border py-0 pl-3">
@@ -357,12 +364,4 @@ $(document).on("click", ".save-info-product", function (e) {
         $("#table-body").append(row);
     });
     // Log thông tin sản phẩm tìm được
-
-    $(".btn-save-print").click();
-    $("#product_code_input").val(productCode);
-    $("#product_name_input").val(productName);
-    $("#product_brand_input").val(productBrand);
-    $("#product_id_input").val(productId);
-    $("#modal-id").attr("data-type", "update");
-    console.log(products); // Log ra mảng products để kiểm tra
 });
