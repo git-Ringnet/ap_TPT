@@ -2,35 +2,40 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Receiving;
 use Illuminate\Http\Request;
 
 class ReceivingController extends Controller
 {
     // Display a listing of the receiving records
+
     public function index()
     {
         $receivings = Receiving::all();
-        return view('expertise.receivings.index', compact('receivings'));
+        $title = 'Phiếu tiếp nhận';
+        return view('expertise.receivings.index', compact('receivings', 'title'));
     }
 
     // Show the form for creating a new receiving record
     public function create()
     {
         $title = 'Tạo phiếu tiếp nhận';
-
-        return view('expertise.receivings.create', compact('title'));
+        $products = Product::all();
+        $quoteNumber = (new Receiving)->getQuoteCount('PTN', Receiving::class, 'form_code_receiving');
+        return view('expertise.receivings.create', compact('title', 'products', 'quoteNumber'));
     }
 
     // Store a newly created receiving record in storage
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
-            'branch_id' => 'required|array|min:1',
+            'branch_id' => 'required|min:1',
             'branch_id.*' => 'in:1,2',
-            'form_type' => 'required|array|min:1',
+            'form_type' => 'required|min:1',
             'form_type.*' => 'in:1,2,3',
-            'form_code' => 'required|string|unique:receiving,form_code',
+            'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving',
             'customer_id' => 'required|integer',
             'address' => 'required|string',
             'date_created' => 'required|date',
@@ -39,8 +44,8 @@ class ReceivingController extends Controller
             'user_id' => 'required|integer',
             'phone' => 'nullable|string',
             'closed_at' => 'nullable|date',
-            'status' => 'required|integer',
-            'state' => 'required|integer',
+            'status' => 'nullable|integer',
+            'state' => 'nullable|integer',
         ]);
         Receiving::create($validated);
 
@@ -65,7 +70,7 @@ class ReceivingController extends Controller
         $validated = $request->validate([
             'branch_id' => 'required|integer',
             'form_type' => 'required|integer',
-            'form_code' => 'required|string|unique:receiving,form_code,' . $receiving->id,
+            'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving,' . $receiving->id,
             'customer_id' => 'required|integer',
             'address' => 'required|string',
             'date_created' => 'required|date',

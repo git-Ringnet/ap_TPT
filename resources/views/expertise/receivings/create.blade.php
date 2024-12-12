@@ -9,32 +9,32 @@
                         <span class="text text-13-black m-0" style="flex: 2;">Hãng tiếp nhận :</span>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
-                            <input type="checkbox" class="form-check-input hanguTiepNhan" id="internal"
-                                name="branch_id" value="1" checked onclick="toggleCheckbox(this, 'hanguTiepNhan')">
+                            <input type="radio" class="form-check-input hanguTiepNhan" id="internal" name="branch_id"
+                                value="1">
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label text text-13-black mr-1" for="external">Bên ngoài</label>
-                            <input type="checkbox" class="form-check-input hanguTiepNhan" id="external"
-                                name="branch_id" value="2" onclick="toggleCheckbox(this, 'hanguTiepNhan')">
+                            <input type="radio" class="form-check-input hanguTiepNhan" id="external" name="branch_id"
+                                value="2">
                         </div>
                     </div>
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="warranty">Bảo hành</label>
-                            <input type="checkbox" class="form-check-input loaiPhieu" checked id="warranty"
-                                name="form_type" value="1" onclick="toggleCheckbox(this, 'loaiPhieu')">
+                            <input type="radio" class="form-check-input loaiPhieu" id="warranty" name="form_type"
+                                value="1">
                         </div>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="service">Dịch vụ</label>
-                            <input type="checkbox" class="form-check-input loaiPhieu" id="service" name="form_type"
-                                value="2" onclick="toggleCheckbox(this, 'loaiPhieu')">
+                            <input type="radio" class="form-check-input loaiPhieu" id="service" name="form_type"
+                                value="2">
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label text text-13-black mr-1" for="serviceWarranty">Bảo hành dịch
                                 vụ</label>
-                            <input type="checkbox" class="form-check-input loaiPhieu" id="serviceWarranty"
-                                name="form_type" value="3" onclick="toggleCheckbox(this, 'loaiPhieu')">
+                            <input type="radio" class="form-check-input loaiPhieu" id="serviceWarranty"
+                                name="form_type" value="3">
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,8 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
-                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
+                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
+                            id="btn-get-unique-products">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -91,8 +92,8 @@
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13 text-nowrap mr-3 required-label" style="flex: 1.5;">Mã phiếu</span>
-                            <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                placeholder="Nhập thông tin"
+                            <input type="text" id="form_code_receiving" name="form_code_receiving"
+                                style="flex:2;" placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
                                 class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                         </div>
                         <div
@@ -222,10 +223,10 @@
                                     <th class="" style="width:10%;"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr id="dynamic-fields" class="bg-white"></tr>
+                            <tbody id="tbody-product-data">
                             </tbody>
                         </table>
+                        <input type="hidden" name="data-test" id="data-test">
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
@@ -246,7 +247,8 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" />
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                            name="TN" />
                     </section>
                 </div>
             </div>
@@ -254,15 +256,4 @@
     </div>
 </form>
 <script src="{{ asset('js/addproduct.js') }}"></script>
-<script>
-    // Checkbox hãng tiếp nhận và loại phiếu
-    function toggleCheckbox(clickedCheckbox, groupName) {
-        const checkboxes = document.querySelectorAll(`.${groupName}`);
-
-        checkboxes.forEach((checkbox) => {
-            if (checkbox !== clickedCheckbox) {
-                checkbox.checked = false; // Uncheck other checkboxes in the same group
-            }
-        });
-    }
-</script>
+<script></script>

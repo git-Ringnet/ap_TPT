@@ -116,12 +116,14 @@ $(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
     let modalId = $(this).data("modal-id");
     $("#" + modalId)
         .find("input")
+        .not("#name_modal") // Loại trừ phần tử có ID là name_modal
         .val("");
 });
 // Hàm xử lý khi bấm nút Xác nhận
 $(document).on("click", ".submit-button", function (event) {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
 
+    let name_modal = $("#name_modal").val();
     let serialNumbers = getSerialNumbers(); // Lấy mảng serial numbers
     let product = getProduct(); // Lấy thông tin sản phẩm
 
@@ -169,19 +171,20 @@ $(document).on("click", ".submit-button", function (event) {
     }
     // Thêm các hàng mới từ serialNumbers
     serialNumbers.forEach(function (serial, index) {
-        let newRow = createSerialRow(index, product, serial); // Hàm tạo dòng mới
+        let newRow = createSerialRow(index, product, serial, name_modal); // Hàm tạo dòng mới
         $tbody.append(newRow); // Thêm dòng mới vào tbody
     });
 
     // Thêm hàng cuối cùng để đếm số lượng serial
-    let countRow = createCountRow(serialNumbers.length, product);
+    let countRow = createCountRow(serialNumbers.length, product, name_modal);
     $tbody.append(countRow); // Thêm dòng đếm số lượng vào cuối bảng
 
     $(".btn-destroy-modal").click(); // Đóng modal
 });
 
 // Hàm tạo hàng dữ liệu với serial
-function createSerialRow(index, product, serial) {
+function createSerialRow(index, product, serial, name) {
+    const hideLastColumn = name === "NH" ? "d-none" : "";
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
@@ -218,6 +221,11 @@ function createSerialRow(index, product, serial) {
                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
                     name="serial[]" value="${serial}">
             </td>
+             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 status_recept height-32 bg-input-guest-blue"
+                    name="status_recept[]" value="">
+            </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
@@ -235,7 +243,11 @@ function createSerialRow(index, product, serial) {
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
-function createCountRow(count, product) {
+function createCountRow(count, product, name) {
+    // Kiểm tra giá trị của name để xác định colspan
+    const colspanValue1 = name === "TN" ? 4 : 3;
+    const colspanValue2 = name === "TN" ? 8 : 7;
+
     return `
         <tr id="serials-count" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4"></td>
@@ -245,10 +257,10 @@ function createCountRow(count, product) {
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="serial_count" value="${count}">
             </td>
-            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td colspan="${colspanValue1}" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
-        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}" class="bg-white">
-             <td colspan="7" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
+            <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -228,7 +228,8 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" />
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                            name="NH" />
                     </section>
                 </div>
             </div>
@@ -236,100 +237,4 @@
     </div>
 </form>
 <script src="{{ asset('js/addproduct.js') }}"></script>
-<script>
-    // Khi bấm vào nút
-    $('#btn-get-unique-products').click(function(e) {
-        if ($('#tbody-product-data tr').length === 0) {
-            alert("Vui lòng thêm sản phẩm.");
-            e.preventDefault();
-        }
-        // Kiểm tra nhập S/N trùng
-        let duplicates = [];
-        let seen = new Set();
-
-        // Duyệt qua từng input để lấy giá trị
-        $('input[name="serial[]"]').each(function() {
-            let value = $(this).val().trim().toLowerCase(); // Chuẩn hóa về chữ thường
-            if (seen.has(value) && value !== "") {
-                duplicates.push(value); // Thêm giá trị trùng vào mảng
-            } else {
-                seen.add(value); // Thêm giá trị vào tập hợp
-            }
-        });
-
-        // Nếu có giá trị trùng, thông báo
-        if (duplicates.length > 0) {
-            alert("Các S/N bị trùng: " + duplicates.join(", "));
-            e.preventDefault();
-        }
-
-        //Kiểm tra S/N tồn tại
-        let SNExist = []; //mảng chứa S/N tồn tại
-        let isDuplicate = false; // Cờ kiểm tra xem có serial nào bị trùng không
-        const rows = $('#tbody-product-data tr[data-product-id]'); // Lấy tất cả các hàng có product_id
-
-        rows.each(function() {
-            const $row = $(this); // Lấy dòng hiện tại
-            const product_id = $row.find('.product_id').val();
-            const serial = $row.find('.serial').val().trim();
-
-            // Nếu serial rỗng, bỏ qua
-            if (!serial) return;
-
-            // Gửi AJAX kiểm tra từng serial
-            $.ajax({
-                url: '{{ route('checkSN') }}',
-                type: 'GET',
-                async: false, // Sử dụng đồng bộ để đợi kết quả trước khi xử lý tiếp
-                data: {
-                    product_id: product_id,
-                    serial: serial,
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.exists) {
-                        SNExist.push(serial);
-                        isDuplicate = true; // Đánh dấu có lỗi
-                    }
-                }
-            });
-        });
-
-        // Nếu có serial trùng, dừng submit
-        if (isDuplicate) {
-            alert('Serial này đã có trong hệ thống: ' + SNExist.join(", "));
-            e.preventDefault();
-        }
-
-        // e.preventDefault(); // Nếu cần, hãy giữ lại để ngăn mặc định
-        // Khởi tạo một Map để lưu sản phẩm duy nhất
-        const uniqueProducts = new Map();
-
-        // Duyệt qua từng hàng có thuộc tính data-product-id trong tbody
-        $('#tbody-product-data tr[data-product-id]').each(function() {
-            const $row = $(this); // Dòng hiện tại
-            const product_id = $row.find('.product_id').val();
-            const serial = $row.find('.serial').val();
-            const note_seri = $row.find('.note_seri').val();
-
-            // Tạo khóa duy nhất bao gồm cả note_seri
-            const uniqueKey = `${product_id}-${serial}-${note_seri}`;
-
-            // Thêm vào Map nếu chưa tồn tại
-            if (!uniqueProducts.has(uniqueKey)) {
-                uniqueProducts.set(uniqueKey, {
-                    product_id,
-                    serial,
-                    note_seri
-                });
-            }
-        });
-
-        // Chuyển Map thành mảng
-        const uniqueProductsArray = Array.from(uniqueProducts.values());
-
-        // Chuyển mảng thành chuỗi JSON và gán vào data-test
-        $('#data-test').val(JSON.stringify(uniqueProductsArray));
-    });
-</script>
 <script src="{{ asset('js/imports.js') }}"></script>

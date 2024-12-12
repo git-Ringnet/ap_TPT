@@ -12,7 +12,9 @@ class CreateSerialNumbersTable extends Migration
             $table->id();
             $table->string('serial_code', 100)->unique();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->integer('status')->nullable();
+            $table->integer('status')
+                ->default(1)
+                ->comment('1: Nhập hàng, 2: Xuất hàng, 3: Tiếp nhận, 4: Trả hàng');
             $table->string('note')->nullable();
             $table->timestamps();
         });

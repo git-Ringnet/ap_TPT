@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('branch_id')->default(null)->comment('Hãng tiếp nhận');
             $table->unsignedInteger('form_type')->default(null)->comment('Loại phiếu');
-            $table->string('form_code')->default(null)->comment('Mã phiếu');
+            $table->string('form_code_receiving')->default(null)->comment('Mã phiếu');
             $table->unsignedBigInteger('customer_id')->default(null)->comment('Khách hàng');
             $table->text('address')->default(null)->comment('Địa chỉ');
             $table->dateTime('date_created')->comment('Ngày lập phiếu');
