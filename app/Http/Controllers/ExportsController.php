@@ -79,7 +79,9 @@ class ExportsController extends Controller
     {
         $export = Exports::with(['user', 'customer'])->where("exports.id", $id)->first();
         $title = "Xem chi tiết phiếu xuất hàng";
-        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])->get();
+        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])
+            ->where("export_id", $id)
+            ->get();
         return view('expertise.export.show', compact('title', 'export', 'productExports'));
     }
 
@@ -92,7 +94,9 @@ class ExportsController extends Controller
         $users = User::all();
         $cumtomers = Customers::all();
         $title = "Sửa phiếu xuất hàng";
-        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])->get();
+        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])
+            ->where("export_id", $id)
+            ->get();
         $products = Product::all();
         return view('expertise.export.edit', compact('title', 'export', 'users', 'cumtomers', 'productExports', 'products'));
     }

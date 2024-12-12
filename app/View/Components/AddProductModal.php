@@ -24,13 +24,12 @@ class AddProductModal extends Component
      * @param  string  $title
      * @return void
      */
-    public function __construct($id, $title = 'Modal Title', $dataProduct = null, $page = null , $name = null)
+    public function __construct($id, $title = 'Modal Title', $dataProduct = null, $name = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->title = $title;
         $this->dataProduct = $dataProduct;
-        $this->page = $page;
     }
 
     /**

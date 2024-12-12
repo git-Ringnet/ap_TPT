@@ -194,6 +194,7 @@ $(document).on("click", ".submit-button", function (event) {
 // Hàm tạo hàng dữ liệu với serial
 function createSerialRow(index, product, serial, name) {
     const hideLastColumn = name === "TN" ? "d-block" : "d-none";
+    const hideLastWarranty = name === "XH" ? "d-block" : "d-none";
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
@@ -235,6 +236,11 @@ function createSerialRow(index, product, serial, name) {
                     class="border-0 pl-1 pr-2 py-1 w-100 status_recept height-32 bg-input-guest-blue"
                     name="status_recept[]" value="">
             </td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastWarranty}">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                    name="warranty[]" value="${product.warranty || ""}">
+            </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
@@ -254,7 +260,7 @@ function createSerialRow(index, product, serial, name) {
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
 function createCountRow(count, product, name) {
     let colspanValue1, colspanValue2;
-    if (name === "TN") {
+    if (name === "TN" || name === "XH") {
         colspanValue1 = 4;
         colspanValue2 = 8;
     } else if (name === "NH") {
@@ -274,8 +280,8 @@ function createCountRow(count, product, name) {
         </tr>
         <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                <button type="button" class="save-info-product" data-product-id="${product.id}" data-product-code="${product.product_code}"
-                 data-product-name="${product.product_name}" data-product-brand="${product.product_brand}">
+                <button type="button" class="save-info-product btn" data-product-id="${product.id}" data-product-code="${product.product_code}"
+                 data-product-name="${product.product_name}" data-product-brand="${product.product_brand}" data-product-warranty="${product.warranty}">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
                     1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
@@ -393,7 +399,7 @@ $(document).on("click", ".save-info-product", function (e) {
         $("#table-body").append(row);
     });
     // Log thông tin sản phẩm tìm được
-    $(".btn-save-print").click();
+    // $(".btn-save-print").click();
     $("#product_code_input").val(productCode);
     $("#product_name_input").val(
         productName !== "undefined" ? productName : ""
@@ -406,5 +412,4 @@ $(document).on("click", ".save-info-product", function (e) {
     );
     $("#product_id_input").val(productId);
     $("#modal-id").attr("data-type", "update");
-    console.log(products); // Log ra mảng products để kiểm tra
 });

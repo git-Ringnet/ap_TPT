@@ -3,7 +3,7 @@
     <input type="hidden" name="modal_id" value="{{ $id }}">
     <input type="hidden" name="name_modal" id="name_modal" value="{{ $name }}">
     <div class="modal-dialog modal-dialog-centered" role="document"
-        @if ($page == 'exports') style="max-width: 800px;" @endif>
+        @if ($name == 'XH') style="max-width: 800px;" @endif>
         <div class="modal-content">
             <div class="modal-header justify-content-end">
                 <div class="d-flex content__heading--right">
@@ -48,7 +48,7 @@
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Mã hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 25%;">Tên hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Hãng</th>
-                                    @if ($page == 'exports')
+                                    @if ($name == 'XH')
                                         <th class="height-40 py-0 border pl-3" style="width: 20%;">Bảo hành (Tháng)</th>
                                     @endif
                                 </tr>
@@ -104,7 +104,7 @@
                                         <input type="text" id="product_brand_input" name="product_brand_input"
                                             style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
-                                    @if ($page == 'exports')
+                                    @if ($name == 'XH')
                                         <td class="text-13-black border py-0 pl-3">
                                             <input type="text" id="product_warranty_input"
                                                 name="product_warranty_input" style="flex:2;" readonly
@@ -238,6 +238,7 @@
     </div>
 </div>
 <script>
+    let nameModal = $("#name_modal").val();
     // Khi bấm vào nút
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
@@ -267,6 +268,7 @@
 
         //Kiểm tra S/N tồn tại
         let SNExist = []; //mảng chứa S/N tồn tại
+
         let isDuplicate = false; // Cờ kiểm tra xem có serial nào bị trùng không
         const rows = $(
             '#tbody-product-data .row-product[data-product-id]'); // Lấy tất cả các hàng có product_id
@@ -290,9 +292,13 @@
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
-                    if (response.exists) {
+                    if (nameModal === "NH" && response.exists) {
                         SNExist.push(serial);
-                        isDuplicate = true; // Đánh dấu có lỗi
+                        isDuplicate = true; // Đánh dấu có lỗi trùng lặp
+                    }
+                    if (nameModal === "XH" && !response.exists) {
+                        SNExist.push(serial);
+                        isDuplicate = true; // Đánh dấu lỗi không tồn tại
                     }
                 }
             });
@@ -300,8 +306,11 @@
 
         // Nếu có serial trùng, dừng submit
         if (isDuplicate) {
-            alert('Serial này đã có trong hệ thống: ' + SNExist.join(", "));
-            e.preventDefault();
+            const message = nameModal === "NH" ?
+                `Serial này đã có trong hệ thống: ${SNExist.join(", ")}` :
+                `Serial này không tồn tại trong hệ thống: ${SNExist.join(", ")}`;
+            alert(message);
+            e.preventDefault(); // Ngăn form submit
         }
 
         // e.preventDefault(); // Nếu cần, hãy giữ lại để ngăn mặc định
@@ -309,22 +318,29 @@
         const uniqueProducts = new Map();
 
         // Duyệt qua từng hàng có thuộc tính data-product-id trong tbody
-        $('#tbody-product-data .row-product[data-product-id]').each(function() {
+        $('#tbody-product-data tr[data-product-id]').each(function() {
             const $row = $(this); // Dòng hiện tại
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val();
             const note_seri = $row.find('.note_seri').val();
+
+            // Khởi tạo object chứa dữ liệu cơ bản
+            const productData = {
+                product_id,
+                serial,
+                note_seri
+            };
+
+            if (nameModal === "XH") {
+                productData.warranty = $row.find('.warranty').val();
+            }
 
             // Tạo khóa duy nhất bao gồm cả note_seri
             const uniqueKey = `${product_id}-${serial}-${note_seri}`;
 
             // Thêm vào Map nếu chưa tồn tại
             if (!uniqueProducts.has(uniqueKey)) {
-                uniqueProducts.set(uniqueKey, {
-                    product_id,
-                    serial,
-                    note_seri
-                });
+                uniqueProducts.set(uniqueKey, productData);
             }
         });
 
@@ -333,7 +349,5 @@
 
         // Chuyển mảng thành chuỗi JSON và gán vào data-test
         $('#data-test').val(JSON.stringify(uniqueProductsArray));
-        console.log(uniqueProductsArray);
-
     });
 </script>
