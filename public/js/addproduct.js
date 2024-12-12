@@ -192,7 +192,8 @@ $(document).on("click", ".submit-button", function (event) {
 });
 
 // Hàm tạo hàng dữ liệu với serial
-function createSerialRow(index, product, serial) {
+function createSerialRow(index, product, serial, name) {
+    const hideLastColumn = name === "TN" ? "d-block" : "d-none";
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
@@ -229,6 +230,11 @@ function createSerialRow(index, product, serial) {
                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
                     name="serial[]" value="${serial}">
             </td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 status_recept height-32 bg-input-guest-blue"
+                    name="status_recept[]" value="">
+            </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
@@ -246,11 +252,17 @@ function createSerialRow(index, product, serial) {
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
-function createCountRow(count, product) {
+function createCountRow(count, product, name) {
+    let colspanValue1, colspanValue2;
+    if (name === "TN") {
+        colspanValue1 = 4;
+        colspanValue2 = 8;
+    } else if (name === "NH") {
+        colspanValue1 = 3;
+        colspanValue2 = 7;
+    }
     return `
-        <tr id="serials-count" class="bg-white" data-product-code="${
-            product.product_code
-        }" data-product-id="${product.id}">
+        <tr id="serials-count" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4"></td>
             <td class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">Số lượng serial:</td>
             <td class="border-right p-2 text-13 align-center border-bottom border-top-0">
@@ -258,10 +270,10 @@ function createCountRow(count, product) {
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="serial_count" value="${count}">
             </td>
-            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td colspan="${colspanValue1}" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
-        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}" class="bg-white">
-             <td colspan="7" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
+            <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
