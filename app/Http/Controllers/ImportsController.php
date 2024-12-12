@@ -68,7 +68,7 @@ class ImportsController extends Controller
         // );
 
         // $import = Imports::create($validatedData);
-        // dd($request->all()); 
+        // dd($request->all());
         $import_id = $this->imports->addImport($request->all());
         $dataTest = $request->input('data-test');
 
@@ -77,18 +77,20 @@ class ImportsController extends Controller
 
         // Duyệt qua từng sản phẩm trong mảng
         foreach ($uniqueProductsArray as $serial) {
-            $newSerial = SerialNumber::create([
-                'serial_code' => $serial['serial'],
-                'product_id' => $serial['product_id'],
-                'note' => $serial['note_seri'],
-            ]);
-            ProductImport::create([
-                'import_id' => $import_id,
-                'product_id' => $serial['product_id'],
-                'quantity' => 1,
-                'sn_id' => $newSerial->id,
-                'note' => $serial['note_seri'],
-            ]);
+            if (isset($serial['serial']) && !empty($serial['serial'])) {
+                $newSerial = SerialNumber::create([
+                    'serial_code' => $serial['serial'],
+                    'product_id' => $serial['product_id'],
+                    'note' => $serial['note_seri'],
+                ]);
+                ProductImport::create([
+                    'import_id' => $import_id,
+                    'product_id' => $serial['product_id'],
+                    'quantity' => 1,
+                    'sn_id' => $newSerial->id,
+                    'note' => $serial['note_seri'],
+                ]);
+            }
         }
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
     }
@@ -126,13 +128,14 @@ class ImportsController extends Controller
         $title = "Sửa phiếu nhập hàng";
         $users = User::all();
         $providers = Providers::all();
-        $products = ProductImport::where('import_id', $id)
+        $productImport = ProductImport::where('import_id', $id)
             ->leftJoin("imports", "product_import.product_id", "imports.id")
             ->leftJoin("serial_numbers", "product_import.sn_id", "serial_numbers.id")
             ->leftJoin("products", "products.id", "product_import.product_id")
             ->select("serial_numbers.serial_code", "product_import.note as ghichu", "imports.*", "products.*")
             ->get();
-        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'products'));
+        $products = Product::all();
+        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'products', 'productImport'));
     }
 
     /**

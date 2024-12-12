@@ -190,7 +190,7 @@
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
-                                                    {{-- <a href="{{ route('imports.edit', $item->id) }}">
+                                                    <a href="{{ route('imports.edit', $item->id) }}">
                                                         <div class="m-0 px-2 py-1 mx-2 rounded">
                                                             <svg width="16" height="16" viewBox="0 0 16 16"
                                                                 fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -204,7 +204,7 @@
                                                                     fill="#6C6F74" />
                                                             </svg>
                                                         </div>
-                                                    </a> --}}
+                                                    </a>
                                                     <a href="#">
                                                         <div class="rounded">
                                                             <form

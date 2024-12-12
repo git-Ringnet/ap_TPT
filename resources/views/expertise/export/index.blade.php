@@ -180,10 +180,10 @@
                                                 {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->customer_name }}
+                                                {{ $item->customer->customer_name }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->name }}
+                                                {{ $item->user->name }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
                                                 {{ $item->note }}

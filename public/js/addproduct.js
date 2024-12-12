@@ -91,11 +91,19 @@ function getSerialNumbers() {
 }
 
 function getProduct() {
+    //kiểm tra trang hiện tại
+    let page = $("#page").val();
     let product = {};
     let productCode = $("#product_code_input").val().trim();
     let productName = $("#product_name_input").val().trim();
     let productBrand = $("#product_brand_input").val().trim();
     let productId = $("#product_id_input").val().trim();
+    if (page == "exports") {
+        let productWarranty = $("#product_warranty_input").val().trim();
+        if (productWarranty !== "") {
+            product.warranty = productWarranty;
+        }
+    }
     if (productCode !== "") {
         product.product_code = productCode;
     }
@@ -180,11 +188,11 @@ $(document).on("click", ".submit-button", function (event) {
     $tbody.append(countRow); // Thêm dòng đếm số lượng vào cuối bảng
 
     $(".btn-destroy-modal").click(); // Đóng modal
+    console.log(product);
 });
 
 // Hàm tạo hàng dữ liệu với serial
-function createSerialRow(index, product, serial, name) {
-    const hideLastColumn = name === "NH" ? "d-none" : "";
+function createSerialRow(index, product, serial) {
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
@@ -221,17 +229,12 @@ function createSerialRow(index, product, serial, name) {
                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
                     name="serial[]" value="${serial}">
             </td>
-             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
-                <input type="text" autocomplete="off"
-                    class="border-0 pl-1 pr-2 py-1 w-100 status_recept height-32 bg-input-guest-blue"
-                    name="status_recept[]" value="">
-            </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
                     name="note_seri[]" value="">
             </td>
-            <td class="p-2 align-top activity border-bottom border-top-0">
+            <td class="p-2 align-top activity border-bottom border-top-0 border-right">
                 <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" clip-rule="evenodd"
                         d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
@@ -243,13 +246,11 @@ function createSerialRow(index, product, serial, name) {
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
-function createCountRow(count, product, name) {
-    // Kiểm tra giá trị của name để xác định colspan
-    const colspanValue1 = name === "TN" ? 4 : 3;
-    const colspanValue2 = name === "TN" ? 8 : 7;
-
+function createCountRow(count, product) {
     return `
-        <tr id="serials-count" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
+        <tr id="serials-count" class="bg-white" data-product-code="${
+            product.product_code
+        }" data-product-id="${product.id}">
             <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4"></td>
             <td class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">Số lượng serial:</td>
             <td class="border-right p-2 text-13 align-center border-bottom border-top-0">
@@ -257,10 +258,10 @@ function createCountRow(count, product, name) {
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="serial_count" value="${count}">
             </td>
-            <td colspan="${colspanValue1}" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
-        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
-            <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}" class="bg-white">
+             <td colspan="7" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -314,11 +315,13 @@ $(document).ready(function () {
         const dataName = $(this).data("name");
         const dataCode = $(this).data("code");
         const dataBrand = $(this).data("brand");
+        const dataWarranty = $(this).data("warranty");
         const data_id = $(this).data("id");
         $("#product_code_input").val(dataCode);
         $("#product_name_input").val(dataName);
         $("#product_brand_input").val(dataBrand);
         $("#product_id_input").val(data_id);
+        $("#product_warranty_input").val(dataWarranty);
     });
 });
 $(document).on("click", ".save-info-product", function (e) {
@@ -328,6 +331,7 @@ $(document).on("click", ".save-info-product", function (e) {
     const productName = $(this).data("product-name");
     const productCode = $(this).data("product-code");
     const productBrand = $(this).data("product-brand");
+    const productWarranty = $(this).data("product-warranty");
     // Khai báo mảng để lưu thông tin sản phẩm
     const products = [];
     // Duyệt qua từng dòng có data-product-id trùng với productId
@@ -349,6 +353,7 @@ $(document).on("click", ".save-info-product", function (e) {
     $("#product_code_input").val(productCode);
     $("#product_name_input").val(productName || "");
     $("#product_brand_input").val(productBrand || "");
+    $("#product_warranty_input").val(productWarranty || "");
     $("#product_id_input").val(productId);
     $("#modal-id").attr("data-type", "update");
 
@@ -360,7 +365,7 @@ $(document).on("click", ".save-info-product", function (e) {
                     index + 1
                 }</td>
                 <td class="text-13-black border py-0 pl-3">
-                    <input type="text" name="form_code"value="${
+                    <input type="text" name="form_code" value="${
                         product.serial
                     }" class="text-13-black w-100 border-0 serial-input" placeholder="Nhập thông tin">
                 </td>
@@ -376,4 +381,18 @@ $(document).on("click", ".save-info-product", function (e) {
         $("#table-body").append(row);
     });
     // Log thông tin sản phẩm tìm được
+    $(".btn-save-print").click();
+    $("#product_code_input").val(productCode);
+    $("#product_name_input").val(
+        productName !== "undefined" ? productName : ""
+    );
+    $("#product_brand_input").val(
+        productBrand !== "undefined" ? productBrand : ""
+    );
+    $("#product_warranty_input").val(
+        productWarranty !== "undefined" ? productWarranty : ""
+    );
+    $("#product_id_input").val(productId);
+    $("#modal-id").attr("data-type", "update");
+    console.log(products); // Log ra mảng products để kiểm tra
 });

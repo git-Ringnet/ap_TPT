@@ -22,29 +22,38 @@ class Exports extends Model
         'note',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, 'customer_id', 'id');
+    }
+
     public static function generateExportCode()
     {
         $prefix = 'PXH';
-        $date = now()->format('dmy'); // Ngày tháng năm hiện tại (ddmmyy)
 
-        // Lấy mã lớn nhất hiện tại theo prefix và ngày
+        // Lấy mã lớn nhất hiện tại theo prefix
         $lastCode = DB::table('exports')
-            ->where('export_code', 'like', "{$prefix}%" . "-{$date}")
+            ->where('export_code', 'like', "{$prefix}%")
             ->orderBy('export_code', 'desc')
             ->value('export_code');
 
         // Tách số thứ tự nếu mã cuối cùng tồn tại
         $newNumber = 1; // Mặc định số thứ tự là 1
         if ($lastCode) {
-            $lastNumber = (int) substr($lastCode, strlen($prefix), 3); // Lấy 3 ký tự sau prefix
+            $lastNumber = (int) substr($lastCode, strlen($prefix)); // Lấy phần số sau prefix
             $newNumber  = $lastNumber + 1;
         }
 
-        // Định dạng số thứ tự thành chuỗi 3 chữ số (001, 002, ...)
-        $formattedNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        // Định dạng số thứ tự thành chuỗi 5 chữ số (001, 002, ...)
+        $formattedNumber = str_pad($newNumber, 5, '0', STR_PAD_LEFT);
 
         // Kết hợp thành mã mới
-        return "{$prefix}{$formattedNumber}-{$date}";
+        return "{$prefix}{$formattedNumber}";
     }
 
     public function addExport($data)
@@ -61,12 +70,5 @@ class Exports extends Model
         ];
         $import = DB::table($this->table)->insertGetId($arrExport);
         return $import;
-    }
-    function getAllExports()
-    {
-        return Exports::leftJoin("customers", "customers.id", "exports.customer_id")
-            ->leftJoin("users", "users.id", "exports.user_id")
-            ->select("customers.customer_name", "users.name", "exports.*")
-            ->get();
     }
 }

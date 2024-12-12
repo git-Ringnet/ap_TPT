@@ -2,6 +2,7 @@
 @section('title', $title)
 <form id="form-submit" action="{{ route('exports.store') }}" method="POST">
     @csrf
+    <input type="hidden" id="page" value="exports">
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
@@ -75,42 +76,16 @@
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Người lập phiếu</span>
                                 <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name" readonly
-                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                    style="flex:2;" />
-                                <input type="hidden" name="user_id" id="user_id">
-                                <div class="">
-                                    <div id="listUser"
-                                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                        style="z-index: 99;display: none;">
-                                        <div class="p-1">
-                                            <div class="position-relative">
-                                                <input type="text" placeholder="Nhập thông tin"
-                                                    class="pr-4 w-100 input-search bg-input-guest" id="searchUser">
-                                                <span id="search-icon" class="search-icon">
-                                                    <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <ul class="m-0 p-0 scroll-data">
-                                            @foreach ($users as $user_value)
-                                                <li class="p-2 align-items-center text-wrap border-top"
-                                                    data-id="{{ $user_value->id }}">
-                                                    <a href="#" title="{{ $user_value->name }}" style="flex:2;"
-                                                        id="{{ $user_value->id }}" data-name="{{ $user_value->name }}"
-                                                        name="create-info" class="search-info">
-                                                        <span class="text-13-black">{{ $user_value->name }}</span>
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
+                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;"
+                                    value="Admin" />
+                                <input type="hidden" name="user_id" id="user_id" value="1">
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Khách hàng</span>
-                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name" readonly
+                                <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
+                                    readonly
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="customer_id" id="provider_id">
@@ -135,6 +110,8 @@
                                                     <a href="#" title="{{ $customer_value->customer_name }}"
                                                         style="flex:2;" id="{{ $customer_value->id }}"
                                                         data-name="{{ $customer_value->customer_name }}"
+                                                        data-phone="{{ $customer_value->phone }}"
+                                                        data-address="{{ $customer_value->address }}"
                                                         name="search-info" class="search-info">
                                                         <span
                                                             class="text-13-black">{{ $customer_value->customer_name }}</span>
@@ -203,7 +180,7 @@
                                     <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
                                         <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width: 5%;"></th>
+                                    <th class="border-right" style="width: 5%;"></th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-product-data">
@@ -230,12 +207,73 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" />
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                            :page="'exports'" />
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
+<script>
+    // Khi bấm vào nút
+    $('#btn-get-unique-products').click(function(e) {
+        if ($('#tbody-product-data tr').length === 0) {
+            alert("Vui lòng thêm sản phẩm.");
+            e.preventDefault();
+        }
+        // Kiểm tra nhập S/N trùng
+        let duplicates = [];
+        let seen = new Set();
+
+        // Duyệt qua từng input để lấy giá trị
+        $('input[name="serial[]"]').each(function() {
+            let value = $(this).val().trim().toLowerCase(); // Chuẩn hóa về chữ thường
+            if (seen.has(value) && value !== "") {
+                duplicates.push(value); // Thêm giá trị trùng vào mảng
+            } else {
+                seen.add(value); // Thêm giá trị vào tập hợp
+            }
+        });
+
+        // Nếu có giá trị trùng, thông báo
+        if (duplicates.length > 0) {
+            alert("Các S/N bị trùng: " + duplicates.join(", "));
+            e.preventDefault();
+        }
+
+        // e.preventDefault(); // Nếu cần, hãy giữ lại để ngăn mặc định
+        // Khởi tạo một Map để lưu sản phẩm duy nhất
+        const uniqueProducts = new Map();
+
+        // Duyệt qua từng hàng có thuộc tính data-product-id trong tbody
+        $('#tbody-product-data tr[data-product-id]').each(function() {
+            const $row = $(this); // Dòng hiện tại
+            const product_id = $row.find('.product_id').val();
+            const serial = $row.find('.serial').val();
+            const warranty = $row.find('.warranty').val();
+            const note_seri = $row.find('.note_seri').val();
+
+            // Tạo khóa duy nhất bao gồm cả note_seri
+            const uniqueKey = `${product_id}-${serial}-${note_seri}`;
+
+            // Thêm vào Map nếu chưa tồn tại
+            if (!uniqueProducts.has(uniqueKey)) {
+                uniqueProducts.set(uniqueKey, {
+                    product_id,
+                    serial,
+                    warranty,
+                    note_seri
+                });
+            }
+        });
+
+        // Chuyển Map thành mảng
+        const uniqueProductsArray = Array.from(uniqueProducts.values());
+
+        // Chuyển mảng thành chuỗi JSON và gán vào data-test
+        $('#data-test').val(JSON.stringify(uniqueProductsArray));
+    });
+</script>
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script src="{{ asset('js/imports.js') }}"></script>

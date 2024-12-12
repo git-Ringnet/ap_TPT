@@ -41,8 +41,12 @@ $(document).ready(function () {
     $('a[name="search-info"]').on('click', function() {
         const dataId = $(this).attr('id');
         const dataName = $(this).data('name');
+        const phone = $(this).data('phone');
+        const address = $(this).data('address');
         $("#provider_id").val(dataId);
         $("#provider_name").val(dataName);
+        $('[name="phone"]').val(phone);
+        $('[name="address"]').val(address);
     });
     //lấy người lập
     $('a[name="create-info"]').on('click', function() {

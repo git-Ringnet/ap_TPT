@@ -47,25 +47,24 @@ class Imports extends Model
     public static function generateImportCode()
     {
         $prefix = 'PNH';
-        $date = now()->format('dmy'); // Ngày tháng năm hiện tại (ddmmyy)
 
-        // Lấy mã lớn nhất hiện tại theo prefix và ngày
+        // Lấy mã lớn nhất hiện tại theo prefix
         $lastCode = DB::table('imports')
-            ->where('import_code', 'like', "{$prefix}%" . "-{$date}")
+            ->where('import_code', 'like', "{$prefix}%")
             ->orderBy('import_code', 'desc')
             ->value('import_code');
 
         // Tách số thứ tự nếu mã cuối cùng tồn tại
         $newNumber = 1; // Mặc định số thứ tự là 1
         if ($lastCode) {
-            $lastNumber = (int) substr($lastCode, strlen($prefix), 3); // Lấy 3 ký tự sau prefix
+            $lastNumber = (int) substr($lastCode, strlen($prefix)); // Lấy phần số sau prefix
             $newNumber  = $lastNumber + 1;
         }
 
-        // Định dạng số thứ tự thành chuỗi 3 chữ số (001, 002, ...)
-        $formattedNumber = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+        // Định dạng số thứ tự thành chuỗi 5 chữ số (001, 002, ...)
+        $formattedNumber = str_pad($newNumber, 5, '0', STR_PAD_LEFT);
 
         // Kết hợp thành mã mới
-        return "{$prefix}{$formattedNumber}-{$date}";
+        return "{$prefix}{$formattedNumber}";
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customers;
 use App\Models\Exports;
 use App\Models\Product;
+use App\Models\ProductExport;
+use App\Models\SerialNumber;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,7 +24,7 @@ class ExportsController extends Controller
     public function index()
     {
         $title = "Phiếu xuất hàng";
-        $exports = $this->exports->getAllExports();
+        $exports = Exports::with(['user', 'customer'])->get();
         return view('expertise.export.index', compact('title', 'exports'));
     }
 
@@ -45,6 +47,28 @@ class ExportsController extends Controller
     public function store(Request $request)
     {
         $export_id = $this->exports->addExport($request->all());
+        $dataTest = $request->input('data-test');
+
+        // Giải mã chuỗi JSON thành mảng
+        $uniqueProductsArray = json_decode($dataTest, true);
+
+        // Duyệt qua từng sản phẩm trong mảng
+        foreach ($uniqueProductsArray as $serial) {
+            if (isset($serial['serial']) && !empty($serial['serial'])) {
+                $sn_id = SerialNumber::where("serial_code", $serial['serial'])
+                    ->value("id");
+                if ($sn_id) {
+                    ProductExport::create([
+                        'export_id' => $export_id,
+                        'product_id' => $serial['product_id'],
+                        'quantity' => 1,
+                        'sn_id' => $sn_id,
+                        'warranty' => $serial['warranty'],
+                        'note' => $serial['note_seri'],
+                    ]);
+                }
+            }
+        }
         return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');;
     }
 
@@ -53,13 +77,10 @@ class ExportsController extends Controller
      */
     public function show(String $id)
     {
-        $export = Exports::leftJoin("customers", "customers.id", "exports.customer_id")
-            ->leftJoin("users", "users.id", "exports.user_id")
-            ->select("customers.customer_name", "users.name", "exports.*")
-            ->where("exports.id", $id)
-            ->first();
+        $export = Exports::with(['user', 'customer'])->where("exports.id", $id)->first();
         $title = "Xem chi tiết phiếu xuất hàng";
-        return view('expertise.export.show', compact('title', 'export'));
+        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])->get();
+        return view('expertise.export.show', compact('title', 'export', 'productExports'));
     }
 
     /**
@@ -67,15 +88,13 @@ class ExportsController extends Controller
      */
     public function edit(String $id)
     {
-        $export = Exports::leftJoin("customers", "customers.id", "exports.customer_id")
-            ->leftJoin("users", "users.id", "exports.user_id")
-            ->select("customers.customer_name", "users.name", "exports.*")
-            ->where("exports.id", $id)
-            ->first();
+        $export = Exports::with(['user', 'customer'])->where("exports.id", $id)->first();
         $users = User::all();
         $cumtomers = Customers::all();
         $title = "Sửa phiếu xuất hàng";
-        return view('expertise.export.edit', compact('title', 'export', 'users', 'cumtomers'));
+        $productExports = ProductExport::with(['export', 'product', 'serialNumber'])->get();
+        $products = Product::all();
+        return view('expertise.export.edit', compact('title', 'export', 'users', 'cumtomers', 'productExports', 'products'));
     }
 
     /**
