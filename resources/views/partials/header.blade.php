@@ -88,7 +88,8 @@
                             </a>
                             <a class="dropdown-item text-13-black" href="#">Tra cứu bảo hành
                             </a>
-                            <a class="dropdown-item text-13-black" href="#">Phiếu tiếp nhận
+                            <a class="dropdown-item text-13-black" href="{{ route('receivings.index') }}">Phiếu tiếp
+                                nhận
                             </a>
                             <a class="dropdown-item text-13-black" href="#">Phiếu trả hàng
                             </a>
@@ -108,7 +109,8 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center justify-content-end">
-                    <a class="nav-link position-relative mr-3" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <a class="nav-link position-relative mr-3" data-toggle="dropdown" href="#"
+                        aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26"
                             fill="none">
                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -219,9 +221,9 @@
                             Tra cứu bảo hành
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('receivings.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'receivings') active @endif">
                             Phiếu tiếp nhận
                         </button>
                     </a>

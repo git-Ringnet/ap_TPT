@@ -318,7 +318,7 @@
         const uniqueProducts = new Map();
 
         // Duyệt qua từng hàng có thuộc tính data-product-id trong tbody
-        $('#tbody-product-data tr[data-product-id]').each(function() {
+        $('#tbody-product-data .row-product[data-product-id]').each(function() {
             const $row = $(this); // Dòng hiện tại
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val();

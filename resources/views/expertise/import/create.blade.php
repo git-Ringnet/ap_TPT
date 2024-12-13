@@ -75,8 +75,8 @@
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Người lập phiếu</span>
                                 <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name" readonly
-                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"
-                                    style="flex:2;" value="Admin" />
+                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;"
+                                    value="Admin" />
                                 <input type="hidden" name="user_id" id="user_id" value="1">
                             </div>
                             <div

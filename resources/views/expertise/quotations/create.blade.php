@@ -1,40 +1,18 @@
-@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'receivings'])
-<form id="form-submit" action="{{ route('receivings.store') }}" method="POST">
+@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'quotations'])
+<form id="form-submit" action="{{ route('quotations.store') }}" method="POST">
     @csrf
     <div class="content-wrapper--2Column m-0 min-height--none">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
-                        <span class="text text-13-black m-0" style="flex: 2;">Hãng tiếp nhận :</span>
+                        <span class="text text-13-black m-0" style="flex: 2;">Trạng thái :</span>
                         <div class="form-check form-check-inline mr-1">
-                            <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="internal" name="branch_id"
-                                value="1">
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label text text-13-black mr-1" for="external">Bên ngoài</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="external" name="branch_id"
-                                value="2">
-                        </div>
-                    </div>
-                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
-                        <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
-                        <div class="form-check form-check-inline mr-1">
-                            <label class="text text-13-black form-check-label mr-1" for="warranty">Bảo hành</label>
-                            <input type="radio" class="form-check-input loaiPhieu" id="warranty" name="form_type"
-                                value="1">
-                        </div>
-                        <div class="form-check form-check-inline mr-1">
-                            <label class="text text-13-black form-check-label mr-1" for="service">Dịch vụ</label>
-                            <input type="radio" class="form-check-input loaiPhieu" id="service" name="form_type"
-                                value="2">
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label text text-13-black mr-1" for="serviceWarranty">Bảo hành dịch
-                                vụ</label>
-                            <input type="radio" class="form-check-input loaiPhieu" id="serviceWarranty"
-                                name="form_type" value="3">
+                            <select class="form-check-input border-0 text text-13-black" name="status" id="status">
+                                <option value="1">Tiếp nhận
+                                </option>
+                                <option value="2">Xử lý</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -85,7 +63,7 @@
                 <div class="info-form">
                     <div class="bg-filter-search border-0 text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
-                            THÔNG TIN PHIẾU TIẾP NHẬN
+                            THÔNG TIN PHIẾU BÁO GIÁ
                         </p>
                     </div>
                     <div class="d-flex w-100">
@@ -93,47 +71,16 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
                                 phiếu</span>
-                            <input type="text" id="form_code_receiving" name="form_code_receiving"
-                                style="flex:2;" placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
+                            <input type="text" id="form_code_receiving" name="form_code_receiving" style="flex:2;"
+                                placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
                                 class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black btn-click required-label font-weight-bold"
-                                style="flex: 1.6;">Khách hàng</span>
+                            <span class="text-13-black btn-click font-weight-bold" style="flex: 1.6;">Khách hàng</span>
                             <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
-                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style="flex:2;" />
+                                class="text-13-black w-100 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
                             <input type="hidden" name="customer_id" id="customer_id">
-                            <div class="">
-                                <div id="listCustomer"
-                                    class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                    style="z-index: 99;display: none;">
-                                    <div class="p-1">
-                                        <div class="position-relative">
-                                            <input type="text" placeholder="Nhập thông tin"
-                                                class="pr-4 w-100 input-search bg-input-guest" id="searchCustomer">
-                                            <span id="search-icon" class="search-icon">
-                                                <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <ul class="m-0 p-0 scroll-data">
-                                        @foreach ($customers as $item)
-                                            <li class="p-2 align-items-center text-wrap border-top"
-                                                data-id="{{ $item->id }}">
-                                                <a href="#" title="{{ $item->customer_name }}" style="flex:2;"
-                                                    id="{{ $item->id }}" data-name="{{ $item->customer_name }}"
-                                                    data-phone="{{ $item->phone }}"
-                                                    data-address="{{ $item->address }}" name="search-info"
-                                                    class="search-info">
-                                                    <span class="text-13-black-black">{{ $item->customer_name }}</span>
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -225,7 +172,8 @@
             {{-- Thông tin sản phẩm --}}
             <div class="content">
                 <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
-                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG
+                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG HOÁ/DỊCH
+                        VỤ
                     </p>
                 </div>
                 <div class="container-fluided">
@@ -281,53 +229,9 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
-                            name="TN" />
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script src="{{ asset('js/addproduct.js') }}"></script>
-<script>
-    $(document).ready(function() {
-        function toggleListGuest(input, list, filterInput) {
-            input.on("click", function() {
-                list.show();
-            });
-            $(document).click(function(event) {
-                if (
-                    !$(event.target).closest(input).length &&
-                    !$(event.target).closest(filterInput).length
-                ) {
-                    list.hide();
-                }
-            });
-            var applyFilter = function() {
-                var value = filterInput.val().toUpperCase();
-                list.find("li").each(function() {
-                    var text = $(this).find("a").text().toUpperCase();
-                    $(this).toggle(text.indexOf(value) > -1);
-                });
-            };
-            input.on("keyup", applyFilter);
-            filterInput.on("keyup", applyFilter);
-        }
-        toggleListGuest(
-            $("#customer_name"),
-            $("#listCustomer"),
-            $("#searchCustomer")
-        );
-        $('a[name="search-info"]').on('click', function() {
-            const dataId = $(this).attr('id');
-            const dataName = $(this).data('name');
-            const phone = $(this).data('phone');
-            const address = $(this).data('address');
-            $("#customer_id").val(dataId);
-            $("#customer_name").val(dataName);
-            $('[name="phone"]').val(phone);
-            $('[name="address"]').val(address);
-        });
-    });
-</script>

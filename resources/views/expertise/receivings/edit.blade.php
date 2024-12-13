@@ -1,7 +1,9 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'receivings'])
-<form id="form-submit" action="{{ route('receivings.store') }}" method="POST">
+@section('title', $title)
+<form id="form-submit" action="{{ route('receivings.update', $receiving->id) }}" method="POST">
     @csrf
-    <div class="content-wrapper--2Column m-0 min-height--none">
+    @method('PUT')
+    <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
@@ -10,12 +12,12 @@
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
                             <input type="radio" class="form-check-input hanguTiepNhan" id="internal" name="branch_id"
-                                value="1">
+                                value="1" {{ $receiving->branch_id == 1 ? 'checked' : '' }}>
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label text text-13-black mr-1" for="external">Bên ngoài</label>
                             <input type="radio" class="form-check-input hanguTiepNhan" id="external" name="branch_id"
-                                value="2">
+                                value="2" {{ $receiving->branch_id == 2 ? 'checked' : '' }}>
                         </div>
                     </div>
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
@@ -23,24 +25,36 @@
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="warranty">Bảo hành</label>
                             <input type="radio" class="form-check-input loaiPhieu" id="warranty" name="form_type"
-                                value="1">
+                                value="1" {{ $receiving->form_type == 1 ? 'checked' : '' }}>
                         </div>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="service">Dịch vụ</label>
                             <input type="radio" class="form-check-input loaiPhieu" id="service" name="form_type"
-                                value="2">
+                                value="2" {{ $receiving->form_type == 2 ? 'checked' : '' }}>
                         </div>
                         <div class="form-check form-check-inline">
                             <label class="form-check-label text text-13-black mr-1" for="serviceWarranty">Bảo hành dịch
                                 vụ</label>
                             <input type="radio" class="form-check-input loaiPhieu" id="serviceWarranty"
-                                name="form_type" value="3">
+                                name="form_type" value="3" {{ $receiving->form_type == 3 ? 'checked' : '' }}>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
+                        <span class="text text-13-black m-0" style="flex: 2;">Trạng thái :</span>
+                        <div class="form-check form-check-inline mr-1">
+                            <select class="form-check-input border-0 text text-13-black" name="status" id="status">
+                                <option value="1"
+                                    {{ isset($receiving) && $receiving->status == 1 ? 'selected' : '' }}>Tiếp nhận
+                                </option>
+                                <option value="2"
+                                    {{ isset($receiving) && $receiving->status == 2 ? 'selected' : '' }}>Xử lý</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="#">
+                        <a href="{{ route('receivings.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -61,25 +75,11 @@
                             </svg>
                             <p class="m-0 p-0">Xác nhận</p>
                         </button>
-                        <button id="sideGuest" type="button" class="btn-option border-0 mx-1">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <rect x="16" width="16" height="16" rx="5" transform="rotate(90 16 0)"
-                                    fill="#ECEEFA"></rect>
-                                <path
-                                    d="M15 11C15 13.2091 13.2091 15 11 15L5 15C2.7909 15 1 13.2091 1 11L1 5C1 2.79086 2.7909 1 5 1L11 1C13.2091 1 15 2.79086 15 5L15 11ZM10 13.5L10 2.5L5 2.5C3.6193 2.5 2.5 3.61929 2.5 5L2.5 11C2.5 12.3807 3.6193 13.5 5 13.5H10Z"
-                                    fill="#26273B" fill-opacity="0.8"></path>
-                            </svg>
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
-            <div id="contextMenuPBH" class="dropdown-menu"
-                style="display: none; background: #ffffff; position: absolute; width:13%;  padding: 3px 10px;  box-shadow: 0 0 10px -3px rgba(0, 0, 0, .3); border: 1px solid #ccc;">
-                <a class="dropdown-item text-13-black" href="#" data-option="donhang">Tạo phiếu xuất kho</a>
-            </div>
             {{-- Thông tin khách hàng --}}
             <div class="border">
                 <div class="info-form">
@@ -94,7 +94,8 @@
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
                                 phiếu</span>
                             <input type="text" id="form_code_receiving" name="form_code_receiving"
-                                style="flex:2;" placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
+                                style="flex:2;" placeholder="Nhập thông tin"
+                                value="{{ $receiving->form_code_receiving }}"
                                 class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                         </div>
                         <div
@@ -103,8 +104,9 @@
                                 style="flex: 1.6;">Khách hàng</span>
                             <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style="flex:2;" />
-                            <input type="hidden" name="customer_id" id="customer_id">
+                                value="{{ $receiving->customer->customer_name }}" style="flex:2;" />
+                            <input type="hidden" name="customer_id" id="customer_id"
+                                value="{{ $receiving->customer_id }}">
                             <div class="">
                                 <div id="listCustomer"
                                     class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
@@ -127,7 +129,8 @@
                                                     data-phone="{{ $item->phone }}"
                                                     data-address="{{ $item->address }}" name="search-info"
                                                     class="search-info">
-                                                    <span class="text-13-black-black">{{ $item->customer_name }}</span>
+                                                    <span
+                                                        class="text-13-black-black">{{ $item->customer_name }}</span>
                                                 </a>
                                             </li>
                                         @endforeach
@@ -138,7 +141,7 @@
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">Người lập phiếu</span>
-                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                            <input type="hidden" name="user_id" value="{{ $receiving->user_id }}">
                             <input class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" autocomplete="off"
                                 placeholder="Nhập thông tin" style="flex:2;" name=""
                                 value="{{ Auth::user()->name }}" readonly />
@@ -152,48 +155,21 @@
                             <input name="date_created" placeholder="Nhập thông tin" autocomplete="off"
                                 type="date"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style=" flex:2;" value="{{ now()->format('Y-m-d') }}" />
+                                style=" flex:2;" value="{{ $receiving->date_created->format('Y-m-d') }}" />
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
                             <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style="flex:2;" />
-                            <div class="">
-                                <div id="myUL"
-                                    class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                    style="z-index: 99;display: none;">
-                                    <div class="p-1">
-                                        <div class="position-relative">
-                                            <input type="text" placeholder="Nhập công ty"
-                                                class="pr-4 w-100 input-search bg-input-guest" id="companyFilter">
-                                            <span id="search-icon" class="search-icon">
-                                                <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <ul class="m-0 p-0 scroll-data">
-                                        {{-- @foreach ($guest as $guest_value)
-                                            <li class="p-2 align-items-center text-wrap border-top"
-                                                data-id="{{ $guest_value->id }}">
-                                                <a href="#" title="{{ $guest_value->guest_name_display }}"
-                                                    style="flex:2;" id="{{ $guest_value->id }}"
-                                                    name="search-info" class="search-info">
-                                                    <span
-                                                        class="text-13-black">{{ $guest_value->guest_name_display }}</span>
-                                                </a>
-                                            </li>
-                                        @endforeach --}}
-                                    </ul>
-                                </div>
-                            </div>
+                                value="{{ $receiving->contact_person }}" style="flex:2;" />
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
                             <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone" />
+                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone"
+                                value="{{ $receiving->phone }}" />
                         </div>
 
                     </div>
@@ -202,6 +178,7 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Địa chỉ</span>
                             <input id="" placeholder="Nhập thông tin" name="address"
+                                value="{{ $receiving->address }}"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;" />
                         </div>
                     </div>
@@ -210,6 +187,7 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
                             <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
+                                value="{{ $receiving->notes }}"
                                 class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
                         </div>
                     </div>
@@ -233,31 +211,136 @@
                         <table class="table" id="inputcontent">
                             <thead>
                                 <tr style="height:44px;">
-                                    <th class="border-right px-2 p-0 pl-4" style="width:10%;">
-                                        <span class="text-table text-secondary">Mã hàng</span>
+                                    <th class="border-right px-2 p-0" style="width: 8%">
+                                        <span class="text-table text-13-black font-weight-bold pl-3">Mã hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:20%;">
-                                        <span class="text-table text-secondary">Tên hàng</span>
+                                    <th class="border-right px-2 p-0 text-left" style="width: 15%; z-index:99;">
+                                        <span class="text-table text-13-black font-weight-bold">Tên hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:10%;">
-                                        <span class="text-table text-secondary">Hãng</span>
+                                    <th class="border-right px-2 p-0 text-left" style="width: 8%;">
+                                        <span class="text-table text-13-black font-weight-bold">Hãng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:10%;">
-                                        <span class="text-table text-secondary">Số lượng</span>
+                                    <th class="border-right px-2 p-0" style="width: 8%;">
+                                        <span class="text-table text-13-black font-weight-bold">Số lượng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:15%;">
-                                        <span class="text-table text-secondary">Serial Number</span>
+                                    <th class="border-right px-2 p-0" style="width: 10%;">
+                                        <span class="text-table text-13-black font-weight-bold">Serial Number</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:20%;">
-                                        <span class="text-table text-secondary">Tình trạng tiếp nhận</span>
+                                    <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
+                                        <span class="text-table text-13-black font-weight-bold">Tình trạng tiếp
+                                            nhận</span>
                                     </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:10%;">
-                                        <span class="text-table text-secondary">Ghi chú</span>
+                                    <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
+                                        <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width:10%;"></th>
+                                    <th class="border-right note px-2 p-0" style="width: 5%;"></th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-product-data">
+                                @foreach ($receivedProducts as $productId => $products)
+                                    @php
+                                        $productCode = $products->first()->product->product_code ?? '';
+                                        $productId = $products->first()->product->id ?? '';
+                                        $productName = $products->first()->product->name ?? '';
+                                        $productBrand = $products->first()->product->brand ?? '';
+                                        $serialCount = $products->count();
+                                    @endphp
+                                    @foreach ($products as $item)
+                                        <tr id="serials-data" class="row-product bg-white" data-index="1"
+                                            data-product-code="{{ $productCode }}"
+                                            data-product-id="{{ $item->product_id }}">
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                    readonly="" name="product_id[]"
+                                                    value="{{ $item->product_id }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                    readonly="" value="{{ $item->product->product_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                    readonly="" value="{{ $item->product->product_name }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                    readonly="" value="{{ $item->product->brand }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32"
+                                                    readonly="" value="{{ $item->quantity }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
+                                                    value="{{ $item->serial }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                    value="{{ $item->status }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                    value="{{ $item->note }}">
+                                            </td>
+                                            <td class="p-2 align-top border-bottom border-top-0">
+                                                <svg class="delete-row" width="17" height="17"
+                                                    viewBox="0 0 17 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                                                        fill="#6B6F76"></path>
+                                                </svg>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <tr id="serials-count" class="bg-white" data-product-code="{{ $productCode }}"
+                                        data-product-id="{{ $productId }}">
+                                        <td colspan="2"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                        </td>
+                                        <td
+                                            class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">
+                                            Số lượng serial:</td>
+                                        <td class="border-right p-2 text-13 align-center border-bottom border-top-0">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
+                                                name="serial_count" value="{{ $serialCount }}">
+                                        </td>
+                                        <td colspan="4"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+                                    </tr>
+                                    <tr id="add-row-product" class="bg-white"
+                                        data-product-code="{{ $productCode }}"
+                                        data-product-id="{{ $productId }}">
+                                        <td colspan="8"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <button type="button" class="save-info-product btn"
+                                                data-product-id="{{ $productId }}"
+                                                data-product-code="{{ $productCode }}"
+                                                data-product-name="{{ $productName }}"
+                                                data-product-brand="{{ $productBrand }}">
+                                                <svg width="14" height="14" viewBox="0 0 14 14"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
+                                                    1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
+                                                    12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
+                                                    6.34375H7.65625V2.625Z" fill="#151516">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <input type="hidden" name="data-test" id="data-test">
@@ -276,12 +359,12 @@
                                                 d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
                                                 fill="#42526E" />
                                         </svg>
-                                        <span class="text-table">Thêm sản phẩm</span>
+                                        <span class="text-table font-weight-bold">Thêm sản phẩm</span>
                                     </button>
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products_all"
                             name="TN" />
                     </section>
                 </div>

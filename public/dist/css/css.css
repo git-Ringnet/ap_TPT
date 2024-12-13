@@ -3172,3 +3172,9 @@ input[type="checkbox"]:checked {
     padding: 0 3px;
     box-sizing: border-box;
 }
+.w-10{
+    width: 10%;
+}
+.info-form span{
+    font-weight: 700 !important;
+}

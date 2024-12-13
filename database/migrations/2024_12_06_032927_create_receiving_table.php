@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->comment('Người lập phiếu');
             $table->string('phone')->nullable()->comment('Số điện thoại');
             $table->dateTime('closed_at')->nullable()->comment('Ngày đóng phiếu');
-            $table->unsignedInteger('status')->default(0)->comment('Tình trạng');
+            $table->unsignedInteger('status')->default(1)->comment('Tình trạng');
             $table->unsignedInteger('state')->default(0)->comment('Trạng thái');
             $table->timestamps();
         });

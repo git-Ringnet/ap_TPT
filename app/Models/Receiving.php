@@ -30,6 +30,14 @@ class Receiving extends Model
         'date_created' => 'datetime',
         'closed_at' => 'datetime',
     ];
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, 'customer_id');
+    }
+    public function receivedProducts()
+    {
+        return $this->hasMany(ReceivedProduct::class, 'reception_id');
+    }
     public function getQuoteCount(string $prefix, $model, string $column)
     {
         // Lấy số thứ tự lớn nhất của mã phiếu hiện có
@@ -40,7 +48,7 @@ class Receiving extends Model
             $lastNumber = isset($matches[1]) ? (int)$matches[1] : 0;
         }
         $newInvoiceNumber = $lastNumber + 1;
-        $countFormattedInvoice = str_pad($newInvoiceNumber, 2, '0', STR_PAD_LEFT);
+        $countFormattedInvoice = str_pad($newInvoiceNumber, 6, '0', STR_PAD_LEFT);
         $invoiceNumber = "{$prefix}{$countFormattedInvoice}";
 
         return $invoiceNumber;

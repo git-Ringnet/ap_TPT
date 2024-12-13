@@ -1,4 +1,4 @@
-@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'receivings'])
+@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'quotations'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed p-0 border-0">
@@ -80,7 +80,7 @@
             </div>
             <div class="d-flex content__heading--right">
                 <div class="row m-0">
-                    <a href="{{ route('receivings.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
+                    <a href="{{ route('quotations.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
                             <svg class="mr-1" width="12" height="12" viewBox="0 0 18 18" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -202,11 +202,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-guest">
-                                    @foreach ($receivings as $item)
+                                    @foreach ($quotations as $item)
                                         <tr class="position-relative guest-info height-30">
                                             <td class="text-13-black border-right border-bottom py-0 pl-4">
                                                 <a
-                                                    href="{{ route('receivings.edit', $item->id) }}">{{ $item->form_code_receiving }}</a>
+                                                    href="{{ route('quotations.edit', $item->id) }}">{{ $item->form_code_receiving }}</a>
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
                                                 {{ $item->customer->customer_name }}
@@ -250,7 +250,7 @@
                                                         <div class="rounded">
                                                             <form
                                                                 onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                                action="{{ route('receivings.destroy', $item->id) }}"
+                                                                action="{{ route('quotations.destroy', $item->id) }}"
                                                                 method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')

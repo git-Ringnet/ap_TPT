@@ -8,6 +8,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryLookupController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
@@ -20,6 +21,7 @@ Route::resource('products', ProductController::class);
 Route::resource('users', UserController::class);
 Route::resource('warehouses', WarehouseController::class);
 Route::resource('receivings', ReceivingController::class);
+Route::resource('quotations', QuotationController::class);
 
 Route::get('/', function () {
     return view('welcome');
