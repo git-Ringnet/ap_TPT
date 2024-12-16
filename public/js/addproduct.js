@@ -92,13 +92,13 @@ function getSerialNumbers() {
 
 function getProduct() {
     //kiểm tra trang hiện tại
-    let page = $("#page").val();
+    let name_modal = $("#name_modal").val();
     let product = {};
     let productCode = $("#product_code_input").val().trim();
     let productName = $("#product_name_input").val().trim();
     let productBrand = $("#product_brand_input").val().trim();
     let productId = $("#product_id_input").val().trim();
-    if (page == "exports") {
+    if (name_modal == "XH") {
         let productWarranty = $("#product_warranty_input").val().trim();
         if (productWarranty !== "") {
             product.warranty = productWarranty;
@@ -263,7 +263,7 @@ function createCountRow(count, product, name) {
     if (name === "TN" || name === "XH") {
         colspanValue1 = 4;
         colspanValue2 = 8;
-    } else if (name === "NH") {
+    } else if (name === "NH" || name === "CNH") {
         colspanValue1 = 3;
         colspanValue2 = 7;
     }

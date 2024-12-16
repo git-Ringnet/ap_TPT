@@ -42,4 +42,9 @@ class SerialNumber extends Model
     {
         return $this->hasMany(InventoryLookup::class, 'sn_id', 'id');
     }
+
+    public function productImports()
+    {
+        return $this->hasMany(ProductImport::class, 'sn_id', 'id');
+    }
 }

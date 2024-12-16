@@ -9,6 +9,7 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $table = 'products';
     // Đặt các cột có thể điền giá trị bằng phương thức create hoặc update
     protected $fillable = [
         'group_id',
@@ -32,6 +33,11 @@ class Product extends Model
         return $this->hasMany(InventoryLookup::class, 'product_id', 'id');
     }
 
+    public function productImports()
+    {
+        return $this->hasMany(ProductImport::class, 'product_id', 'id');
+    }
+    
     // public function group()
     // {
     //     return $this->belongsTo(Group::class, 'group_id');

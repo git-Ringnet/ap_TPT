@@ -16,4 +16,19 @@ class ProductImport extends Model
         'sn_id',
         'note'
     ];
+    
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function import()
+    {
+        return $this->belongsTo(Imports::class, 'import_id', 'id');
+    }
+
+    public function serialNumber()
+    {
+        return $this->belongsTo(SerialNumber::class, 'sn_id', 'id');
+    }
 }

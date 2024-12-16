@@ -20,7 +20,7 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
-                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
+                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4" id="btn-get-unique-products">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 viewBox="0 0 16 16" fill="none">
                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -86,8 +86,7 @@
                                     style="flex: 1.5;">Người lập phiếu</span>
                                 <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name"
                                     value="{{ $import->name }}" readonly
-                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"
-                                    style="flex:2;" />
+                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
                                 <input type="hidden" name="user_id" id="user_id" value="{{ $import->user_id }}">
                             </div>
                             <div
@@ -195,52 +194,107 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody-product-data">
-                                @foreach ($productImport as $product_value)
-                                    <tr class="bg-white">
+                                @foreach ($productImports as $productId => $products)
+                                    @php
+                                        // Lấy thông tin sản phẩm của product_id
+                                        $product = $products->first()->product;
+                                    @endphp
+                                    {{-- Hiển thị từng serial --}}
+                                    @foreach ($products as $item)
+                                        <tr id="serials-data" class="row-product bg-white" data-index="1"
+                                            data-product-code="{{ $product->product_code }}" data-product-id="{{ $product->id }}">
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                    readonly="" name="product_id[]"
+                                                    value="{{ $product->id }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                                    readonly="" name="product_code"
+                                                    value="{{ $item->product->product_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                    readonly="" name="product_name"
+                                                    value="{{ $item->product->product_name }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 brand height-32"
+                                                    readonly="" name="brand"
+                                                    value="{{ $item->product->brand }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
+                                                    name="" value="1">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                                                    name="serial[]" value="{{ $item->serialNumber->serial_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                    name="note_seri[]" value="{{ $item->note }}">
+                                            </td>
+                                            <td class="p-2 align-top activity border-bottom border-top-0 border-right">
+                                                <svg class="delete-row" width="17" height="17"
+                                                    viewBox="0 0 17 17" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                                                        fill="#6B6F76"></path>
+                                                </svg>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    {{-- Tổng số lượng --}}
+                                    <tr id="serials-count" class="bg-white"
+                                        data-product-code="{{ $product->product_name }}"
+                                        data-product-id="{{ $product->id }}">
+                                        <td colspan="2"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        </td>
                                         <td
-                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" name="product_id[]" value="1">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
-                                                readonly="" value="{{ $product_value->product_code }}">
+                                            class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">
+                                            Số lượng serial:
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->product_name }}">
+                                                class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
+                                                name="" value="{{ $products->sum('quantity') }}">
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->brand }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="1">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly=""
-                                                value="{{ $product_value->serial_code }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
-                                                value="{{ $product_value->ghichu }}">
-                                        </td>
-                                        <td class="p-2 align-top border-bottom border-top-0">
-                                            <svg class="delete-row" width="17" height="17"
-                                                viewBox="0 0 17 17" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
-                                                    fill="#6B6F76"></path>
-                                            </svg>
+                                        <td colspan="3"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+                                    </tr>
+
+                                    {{-- Nút thêm --}}
+                                    <tr id="add-row-product" class="bg-white" data-product-code="SP1"
+                                        data-product-id="{{ $product->id }}">
+                                        <td colspan="7"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                            <button type="button" class="save-info-product btn"
+                                                data-product-id="{{ $product->id }}"
+                                                data-product-code="{{ $product->product_code }}"
+                                                data-product-name="{{ $product->product_name }}"
+                                                data-product-brand="{{ $product->brand }}"
+                                                data-product-warranty="{{ $product->warranty }}">
+                                                <svg width="14" height="14" viewBox="0 0 14 14"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
+                                                1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
+                                                12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
+                                                6.34375H7.65625V2.625Z" fill="#151516"></path>
+                                                </svg>
+                                            </button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -262,12 +316,13 @@
                                                 d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
                                                 fill="#42526E" />
                                         </svg>
-                                        <span class="text-table font-weight-bold">Thêm sản phẩm</span>
+                                        <span class="text-table font-weight-bold">Thêm sản phẩm mới</span>
                                     </button>
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" />
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll"
+                            name="CNH" />
                     </section>
                 </div>
             </div>

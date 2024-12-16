@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('export_id');
             $table->integer('product_id');
-            $table->integer('quantity');
+            $table->integer('quantity')->default(1);
             $table->integer('sn_id');
             $table->integer('warranty');
             $table->text('note')->nullable();

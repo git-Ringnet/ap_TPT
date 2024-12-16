@@ -2,7 +2,6 @@
 @section('title', $title)
 <form id="form-submit" action="{{ route('exports.store') }}" method="POST">
     @csrf
-    <input type="hidden" id="page" value="exports">
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">

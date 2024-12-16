@@ -128,14 +128,11 @@ class ImportsController extends Controller
         $title = "Sửa phiếu nhập hàng";
         $users = User::all();
         $providers = Providers::all();
-        $productImport = ProductImport::where('import_id', $id)
-            ->leftJoin("imports", "product_import.product_id", "imports.id")
-            ->leftJoin("serial_numbers", "product_import.sn_id", "serial_numbers.id")
-            ->leftJoin("products", "products.id", "product_import.product_id")
-            ->select("serial_numbers.serial_code", "product_import.note as ghichu", "imports.*", "products.*")
-            ->get();
-        $products = Product::all();
-        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'products', 'productImport'));
+
+        $productImports = ProductImport::where("import_id", $id)
+            ->get()->groupBy('product_id');
+        $productAll = Product::all();
+        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'productAll', 'productImports'));
     }
 
     /**
@@ -143,6 +140,7 @@ class ImportsController extends Controller
      */
     public function update(Request $request, String $id)
     {
+        // dd($request->all());
         // Validate dữ liệu đầu vào
         $validatedData = $request->validate(
             [
@@ -166,6 +164,71 @@ class ImportsController extends Controller
 
         // Cập nhật dữ liệu
         $import->update($validatedData);
+
+        // Lấy dữ liệu từ form gửi lên
+        $dataTest = json_decode($request->input('data-test'), true);
+
+        // Lấy danh sách serial từ data-test
+        $formSerials = array_column($dataTest, 'serial');
+
+        // Lấy serials đã có trong database
+        $existingSerials = SerialNumber::whereIn('serial_code', $formSerials)->get();
+        $existingSerialCodes = $existingSerials->pluck('serial_code')->toArray();
+        $serialIds = $existingSerials->pluck('id', 'serial_code')->toArray(); // Map serial_code -> sn_id
+
+        // Lấy danh sách các serial cần thêm mới
+        $newSerials = array_filter($dataTest, function ($data) use ($existingSerialCodes) {
+            return isset($data['serial']) && !empty($data['serial']) && !in_array($data['serial'], $existingSerialCodes);
+        });
+
+        // Thêm mới các serials
+        foreach ($newSerials as $serialData) {
+            if (isset($serialData['serial']) && !empty($serialData['serial'])) {
+                $newSerial = SerialNumber::create([
+                    'serial_code' => $serialData['serial'],
+                    'product_id' => $serialData['product_id'], // Nếu cần lưu product_id
+                ]);
+                // Thêm sn_id vào danh sách serialIds để dùng sau
+                $serialIds[$serialData['serial']] = $newSerial->id;
+            }
+        }
+
+        // Thêm mới hoặc cập nhật ProductImport
+        foreach ($dataTest as $data) {
+            if (isset($data['serial']) && !empty($data['serial']) && isset($serialIds[$data['serial']])) {
+                $snId = $serialIds[$data['serial']];
+
+                ProductImport::updateOrCreate(
+                    [
+                        'import_id' => $id, // import_id từ form
+                        'product_id' => $data['product_id'], // Đảm bảo product_id từ data-test
+                        'sn_id' => $snId, // Liên kết với serial vừa tạo
+                    ],
+                    [
+                        'note' => $data['note_seri'] ?? '', // Ghi chú nếu có
+                    ]
+                );
+            }
+        }
+
+        // Lấy danh sách sn_id từ form (chỉ lấy các giá trị hợp lệ)
+        $formSerialIds = array_filter(array_map(function ($data) use ($serialIds) {
+            return isset($data['serial']) && !empty($data['serial']) ? $serialIds[$data['serial']] ?? null : null;
+        }, $dataTest));
+
+        // Tìm các serial bị xóa khỏi form
+        $removedSnIds = ProductImport::where('import_id', $id)
+            ->whereNotIn('sn_id', $formSerialIds)
+            ->pluck('sn_id'); // Lấy danh sách sn_id trước khi xóa
+
+        // Xóa các serial không còn trong form
+        ProductImport::where('import_id', $id)
+            ->whereNotIn('sn_id', $formSerialIds)
+            ->delete();
+
+        if ($removedSnIds->isNotEmpty()) {
+            SerialNumber::whereIn('id', $removedSnIds)->update(['status' => '5']);
+        }
 
         return redirect()->route('imports.index')->with('msg', 'Cập nhật thành công phiếu nhập hàng!');
     }

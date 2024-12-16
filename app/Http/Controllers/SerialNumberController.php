@@ -15,6 +15,7 @@ class SerialNumberController extends Controller
         // Kiểm tra trong bảng serial_numbers
         $exists = SerialNumber::where('product_id', $productId)
             ->where('serial_code', $serial)
+            ->where("status", "!=", "5")
             ->exists();
 
         return response()->json(['exists' => $exists]);

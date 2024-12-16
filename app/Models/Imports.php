@@ -21,6 +21,11 @@ class Imports extends Model
         'note',
     ];
 
+    public function productImports()
+    {
+        return $this->hasMany(ProductImport::class, 'import_id', 'id');
+    }
+
     public function getAllImports()
     {
         return Imports::leftJoin("providers", "providers.id", "imports.provider_id")
