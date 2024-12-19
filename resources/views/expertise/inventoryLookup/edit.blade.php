@@ -1,7 +1,8 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'inventoryLookup'])
 @section('title', $title)
-<form id="form-submit" action="#" method="POST">
+<form id="form-submit" action="{{ route('inventoryLookup.update', $inventoryLookup->id) }}" method="POST">
     @csrf
+    @method('PUT')
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
@@ -9,7 +10,7 @@
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
                         <div class="dropdown mx-1">
-                            <a href="{{ route('imports.index') }}">
+                            <a href="{{ route('inventoryLookup.index') }}">
                                 <button type="button"
                                     class="btn-save-print rounded mx-1 py-1 px-2 d-flex align-items-center h-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -42,12 +43,12 @@
                 <div>
                     <div class="bg-filter-search border-0 text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
-                            THÔNG TIN HÀNG BẢO HÀNH ĐỊNH KỲ
+                            THÔNG TIN HÀNG BẢO TRÌ ĐỊNH KỲ
                         </p>
                     </div>
                     <div class="container-fluided">
                         <section class="content overflow-content-quote">
-                            <table class="table" id="inputcontent">
+                            <table class="table mb-0" id="inputcontent">
                                 <thead>
                                     <tr style="height:44px;">
                                         <th class="border-right px-2 p-0" style="width: 8%">
@@ -80,14 +81,32 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $inventoryLookup->product->product_code }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $inventoryLookup->product->product_name }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $inventoryLookup->product->brand }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $inventoryLookup->serialNumber->serial_code }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ date_format(new DateTime($inventoryLookup->import_date), 'd/m/Y') }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $inventoryLookup->storage_duration }} ngày
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            <input type="date" name="warranty_date"
+                                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2">
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            <input type="text" name="note" autocomplete="off"
+                                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2">
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -98,7 +117,7 @@
             {{-- Thông tin sản phẩm --}}
             <div class="content">
                 <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
-                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">LỊCH SỬ BẢO HÀNH ĐỊNH KỲ
+                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">LỊCH SỬ BẢO TRÌ ĐỊNH KỲ
                     </p>
                 </div>
                 <div class="container-fluided">
@@ -125,13 +144,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                @foreach ($histories as $item_history)
+                                    <tr>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $item_history->inventoryLookup->serialNumber->serial_code }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ date_format(new DateTime($item_history->inventoryLookup->import_date), 'd/m/Y') }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $item_history->storage_duration }} ngày
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ date_format(new DateTime($item_history->warranty_date), 'd/m/Y') }}
+                                        </td>
+                                        <td class="text-13-black border-right border-bottom">
+                                            {{ $item_history->note }}
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </section>

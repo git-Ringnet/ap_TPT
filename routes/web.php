@@ -51,7 +51,7 @@ Route::resource('imports', ImportsController::class);
 //Exports
 Route::resource('exports', ExportsController::class);
 //Inventory
-Route::resource('invenroryLookup', InventoryLookupController::class);
+Route::resource('inventoryLookup', InventoryLookupController::class);
 //Check S/N exist
 Route::get('/checkSN', [SerialNumberController::class, 'checkSN'])->name('checkSN');
 

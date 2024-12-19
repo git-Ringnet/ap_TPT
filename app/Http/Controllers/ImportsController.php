@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Imports;
+use App\Models\InventoryLookup;
 use App\Models\Product;
 use App\Models\ProductImport;
 use App\Models\Providers;
@@ -90,8 +91,18 @@ class ImportsController extends Controller
                     'sn_id' => $newSerial->id,
                     'note' => $serial['note_seri'],
                 ]);
+                //Tra cứu tồn kho
+                InventoryLookup::create([
+                    'product_id' => $serial['product_id'],
+                    'sn_id' => $newSerial->id,
+                    'provider_id' => $request->provider_id,
+                    'import_date' => $request->date_create,
+                    'storage_duration' => 1,
+                    'status' => 0,
+                ]);
             }
         }
+
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
     }
 
