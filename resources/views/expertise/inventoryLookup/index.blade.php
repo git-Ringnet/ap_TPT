@@ -199,7 +199,7 @@
                                                 {{ $item->product->brand }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                <a href="{{ route('invenroryLookup.edit', $item->id) }}">
+                                                <a href="{{ route('inventoryLookup.edit', $item->id) }}">
                                                     {{ $item->serialNumber->serial_code }}
                                                 </a>
                                             </td>

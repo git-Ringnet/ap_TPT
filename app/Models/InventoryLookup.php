@@ -32,4 +32,8 @@ class InventoryLookup extends Model
     {
         return $this->belongsTo(Providers::class, 'provider_id', 'id');
     }
+    public function inventoryHistories()
+    {
+        return $this->hasMany(InventoryHistory::class, 'inventory_lookup_id');
+    }
 }
