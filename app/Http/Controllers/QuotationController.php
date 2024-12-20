@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quotation;
+use App\Models\QuotationService;
 use App\Models\Receiving;
 use Illuminate\Http\Request;
 
@@ -21,26 +22,53 @@ class QuotationController extends Controller
     {
         $quoteNumber = (new Receiving)->getQuoteCount('PBG', Quotation::class, 'quotation_code');
         $title = 'Tạo phiếu báo giá';
-        return view('expertise.quotations.create', compact('title', 'quoteNumber'));
+        $receivings = Receiving::all();
+        return view('expertise.quotations.create', compact('title', 'quoteNumber', 'receivings'));
     }
 
     // Lưu báo giá mới vào cơ sở dữ liệu
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'reception_id' => 'required|integer',
             'quotation_code' => 'required|string|unique:quotations,quotation_code',
             'customer_id' => 'required|integer',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'quotation_date' => 'required|date',
             'contact_person' => 'nullable|string',
             'notes' => 'nullable|string',
             'user_id' => 'required|integer',
             'contact_phone' => 'nullable|string',
             'total_amount' => 'required|numeric|min:0',
+            'services.*.service_name' => 'required|string', // Validate từng dịch vụ
+            'services.*.unit' => 'nullable|string',
+            'services.*.brand' => 'nullable|string',
+            'services.*.quantity' => 'required|integer|min:1',
+            'services.*.unit_price' => 'required|numeric|min:0',
+            'services.*.tax_rate' => 'nullable|numeric|min:0|max:100',
+            'services.*.note' => 'nullable|string',
         ]);
 
-        Quotation::create($validated);
+        $quotation = Quotation::create($validated);
+
+        if ($request->has('services')) {
+            foreach ($validated['services'] as $service) {
+                $total = $service['quantity'] * $service['unit_price'];
+                $totalWithTax = $total + ($total * ($service['tax_rate'] ?? 0) / 100);
+                QuotationService::create([
+                    'quotation_id' => $quotation->id, // Liên kết với bảng `quotations`
+                    'service_name' => $service['service_name'],
+                    'unit' => $service['unit'] ?? null,
+                    'brand' => $service['brand'] ?? null,
+                    'quantity' => $service['quantity'],
+                    'unit_price' => $service['unit_price'],
+                    'tax_rate' => $service['tax_rate'] ?? 0,
+                    'total' => $totalWithTax,
+                    'note' => $service['note'] ?? null,
+                ]);
+            }
+        }
 
         return redirect()->route('quotations.index')->with('msg', 'Tạo báo giá thành công!');
     }
@@ -54,7 +82,12 @@ class QuotationController extends Controller
     // Hiển thị form chỉnh sửa báo giá
     public function edit(Quotation $quotation)
     {
-        return view('expertise.quotations.edit', compact('quotation'));
+        $title = 'Chi tiết báo giá';
+        $receivings = Receiving::all();
+        $quotation = Quotation::with('services')->findOrFail($quotation->id);
+        // Giả sử 'id' là khóa duy nhất cho mỗi dịch vụ
+        $quotationServices = $quotation->services->keyBy('id');
+        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices'));
     }
 
     // Cập nhật thông tin báo giá
@@ -64,25 +97,49 @@ class QuotationController extends Controller
             'reception_id' => 'required|integer',
             'quotation_code' => 'required|string|unique:quotations,quotation_code,' . $quotation->id,
             'customer_id' => 'required|integer',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'quotation_date' => 'required|date',
             'contact_person' => 'nullable|string',
             'notes' => 'nullable|string',
             'user_id' => 'required|integer',
             'contact_phone' => 'nullable|string',
             'total_amount' => 'required|numeric|min:0',
+            'services.*.id' => 'nullable|integer',
+            'services.*.service_name' => 'required|string',
+            'services.*.unit' => 'nullable|string',
+            'services.*.brand' => 'nullable|string',
+            'services.*.quantity' => 'required|integer|min:1',
+            'services.*.unit_price' => 'required|numeric|min:0',
+            'services.*.tax_rate' => 'nullable|numeric|min:0|max:100',
+            'services.*.note' => 'nullable|string',
         ]);
 
+        // Cập nhật thông tin báo giá
         $quotation->update($validated);
-
+        $existingServices = $quotation->services->keyBy('id');
+        foreach ($validated['services'] ?? [] as $service) {
+            $totalWithTax = $service['quantity'] * $service['unit_price'] * (1 + ($service['tax_rate'] ?? 0) / 100);
+            if (
+                !empty($service['id']) && $existingServices->has($service['id'])
+            ) {
+                $existingServices[$service['id']]->update(array_merge($service, ['total' => $totalWithTax]));
+                $existingServices->forget($service['id']);
+            } else {
+                $quotation->services()->create(array_merge($service, [
+                    'total' => $totalWithTax
+                ]));
+            }
+        }
+        QuotationService::destroy($existingServices->keys());
         return redirect()->route('quotations.index')->with('msg', 'Cập nhật báo giá thành công!');
     }
+
 
     // Xóa báo giá
     public function destroy(Quotation $quotation)
     {
         $quotation->delete();
-
-        return redirect()->route('quotations.index')->with('msg', 'Xóa báo giá thành công!');
+        $quotation->services()->delete();
+        return redirect()->route('quotations.index')->with('msg', 'Xóa báo giá và các dịch vụ thành công!');
     }
 }

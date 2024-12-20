@@ -226,7 +226,8 @@
                                 <button id="add-rows"
                                     class="border-0 bg-transparent pl-3 text-purble font-weight-bold">Thêm</button>
                                 <input type="number" id="row-count" class="rounded d-inline-block p-0 text-center"
-                                    style="width: 36px; height: 22px; font-size: 12px;" value="5">
+                                    style="width: 36px; height: 22px; font-size: 12px;" value="5"
+                                    min="1">
                                 dòng
                             </span>
                             <span class="mr-5 text-danger font-weight-bold">Số lượng : 3</span>
@@ -323,12 +324,14 @@
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val();
             const note_seri = $row.find('.note_seri').val();
+            const status_recept = $row.find('.status_recept').val();
 
             // Khởi tạo object chứa dữ liệu cơ bản
             const productData = {
                 product_id,
                 serial,
-                note_seri
+                note_seri,
+                status_recept
             };
 
             if (nameModal === "XH") {

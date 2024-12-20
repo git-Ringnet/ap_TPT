@@ -17,12 +17,12 @@ class Quotation extends Model
         'quotation_code',
         'customer_id',
         'address',
-        'date_created',
+        'quotation_date',
         'contact_person',
         'notes',
         'user_id',
         'contact_phone',
-        'total_price',
+        'total_amount',
     ];
 
     // Nếu cần định nghĩa quan hệ
@@ -39,5 +39,9 @@ class Quotation extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+    public function services()
+    {
+        return $this->hasMany(QuotationService::class, 'quotation_id');
     }
 }

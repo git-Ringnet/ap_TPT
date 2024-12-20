@@ -91,9 +91,10 @@
                             <a class="dropdown-item text-13-black" href="{{ route('receivings.index') }}">Phiếu tiếp
                                 nhận
                             </a>
-                            <a class="dropdown-item text-13-black" href="#">Phiếu trả hàng
+                            <a class="dropdown-item text-13-black" href="{{ route('quotations.index') }}">Phiếu báo giá
                             </a>
-                            <a class="dropdown-item text-13-black" href="#">Phiếu báo giá
+                            <a class="dropdown-item text-13-black" href="{{ route('returnforms.index') }}">Phiếu trả
+                                hàng
                             </a>
                         </div>
                     </div>
@@ -227,16 +228,16 @@
                             Phiếu tiếp nhận
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('quotations.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
-                            Phiếu trả hàng
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'quotations') active @endif">
+                            Phiếu báo giá
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('returnforms.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
-                            Phiếu báo giá
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'returnforms') active @endif">
+                            Phiếu trả hàng
                         </button>
                     </a>
                 </div>

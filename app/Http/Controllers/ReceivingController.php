@@ -6,6 +6,7 @@ use App\Models\Customers;
 use App\Models\Product;
 use App\Models\ReceivedProduct;
 use App\Models\Receiving;
+use App\Models\SerialNumber;
 use Illuminate\Http\Request;
 
 class ReceivingController extends Controller
@@ -40,7 +41,7 @@ class ReceivingController extends Controller
             'form_type.*' => 'in:1,2,3',
             'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving',
             'customer_id' => 'required|integer',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'date_created' => 'required|date',
             'contact_person' => 'nullable|string',
             'notes' => 'nullable|string',
@@ -62,19 +63,32 @@ class ReceivingController extends Controller
         }
         // Duyệt qua mảng và lưu vào bảng received_products
         foreach ($data as $item) {
+            // Tìm hoặc tạo serial
+            $serial = SerialNumber::firstOrCreate(
+                ['serial_code' => $item['serial']],
+                [
+                    'product_id' => $item['product_id'],
+                    'status' => 3,
+                ]
+            );
+            // Đảm bảo status của serial luôn là 3
+            if ($serial->status !== 3) {
+                $serial->update(['status' => 3]);
+            }
+            // Lưu vào bảng received_products
             ReceivedProduct::create([
                 'reception_id' => $receiving->id, // Lấy ID của phiếu tiếp nhận vừa tạo
                 'product_id' => $item['product_id'], // ID hàng hóa
                 'quantity' => 1, // Số lượng (Giả sử mỗi serial là 1 sản phẩm)
-                'serial' => $item['serial'], // Serial
+                'serial_id' => $serial->id, // Serial
                 'note' => $item['note_seri'] ?? '', // Ghi chú
-                'status' => 'pending', // Tình trạng tiếp nhận
+                'status' => $item['status_recept'] ?? '', // Tình trạng tiếp nhận
             ]);
         }
-
         // Chuyển hướng về danh sách phiếu tiếp nhận với thông báo thành công
         return redirect()->route('receivings.index')->with('msg', 'Tạo phiếu tiếp nhận thành công.');
     }
+
 
     // Display the specified receiving record
     public function show(Receiving $receiving)
@@ -103,7 +117,7 @@ class ReceivingController extends Controller
             'form_type' => 'required|integer',
             'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving,' . $receiving->id,
             'customer_id' => 'required|integer',
-            'address' => 'required|string',
+            'address' => 'nullable|string',
             'date_created' => 'required|date',
             'contact_person' => 'nullable|string',
             'notes' => 'nullable|string',
@@ -129,17 +143,32 @@ class ReceivingController extends Controller
         // Lấy danh sách sản phẩm hiện tại trong bảng `received_products` liên quan đến `receiving`
         $existingProducts = ReceivedProduct::where('reception_id', $receiving->id)->get();
 
-        // Duyệt qua mảng dữ liệu mới
-        foreach ($data as $item) {
-            $existingProduct = $existingProducts->firstWhere('serial', $item['serial']);
+        // Mảng để theo dõi các serial đã xử lý
+        $processedSerials = [];
 
+        foreach ($data as $item) {
+            // Tìm hoặc tạo serial
+            $serial = SerialNumber::firstOrCreate(
+                ['serial_code' => $item['serial']],
+                [
+                    'product_id' => $item['product_id'],
+                    'status' => 3,
+                ]
+            );
+
+            // Đảm bảo status của serial luôn là 3
+            if ($serial->status !== 3) {
+                $serial->update(['status' => 3]);
+            }
+
+            // Tìm sản phẩm đã tiếp nhận dựa trên serial_id
+            $existingProduct = $existingProducts->firstWhere('serial_id', $serial->id);
             if ($existingProduct) {
-                // Nếu sản phẩm đã tồn tại, cập nhật
                 $existingProduct->update([
                     'product_id' => $item['product_id'],
-                    'quantity' => 1, // Giả sử mỗi serial là 1 sản phẩm
+                    'quantity' => 1,
                     'note' => $item['note_seri'] ?? '',
-                    'status' => 'pending',
+                    'status' => $item['status_recept'] ?? '',
                 ]);
             } else {
                 // Nếu sản phẩm không tồn tại, tạo mới
@@ -147,22 +176,26 @@ class ReceivingController extends Controller
                     'reception_id' => $receiving->id,
                     'product_id' => $item['product_id'],
                     'quantity' => 1,
-                    'serial' => $item['serial'],
+                    'serial_id' => $serial->id,
                     'note' => $item['note_seri'] ?? '',
-                    'status' => 'pending',
+                    'status' => $item['status_recept'] ?? '',
                 ]);
             }
+
+            // Đánh dấu serial đã xử lý
+            $processedSerials[] = $serial->id;
         }
 
         // Xóa các sản phẩm không có trong dữ liệu mới
-        $existingSerials = array_column($data, 'serial');
         ReceivedProduct::where('reception_id', $receiving->id)
-            ->whereNotIn('serial', $existingSerials)
+            ->whereNotIn('serial_id', $processedSerials)
             ->delete();
 
         // Chuyển hướng về danh sách phiếu tiếp nhận với thông báo thành công
         return redirect()->route('receivings.index')->with('msg', 'Cập nhật phiếu tiếp nhận thành công.');
     }
+
+
 
 
     // Remove the specified receiving record from storage
@@ -171,5 +204,25 @@ class ReceivingController extends Controller
         $receiving->delete();
 
         return redirect()->route('receivings.index')->with('success', 'Receiving record deleted successfully.');
+    }
+    public function getReceiving(Request $request)
+    {
+        $receivingId = $request->selectedId;
+        $receiving = Receiving::with('customer')->find($receivingId);
+        $receivedProduct = ReceivedProduct::with('product', 'serial')->where('reception_id', $receivingId)->get();
+        $products = Product::all();
+        if ($receiving) {
+            return response()->json([
+                'success' => true,
+                'data' => $receiving,
+                'product' => $receivedProduct,
+                'productData' => $products,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'msg' => 'pha hoai khong a'
+            ]);
+        }
     }
 }

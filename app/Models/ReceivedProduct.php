@@ -17,7 +17,7 @@ class ReceivedProduct extends Model
         'reception_id',
         'product_id',
         'quantity',
-        'serial',
+        'serial_id',
         'status',
         'note',
     ];
@@ -35,5 +35,9 @@ class ReceivedProduct extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+    public function serial()
+    {
+        return $this->belongsTo(SerialNumber::class, 'serial_id');
     }
 }

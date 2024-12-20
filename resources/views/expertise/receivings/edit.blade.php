@@ -280,11 +280,11 @@
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
-                                                    value="{{ $item->serial }}">
+                                                    value="{{ $item->serial->serial_code }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 status height-32 bg-input-guest-blue"
                                                     value="{{ $item->status }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">

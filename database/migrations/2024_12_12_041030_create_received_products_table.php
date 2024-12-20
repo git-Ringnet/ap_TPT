@@ -13,7 +13,7 @@ class CreateReceivedProductsTable extends Migration
             $table->unsignedBigInteger('reception_id')->comment('ID phiếu tiếp nhận');
             $table->unsignedBigInteger('product_id')->comment('ID hàng hóa');
             $table->integer('quantity')->comment('Số lượng');
-            $table->text('serial')->nullable()->comment('Serial');
+            $table->unsignedBigInteger('serial_id')->nullable()->comment('Serial Id');
             $table->text('status')->nullable()->comment('Tình trạng tiếp nhận');
             $table->text('note')->nullable()->comment('Ghi chú');
             $table->timestamps();

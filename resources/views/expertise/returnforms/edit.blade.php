@@ -1,6 +1,6 @@
-@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'quotations'])
+@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'returnforms'])
 @section('title', $title)
-<form id="form-submit" action="{{ route('quotations.update', $quotation->id) }}" method="POST">
+<form id="form-submit" action="{{ route('returnforms.update', $returnForm->id) }}" method="POST">
     @csrf
     @method('PUT')
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
@@ -15,17 +15,46 @@
                                 <option value="">Chưa chọn phiếu</option>
                                 @foreach ($receivings as $item)
                                     <option value="{{ $item->id }}"
-                                        {{ $quotation->reception_id == $item->id ? 'selected' : '' }}>
+                                        {{ $returnForm->reception_id == $item->id ? 'selected' : '' }}>
                                         {{ $item->form_code_receiving }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
+                        <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
+                        <div class="form-check form-check-inline mr-1">
+                            <select class="form-check-input border-0 text text-13-black select-nodropdown"
+                                name="status" id="status" disabled>
+                                <option value="0">Chưa chọn</option>
+                                <option value="1" {{ $returnForm->reception->form_type == 1 ? 'selected' : '' }}>
+                                    Bảo hành</option>
+                                <option value="2" {{ $returnForm->reception->form_type == 2 ? 'selected' : '' }}>
+                                    Dịch
+                                    vụ</option>
+                                <option value="3" {{ $returnForm->reception->form_type == 3 ? 'selected' : '' }}>
+                                    Bảo
+                                    hành dịch vụ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
+                        <span class="text text-13-black m-0" style="flex: 2;">Trạng thái :</span>
+                        <div class="form-check form-check-inline mr-1">
+                            <select class="form-check-input border-0 text text-13-black" name="status" required
+                                id="status">
+                                <option value="1" {{ $returnForm->status == 1 ? 'selected' : '' }}>Hoàn
+                                    thành</option>
+                                <option value="2" {{ $returnForm->status == 2 ? 'selected' : '' }}>Không đồng ý
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="{{ route('quotations.index') }}">
+                        <a href="{{ route('returnforms.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -64,19 +93,20 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
                                 phiếu</span>
-                            <input type="text" id="quotation_code" name="quotation_code" style="flex:2;"
-                                placeholder="Nhập thông tin" value="{{ $quotation->quotation_code }}"
+                            <input type="text" id="return_code" name="return_code" style="flex:2;"
+                                placeholder="Nhập thông tin" value="{{ $returnForm->return_code }}"
                                 class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click required-label font-weight-bold"
-                                style="flex: 1.6;">Khách hàng</span>
+                                style="flex: 1.6;">Khách
+                                hàng</span>
                             <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                value="{{ $quotation->customer->customer_name }}" style="flex:2;" />
+                                value="{{ $returnForm->customer->customer_name }}" style="flex:2;" />
                             <input type="hidden" name="customer_id" id="customer_id"
-                                value="{{ $quotation->customer_id }}">
+                                value="{{ $returnForm->customer_id }}">
                             <div class="">
                                 <div id="listCustomer"
                                     class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
@@ -97,7 +127,7 @@
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">Người lập phiếu</span>
-                            <input type="hidden" name="user_id" value="{{ $quotation->user_id }}">
+                            <input type="hidden" name="user_id" value="{{ $returnForm->user_id }}">
                             <input class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" autocomplete="off"
                                 placeholder="Nhập thông tin" style="flex:2;" name=""
                                 value="{{ Auth::user()->name }}" readonly />
@@ -108,25 +138,25 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
                                 phiếu</span>
-                            <input name="quotation_date" placeholder="Nhập thông tin" autocomplete="off"
+                            <input name="date_created" placeholder="Nhập thông tin" autocomplete="off"
                                 type="date"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                 style=" flex:2;"
-                                value="{{ \Carbon\Carbon::parse($quotation->quotation_date)->format('Y-m-d') }}" />
+                                value="{{ \Carbon\Carbon::parse($returnForm->date_created)->format('Y-m-d') }}" />
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
                             <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                id="contact_person" value="{{ $quotation->contact_person }}" style="flex:2;" />
+                                id="contact_person" value="{{ $returnForm->contact_person }}" style="flex:2;" />
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
                             <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone"
-                                id="phone" value="{{ $quotation->phone }}" />
+                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone_number"
+                                id="phone_number" value="{{ $returnForm->phone_number }}" />
                         </div>
 
                     </div>
@@ -134,9 +164,23 @@
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Địa chỉ</span>
-                            <input placeholder="Nhập thông tin" name="address" value="{{ $quotation->address }}"
+                            <input placeholder="Nhập thông tin" name="address" value="{{ $returnForm->address }}"
                                 id="address"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                        </div>
+                        <div
+                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Phương thức trả hàng</span>
+                            <select
+                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"
+                                style="flex:2;" name="return_method" id="return_method">
+                                <option value="1" {{ $returnForm->return_method == 1 ? 'selected' : '' }}>Khách
+                                    nhận trực tiếp</option>
+                                <option value="2" {{ $returnForm->return_method == 2 ? 'selected' : '' }}>Chuyển
+                                    phát nhanh</option>
+                                <option value="3" {{ $returnForm->return_method == 3 ? 'selected' : '' }}>Gửi
+                                    chành xe</option>
+                            </select>
                         </div>
                     </div>
                     <div class="d-flex w-100">
@@ -144,15 +188,14 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
                             <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
-                                value="{{ $quotation->notes }}"
+                                value="{{ $returnForm->notes }}"
                                 class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
                         </div>
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Total_Amount</span>
-                            <input name="total_amount" placeholder="Nhập thông tin" autocomplete="off"
-                                id="notes"
-                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                        </div>
+                        <div
+                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                         </div>
                     </div>
                 </div>
@@ -172,142 +215,146 @@
                     </p>
                 </div>
                 <div class="container-fluided">
-                    <section class="content overflow-content-quote">
+                    <section class="content overflow-content-quote" style="overflow-x:visible">
                         <table class="table" id="inputcontent">
+                            @php
+                                $hideReplacement =
+                                    $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
+                                        ? 'd-none'
+                                        : '';
+                                $hideExtraWarranty =
+                                    $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
+                                        ? 'd-none'
+                                        : '';
+                            @endphp
                             <thead>
                                 <tr style="height:44px;">
-                                    <th class="border-right px-2 p-0 pl-4" style="width:5%;">
-                                        <span class="text-table text-secondary">STT</span>
+                                    <th class="border-right px-2 p-0 pl-4" style="width:8%;">
+                                        <span class="text-table text-secondary">Mã hàng</span>
                                     </th>
                                     <th class="border-right px-2 p-0 text-left" style="width:25%;">
-                                        <span class="text-table text-secondary">Thông tin hàng hoá/dịch vụ</span>
+                                        <span class="text-table text-secondary">Tên Hàng</span>
                                     </th>
                                     <th class="border-right px-2 p-0 text-left" style="width:10%;">
-                                        <span class="text-table text-secondary">ĐVT</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:10%;">
                                         <span class="text-table text-secondary">Hãng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:5%;">
+                                    <th class="border-right px-2 p-0 text-right" style="width:7%;">
                                         <span class="text-table text-secondary">Số lượng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:8%;">
-                                        <span class="text-table text-secondary">Đơn giá</span>
+                                    <th class="border-right px-2 p-0 text-right" style="width:10%;">
+                                        <span class="text-table text-secondary">Serial Number</span>
                                     </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:5%;">
-                                        <span class="text-table text-secondary">Thuế</span>
+                                    <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                        style="width:10%;">
+                                        <span class="text-table text-secondary">Mã hàng đổi</span>
                                     </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:10%;">
-                                        <span class="text-table text-secondary">Thành tiền</span>
+                                    <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                        style="width:10%;">
+                                        <span class="text-table text-secondary">Serial Number đổi</span>
                                     </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:15%;">
+                                    <th class="border-right note px-2 p-0 text-left {{ $hideExtraWarranty }}"
+                                        style="width:8%;">
+                                        <span class="text-table text-secondary">Bảo hành thêm</span>
+                                    </th>
+                                    <th class="border-right note px-2 p-0 text-left" style="width:12%;">
                                         <span class="text-table text-secondary">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width:10%;"></th>
                                 </tr>
+
                             </thead>
                             <tbody id="tbody-data">
-                                @foreach ($quotationServices as $id => $item)
+                                @foreach ($returnProducts as $id => $item)
                                     <tr class="row-product bg-white">
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            {{ $loop->iteration }} <!-- Sử dụng vòng lặp Laravel để đánh số -->
+                                            <input type="hidden" name="return[{{ $id }}][product_id]"
+                                                value="{{ $item->product_id }}">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly
+                                                name="return[{{ $id }}][product_code]"
+                                                value="{{ $item->product->product_code }}">
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 service_name height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][service_name]"
-                                                value="{{ $item->service_name }}" required>
+                                                class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly
+                                                name="return[{{ $id }}][product_name]"
+                                                value="{{ $item->product->product_name }}">
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 unit height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][unit]"
-                                                value="{{ $item->unit }}">
+                                                class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly
+                                                name="return[{{ $id }}][brand]"
+                                                value="{{ $item->product->brand }}">
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 brand height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][brand]"
-                                                value="{{ $item->brand }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="number" min="1" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][quantity]"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly
+                                                name="return[{{ $id }}][quantity]"
                                                 value="{{ $item->quantity }}">
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="number" step="0.01" min="0" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 unit_price height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][unit_price]"
-                                                value="{{ $item->unit_price }}">
+                                            <input type="hidden" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 serial_id height-32" readonly
+                                                name="return[{{ $id }}][serial_id]"
+                                                value="{{ $item->serialNumber->id }}">
+                                            <input type="text" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" readonly
+                                                name="return[{{ $id }}][serial_code]"
+                                                value="{{ $item->serialNumber->serial_code }}">
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <select class="border-0 pl-1 pr-2 py-1 w-100 height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][tax_rate]">
-                                                <option value="10" {{ $item->tax_rate == 10 ? 'selected' : '' }}>
-                                                    10%</option>
-                                                <option value="8" {{ $item->tax_rate == 8 ? 'selected' : '' }}>8%
-                                                </option>
-                                                <option value="0" {{ $item->tax_rate == 0 ? 'selected' : '' }}>
-                                                    KCT</option>
-                                            </select>
+                                        <td
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative {{ $hideReplacement }}">
+                                            <input type="hidden" min="0" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue"
+                                                id="replacement_code_{{ $id }}"
+                                                name="return[{{ $id }}][replacement_code]"
+                                                value="{{ $item->product_replace->id ?? null }}">
+                                            <div class="search-container">
+                                                <input type="text"
+                                                    class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
+                                                    value="{{ $item->product_replace->product_code ?? '' }}"
+                                                    placeholder="Search..." />
+                                                <ul class="search-list border rounded">
+                                                    @foreach ($dataProduct as $product)
+                                                        <li class="search-item p-2 border-bottom"
+                                                            data-id="{{ $id }}"
+                                                            data-replace_id="{{ $product->id }}"
+                                                            data-code="{{ $product->product_code }}">
+                                                            {{ $product->product_code }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="number" step="0.01" min="0" readonly
-                                                class="border-0 pl-1 pr-2 py-1 w-100 total height-32"
-                                                name="services[{{ $id }}][total]"
-                                                value="{{ $item->total }}">
+                                        <td
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideReplacement }}">
+                                            <input type="text" min="0" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue"
+                                                name="return[{{ $id }}][replacement_serial_number_id]"
+                                                value="{{ $item->replacementSerialNumber->serial_code ?? '' }}">
+                                        </td>
+                                        <td
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
+                                            <input type="number" min="0" max="100" autocomplete="off"
+                                                class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue"
+                                                name="return[{{ $id }}][extra_warranty]"
+                                                value="{{ $item->extra_warranty ?? '' }}">
                                         </td>
                                         <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
                                                 class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue"
-                                                name="services[{{ $id }}][note]"
-                                                value="{{ $item->note }}">
-                                        </td>
-                                        <td class="p-2 align-top activity border-bottom border-top-0 border-right">
-                                            <button type="button" class="delete-row btn btn-sm"> <svg
-                                                    class="delete-row" width="17" height="17"
-                                                    viewBox="0 0 17 17" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                                        d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
-                                                        fill="#6B6F76"></path>
-                                                </svg></button>
+                                                name="return[{{ $id }}][note]"
+                                                value="{{ $item->notes ?? '' }}">
                                         </td>
                                     </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
-                        <input type="hidden" name="data-test" id="data-test">
-                        <section class="content mt-2">
-                            <div class="container-fluided">
-                                <div class="d-flex ml-4">
-                                    <button type="button" data-toggle="modal" data-target="#modal-id"
-                                        class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
-                                        id="btn-add-row" style="margin-right:10px">
-                                        <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
-                                            height="12" viewBox="0 0 18 18" fill="none">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M9 0C9.58186 -2.96028e-08 10.0536 0.471694 10.0536 1.05356L10.0536 16.9464C10.0536 17.5283 9.58186 18 9 18C8.41814 18 7.94644 17.5283 7.94644 16.9464V1.05356C7.94644 0.471694 8.41814 -2.96028e-08 9 0Z"
-                                                fill="#42526E" />
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
-                                                fill="#42526E" />
-                                        </svg>
-                                        <span class="text-table">Thêm sản phẩm</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </section>
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script src="{{ asset('js/quotation.js') }}"></script>
+<script src="{{ asset('js/returnform.js') }}"></script>
 <script>
     $(document).ready(function() {
         $('#reception').change(function() {
@@ -323,10 +370,12 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
+                        $('#status').val(response.data.form_type).change();
+                        populateTableRows(response.product, "#tbody-data");
                         $('#customer_name').val(response.data.customer.customer_name);
                         $('#customer_id').val(response.data.customer_id);
                         $('#contact_person').val(response.data.contact_person);
-                        $('#phone').val(response.data.phone);
+                        $('#phone_number').val(response.data.phone);
                         $('#address').val(response.data.address);
                     }
                 });

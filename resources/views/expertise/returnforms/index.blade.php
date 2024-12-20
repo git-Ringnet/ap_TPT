@@ -1,4 +1,4 @@
-@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'quotations'])
+@include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'returnforms'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed p-0 border-0">
@@ -80,7 +80,8 @@
             </div>
             <div class="d-flex content__heading--right">
                 <div class="row m-0">
-                    <a href="{{ route('quotations.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
+                    <a href="{{ route('returnforms.create') }}" class="activity mr-3" data-name1="KH"
+                        data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
                             <svg class="mr-1" width="12" height="12" viewBox="0 0 18 18" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -149,13 +150,12 @@
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Tổng tiền</span>
+                                                        <span class="text-14">Tình trạng</span>
                                                     </button>
                                                 </a>
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-
                                         <th class="height-30 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
@@ -167,14 +167,25 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
+                                        <th class="height-30 py-0 border" scope="col">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="guest_code" data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Ghi chú</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-guest_code"></div>
+                                            </span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-guest">
-                                    @foreach ($quotations as $item)
+                                    @foreach ($returnforms as $item)
                                         <tr class="position-relative guest-info height-30">
                                             <td class="text-13-black border-right border-bottom py-0 pl-4">
-                                                <a
-                                                    href="{{ route('quotations.edit', $item->id) }}">{{ $item->quotation_code }}</a>
+                                                <a href="{{ route('returnforms.edit', $item->id) }}">{{ $item->return_code }}
+                                                </a>
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
                                                 {{ $item->customer->customer_name }}
@@ -184,7 +195,11 @@
                                                 {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ number_format($item->total_amount) }}
+                                                @if ($item->status == 1)
+                                                    Hoàn thành
+                                                @elseif($item->status == 2)
+                                                    Khách không đồng ý
+                                                @endif
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
                                                 @if ($item->reception->form_type == 1)
@@ -195,14 +210,16 @@
                                                     Dịch vụ bảo hành
                                                 @endif
                                             </td>
-
+                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                                {{ $item->notes }}
+                                            </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
                                                     <a href="#">
                                                         <div class="rounded">
                                                             <form
                                                                 onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                                action="{{ route('quotations.destroy', $item->id) }}"
+                                                                action="{{ route('returnforms.destroy', $item->id) }}"
                                                                 method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
