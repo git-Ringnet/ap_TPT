@@ -3,6 +3,7 @@
 <form id="form-submit" action="{{ route('exports.update', $export->id) }}" method="POST">
     @csrf
     @method('PUT')
+    <input type="hidden" value="{{ $export->id }}" id="import_id">
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
@@ -332,7 +333,7 @@
                             </div>
                         </section>
                         <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll"
-                            name="XH" />
+                            name="CXH" />
                     </section>
                 </div>
             </div>

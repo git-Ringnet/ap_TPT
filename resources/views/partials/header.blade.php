@@ -86,7 +86,7 @@
                             <a class="dropdown-item text-13-black" href="{{ route('inventoryLookup.index') }}">
                                 Tra cứu tồn kho
                             </a>
-                            <a class="dropdown-item text-13-black" href="#">Tra cứu bảo hành
+                            <a class="dropdown-item text-13-black" href="{{ route('warrantyLookup.index') }}">Tra cứu bảo hành
                             </a>
                             <a class="dropdown-item text-13-black" href="{{ route('receivings.index') }}">Phiếu tiếp
                                 nhận
@@ -223,9 +223,9 @@
                             Tra cứu tồn kho
                         </button>
                     </a>
-                    <a href="#" class="height-36">
+                    <a href="{{ route('warrantyLookup.index') }}" class="height-36">
                         <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2">
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'warrantyLookup') active @endif">
                             Tra cứu bảo hành
                         </button>
                     </a>

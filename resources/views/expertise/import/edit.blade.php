@@ -3,6 +3,7 @@
 <form id="form-submit" action="{{ route('imports.update', $import->id) }}" method="POST">
     @csrf
     @method('PUT')
+    <input type="hidden" value="{{ $import->id }}" id="import_id">
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner">
@@ -20,15 +21,26 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
-                        <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4" id="btn-get-unique-products">
-                            <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                viewBox="0 0 16 16" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15ZM11.7836 6.42901C12.0858 6.08709 12.0695 5.55006 11.7472 5.22952C11.4248 4.90897 10.9186 4.9263 10.6164 5.26821L7.14921 9.19122L5.3315 7.4773C5.00127 7.16593 4.49561 7.19748 4.20208 7.54777C3.90855 7.89806 3.93829 8.43445 4.26852 8.74581L6.28032 10.6427C6.82041 11.152 7.64463 11.1122 8.13886 10.553L11.7836 6.42901Z"
-                                    fill="white" />
-                            </svg>
-                            <p class="m-0 p-0">Xác nhận</p>
-                        </button>
+                        <?php $isCheck = true; ?>
+                        @foreach ($productImports as $productId => $products)
+                            @foreach ($products as $item)
+                                <?php if ($item->serialNumber->status != 1) {
+                                    $isCheck = false;
+                                } ?>
+                            @endforeach
+                        @endforeach
+                        @if ($isCheck)
+                            <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
+                                id="btn-get-unique-products">
+                                <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 16 16" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M8 15C11.866 15 15 11.866 15 8C15 4.13401 11.866 1 8 1C4.13401 1 1 4.13401 1 8C1 11.866 4.13401 15 8 15ZM11.7836 6.42901C12.0858 6.08709 12.0695 5.55006 11.7472 5.22952C11.4248 4.90897 10.9186 4.9263 10.6164 5.26821L7.14921 9.19122L5.3315 7.4773C5.00127 7.16593 4.49561 7.19748 4.20208 7.54777C3.90855 7.89806 3.93829 8.43445 4.26852 8.74581L6.28032 10.6427C6.82041 11.152 7.64463 11.1122 8.13886 10.553L11.7836 6.42901Z"
+                                        fill="white" />
+                                </svg>
+                                <p class="m-0 p-0">Xác nhận</p>
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -202,13 +214,13 @@
                                     {{-- Hiển thị từng serial --}}
                                     @foreach ($products as $item)
                                         <tr id="serials-data" class="row-product bg-white" data-index="1"
-                                            data-product-code="{{ $product->product_code }}" data-product-id="{{ $product->id }}">
+                                            data-product-code="{{ $product->product_code }}"
+                                            data-product-id="{{ $product->id }}">
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
                                                 <input type="text" autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                    readonly="" name="product_id[]"
-                                                    value="{{ $product->id }}">
+                                                    readonly="" name="product_id[]" value="{{ $product->id }}">
                                             </td>
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">

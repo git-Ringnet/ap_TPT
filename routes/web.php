@@ -16,6 +16,7 @@ use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ProvidersController;
 use App\Http\Controllers\ReturnFormController;
 use App\Http\Controllers\SerialNumberController;
+use App\Http\Controllers\WarrantyLookupController;
 use Illuminate\Support\Facades\Route;
 
 // Products
@@ -60,5 +61,7 @@ Route::resource('exports', ExportsController::class);
 Route::resource('inventoryLookup', InventoryLookupController::class);
 //Check S/N exist
 Route::get('/checkSN', [SerialNumberController::class, 'checkSN'])->name('checkSN');
+//Warranty
+Route::resource('warrantyLookup', WarrantyLookupController::class);
 
 require __DIR__ . '/auth.php';

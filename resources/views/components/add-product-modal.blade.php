@@ -3,7 +3,7 @@
     <input type="hidden" name="modal_id" value="{{ $id }}">
     <input type="hidden" name="name_modal" id="name_modal" value="{{ $name }}">
     <div class="modal-dialog modal-dialog-centered" role="document"
-        @if ($name == 'XH') style="max-width: 800px;" @endif>
+        @if ($name == 'XH' || $name == 'CXH') style="max-width: 800px;" @endif>
         <div class="modal-content">
             <div class="modal-header justify-content-end">
                 <div class="d-flex content__heading--right">
@@ -48,7 +48,7 @@
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Mã hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 25%;">Tên hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Hãng</th>
-                                    @if ($name == 'XH')
+                                    @if ($name == 'XH' || $name == 'CXH')
                                         <th class="height-40 py-0 border pl-3" style="width: 20%;">Bảo hành (Tháng)</th>
                                     @endif
                                 </tr>
@@ -104,7 +104,7 @@
                                         <input type="text" id="product_brand_input" name="product_brand_input"
                                             style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
-                                    @if ($name == 'XH')
+                                    @if ($name == 'XH' || $name == 'CXH')
                                         <td class="text-13-black border py-0 pl-3">
                                             <input type="text" id="product_warranty_input"
                                                 name="product_warranty_input" style="flex:2;" readonly
@@ -240,6 +240,8 @@
 </div>
 <script>
     let nameModal = $("#name_modal").val();
+    //id phiếu nhập/xuất
+    let import_id = $("#import_id").val();
     // Khi bấm vào nút
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
@@ -290,6 +292,8 @@
                 data: {
                     product_id: product_id,
                     serial: serial,
+                    nameModal: nameModal,
+                    import_id: import_id,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
@@ -297,7 +301,15 @@
                         SNExist.push(serial);
                         isDuplicate = true; // Đánh dấu có lỗi trùng lặp
                     }
+                    if (nameModal === "CNH" && response.exists) {
+                        SNExist.push(serial);
+                        isDuplicate = true; // Đánh dấu có lỗi trùng lặp
+                    }
                     if (nameModal === "XH" && !response.exists) {
+                        SNExist.push(serial);
+                        isDuplicate = true; // Đánh dấu lỗi không tồn tại
+                    }
+                    if (nameModal === "CXH" && !response.exists) {
                         SNExist.push(serial);
                         isDuplicate = true; // Đánh dấu lỗi không tồn tại
                     }
@@ -307,9 +319,14 @@
 
         // Nếu có serial trùng, dừng submit
         if (isDuplicate) {
-            const message = nameModal === "NH" ?
-                `Serial này đã có trong hệ thống: ${SNExist.join(", ")}` :
-                `Serial này không tồn tại trong hệ thống: ${SNExist.join(", ")}`;
+            let message = '';
+
+            if (nameModal === "NH" || nameModal === "CNH") {
+                message = `Serial này đã có trong hệ thống: ${SNExist.join(", ")}`;
+            } else if (nameModal === "XH" || nameModal === "CXH") {
+                message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
+            }
+
             alert(message);
             e.preventDefault(); // Ngăn form submit
         }
@@ -334,7 +351,7 @@
                 status_recept
             };
 
-            if (nameModal === "XH") {
+            if (nameModal === "XH" || nameModal === "CXH") {
                 productData.warranty = $row.find('.warranty').val();
             }
 

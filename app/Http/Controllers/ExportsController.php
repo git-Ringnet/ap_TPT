@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductExport;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Models\warrantyLookup;
 use Illuminate\Http\Request;
 
 class ExportsController extends Controller
@@ -68,6 +69,15 @@ class ExportsController extends Controller
                         'sn_id' => $sn->id,
                         'warranty' => $serial['warranty'],
                         'note' => $serial['note_seri'],
+                    ]);
+                    //Tra cứu bảo hành
+                    warrantyLookup::create([
+                        'product_id' => $serial['product_id'],
+                        'sn_id' => $sn->id,
+                        'customer_id' => $request->customer_id,
+                        'export_return_date' => $request->date_create,
+                        'warranty' => $serial['warranty'],
+                        'status' => 0,
                     ]);
                 }
             }
@@ -172,6 +182,19 @@ class ExportsController extends Controller
 
                 // Cập nhật trạng thái serial thành 2 (exported)
                 SerialNumber::where('id', $snId)->update(['status' => 2]);
+
+                // **Thêm mới vào WarrantyLookup nếu chưa tồn tại**
+                $existingWarranty = WarrantyLookup::where('sn_id', $snId)->first();
+                if (!$existingWarranty) {
+                    WarrantyLookup::create([
+                        'product_id' => $data['product_id'],
+                        'sn_id' => $snId,
+                        'customer_id' => $request->customer_id,
+                        'export_return_date' => $request->date_create,
+                        'warranty' => $data['warranty'] ?? 12,
+                        'status' => 0,
+                    ]);
+                }
             }
         }
 
@@ -187,6 +210,9 @@ class ExportsController extends Controller
         // Cập nhật trạng thái serial bị xóa về 1 (active)
         if (!empty($removedSnIds)) {
             SerialNumber::whereIn('id', $removedSnIds)->update(['status' => 1]);
+
+            // **Xóa khỏi WarrantyLookup nếu tồn tại**
+            WarrantyLookup::whereIn('sn_id', $removedSnIds)->delete();
         }
 
         // Xóa serials bị xóa khỏi ProductExport

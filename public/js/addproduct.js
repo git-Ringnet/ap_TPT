@@ -98,7 +98,7 @@ function getProduct() {
     let productName = $("#product_name_input").val().trim();
     let productBrand = $("#product_brand_input").val().trim();
     let productId = $("#product_id_input").val().trim();
-    if (name_modal == "XH") {
+    if (name_modal == "XH" || name_modal == "CXH") {
         let productWarranty = $("#product_warranty_input").val().trim();
         if (productWarranty !== "") {
             product.warranty = productWarranty;
@@ -194,7 +194,7 @@ $(document).on("click", ".submit-button", function (event) {
 // Hàm tạo hàng dữ liệu với serial
 function createSerialRow(index, product, serial, name) {
     const hideLastColumn = name === "TN" ? "d-block" : "d-none";
-    const hideLastWarranty = name === "XH" ? "d-block" : "d-none";
+    const hideLastWarranty = (name === "XH" || name === "CXH") ? "d-block" : "d-none";
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
@@ -260,7 +260,7 @@ function createSerialRow(index, product, serial, name) {
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
 function createCountRow(count, product, name) {
     let colspanValue1, colspanValue2;
-    if (name === "TN" || name === "XH") {
+    if (name === "TN" || name === "XH" || name === "CXH") {
         colspanValue1 = 4;
         colspanValue2 = 8;
     } else if (name === "NH" || name === "CNH") {

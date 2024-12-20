@@ -201,6 +201,19 @@ class ImportsController extends Controller
                 ]);
                 // Thêm sn_id vào danh sách serialIds để dùng sau
                 $serialIds[$serialData['serial']] = $newSerial->id;
+
+                // **Thêm mới vào InventoryLookup nếu chưa tồn tại**
+                $existingInventory = InventoryLookup::where('sn_id', $newSerial->id)->first();
+                if (!$existingInventory) {
+                    InventoryLookup::create([
+                        'product_id' => $serialData['product_id'],
+                        'sn_id' => $newSerial->id,
+                        'provider_id' => $request->provider_id,
+                        'import_date' => $request->date_create,
+                        'storage_duration' => 1,
+                        'status' => 0,
+                    ]);
+                }
             }
         }
 
@@ -238,7 +251,10 @@ class ImportsController extends Controller
             ->delete();
 
         if ($removedSnIds->isNotEmpty()) {
-            SerialNumber::whereIn('id', $removedSnIds)->update(['status' => '5']);
+            SerialNumber::whereIn('id', $removedSnIds)->delete();
+
+            // **Xóa khỏi InventoryLookup nếu tồn tại**
+            InventoryLookup::whereIn('sn_id', $removedSnIds)->delete();
         }
 
         return redirect()->route('imports.index')->with('msg', 'Cập nhật thành công phiếu nhập hàng!');
