@@ -213,7 +213,11 @@
                                                 {{ $item->warranty }} tháng
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->status }}
+                                                @if (@$item->status == '1')
+                                                    <span class="text-13-black">Hết bảo hành</span>
+                                                    @else
+                                                    <span class="text-13-black">Còn bảo hành</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

@@ -97,13 +97,13 @@ class ImportsController extends Controller
                     'sn_id' => $newSerial->id,
                     'provider_id' => $request->provider_id,
                     'import_date' => $request->date_create,
-                    'storage_duration' => 1,
+                    'storage_duration' => 0,
                     'status' => 0,
                 ]);
             }
         }
 
-        return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');;
+        return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');
     }
 
     /**
@@ -116,14 +116,11 @@ class ImportsController extends Controller
             ->select("providers.provider_name", "users.name", "imports.*")
             ->where("imports.id", $id)
             ->first();
-        $products = ProductImport::where('import_id', $id)
-            ->leftJoin("imports", "product_import.product_id", "imports.id")
-            ->leftJoin("serial_numbers", "product_import.sn_id", "serial_numbers.id")
-            ->leftJoin("products", "products.id", "product_import.product_id")
-            ->select("serial_numbers.serial_code", "product_import.note as ghichu", "imports.*", "products.*")
-            ->get();
+        $productImports = ProductImport::where("import_id", $id)
+            ->get()->groupBy('product_id');
         $title = "Xem chi tiết phiếu nhập hàng";
-        return view('expertise.import.see', compact('title', 'import', 'products'));
+        $providers = Providers::all();
+        return view('expertise.import.see', compact('title', 'import', 'productImports', 'providers'));
     }
 
     /**
@@ -210,7 +207,7 @@ class ImportsController extends Controller
                         'sn_id' => $newSerial->id,
                         'provider_id' => $request->provider_id,
                         'import_date' => $request->date_create,
-                        'storage_duration' => 1,
+                        'storage_duration' => 0,
                         'status' => 0,
                     ]);
                 }

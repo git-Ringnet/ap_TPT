@@ -37,23 +37,22 @@
                                 </span>
                             </div>
                         </div>
-                        {{-- @foreach ($provider as $provider_value)
-                            <li class="p-2 align-items-center text-wrap"
-                                style="border-radius:4px;border-bottom: 1px solid #d6d6d6;">
-                                <a href="javascript:void(0)" style="flex:2" data-id="{{ $provider_value->id }}"
-                                    name="search-infoEdit" class="search-infoEdit">
-                                    <span
-                                        class="text-13-black">{{ $provider_value->provider_name }}</span></span>
+                        @foreach ($guestOrProvider as $provider_value)
+                            <li class="p-2 align-items-center text-wrap border-top" data-id="{{ $provider_value->id }}">
+                                <a href="#" title="{{ $provider_value->provider_name }}" style="flex:2;"
+                                    id="{{ $provider_value->id }}" data-name="{{ $provider_value->provider_name }}"
+                                    name="search-info" class="search-info">
+                                    <span class="text-13-black">{{ $provider_value->provider_name }}</span>
                                 </a>
                             </li>
-                        @endforeach --}}
+                        @endforeach
                     </ul>
                 </div>
             </div>
             <div class="mt-2">
                 <p class="m-0 p-0 text-13-black">Người lập</p>
                 <select id="creator" class="form-control text-13-black">
-
+                    
                 </select>
             </div>
         </div>
@@ -95,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                 </tbody>
             </table>
         </div>

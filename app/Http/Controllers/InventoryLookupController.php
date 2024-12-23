@@ -63,13 +63,12 @@ class InventoryLookupController extends Controller
     public function update(String $id, Request $request)
     {
         $inventoryLookup = InventoryLookup::findOrFail($id);
-        $data = $request->only([
-            'warranty_date',
-            'note',
-        ]);
-        $inventoryLookup->update($data);
+        $inventoryLookup->warranty_date = $request->warranty_date;
+        $inventoryLookup->note = $request->note;
+        $inventoryLookup->status = 0;
+        $inventoryLookup->save();
         //Lưu lịch sử 
-        if (!empty($data['warranty_date']) && !empty($data['note'])) {
+        if (!empty($data['warranty_date'])) {
             // Thêm mới vào inventory_history
             InventoryHistory::create([
                 'inventory_lookup_id' => $id,

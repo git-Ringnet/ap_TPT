@@ -185,57 +185,80 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php $count = 0; ?>
-                                @foreach ($products as $product_value)
-                                    <tr class="bg-white">
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->product_code }}">
+                            <tbody id="tbody-product-data">
+                                @foreach ($productImports as $productId => $products)
+                                    @php
+                                        // Lấy thông tin sản phẩm của product_id
+                                        $product = $products->first()->product;
+                                    @endphp
+                                    {{-- Hiển thị từng serial --}}
+                                    @foreach ($products as $item)
+                                        <tr id="serials-data" class="row-product bg-white" data-index="1"
+                                            data-product-code="{{ $product->product_code }}"
+                                            data-product-id="{{ $product->id }}">
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                    readonly="" name="product_id[]" value="{{ $product->id }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                                    readonly="" name="product_code"
+                                                    value="{{ $item->product->product_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                    readonly="" name="product_name"
+                                                    value="{{ $item->product->product_name }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 brand height-32"
+                                                    readonly="" name="brand"
+                                                    value="{{ $item->product->brand }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
+                                                    name="" value="1">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off" readonly
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                                                    name="serial[]" value="{{ $item->serialNumber->serial_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off" readonly
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32"
+                                                    name="note_seri[]" value="{{ $item->note }}">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    {{-- Tổng số lượng --}}
+                                    <tr id="serials-count" class="bg-white"
+                                        data-product-code="{{ $product->product_name }}"
+                                        data-product-id="{{ $product->id }}">
+                                        <td colspan="2"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->product_name }}">
+                                        <td
+                                            class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right text-purble">
+                                            Số lượng serial:
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->brand }}">
+                                                class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
+                                                name="" value="{{ $products->sum('quantity') }}">
                                         </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="1">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->serial_code }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                readonly="" value="{{ $product_value->ghichu }}">
-                                        </td>
+                                        <td colspan="3"
+                                            class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                                     </tr>
-                                    <?php $count++; ?>
                                 @endforeach
-                                <tr>
-                                    <td colspan="2"
-                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                    </td>
-                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                        <span class="text-purble">Tổng số lượng:</span>
-                                    </td>
-                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                        <span class="text-purble">{{ $count }}</span>
-                                    </td>
-                                    <td colspan="2"
-                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </section>
@@ -243,6 +266,6 @@
             </div>
         </div>
         {{-- View mini --}}
-        <x-view_mini></x-view_mini>
+        <x-view_mini :guestOrProvider="$providers"></x-view_mini>
     </div>
 </div>

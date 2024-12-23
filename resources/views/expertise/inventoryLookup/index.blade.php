@@ -213,7 +213,9 @@
                                                 {{ $item->storage_duration }} ngày
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->status }}
+                                                @if (@$item->status == '1')
+                                                    <span class="text-danger">Tới hạn bảo trì</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
