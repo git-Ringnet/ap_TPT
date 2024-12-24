@@ -136,9 +136,11 @@
                             <tbody id="table-body">
                                 <tr class="height-40">
                                     <td class="text-13-black border py-0 text-center">01</td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border py-0 pl-3 position-relative">
                                         <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                                            autocomplete="off" placeholder="Nhập thông tin"
+                                            class="text-13-black w-100 border-0 seri-input-check">
+                                        <span class="check-icon"></span>
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
                                         <button class="btn btn-sm delete-row">
@@ -153,9 +155,11 @@
                                 </tr>
                                 <tr class="height-40">
                                     <td class="text-13-black border py-0 text-center">02</td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border py-0 pl-3 position-relative">
                                         <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                                            autocomplete="off" placeholder="Nhập thông tin"
+                                            class="text-13-black w-100 border-0 seri-input-check">
+                                        <span class="check-icon"></span>
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
                                         <button class="btn btn-sm delete-row">
@@ -170,9 +174,11 @@
                                 </tr>
                                 <tr class="height-40">
                                     <td class="text-13-black border py-0 text-center">03</td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border py-0 pl-3 position-relative">
                                         <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                                            autocomplete="off" placeholder="Nhập thông tin"
+                                            class="text-13-black w-100 border-0 seri-input-check">
+                                        <span class="check-icon"></span>
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
                                         <button class="btn btn-sm delete-row">
@@ -187,9 +193,11 @@
                                 </tr>
                                 <tr class="height-40">
                                     <td class="text-13-black border py-0 text-center">04</td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border py-0 pl-3 position-relative">
                                         <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                                            autocomplete="off" placeholder="Nhập thông tin"
+                                            class="text-13-black w-100 border-0 seri-input-check">
+                                        <span class="check-icon"></span>
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
                                         <button class="btn btn-sm delete-row">
@@ -204,9 +212,11 @@
                                 </tr>
                                 <tr class="height-40">
                                     <td class="text-13-black border py-0 text-center">05</td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border py-0 pl-3 position-relative">
                                         <input type="text" id="form_code" name="form_code" style="flex:2;"
-                                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                                            autocomplete="off" placeholder="Nhập thông tin"
+                                            class="text-13-black w-100 border-0 seri-input-check">
+                                        <span class="check-icon"></span>
                                     </td>
                                     <td class="text-13-black border py-0 text-center">
                                         <button class="btn btn-sm delete-row">
@@ -230,7 +240,7 @@
                                     min="1">
                                 dòng
                             </span>
-                            <span class="mr-5 text-danger font-weight-bold">Số lượng : 3</span>
+                            <span class="mr-5 text-danger font-weight-bold">Số lượng : <b>0</b></span>
                         </div>
                     </div>
                 </div>
@@ -239,10 +249,73 @@
     </div>
 </div>
 <script>
+    // Name modal
     let nameModal = $("#name_modal").val();
     //id phiếu nhập/xuất
     let import_id = $("#import_id").val();
     // Khi bấm vào nút
+
+    // Check serial number
+    $(document).ready(function() {
+        $(document).on('blur', '.seri-input-check', function() {
+            const $input = $(this);
+            const $checkIcon = $input.siblings('.check-icon');
+            const serialNumber = $input.val().trim(); // Giá trị nhập vào
+            const product_id = $('#product_id_input').val(); // Giá trị nhập vào
+            const branch_id = $('input[name="branch_id"]:checked').val();
+            const form_type = $('input[name="form_type"]:checked').val();
+
+            // Kiểm tra trùng lặp trong các ô nhập liệu khác
+            let isDuplicate = false;
+            $('.seri-input-check').each(function() {
+                const otherValue = $(this).val().trim();
+                if ($(this)[0] !== $input[0] && otherValue === serialNumber && serialNumber !==
+                    '') {
+                    isDuplicate = true;
+                    return false; // Thoát khỏi vòng lặp nếu tìm thấy trùng lặp
+                }
+            });
+
+            if (isDuplicate) {
+                $checkIcon.text('✖').css('color', 'red');
+                console.error('Serial bị trùng lặp.');
+                return; // Không thực hiện kiểm tra AJAX nếu trùng lặp
+            }
+
+            // Kiểm tra nếu ô nhập liệu không trống
+            if (serialNumber !== "") {
+                $.ajax({
+                    url: '{{ route('checkSNImport') }}',
+                    type: 'GET',
+                    data: {
+                        form_type: form_type,
+                        branch_id: branch_id,
+                        serial_number: serialNumber,
+                        product_id: product_id,
+                        nameModal: nameModal,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response.message);
+                        if (response.status === 'success') {
+                            $checkIcon.text('✔').css('color', 'green');
+                        } else if (response.status === 'error') {
+                            $checkIcon.text('✖').css('color', 'red');
+                        }
+                    },
+                    error: function() {
+                        $checkIcon.text('?').css('color', 'orange');
+                        console.error('Có lỗi xảy ra khi kiểm tra số serial.');
+                    }
+                });
+            } else {
+                // Nếu ô trống, giữ biểu tượng mặc định hoặc không làm gì cả
+                $checkIcon.text('').css('color', 'transparent');
+            }
+        });
+
+    });
+
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
         if ($('#tbody-product-data tr').length === 0) {
@@ -283,7 +356,6 @@
 
             // Nếu serial rỗng, bỏ qua
             if (!serial) return;
-
             // Gửi AJAX kiểm tra từng serial
             $.ajax({
                 url: '{{ route('checkSN') }}',

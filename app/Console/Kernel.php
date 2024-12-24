@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         // Lệnh tự động tăng thời gian tồn kho mỗi ngày
         $schedule->command('inventory:update-storage')->dailyAt('00:00');
         $schedule->command('warranty:update-storage')->dailyAt('00:00');
+        $schedule->command('receiving:update-status')->dailyAt('00:00');
     }
 
     /**

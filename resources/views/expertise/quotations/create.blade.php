@@ -164,13 +164,6 @@
                             <input name="notes" placeholder="Nhập thông tin" autocomplete="off" id="notes"
                                 class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
                         </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Total_Amount</span>
-                            <input name="total_amount" placeholder="Nhập thông tin" autocomplete="off"
-                                id="notes"
-                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
-                        </div>
                     </div>
                 </div>
             </div>
@@ -303,6 +296,35 @@
                                 </div>
                             </div>
                         </section>
+                        <div class="content">
+                            <div class="row" style="width:95%;">
+                                <div class="position-relative col-lg-6 px-0"></div>
+                                <div class="position-relative col-lg-3 col-md-7 col-sm-12 margin-left180">
+                                    <div class="m-3 ">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-14-black">Giá trị trước thuế:</span>
+                                            <span id="total-amount-sum" class="text-14-black">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2 align-items-center">
+                                            <span class="text-14-black">VAT 8%</span>
+                                            <span id="product-tax" class="text-14-black">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2 align-items-center">
+                                            <span class="text-14-black">VAT 10%</span>
+                                            <span id="product-tax" class="text-14-black">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mt-2">
+                                            <span class="text-20-bold">Tổng cộng:</span>
+                                            <span id="grand-total" class="text-20-bold text-right">
+                                                0
+                                            </span>
+                                            <input type="hidden" name="total_amountuuxuu" value="0"
+                                                id="total">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </div>

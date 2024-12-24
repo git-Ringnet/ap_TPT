@@ -1489,6 +1489,16 @@ input[type="number"] {
     color: #282a30 !important;
     font-weight: 500;
 }
+.text-14-black {
+    font-size: 14px;
+    color: #000000 !important;
+    font-weight: 700;
+}
+.text-20-bold {
+    font-size: 20px;
+    color: #000000 !important;
+    font-weight: 600;
+}
 
 .text-13-red {
     font-size: 13px;
@@ -3238,4 +3248,44 @@ input[type="checkbox"]:checked {
 }
 .list-noti.show {
     display: block;
+}
+.box-shadow-border {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.15);
+    /* Tăng alpha để bóng đổ đậm hơn */
+    padding: 10px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.box-shadow-border:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3), 0 3px 6px rgba(0, 0, 0, 0.2);
+    /* Bóng đổ đậm hơn khi hover */
+}
+.blur-wrapper {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.blur-wrapper * {
+    pointer-events: none;
+}
+.check-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: green;
+    pointer-events: none;
+    /* Không cho phép click vào biểu tượng */
+    transition: color 0.3s ease-in-out;
+    /* Hiệu ứng chuyển màu mượt mà */
+}
+.bg-custom-yl{
+    background-color: rgba(255, 232, 103, 1) !important;
+}
+.bg-custom-pink {
+    background-color:rgba(255, 110, 139, 1) !important;
 }

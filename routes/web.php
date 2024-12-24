@@ -28,6 +28,8 @@ Route::resource('quotations', QuotationController::class);
 Route::resource('returnforms', ReturnFormController::class);
 // 
 Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])->name('getReceiving');
+// Check SN
+Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
 
 
 Route::get('/', function () {

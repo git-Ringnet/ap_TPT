@@ -24,8 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->comment('Người lập phiếu');
             $table->string('phone')->nullable()->comment('Số điện thoại');
             $table->dateTime('closed_at')->nullable()->comment('Ngày đóng phiếu');
-            $table->unsignedInteger('status')->default(1)->comment('Tình trạng');
-            $table->unsignedInteger('state')->default(0)->comment('Trạng thái');
+            $table->unsignedInteger('status')->default(1)->comment('Tình trạng, 1:Tiếp nhận,2:Xử lí,3:Hoàn thành,4:Khách không đồng ý');
+            $table->unsignedInteger('state')->default(0)->comment('Trạng thái, 0: Trống,1: Chưa xử lý vàng, 2: Quá hạn nền đỏ');
             $table->timestamps();
         });
     }

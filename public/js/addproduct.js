@@ -17,9 +17,11 @@ $(document).ready(function () {
                     <td class="text-13-black border py-0 text-center">${rowCount
                         .toString()
                         .padStart(2, "0")}</td>
-                    <td class="text-13-black border py-0 pl-3">
-                        <input type="text" id="form_code" name="form_code" style="flex:2;" 
-                            placeholder="Nhập thông tin" class="text-13-black w-100 border-0">
+                    <td class="text-13-black border py-0 pl-3 position-relative">
+                        <input type="text" id="form_code" name="form_code" style="flex:2;"
+                            autocomplete="off" placeholder="Nhập thông tin"
+                            class="text-13-black w-100 border-0 seri-input-check">
+                        <span class="check-icon"></span>
                     </td>
                     <td class="text-13-black border py-0 text-center">
                         <button class="btn btn-sm delete-row">
@@ -126,10 +128,26 @@ $(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
         .find("input")
         .not("#name_modal") // Loại trừ phần tử có ID là name_modal
         .val("");
+    $(".check-icon").text("");
 });
 // Hàm xử lý khi bấm nút Xác nhận
 $(document).on("click", ".submit-button", function (event) {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
+
+    let hasError = false;
+    $(".seri-input-check").each(function () {
+        const $checkIcon = $(this).siblings(".check-icon");
+        if ($checkIcon.text() === "✖") {
+            hasError = true;
+            return false;
+        }
+    });
+    if (hasError) {
+        alert("Có số serial không hợp lệ, vui lòng kiểm tra lại.");
+        return;
+    } else {
+        console.log("Tất cả serial đều hợp lệ.");
+    }
 
     let name_modal = $("#name_modal").val();
     let serialNumbers = getSerialNumbers(); // Lấy mảng serial numbers
@@ -194,7 +212,8 @@ $(document).on("click", ".submit-button", function (event) {
 // Hàm tạo hàng dữ liệu với serial
 function createSerialRow(index, product, serial, name) {
     const hideLastColumn = name === "TN" ? "d-block" : "d-none";
-    const hideLastWarranty = (name === "XH" || name === "CXH") ? "d-block" : "d-none";
+    const hideLastWarranty =
+        name === "XH" || name === "CXH" ? "d-block" : "d-none";
     return `
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1

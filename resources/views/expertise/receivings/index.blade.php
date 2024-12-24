@@ -111,7 +111,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-30 py-0 border-right pl-4" scope="col">
+                                        <th class="height-40 py-0 border-right pl-4" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -122,7 +122,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -133,7 +133,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -144,7 +144,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -155,7 +155,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -166,7 +166,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -177,7 +177,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -188,7 +188,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -203,7 +203,8 @@
                                 </thead>
                                 <tbody class="tbody-guest">
                                     @foreach ($receivings as $item)
-                                        <tr class="position-relative guest-info height-30">
+                                        <tr
+                                            class="position-relative guest-info height-40 @if ($item->state == 1) bg-custom-yl @elseif($item->state == 2) bg-custom-pink @else bg-white @endif">
                                             <td class="text-13-black border-right border-bottom py-0 pl-4">
                                                 <a
                                                     href="{{ route('receivings.edit', $item->id) }}">{{ $item->form_code_receiving }}</a>
@@ -239,10 +240,18 @@
                                                     Tiếp nhận
                                                 @elseif($item->status == 2)
                                                     Xử lý
+                                                @elseif($item->status == 3)
+                                                    Hoàn thành
+                                                @elseif($item->status == 4)
+                                                    Khách không đồng ý
                                                 @endif
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">
-                                                {{ $item->state }}
+                                                @if ($item->state == 1)
+                                                    Chưa xử lý
+                                                @elseif($item->state == 2)
+                                                    Quá hạn
+                                                @endif
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">

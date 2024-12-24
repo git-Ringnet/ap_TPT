@@ -5,7 +5,7 @@
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
-                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
+                    <div class="d-flex mb-2 mr-2 p-1 border rounded box-shadow-border" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Hãng tiếp nhận :</span>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
@@ -18,7 +18,7 @@
                                 value="2">
                         </div>
                     </div>
-                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
+                    <div class="d-flex mb-2 mr-2 p-1 border rounded box-shadow-border" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
                         <div class="form-check form-check-inline mr-1">
                             <label class="text text-13-black form-check-label mr-1" for="warranty">Bảo hành</label>
@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <div class="content-wrapper2 px-0 py-0 margin-top-118">
+        <div class="content-wrapper2 px-0 py-0 margin-top-118 blur-wrapper" id="content-wrapper">
             <div id="contextMenuPBH" class="dropdown-menu"
                 style="display: none; background: #ffffff; position: absolute; width:13%;  padding: 3px 10px;  box-shadow: 0 0 10px -3px rgba(0, 0, 0, .3); border: 1px solid #ccc;">
                 <a class="dropdown-item text-13-black" href="#" data-option="donhang">Tạo phiếu xuất kho</a>
@@ -291,6 +291,25 @@
 </form>
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        // Kiểm tra các radio button khi thay đổi giá trị
+        $('input[type="radio"]').on('change', function() {
+            // Kiểm tra xem có ít nhất một radio button được chọn cho mỗi nhóm
+            let isBranchChecked = $('input[name="branch_id"]:checked').length > 0;
+            let isFormTypeChecked = $('input[name="form_type"]:checked').length > 0;
+
+            // Lấy phần tử có id="content-wrapper"
+            let contentWrapper = $('#content-wrapper');
+
+            // Nếu cả hai nhóm đều có radio button được chọn, remove class blur-wrapper
+            if (isBranchChecked && isFormTypeChecked) {
+                contentWrapper.removeClass('blur-wrapper');
+            } else {
+                // Nếu không, thêm class blur-wrapper
+                contentWrapper.addClass('blur-wrapper');
+            }
+        });
+    });
     $(document).ready(function() {
         function toggleListGuest(input, list, filterInput) {
             input.on("click", function() {
