@@ -21,6 +21,16 @@ class Imports extends Model
         'note',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Providers::class, 'provider_id');
+    }
+
     public function productImports()
     {
         return $this->hasMany(ProductImport::class, 'import_id', 'id');

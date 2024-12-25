@@ -37,9 +37,9 @@ class ExportsController extends Controller
         $title = "Tạo phiếu xuất hàng";
         $export_code = $this->exports->generateExportCode();
         $users = User::all();
-        $cumtomers = Customers::all();
+        $customers = Customers::all();
         $products = Product::all();
-        return view('expertise.export.create', compact('title', 'export_code', 'users', 'cumtomers', 'products'));
+        return view('expertise.export.create', compact('title', 'export_code', 'users', 'customers', 'products'));
     }
 
     /**
@@ -78,6 +78,7 @@ class ExportsController extends Controller
                         'export_return_date' => $request->date_create,
                         'warranty' => $serial['warranty'],
                         'status' => 0,
+                        'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $serial['warranty'] . ' months')),
                     ]);
                 }
             }
@@ -105,12 +106,13 @@ class ExportsController extends Controller
     {
         $export = Exports::with(['user', 'customer'])->where("exports.id", $id)->first();
         $users = User::all();
-        $cumtomers = Customers::all();
+        $customers = Customers::all();
         $title = "Sửa phiếu xuất hàng";
         $productExports = ProductExport::where("export_id", $id)
             ->get()->groupBy('product_id');
         $productAll = Product::all();
-        return view('expertise.export.edit', compact('title', 'export', 'users', 'cumtomers', 'productExports', 'productAll'));
+        $exports = Exports::with(['user', 'customer'])->get();
+        return view('expertise.export.edit', compact('title', 'export', 'users', 'customers', 'productExports', 'productAll', 'exports'));
     }
 
     /**
@@ -176,6 +178,7 @@ class ExportsController extends Controller
                 } else {
                     // Cập nhật ghi chú nếu cần
                     $existingExport->update([
+                        'warranty' => $data['warranty'] ?? 12,
                         'note' => $data['note_seri'] ?? '',
                     ]);
                 }
@@ -193,6 +196,13 @@ class ExportsController extends Controller
                         'export_return_date' => $request->date_create,
                         'warranty' => $data['warranty'] ?? 12,
                         'status' => 0,
+                        'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $data['warranty'] . ' months')),
+                    ]);
+                } else {
+                    // Cập nhật ghi chú nếu cần
+                    $existingWarranty->update([
+                        'warranty' => $data['warranty'] ?? 12,
+                        'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $data['warranty'] . ' months')),
                     ]);
                 }
             }

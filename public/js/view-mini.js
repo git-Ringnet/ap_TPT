@@ -30,5 +30,22 @@ $(document).ready(function () {
         $("#listGuestMiniView"),
         $("#searchProviderMiniView")
     );
+    toggleListGuest(
+        $("#inputUser"),
+        $("#listUserMiniView"),
+        $("#searchUserMiniView")
+    );
+    //lấy tên nhà cung cấp và id
+    $('a[name="search-info"]').on("click", function () {
+        const dataName = $(this).data("name");
+        const data_id = $(this).data("id");
+        $("#inputProvider").val(dataName);
+        $(".idProviderMiniView").val(data_id);
+    });
+    $(".search-user").on("click", function () {
+        const dataName = $(this).data("name");
+        const data_id = $(this).data("id");
+        $("#inputUser").val(dataName);
+        $(".idUserMiniView").val(data_id);
+    });
 });
-

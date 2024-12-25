@@ -9,12 +9,19 @@ use Illuminate\View\Component;
 class view_mini extends Component
 {
     public $guestOrProvider;
+    public $users;
+    public $name;
+    public $data;
+
     /**
      * Create a new component instance.
      */
-    public function __construct($guestOrProvider = "")
+    public function __construct($guestOrProvider = null, $users = null, $name = null, $data)
     {
         $this->guestOrProvider = $guestOrProvider;
+        $this->users = $users;
+        $this->name = $name;
+        $this->data = $data;
     }
 
     /**

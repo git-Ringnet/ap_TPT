@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exports;
 use App\Models\Imports;
 use App\Models\InventoryLookup;
 use App\Models\Product;
 use App\Models\ProductImport;
 use App\Models\Providers;
+use App\Models\Receiving;
 use App\Models\SerialNumber;
 use App\Models\User;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ImportsController extends Controller
 {
@@ -120,6 +125,7 @@ class ImportsController extends Controller
             ->get()->groupBy('product_id');
         $title = "Xem chi tiết phiếu nhập hàng";
         $providers = Providers::all();
+
         return view('expertise.import.see', compact('title', 'import', 'productImports', 'providers'));
     }
 
@@ -140,7 +146,8 @@ class ImportsController extends Controller
         $productImports = ProductImport::where("import_id", $id)
             ->get()->groupBy('product_id');
         $productAll = Product::all();
-        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'productAll', 'productImports'));
+        $data = $this->imports->getAllImports();
+        return view('expertise.import.edit', compact('title', 'import', 'users', 'providers', 'productAll', 'productImports', 'data'));
     }
 
     /**
@@ -266,5 +273,87 @@ class ImportsController extends Controller
         ProductImport::where('import_id', $id)->delete();
         $import->delete();
         return redirect()->route('imports.index')->with('msg', 'Xóa thành công phiếu nhập hàng!');
+    }
+    public function searchMiniView(Request $request)
+    {
+        // Định dạng lại ngày truyền vào để chắc chắn không có phần giờ
+        $fromDate = Carbon::parse($request->fromDate)->format('Y-m-d');
+        $toDate = Carbon::parse($request->toDate)->format('Y-m-d');
+
+        if ($request->page == "NH") {
+            $imports = Imports::query()
+                ->when($request->idGuest, function ($query, $idGuest) {
+                    return $query->where('provider_id', $idGuest);
+                })
+                ->when($request->creator, function ($query, $creator) {
+                    return $query->where('imports.user_id', $creator);
+                })
+                ->whereBetween(DB::raw("DATE(imports.created_at)"), [$fromDate, $toDate])
+                ->with('user', 'provider')
+                ->get();
+
+            $data = $imports->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'import_code' => $detail->import_code,
+                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'provider_name' => $detail->provider->provider_name,
+                ];
+            });
+
+            return response()->json($data);
+        }
+        if ($request->page == "XH") {
+            $exports = Exports::query()
+                ->when($request->idGuest, function ($query, $idGuest) {
+                    return $query->where('customer_id', $idGuest);
+                })
+                ->when($request->creator, function ($query, $creator) {
+                    return $query->where('exports.user_id', $creator);
+                })
+                ->whereBetween(DB::raw("DATE(exports.created_at)"), [$fromDate, $toDate])
+                ->with('user', 'customer')
+                ->get();
+
+            $data = $exports->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'export_code' => $detail->export_code,
+                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'customer_name' => $detail->customer->customer_name,
+                ];
+            });
+
+            return response()->json($data);
+        }
+        if ($request->page == "TN") {
+            $receiving = Receiving::query()
+                ->when($request->idGuest, function ($query, $idGuest) {
+                    return $query->where('customer_id', $idGuest);
+                })
+                ->when($request->creator, function ($query, $creator) {
+                    return $query->where('receiving.user_id', $creator);
+                })
+                ->whereBetween(DB::raw("DATE(receiving.created_at)"), [$fromDate, $toDate])
+                ->with('user', 'customer')
+                ->get();
+
+            $data = $receiving->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'form_code_receiving' => $detail->form_code_receiving,
+                    'status' => match ($detail->status) {
+                        1 => 'Tiếp nhận',
+                        2 => 'Xử lý',
+                        3 => 'Hoàn thành',
+                        4 => 'Khách không đồng ý',
+                    },
+                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'customer_name' => $detail->customer->customer_name,
+                ];
+            });
+
+            return response()->json($data);
+        }
     }
 }

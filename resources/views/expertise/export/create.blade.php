@@ -76,8 +76,8 @@
                                     style="flex: 1.5;">Người lập phiếu</span>
                                 <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name" readonly
                                     class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;"
-                                    value="Admin" />
-                                <input type="hidden" name="user_id" id="user_id" value="1">
+                                    value="{{ Auth::user()->name }}" />
+                                <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -103,7 +103,7 @@
                                             </div>
                                         </div>
                                         <ul class="m-0 p-0 scroll-data">
-                                            @foreach ($cumtomers as $customer_value)
+                                            @foreach ($customers as $customer_value)
                                                 <li class="p-2 align-items-center text-wrap border-top"
                                                     data-id="{{ $customer_value->id }}">
                                                     <a href="#" title="{{ $customer_value->customer_name }}"

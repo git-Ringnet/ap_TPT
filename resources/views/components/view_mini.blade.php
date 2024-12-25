@@ -9,58 +9,128 @@
             <div class="px-1">
                 <p class="m-0 p-0 text-13-black">Từ ngày</p>
                 <input type="date" class="w-100 form-control mr-1" id="fromDate">
-                <input type="hidden" id="hiddenInputDateFrom">
             </div>
             <div class="mr-4">
                 <p class="m-0 p-0 text-13-black">Đến ngày</p>
                 <input type="date" class="w-100 form-control ml-1" id="toDate">
-                <input type="hidden" id="hiddenInputDateTo">
             </div>
         </div>
         <div class="w-100 my-2 px-1">
-            <div class="position-relative">
-                <p class="m-0 p-0 text-13-black">Nhà cung cấp</p>
+            @if ($name == 'NH')
+                <div class="position-relative">
+                    <p class="m-0 p-0 text-13-black">Nhà cung cấp</p>
+                    <input type="text" placeholder="Chọn thông tin" readonly
+                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-white"
+                        autocomplete="off" id="inputProvider">
+                    <input type="hidden" class="idProviderMiniView">
+                    <div id="listGuestMiniView"
+                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block list-guest w-100"
+                        style="z-index: 99;display: none;">
+                        <ul class="m-0 p-0 scroll-data">
+                            <div class="p-1">
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Nhập nhà cung cấp"
+                                        class="pr-4 w-100 input-search bg-input-guest" id="searchProviderMiniView">
+                                    <span id="search-icon" class="search-icon">
+                                        <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @if ($guestOrProvider)
+                                @foreach ($guestOrProvider as $provider_value)
+                                    <li class="p-2 align-items-center text-wrap border-top"
+                                        data-id="{{ $provider_value->id }}">
+                                        <a href="#" title="{{ $provider_value->provider_name }}" style="flex:2;"
+                                            data-id="{{ $provider_value->id }}"
+                                            data-name="{{ $provider_value->provider_name }}" name="search-info"
+                                            class="search-info">
+                                            <span class="text-13-black">{{ $provider_value->provider_name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+            @endif
+            @if ($name == 'XH' || $name == 'TN')
+                <div class="position-relative">
+                    <p class="m-0 p-0 text-13-black">Khách hàng</p>
+                    <input type="text" placeholder="Chọn thông tin" readonly
+                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-white"
+                        autocomplete="off" id="inputProvider">
+                    <input type="hidden" class="idProviderMiniView">
+                    <div id="listGuestMiniView"
+                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block list-guest w-100"
+                        style="z-index: 99;display: none;">
+                        <ul class="m-0 p-0 scroll-data">
+                            <div class="p-1">
+                                <div class="position-relative">
+                                    <input type="text" placeholder="Nhập khách hàng"
+                                        class="pr-4 w-100 input-search bg-input-guest" id="searchProviderMiniView">
+                                    <span id="search-icon" class="search-icon">
+                                        <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            @if ($guestOrProvider)
+                                @foreach ($guestOrProvider as $customer_value)
+                                    <li class="p-2 align-items-center text-wrap border-top"
+                                        data-id="{{ $customer_value->id }}">
+                                        <a href="#" title="{{ $customer_value->customer_name }}" style="flex:2;"
+                                            data-id="{{ $customer_value->id }}"
+                                            data-name="{{ $customer_value->customer_name }}" name="search-info"
+                                            class="search-info">
+                                            <span class="text-13-black">{{ $customer_value->customer_name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+            @endif
+            <div class="mt-2 position-relative">
+                <p class="m-0 p-0 text-13-black">Người lập</p>
                 <input type="text" placeholder="Chọn thông tin" readonly
-                    class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-white"
-                    autocomplete="off" id="inputProvider">
-                <input type="hidden" class="idProviderMiniView">
-                <div id="listGuestMiniView"
+                    class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameUserMiniView bg-white"
+                    autocomplete="off" id="inputUser">
+                <input type="hidden" class="idUserMiniView">
+                <div id="listUserMiniView"
                     class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block list-guest w-100"
                     style="z-index: 99;display: none;">
                     <ul class="m-0 p-0 scroll-data">
                         <div class="p-1">
                             <div class="position-relative">
-                                <input type="text" placeholder="Nhập nhà cung cấp"
-                                    class="pr-4 w-100 input-search bg-input-guest" id="searchProviderMiniView">
+                                <input type="text" placeholder="Nhập người lập"
+                                    class="pr-4 w-100 input-search bg-input-guest" id="searchUserMiniView">
                                 <span id="search-icon" class="search-icon">
                                     <i class="fas fa-search text-table" aria-hidden="true"></i>
                                 </span>
                             </div>
                         </div>
-                        @foreach ($guestOrProvider as $provider_value)
-                            <li class="p-2 align-items-center text-wrap border-top" data-id="{{ $provider_value->id }}">
-                                <a href="#" title="{{ $provider_value->provider_name }}" style="flex:2;"
-                                    id="{{ $provider_value->id }}" data-name="{{ $provider_value->provider_name }}"
-                                    name="search-info" class="search-info">
-                                    <span class="text-13-black">{{ $provider_value->provider_name }}</span>
-                                </a>
-                            </li>
-                        @endforeach
+                        @if ($users)
+                            @foreach ($users as $user_value)
+                                <li class="p-2 align-items-center text-wrap border-top"
+                                    data-id="{{ $user_value->id }}">
+                                    <a href="#" title="{{ $user_value->name }}" style="flex:2;"
+                                        class="search-user" id="{{ $user_value->id }}"
+                                        data-name="{{ $user_value->name }}">
+                                        <span class="text-13-black">{{ $user_value->name }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endif
                     </ul>
                 </div>
-            </div>
-            <div class="mt-2">
-                <p class="m-0 p-0 text-13-black">Người lập</p>
-                <select id="creator" class="form-control text-13-black">
-                    
-                </select>
             </div>
         </div>
         <div class="d-flex w-100 my-2 justify-content-between align-items-center">
             <div class="m-0 p-0">
                 <p class="m-0 p-0 text-13-black"></p>
             </div>
-            <a href="#" class="custom-btn d-flex align-items-center h-100 mx-1" id="search-view-mini">
+            <a href="#" class="custom-btn d-flex align-items-center h-100 mx-1" id="search-view-mini"
+                data-page="{{ $name }}">
                 <span>
                     <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -86,18 +156,237 @@
                                 Ngày lập phiếu
                             </span>
                         </th>
-                        <th scope="col" class="height-52">
-                            <span class="d-flex justify-content-start text-13-black font-weight-bold">
-                                Nhà cung cấp
-                            </span>
-                        </th>
+                        @if ($name == 'TN')
+                            <th scope="col" class="height-52">
+                                <span class="d-flex justify-content-start text-13-black font-weight-bold">
+                                    Tình trạng
+                                </span>
+                            </th>
+                        @endif
+                        @if ($name == 'NH')
+                            <th scope="col" class="height-52">
+                                <span class="d-flex justify-content-start text-13-black font-weight-bold">
+                                    Nhà cung cấp
+                                </span>
+                            </th>
+                        @else
+                            <th scope="col" class="height-52">
+                                <span class="d-flex justify-content-start text-13-black font-weight-bold">
+                                    Khách hàng
+                                </span>
+                            </th>
+                        @endif
                     </tr>
                 </thead>
-                <tbody>
-
+                <tbody class="tbody-detail-info">
+                    <!-- Hiệu ứng load -->
+                    <tr class="loading-row">
+                        <td colspan="<?php echo $name == 'TN' ? 4 : 3; ?>" class="text-center">
+                            <div class="spinner-border" role="status"></div>
+                        </td>
+                    </tr>
+                    @if ($name == 'NH')
+                        @foreach ($data as $item)
+                            <tr class="position-relative detail-info height-30 data-row" style="display:none"
+                                data-id="{{ $item->id }}" data-page="{{ $name }}">
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->import_code }}
+                                </td>
+                                <td class="text-13-black text-left border-bottom">
+                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->provider_name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    @if ($name == 'XH')
+                        @foreach ($data as $item)
+                            <tr class="position-relative detail-info height-30 data-row" style="display:none"
+                                data-id="{{ $item->id }}" data-page="{{ $name }}">
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->export_code }}
+                                </td>
+                                <td class="text-13-black text-left border-bottom">
+                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->customer->customer_name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    @if ($name == 'TN')
+                        @foreach ($data as $item)
+                            <tr class="position-relative detail-info height-30 data-row" style="display:none"
+                                data-id="{{ $item->id }}" data-page="{{ $name }}">
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->form_code_receiving }}
+                                </td>
+                                <td class="text-13-black text-left border-bottom">
+                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    @if ($item->status == 1)
+                                        Tiếp nhận
+                                    @elseif($item->status == 2)
+                                        Xử lý
+                                    @elseif($item->status == 3)
+                                        Hoàn thành
+                                    @elseif($item->status == 4)
+                                        Khách không đồng ý
+                                    @endif
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->customer->customer_name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 <script src="{{ asset('/js/view-mini.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        // Hàm giả lập tải dữ liệu
+        function loadData() {
+            // Hiển thị hiệu ứng load
+            $('.loading-row').show();
+            $('.data-row').hide(); // Ẩn phần dữ liệu
+
+            setTimeout(function() {
+                // Ẩn hiệu ứng load
+                $('.loading-row').hide();
+
+                // Hiển thị dữ liệu
+                $('.data-row').show();
+            }, 500); // Thời gian trì hoãn
+        }
+
+        loadData(); // Gọi hàm load dữ liệu khi trang được tải
+    });
+
+    //
+    $(document).ready(function() {
+        // Hàm thêm dòng dữ liệu vào bảng
+        function appendRows(data, page) {
+            let maPhieu = null;
+            let ten = null;
+            let hienThi = null;
+
+            const rows = data.map(detail => {
+                if (page == 'NH') {
+                    maPhieu = detail.import_code;
+                    ten = detail.provider_name;
+                    hienThi = "d-none";
+                }
+                if (page == 'XH') {
+                    maPhieu = detail.export_code;
+                    ten = detail.customer_name;
+                    hienThi = "d-none";
+                }
+                if (page == 'TN') {
+                    maPhieu = detail.form_code_receiving;
+                    ten = detail.customer_name;
+                    hienThi = "block";
+                }
+                return `
+                <tr class="position-relative detail-info height-52" data-id="${detail.id}" data-page="${page}">
+                    <td class="text-13-black text-left border-top-0 border-bottom">${maPhieu}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom">${detail.date_create}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom ${hienThi}">${detail.status}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom">${ten}</td>
+                </tr>
+            `;
+            }).join('');
+            $('.tbody-detail-info').append(rows);
+        }
+
+        // Xử lý tìm kiếm
+        $('#search-view-mini').on('click', function() {
+            const page = this.dataset.page;
+            const fromDate = $('#fromDate').val();
+            const toDate = $('#toDate').val();
+            const idGuest = $('.idProviderMiniView').val();
+            const creator = $('.idUserMiniView').val();
+
+            // Gọi Ajax để tìm kiếm
+            $.ajax({
+                url: '{{ route('searchMiniView') }}',
+                type: 'GET',
+                data: {
+                    page,
+                    fromDate,
+                    toDate,
+                    idGuest,
+                    creator
+                },
+                success: function(data) {
+                    // Xóa bảng cũ và thêm dữ liệu mới
+                    $('.tbody-detail-info').empty();
+                    if (data.length > 0) {
+                        appendRows(data, page);
+
+                        // Lưu dữ liệu tìm kiếm vào localStorage
+                        const searchData = {
+                            page,
+                            fromDate,
+                            toDate,
+                            idGuest,
+                            creator,
+                            results: data
+                        };
+                        localStorage.setItem('searchData', JSON.stringify(searchData));
+                    }
+                },
+            });
+        });
+
+        // Chuyển trang khi nhấn vào dòng chi tiết
+        $(document).on('click', '.detail-info', function() {
+            const id = this.dataset.id;
+            const page = this.dataset.page;
+            let url;
+
+            if (page == 'NH') {
+                url = "{{ route('imports.edit', ':id') }}".replace(':id', id); // Gán giá trị cho url
+            }
+            if (page == 'XH') {
+                url = "{{ route('exports.edit', ':id') }}".replace(':id', id); // Gán giá trị cho url
+            }
+            if (page == 'TN') {
+                url = "{{ route('receivings.edit', ':id') }}".replace(':id',
+                    id); // Gán giá trị cho url
+            }
+
+            // Lưu trạng thái trang trước khi chuyển
+            localStorage.setItem('currentDetailId', id);
+
+            window.location.href = url;
+        });
+
+
+        // Lấy dữ liệu từ localStorage và khôi phục lại tìm kiếm
+        const searchData = JSON.parse(localStorage.getItem('searchData'));
+        if (searchData) {
+            // Điền lại giá trị vào input tìm kiếm
+            $('#fromDate').val(searchData.fromDate);
+            $('#toDate').val(searchData.toDate);
+            $('.idProviderMiniView').val(searchData.idGuest);
+            $('.idUserMiniView').val(searchData.creator);
+
+            // Khôi phục danh sách tìm kiếm
+            $('.tbody-detail-info').empty();
+            if (searchData.results && searchData.results.length > 0) {
+                appendRows(searchData.results, searchData.page);
+            }
+        }
+
+        // Xóa dữ liệu khỏi localStorage nếu không cần giữ
+        localStorage.removeItem('searchData');
+    });
+</script>

@@ -15,6 +15,7 @@ class warrantyLookup extends Model
         'export_return_date',
         'warranty',
         'status',
+        'warranty_expire_date',
     ];
     public function product()
     {

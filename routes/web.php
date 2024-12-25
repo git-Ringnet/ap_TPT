@@ -65,5 +65,7 @@ Route::resource('inventoryLookup', InventoryLookupController::class);
 Route::get('/checkSN', [SerialNumberController::class, 'checkSN'])->name('checkSN');
 //Warranty
 Route::resource('warrantyLookup', WarrantyLookupController::class);
+//
+Route::get('/searchMiniView', [ImportsController::class, 'searchMiniView'])->name('searchMiniView');
 
 require __DIR__ . '/auth.php';

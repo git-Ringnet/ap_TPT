@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\ReceivedProduct;
 use App\Models\Receiving;
 use App\Models\SerialNumber;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReceivingController extends Controller
@@ -105,7 +106,9 @@ class ReceivingController extends Controller
         $receivedProducts = ReceivedProduct::where('reception_id', $receiving->id)
             ->get()
             ->groupBy('product_id');
-        return view('expertise.receivings.edit', compact('receiving', 'receivedProducts', 'products_all', 'customers', 'title'));
+        $users = User::all();
+        $data = Receiving::all();
+        return view('expertise.receivings.edit', compact('receiving', 'receivedProducts', 'products_all', 'customers', 'title', 'users', 'data'));
     }
 
     // Update the specified receiving record in storage

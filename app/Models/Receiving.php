@@ -34,6 +34,10 @@ class Receiving extends Model
     {
         return $this->belongsTo(Customers::class, 'customer_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
     public function receivedProducts()
     {
         return $this->hasMany(ReceivedProduct::class, 'reception_id');
