@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -50,5 +51,38 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function getAllUsers($data = null)
+    {
+        $users = DB::table('users');
+
+        // Tìm kiếm chung
+        if (!empty($data['search'])) {
+            $users->where(function ($query) use ($data) {
+                $query->where('employee_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('address', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('phone', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('email', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        // Lọc theo các trường cụ thể
+        $filterableFields = [
+            'ma' => 'employee_code',
+            'ten' => 'name',
+            'address' => 'address',
+            'phone' => 'phone',
+            'email' => 'email',
+            'note' => 'note',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $users->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+        if (isset($data['roles']) && is_array($data['roles']) && !empty($data['roles'])) {
+            $users = $users->whereIn('role', $data['roles']);
+        }
+        return $users->get();
     }
 }

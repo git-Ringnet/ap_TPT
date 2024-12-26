@@ -11,6 +11,12 @@ class WarehouseController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $warehouse;
+
+    public function __construct()
+    {
+        $this->warehouse = new Warehouse();
+    }
     public function index()
     {
         $warehouses = Warehouse::all();
@@ -68,5 +74,27 @@ class WarehouseController extends Controller
         $warehouse->delete();
 
         return redirect()->route('warehouses.index')->with('success', 'Warehouse deleted successfully.');
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
+        }
+        if (isset($data['address']) && $data['address'] !== null) {
+            $filters[] = ['value' => 'Địa chỉ: ' . $data['address'], 'name' => 'dia-chi', 'icon' => 'po'];
+        }
+        if ($request->ajax()) {
+            $warehouse = $this->warehouse->getAllWarehouse($data);
+            return response()->json([
+                'data' => $warehouse,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

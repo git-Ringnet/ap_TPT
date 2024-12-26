@@ -11,6 +11,11 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $products;
+    public function __construct()
+    {
+        $this->products = new Product();
+    }
     public function index()
     {
         $products = Product::all();
@@ -83,5 +88,30 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('msg', 'Product deleted successfully.');
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
+        }
+        if (isset($data['hang']) && $data['hang'] !== null) {
+            $filters[] = ['value' => 'Hãng: ' . $data['hang'], 'name' => 'hang', 'icon' => 'po'];
+        }
+        if (isset($data['bao_hanh']) && $data['bao_hanh'][1] !== null) {
+            $filters[] = ['value' => 'Bảo hành: ' . $data['bao_hanh'][0] . ' ' . $data['bao_hanh'][1], 'name' => 'bao-hanh', 'icon' => 'money'];
+        }
+        if ($request->ajax()) {
+            $products = $this->products->getAllProducts($data);
+            return response()->json([
+                'data' => $products,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

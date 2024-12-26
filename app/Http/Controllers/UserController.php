@@ -9,12 +9,20 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new User();
+    }
+
     public function index()
     {
         $users = User::all();
         $title = 'Nhân viên';
         $groups = Groups::where('group_type_id', 4)->get();
-        return view('setup.users.index', compact('users', 'title', 'groups'));
+        $roles = Role::all();
+        return view('setup.users.index', compact('users', 'title', 'groups', 'roles'));
     }
 
     public function create()
@@ -115,5 +123,37 @@ class UserController extends Controller
         // Delete the user
         $user->delete();
         return redirect()->route('users.index');
+    }
+
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
+        }
+        if (isset($data['address']) && $data['address'] !== null) {
+            $filters[] = ['value' => 'Địa chỉ: ' . $data['address'], 'name' => 'dia-chi', 'icon' => 'po'];
+        }
+        if (isset($data['phone']) && $data['phone'] !== null) {
+            $filters[] = ['value' => 'Điện thoại: ' . $data['phone'], 'name' => 'dien-thoai', 'icon' => 'po'];
+        }
+        if (isset($data['email']) && $data['email'] !== null) {
+            $filters[] = ['value' => 'Email: ' . $data['email'], 'name' => 'email', 'icon' => 'po'];
+        }
+        if (isset($data['roles']) && $data['roles'] !== null) {
+            $filters[] = ['value' => 'Chức vụ: ' . count($data['roles']) . ' đã chọn', 'name' => 'chuc-vu', 'icon' => 'user'];
+        }
+        if ($request->ajax()) {
+            $users = $this->users->getAllUsers($data);
+            return response()->json([
+                'data' => $users,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

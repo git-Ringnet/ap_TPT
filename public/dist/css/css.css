@@ -138,6 +138,9 @@ li {
 .margin-left30 {
     margin-left: 30px !important;
 }
+.margin-left20 {
+    margin-left: 20px !important;
+}
 .margin-left180 {
     margin-left: 180px !important;
 }
@@ -3196,12 +3199,6 @@ input[type="checkbox"]:checked {
         border: none;
         cursor: not-allowed;
 }
-  /* Styling cho container */
- .search-container {
-     position: relative;
-     width: 300px;
-     /* Bạn có thể thay đổi chiều rộng */
- }
 
  .search-list {
      position: absolute;

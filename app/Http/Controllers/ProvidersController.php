@@ -100,4 +100,35 @@ class ProvidersController extends Controller
         $provider->delete();
         return back()->with('msg', 'Xóa nhà cung cấp thành công');
     }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
+        }
+        if (isset($data['address']) && $data['address'] !== null) {
+            $filters[] = ['value' => 'Địa chỉ: ' . $data['address'], 'name' => 'dia-chi', 'icon' => 'po'];
+        }
+        if (isset($data['phone']) && $data['phone'] !== null) {
+            $filters[] = ['value' => 'Điện thoại: ' . $data['phone'], 'name' => 'dien-thoai', 'icon' => 'po'];
+        }
+        if (isset($data['email']) && $data['email'] !== null) {
+            $filters[] = ['value' => 'Email: ' . $data['email'], 'name' => 'email', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if ($request->ajax()) {
+            $providers = $this->providers->getAllProvide($data);
+            return response()->json([
+                'data' => $providers,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
+    }
 }

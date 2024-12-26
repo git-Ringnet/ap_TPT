@@ -136,7 +136,7 @@ class ReturnFormController extends Controller
                     'notes' => $returnItem['note'],
                 ]);
                 $stateRecei = $validated['status'] = 1 ? 3 : 4;
-                Receiving::find($validated['reception_id'])->update(['status' => $stateRecei]);
+                Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0]);
             }
 
             DB::commit();
@@ -279,7 +279,7 @@ class ReturnFormController extends Controller
             }
             // Cập nhật trạng thái của Receiving dựa trên trạng thái hiện tại
             $stateRecei = $validated['status'] == 1 ? 3 : 4;
-            Receiving::find($validated['reception_id'])->update(['status' => $stateRecei]);
+            Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0]);
 
             DB::commit();
             return redirect()->route('returnforms.index')->with('msg', 'Cập nhật phiếu trả hàng thành công');

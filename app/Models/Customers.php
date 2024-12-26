@@ -17,12 +17,36 @@ class Customers extends Model
         'phone',
         'email',
         'tax_code',
+        'note',
     ];
     protected $table = 'customers';
-    public function getAllGuest()
+    public function getAllGuest($data = null)
     {
-        $guests = DB::table($this->table)->get();
-        return $guests;
+        $guests = DB::table($this->table);
+        if (!empty($data)) { // Kiểm tra $data có dữ liệu
+            $guests->where(function ($query) use ($data) {
+                $query->where('customer_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('customer_name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('address', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('phone', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('email', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('note', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        $filterableFields = [
+            'ma' => 'customer_code',
+            'ten' => 'customer_name',
+            'address' => 'address',
+            'phone' => 'phone',
+            'email' => 'email',
+            'note' => 'note',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $guests->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+        return $guests->get();
     }
     public function addGuest($data)
     {

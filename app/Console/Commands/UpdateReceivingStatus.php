@@ -46,6 +46,9 @@ class UpdateReceivingStatus extends Command
         Receiving::whereNotIn('status', [3, 4]) // Không hoàn thành hoặc khách không đồng ý
             ->where('date_created', '<', $today->copy()->subDays(21))
             ->update(['state' => 2]);
+        // Kiểm tra nếu có phiếu trả hàng rồi thì cập nhật trạng thái về trắng
+        Receiving::whereIn('status', [3, 4])
+            ->update(['state' => 0]);
 
         $this->info('Receiving statuses updated successfully.');
         return Command::SUCCESS;

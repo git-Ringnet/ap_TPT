@@ -30,10 +30,39 @@ class Providers extends Model
     {
         return $this->hasOne(Groups::class, 'id', 'group_id');
     }
-    public function getAllProvide()
+    public function getAllProvide($data = null)
     {
-        return Providers::get();
+        $provides = DB::table($this->table);
+
+        // Tìm kiếm chung
+        if (!empty($data['search'])) {
+            $provides->where(function ($query) use ($data) {
+                $query->where('provider_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('provider_name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('address', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('phone', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('email', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('note', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        // Lọc theo các trường cụ thể
+        $filterableFields = [
+            'ma' => 'provider_code',
+            'ten' => 'provider_name',
+            'address' => 'address',
+            'phone' => 'phone',
+            'email' => 'email',
+            'note' => 'note',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $provides->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+
+        return $provides->get();
     }
+
     public function addProvide($data)
     {
         $result = [];

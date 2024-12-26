@@ -30,7 +30,12 @@ Route::resource('returnforms', ReturnFormController::class);
 Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])->name('getReceiving');
 // Check SN
 Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
-
+// Filter
+Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');
+Route::get('/filter-provides', [ProvidersController::class, 'filterData'])->name('filter-provides');
+Route::get('/filter-products', [ProductController::class, 'filterData'])->name('filter-products');
+Route::get('/filter-users', [UserController::class, 'filterData'])->name('filter-users');
+Route::get('/filter-warehouse', [WarehouseController::class, 'filterData'])->name('filter-warehouse');
 
 Route::get('/', function () {
     return view('welcome');

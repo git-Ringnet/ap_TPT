@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -37,10 +38,38 @@ class Product extends Model
     {
         return $this->hasMany(ProductImport::class, 'product_id', 'id');
     }
-    
+
     // public function group()
     // {
     //     return $this->belongsTo(Group::class, 'group_id');
     // }
 
+    public function getAllProducts($data = null)
+    {
+        $products = DB::table($this->table);
+        // Tìm kiếm chung
+        if (!empty($data['search'])) {
+            $products->where(function ($query) use ($data) {
+                $query->where('product_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('product_name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('brand', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        // Lọc theo các trường cụ thể
+        $filterableFields = [
+            'ma' => 'product_code',
+            'ten' => 'product_name',
+            'hang' => 'brand',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $products->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+        if (isset($data['bao_hanh'][0]) && isset($data['bao_hanh'][1])) {
+            $products = $products->where('warranty', $data['bao_hanh'][0], $data['bao_hanh'][1]);
+        }
+
+        return $products->get();
+    }
 }
