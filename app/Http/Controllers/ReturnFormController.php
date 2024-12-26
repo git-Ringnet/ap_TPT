@@ -9,6 +9,7 @@ use App\Models\Quotation;
 use App\Models\Receiving;
 use App\Models\ReturnForm;
 use App\Models\SerialNumber;
+use App\Models\User;
 use App\Models\warrantyLookup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -168,7 +169,10 @@ class ReturnFormController extends Controller
         $returnProducts = $returnForm->productReturns->keyBy('id');
         // dd($returnProducts);
         $dataProduct = Product::all();
-        return view('expertise.returnforms.edit', compact('returnForm',  'title', 'receivings', 'returnProducts', 'dataProduct'));
+        $data = ReturnForm::with('productReturns', 'reception')->get();
+        $customers = Customers::all();
+        $users = User::all();
+        return view('expertise.returnforms.edit', compact('returnForm',  'title', 'receivings', 'returnProducts', 'dataProduct', 'data', 'customers', 'users'));
     }
 
     /**

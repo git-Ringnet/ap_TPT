@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customers;
 use App\Models\Quotation;
 use App\Models\QuotationService;
 use App\Models\Receiving;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class QuotationController extends Controller
@@ -87,7 +89,10 @@ class QuotationController extends Controller
         $quotation = Quotation::with('services')->findOrFail($quotation->id);
         // Giả sử 'id' là khóa duy nhất cho mỗi dịch vụ
         $quotationServices = $quotation->services->keyBy('id');
-        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices'));
+        $customers = Customers::all();
+        $users = User::all();
+        $data = Quotation::all();
+        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices', 'customers', 'users','data'));
     }
 
     // Cập nhật thông tin báo giá

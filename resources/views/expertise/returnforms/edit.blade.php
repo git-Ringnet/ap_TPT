@@ -3,7 +3,7 @@
 <form id="form-submit" action="{{ route('returnforms.update', $returnForm->id) }}" method="POST">
     @csrf
     @method('PUT')
-    <div class="content-wrapper--2Column m-0 min-height--none pr-2">
+    <div class="content-wrapper--2Column m-0 min-height--none">
         <div class="content-header-fixed-report-1 p-0 border-bottom-0">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
@@ -75,282 +75,304 @@
                             </svg>
                             <p class="m-0 p-0">Xác nhận</p>
                         </button>
+                        <button id="sideGuest" type="button" class="btn-option border-0 mx-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M6.375 3C3.68262 3 1.5 5.18262 1.5 7.875V16.1248C1.5 18.8173 3.68262 20.9998 6.375 20.9998H17.625C20.3174 20.9998 22.5 18.8173 22.5 16.1248V7.875C22.5 5.18262 20.3174 3 17.625 3H6.375ZM3.75 15.7498C3.75 17.4067 5.09314 18.7498 6.75 18.7498H17.625C19.0748 18.7498 20.25 17.5746 20.25 16.1248V7.875C20.25 6.42527 19.0748 5.25 17.625 5.25H6.75C5.09314 5.25 3.75 6.59314 3.75 8.25V15.7498Z"
+                                    fill="#151516" />
+                                <path d="M15.75 4.5H13.5V19.5H15.75V4.5Z" fill="#151516" />
+                                <path d="M21 4.5H15V19.5H21V12.5V4.5Z" fill="#151516" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
-            {{-- Thông tin khách hàng --}}
-            <div class="border">
-                <div class="info-form">
-                    <div class="bg-filter-search border-0 text-center">
-                        <p class="font-weight-bold text-uppercase info-chung--heading text-center">
-                            THÔNG TIN PHIẾU TIẾP NHẬN
-                        </p>
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
-                                phiếu</span>
-                            <input type="text" id="return_code" name="return_code" style="flex:2;"
-                                placeholder="Nhập thông tin" value="{{ $returnForm->return_code }}"
-                                class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
+            <div class="" id="main">
+                {{-- Thông tin khách hàng --}}
+                <div class="border">
+                    <div class="info-form">
+                        <div class="bg-filter-search border-0 text-center">
+                            <p class="font-weight-bold text-uppercase info-chung--heading text-center">
+                                THÔNG TIN PHIẾU TIẾP NHẬN
+                            </p>
                         </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black btn-click required-label font-weight-bold"
-                                style="flex: 1.6;">Khách
-                                hàng</span>
-                            <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
-                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                value="{{ $returnForm->customer->customer_name }}" style="flex:2;" />
-                            <input type="hidden" name="customer_id" id="customer_id"
-                                value="{{ $returnForm->customer_id }}">
-                            <div class="">
-                                <div id="listCustomer"
-                                    class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
-                                    style="z-index: 99;display: none;">
-                                    <div class="p-1">
-                                        <div class="position-relative">
-                                            <input type="text" placeholder="Nhập thông tin"
-                                                class="pr-4 w-100 input-search bg-input-guest" id="searchCustomer">
-                                            <span id="search-icon" class="search-icon">
-                                                <i class="fas fa-search text-table" aria-hidden="true"></i>
-                                            </span>
+                        <div class="d-flex w-100">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
+                                    phiếu</span>
+                                <input type="text" id="return_code" name="return_code" style="flex:2;"
+                                    placeholder="Nhập thông tin" value="{{ $returnForm->return_code }}"
+                                    class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black btn-click required-label font-weight-bold"
+                                    style="flex: 1.6;">Khách
+                                    hàng</span>
+                                <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
+                                    class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    value="{{ $returnForm->customer->customer_name }}" style="flex:2;" />
+                                <input type="hidden" name="customer_id" id="customer_id"
+                                    value="{{ $returnForm->customer_id }}">
+                                <div class="">
+                                    <div id="listCustomer"
+                                        class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
+                                        style="z-index: 99;display: none;">
+                                        <div class="p-1">
+                                            <div class="position-relative">
+                                                <input type="text" placeholder="Nhập thông tin"
+                                                    class="pr-4 w-100 input-search bg-input-guest"
+                                                    id="searchCustomer">
+                                                <span id="search-icon" class="search-icon">
+                                                    <i class="fas fa-search text-table" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    </div>
                                 </div>
                             </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">Người lập phiếu</span>
+                                <input type="hidden" name="user_id" value="{{ $returnForm->user_id }}">
+                                <input class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" autocomplete="off"
+                                    placeholder="Nhập thông tin" style="flex:2;" name=""
+                                    value="{{ Auth::user()->name }}" readonly />
+                            </div>
                         </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">Người lập phiếu</span>
-                            <input type="hidden" name="user_id" value="{{ $returnForm->user_id }}">
-                            <input class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" autocomplete="off"
-                                placeholder="Nhập thông tin" style="flex:2;" name=""
-                                value="{{ Auth::user()->name }}" readonly />
-                        </div>
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
-                                phiếu</span>
-                            <input name="date_created" placeholder="Nhập thông tin" autocomplete="off"
-                                type="date"
-                                class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style=" flex:2;"
-                                value="{{ \Carbon\Carbon::parse($returnForm->date_created)->format('Y-m-d') }}" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
-                            <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
-                                class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                id="contact_person" value="{{ $returnForm->contact_person }}" style="flex:2;" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
-                            <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone_number"
-                                id="phone_number" value="{{ $returnForm->phone_number }}" />
-                        </div>
+                        <div class="d-flex w-100">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày
+                                    lập
+                                    phiếu</span>
+                                <input name="date_created" placeholder="Nhập thông tin" autocomplete="off"
+                                    type="date"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    style=" flex:2;"
+                                    value="{{ \Carbon\Carbon::parse($returnForm->date_created)->format('Y-m-d') }}" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
+                                <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
+                                    class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    id="contact_person" value="{{ $returnForm->contact_person }}" style="flex:2;" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
+                                <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    autocomplete="off" placeholder="Nhập thông tin" style="flex:2;"
+                                    name="phone_number" id="phone_number" value="{{ $returnForm->phone_number }}" />
+                            </div>
 
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Địa chỉ</span>
-                            <input placeholder="Nhập thông tin" name="address" value="{{ $returnForm->address }}"
-                                id="address"
-                                class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;" />
                         </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Phương thức trả hàng</span>
-                            <select
-                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"
-                                style="flex:2;" name="return_method" id="return_method">
-                                <option value="1" {{ $returnForm->return_method == 1 ? 'selected' : '' }}>Khách
-                                    nhận trực tiếp</option>
-                                <option value="2" {{ $returnForm->return_method == 2 ? 'selected' : '' }}>Chuyển
-                                    phát nhanh</option>
-                                <option value="3" {{ $returnForm->return_method == 3 ? 'selected' : '' }}>Gửi
-                                    chành xe</option>
-                            </select>
+                        <div class="d-flex w-100">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Địa chỉ</span>
+                                <input placeholder="Nhập thông tin" name="address"
+                                    value="{{ $returnForm->address }}" id="address"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Phương thức trả
+                                    hàng</span>
+                                <select
+                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"
+                                    style="flex:2;" name="return_method" id="return_method">
+                                    <option value="1" {{ $returnForm->return_method == 1 ? 'selected' : '' }}>
+                                        Khách
+                                        nhận trực tiếp</option>
+                                    <option value="2" {{ $returnForm->return_method == 2 ? 'selected' : '' }}>
+                                        Chuyển
+                                        phát nhanh</option>
+                                    <option value="3" {{ $returnForm->return_method == 3 ? 'selected' : '' }}>Gửi
+                                        chành xe</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex w-100">
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
-                            <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
-                                value="{{ $returnForm->notes }}"
-                                class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                        </div>
-                        <div
-                            class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                        <div class="d-flex w-100">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
+                                <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
+                                    value="{{ $returnForm->notes }}"
+                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            @if ($errors->any())
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
-            {{-- Thông tin sản phẩm --}}
-            <div class="content">
-                <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
-                    <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG HOÁ/DỊCH
-                        VỤ
-                    </p>
-                </div>
-                <div class="container-fluided">
-                    <section class="content overflow-content-quote" style="overflow-x:visible">
-                        <table class="table" id="inputcontent">
-                            @php
-                                $hideReplacement =
-                                    $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
-                                        ? 'd-none'
-                                        : '';
-                                $hideExtraWarranty =
-                                    $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
-                                        ? 'd-none'
-                                        : '';
-                            @endphp
-                            <thead>
-                                <tr style="height:44px;">
-                                    <th class="border-right px-2 p-0 pl-4" style="width:8%;">
-                                        <span class="text-table text-secondary">Mã hàng</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:25%;">
-                                        <span class="text-table text-secondary">Tên Hàng</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:10%;">
-                                        <span class="text-table text-secondary">Hãng</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:7%;">
-                                        <span class="text-table text-secondary">Số lượng</span>
-                                    </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:10%;">
-                                        <span class="text-table text-secondary">Serial Number</span>
-                                    </th>
-                                    <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
-                                        style="width:10%;">
-                                        <span class="text-table text-secondary">Mã hàng đổi</span>
-                                    </th>
-                                    <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
-                                        style="width:10%;">
-                                        <span class="text-table text-secondary">Serial Number đổi</span>
-                                    </th>
-                                    <th class="border-right note px-2 p-0 text-left {{ $hideExtraWarranty }}"
-                                        style="width:8%;">
-                                        <span class="text-table text-secondary">Bảo hành thêm</span>
-                                    </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:12%;">
-                                        <span class="text-table text-secondary">Ghi chú</span>
-                                    </th>
-                                </tr>
-
-                            </thead>
-                            <tbody id="tbody-data">
-                                @foreach ($returnProducts as $id => $item)
-                                    <tr class="row-product bg-white">
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            <input type="hidden" name="return[{{ $id }}][product_id]"
-                                                value="{{ $item->product_id }}">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly
-                                                name="return[{{ $id }}][product_code]"
-                                                value="{{ $item->product->product_code }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly
-                                                name="return[{{ $id }}][product_name]"
-                                                value="{{ $item->product->product_name }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly
-                                                name="return[{{ $id }}][brand]"
-                                                value="{{ $item->product->brand }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly
-                                                name="return[{{ $id }}][quantity]"
-                                                value="{{ $item->quantity }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="hidden" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 serial_id height-32" readonly
-                                                name="return[{{ $id }}][serial_id]"
-                                                value="{{ $item->serialNumber->id }}">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" readonly
-                                                name="return[{{ $id }}][serial_code]"
-                                                value="{{ $item->serialNumber->serial_code }}">
-                                        </td>
-                                        <td
-                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative {{ $hideReplacement }}">
-                                            <input type="hidden" min="0" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue"
-                                                id="replacement_code_{{ $id }}"
-                                                name="return[{{ $id }}][replacement_code]"
-                                                value="{{ $item->product_replace->id ?? null }}">
-                                            <div class="search-container">
-                                                <input type="text"
-                                                    class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
-                                                    value="{{ $item->product_replace->product_code ?? '' }}"
-                                                    placeholder="Search..." />
-                                                <ul class="search-list border rounded">
-                                                    @foreach ($dataProduct as $product)
-                                                        <li class="search-item p-2 border-bottom"
-                                                            data-id="{{ $id }}"
-                                                            data-replace_id="{{ $product->id }}"
-                                                            data-code="{{ $product->product_code }}">
-                                                            {{ $product->product_code }}</li>
-                                                    @endforeach
-                                                </ul>
-                                            </div>
-                                        </td>
-                                        <td
-                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideReplacement }}">
-                                            <input type="text" min="0" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue"
-                                                name="return[{{ $id }}][replacement_serial_number_id]"
-                                                value="{{ $item->replacementSerialNumber->serial_code ?? '' }}">
-                                        </td>
-                                        <td
-                                            class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
-                                            <input type="number" min="0" max="100" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue"
-                                                name="return[{{ $id }}][extra_warranty]"
-                                                value="{{ $item->extra_warranty ?? '' }}">
-                                        </td>
-                                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            <input type="text" autocomplete="off"
-                                                class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue"
-                                                name="return[{{ $id }}][note]"
-                                                value="{{ $item->notes ?? '' }}">
-                                        </td>
+                @if ($errors->any())
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+                {{-- Thông tin sản phẩm --}}
+                <div class="content">
+                    <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
+                        <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG
+                            HOÁ/DỊCH
+                            VỤ
+                        </p>
+                    </div>
+                    <div class="container-fluided">
+                        <section class="content overflow-content-quote" style="overflow-x:visible">
+                            <table class="table" id="inputcontent">
+                                @php
+                                    $hideReplacement =
+                                        $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
+                                            ? 'd-none'
+                                            : '';
+                                    $hideExtraWarranty =
+                                        $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
+                                            ? 'd-none'
+                                            : '';
+                                @endphp
+                                <thead>
+                                    <tr style="height:44px;">
+                                        <th class="border-right px-2 p-0 pl-4" style="width:8%;">
+                                            <span class="text-table text-secondary">Mã hàng</span>
+                                        </th>
+                                        <th class="border-right px-2 p-0 text-left" style="width:25%;">
+                                            <span class="text-table text-secondary">Tên Hàng</span>
+                                        </th>
+                                        <th class="border-right px-2 p-0 text-left" style="width:10%;">
+                                            <span class="text-table text-secondary">Hãng</span>
+                                        </th>
+                                        <th class="border-right px-2 p-0 text-right" style="width:7%;">
+                                            <span class="text-table text-secondary">Số lượng</span>
+                                        </th>
+                                        <th class="border-right px-2 p-0 text-right" style="width:10%;">
+                                            <span class="text-table text-secondary">Serial Number</span>
+                                        </th>
+                                        <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                            style="width:10%;">
+                                            <span class="text-table text-secondary">Mã hàng đổi</span>
+                                        </th>
+                                        <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                            style="width:10%;">
+                                            <span class="text-table text-secondary">Serial Number đổi</span>
+                                        </th>
+                                        <th class="border-right note px-2 p-0 text-left {{ $hideExtraWarranty }}"
+                                            style="width:8%;">
+                                            <span class="text-table text-secondary">Bảo hành thêm</span>
+                                        </th>
+                                        <th class="border-right note px-2 p-0 text-left" style="width:12%;">
+                                            <span class="text-table text-secondary">Ghi chú</span>
+                                        </th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </section>
+
+                                </thead>
+                                <tbody id="tbody-data">
+                                    @foreach ($returnProducts as $id => $item)
+                                        <tr class="row-product bg-white">
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                <input type="hidden" name="return[{{ $id }}][product_id]"
+                                                    value="{{ $item->product_id }}">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                                    readonly name="return[{{ $id }}][product_code]"
+                                                    value="{{ $item->product->product_code }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                    readonly name="return[{{ $id }}][product_name]"
+                                                    value="{{ $item->product->product_name }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly
+                                                    name="return[{{ $id }}][brand]"
+                                                    value="{{ $item->product->brand }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly
+                                                    name="return[{{ $id }}][quantity]"
+                                                    value="{{ $item->quantity }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="hidden" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial_id height-32" readonly
+                                                    name="return[{{ $id }}][serial_id]"
+                                                    value="{{ $item->serialNumber->id }}">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
+                                                    readonly name="return[{{ $id }}][serial_code]"
+                                                    value="{{ $item->serialNumber->serial_code }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative {{ $hideReplacement }}">
+                                                <input type="hidden" min="0" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue"
+                                                    id="replacement_code_{{ $id }}"
+                                                    name="return[{{ $id }}][replacement_code]"
+                                                    value="{{ $item->product_replace->id ?? null }}">
+                                                <div class="search-container">
+                                                    <input type="text"
+                                                        class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
+                                                        value="{{ $item->product_replace->product_code ?? '' }}"
+                                                        placeholder="Search..." />
+                                                    <ul class="search-list border rounded">
+                                                        @foreach ($dataProduct as $product)
+                                                            <li class="search-item p-2 border-bottom"
+                                                                data-id="{{ $id }}"
+                                                                data-replace_id="{{ $product->id }}"
+                                                                data-code="{{ $product->product_code }}">
+                                                                {{ $product->product_code }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideReplacement }}">
+                                                <input type="text" min="0" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue"
+                                                    name="return[{{ $id }}][replacement_serial_number_id]"
+                                                    value="{{ $item->replacementSerialNumber->serial_code ?? '' }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
+                                                <input type="number" min="0" max="100"
+                                                    autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue"
+                                                    name="return[{{ $id }}][extra_warranty]"
+                                                    value="{{ $item->extra_warranty ?? '' }}">
+                                            </td>
+                                            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                <input type="text" autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue"
+                                                    name="return[{{ $id }}][note]"
+                                                    value="{{ $item->notes ?? '' }}">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </section>
+                    </div>
                 </div>
             </div>
+            {{-- View mini --}}
+            <x-view_mini :guestOrProvider="$customers" :users="$users" name="TH" :data="$data"></x-view_mini>
         </div>
     </div>
 </form>

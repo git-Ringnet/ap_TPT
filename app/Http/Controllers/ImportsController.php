@@ -8,7 +8,9 @@ use App\Models\InventoryLookup;
 use App\Models\Product;
 use App\Models\ProductImport;
 use App\Models\Providers;
+use App\Models\Quotation;
 use App\Models\Receiving;
+use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
 use Carbon\Carbon;
@@ -347,6 +349,62 @@ class ImportsController extends Controller
                         2 => 'Xử lý',
                         3 => 'Hoàn thành',
                         4 => 'Khách không đồng ý',
+                    },
+                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'customer_name' => $detail->customer->customer_name,
+                ];
+            });
+
+            return response()->json($data);
+        }
+        if ($request->page == "BG") {
+            $quotation = Quotation::query()
+                ->when($request->idGuest, function ($query, $idGuest) {
+                    return $query->where('customer_id', $idGuest);
+                })
+                ->when($request->creator, function ($query, $creator) {
+                    return $query->where('quotations.user_id', $creator);
+                })
+                ->whereBetween(DB::raw("DATE(quotations.created_at)"), [$fromDate, $toDate])
+                ->with('customer')
+                ->get();
+
+            $data = $quotation->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'quotation_code' => $detail->quotation_code,
+                    'form_type' => match ($detail->reception->form_type) {
+                        1 => 'Bảo hành',
+                        2 => 'Dịch vụ',
+                        3 => 'Dịch vụ bảo hành',
+                    },
+                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'customer_name' => $detail->customer->customer_name,
+                ];
+            });
+
+            return response()->json($data);
+        }
+        if ($request->page == "TH") {
+            $returnForm = ReturnForm::query()
+                ->when($request->idGuest, function ($query, $idGuest) {
+                    return $query->where('customer_id', $idGuest);
+                })
+                ->when($request->creator, function ($query, $creator) {
+                    return $query->where('return_form.user_id', $creator);
+                })
+                ->whereBetween(DB::raw("DATE(return_form.created_at)"), [$fromDate, $toDate])
+                ->with('productReturns', 'reception', 'customer')
+                ->get();
+
+            $data = $returnForm->map(function ($detail) {
+                return [
+                    'id' => $detail->id,
+                    'return_code' => $detail->return_code,
+                    'status' => match ((int) $detail->status) {
+                        1 => 'Hoàn thành',
+                        2 => 'Khách không đồng ý',
+                        default => 'Trạng thái không xác định',
                     },
                     'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
                     'customer_name' => $detail->customer->customer_name,

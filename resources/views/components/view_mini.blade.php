@@ -53,7 +53,7 @@
                     </div>
                 </div>
             @endif
-            @if ($name == 'XH' || $name == 'TN')
+            @if ($name == 'XH' || $name == 'TN' || $name == 'BG' || $name == 'TH')
                 <div class="position-relative">
                     <p class="m-0 p-0 text-13-black">Khách hàng</p>
                     <input type="text" placeholder="Chọn thông tin" readonly
@@ -156,10 +156,17 @@
                                 Ngày lập phiếu
                             </span>
                         </th>
-                        @if ($name == 'TN')
+                        @if ($name == 'TN' || $name == 'TH')
                             <th scope="col" class="height-52">
                                 <span class="d-flex justify-content-start text-13-black font-weight-bold">
                                     Tình trạng
+                                </span>
+                            </th>
+                        @endif
+                        @if ($name == 'BG')
+                            <th scope="col" class="height-52">
+                                <span class="d-flex justify-content-start text-13-black font-weight-bold">
+                                    Loại phiếu
                                 </span>
                             </th>
                         @endif
@@ -181,7 +188,7 @@
                 <tbody class="tbody-detail-info">
                     <!-- Hiệu ứng load -->
                     <tr class="loading-row">
-                        <td colspan="<?php echo $name == 'TN' ? 4 : 3; ?>" class="text-center">
+                        <td colspan="<?php echo $name == 'TN' || $name == 'BG' ? 4 : 3; ?>" class="text-center">
                             <div class="spinner-border" role="status"></div>
                         </td>
                     </tr>
@@ -244,6 +251,54 @@
                             </tr>
                         @endforeach
                     @endif
+                    @if ($name == 'BG')
+                        @foreach ($data as $item)
+                            <tr class="position-relative detail-info height-30 data-row" style="display:none"
+                                data-id="{{ $item->id }}" data-page="{{ $name }}">
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->quotation_code }}
+                                </td>
+                                <td class="text-13-black text-left border-bottom">
+                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    @if ($item->reception->form_type == 1)
+                                        Bảo hành
+                                    @elseif($item->reception->form_type == 2)
+                                        Dịch vụ
+                                    @elseif($item->reception->form_type == 3)
+                                        Dịch vụ bảo hành
+                                    @endif
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->customer->customer_name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    @if ($name == 'TH')
+                        @foreach ($data as $item)
+                            <tr class="position-relative detail-info height-30 data-row" style="display:none"
+                                data-id="{{ $item->id }}" data-page="{{ $name }}">
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->return_code }}
+                                </td>
+                                <td class="text-13-black text-left border-bottom">
+                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    @if ($item->status == 1)
+                                        Hoàn thành
+                                    @elseif($item->status == 2)
+                                        Khách không đồng ý
+                                    @endif
+                                </td>
+                                <td class="text-13-black border-bottom">
+                                    {{ $item->customer->customer_name }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -276,29 +331,46 @@
         function appendRows(data, page) {
             let maPhieu = null;
             let ten = null;
-            let hienThi = null;
+            let hienThiTinhTrang = null;
+            let hienThiLoaiPhieu = null;
 
             const rows = data.map(detail => {
                 if (page == 'NH') {
                     maPhieu = detail.import_code;
                     ten = detail.provider_name;
-                    hienThi = "d-none";
+                    hienThiTinhTrang = "d-none";
+                    hienThiLoaiPhieu = "d-none";
                 }
                 if (page == 'XH') {
                     maPhieu = detail.export_code;
                     ten = detail.customer_name;
-                    hienThi = "d-none";
+                    hienThiTinhTrang = "d-none";
+                    hienThiLoaiPhieu = "d-none";
                 }
                 if (page == 'TN') {
                     maPhieu = detail.form_code_receiving;
                     ten = detail.customer_name;
-                    hienThi = "block";
+                    hienThiTinhTrang = "block";
+                    hienThiLoaiPhieu = "d-none";
+                }
+                if (page == 'BG') {
+                    maPhieu = detail.quotation_code;
+                    ten = detail.customer_name;
+                    hienThiLoaiPhieu = "block";
+                    hienThiTinhTrang = "d-none";
+                }
+                if (page == 'TH') {
+                    maPhieu = detail.return_code;
+                    ten = detail.customer_name;
+                    hienThiTinhTrang = "block";
+                    hienThiLoaiPhieu = "d-none";
                 }
                 return `
                 <tr class="position-relative detail-info height-52" data-id="${detail.id}" data-page="${page}">
                     <td class="text-13-black text-left border-top-0 border-bottom">${maPhieu}</td>
                     <td class="text-13-black text-left border-top-0 border-bottom">${detail.date_create}</td>
-                    <td class="text-13-black text-left border-top-0 border-bottom ${hienThi}">${detail.status}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom ${hienThiTinhTrang}">${detail.status}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom ${hienThiLoaiPhieu}">${detail.form_type}</td>
                     <td class="text-13-black text-left border-top-0 border-bottom">${ten}</td>
                 </tr>
             `;
@@ -360,6 +432,14 @@
             }
             if (page == 'TN') {
                 url = "{{ route('receivings.edit', ':id') }}".replace(':id',
+                    id); // Gán giá trị cho url
+            }
+            if (page == 'BG') {
+                url = "{{ route('quotations.edit', ':id') }}".replace(':id',
+                    id); // Gán giá trị cho url
+            }
+            if (page == 'TH') {
+                url = "{{ route('returnforms.edit', ':id') }}".replace(':id',
                     id); // Gán giá trị cho url
             }
 
