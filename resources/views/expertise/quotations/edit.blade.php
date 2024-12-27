@@ -67,7 +67,7 @@
                     <div class="info-form">
                         <div class="bg-filter-search border-0 text-center">
                             <p class="font-weight-bold text-uppercase info-chung--heading text-center">
-                                THÔNG TIN PHIẾU TIẾP NHẬN
+                                THÔNG TIN PHIẾU BÁO GIÁ
                             </p>
                         </div>
                         <div class="d-flex w-100">
@@ -84,8 +84,8 @@
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Khách hàng</span>
                                 <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
-                                    class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                    value="{{ $quotation->customer->customer_name }}" style="flex:2;" />
+                                    class="text-13-black w-100 border-0 bg-input-guest py-2 px-2"
+                                    value="{{ $quotation->customer->customer_name }}" style="flex:2;" readonly />
                                 <input type="hidden" name="customer_id" id="customer_id"
                                     value="{{ $quotation->customer_id }}">
                                 <div class="">
@@ -157,13 +157,6 @@
                                 <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
                                 <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
                                     value="{{ $quotation->notes }}"
-                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
-                            </div>
-                            <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Total_Amount</span>
-                                <input name="total_amount" placeholder="Nhập thông tin" autocomplete="off"
-                                    id="notes"
                                     class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
                             </div>
                         </div>
@@ -245,13 +238,13 @@
                                                     value="{{ $item->brand }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                <input type="number" min="1" autocomplete="off"
+                                                <input type="text" min="1" autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32 bg-input-guest-blue"
                                                     name="services[{{ $id }}][quantity]"
                                                     value="{{ $item->quantity }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                <input type="number" step="0.01" min="0"
+                                                <input type="text" step="0.01" min="0"
                                                     autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 unit_price height-32 bg-input-guest-blue"
                                                     name="services[{{ $id }}][unit_price]"
@@ -259,7 +252,7 @@
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <select
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 bg-input-guest-blue"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 bg-input-guest-blue tax_rate"
                                                     name="services[{{ $id }}][tax_rate]">
                                                     <option value="10"
                                                         {{ $item->tax_rate == 10 ? 'selected' : '' }}>
@@ -273,7 +266,7 @@
                                                 </select>
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                <input type="number" step="0.01" min="0" readonly
+                                                <input type="text" step="0.01" min="0" readonly
                                                     class="border-0 pl-1 pr-2 py-1 w-100 total height-32"
                                                     name="services[{{ $id }}][total]"
                                                     value="{{ $item->total }}">
@@ -296,7 +289,6 @@
                                             </td>
                                         </tr>
                                     @endforeach
-
                                 </tbody>
                             </table>
                             <input type="hidden" name="data-test" id="data-test">
@@ -320,6 +312,35 @@
                                     </div>
                                 </div>
                             </section>
+                            <div class="content">
+                                <div class="row" style="width:95%;">
+                                    <div class="position-relative col-lg-6 px-0"></div>
+                                    <div class="position-relative col-lg-3 col-md-7 col-sm-12 margin-left180">
+                                        <div class="m-3 ">
+                                            <div class="d-flex justify-content-between">
+                                                <span class="text-14-black">Giá trị trước thuế:</span>
+                                                <span id="total-amount-sum" class="text-14-black">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2 align-items-center">
+                                                <span class="text-14-black">VAT 8%</span>
+                                                <span id="product-tax8" class="text-14-black">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2 align-items-center">
+                                                <span class="text-14-black">VAT 10%</span>
+                                                <span id="product-tax10" class="text-14-black">0</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-2">
+                                                <span class="text-20-bold">Tổng cộng:</span>
+                                                <span id="grand-total" class="text-20-bold text-right">
+                                                    0
+                                                </span>
+                                                <input type="hidden" name="total_amount" value="0"
+                                                    id="total">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </section>
                     </div>
                 </div>
@@ -354,5 +375,8 @@
                 });
             }
         });
+    });
+    $(document).ready(function() {
+        calculateTotals();
     });
 </script>

@@ -12,7 +12,9 @@
                                 id="reception">
                                 <option value="">Chưa chọn phiếu</option>
                                 @foreach ($receivings as $item)
-                                    <option value="{{ $item->id }}">{{ $item->form_code_receiving }}
+                                    <option value="{{ $item->id }}"
+                                        {{ $item->id == request()->query('recei') ? 'selected' : '' }}>
+                                        {{ $item->form_code_receiving }}
                                     </option>
                                 @endforeach
                             </select>
@@ -270,42 +272,40 @@
 <script src="{{ asset('js/returnform.js') }}"></script>
 <script>
     $(document).ready(function() {
+        // Trích xuất tham số từ URL
+        const getQueryParameter = name => new URLSearchParams(window.location.search).get(name);
+        const receiParam = getQueryParameter('recei');
+        const fetchData = (selectedId) => {
+            $.ajax({
+                url: '{{ route('getReceiving') }}',
+                type: 'GET',
+                data: {
+                    selectedId: selectedId,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    const formType = response.data.form_type;
+                    const hideClass = formType === 2 || formType === 3 ?
+                        '.col-replacement-code, .col-replacement-serial' : '';
+                    $(".col-replacement-code, .col-replacement-serial, .col-extra-warranty")
+                        .addClass(hideClass);
+                    $('#status').val(formType).change();
+                    populateTableRows(response.product, "#tbody-data", response.productData,
+                        formType);
+                    $('#customer_name').val(response.data.customer.customer_name);
+                    $('#customer_id').val(response.data.customer_id);
+                    $('#contact_person').val(response.data.contact_person);
+                    $('#phone_number').val(response.data.phone);
+                    $('#address').val(response.data.address);
+                }
+            });
+        };
+        if (receiParam) fetchData(receiParam);
+
+        // Xử lý thay đổi khi chọn reception
         $('#reception').change(function() {
-            var selectedId = $(this).val();
-            if (selectedId != 0) {
-                // Gửi yêu cầu AJAX tới server để lấy dữ liệu chi tiết
-                $.ajax({
-                    url: '{{ route('getReceiving') }}',
-                    type: 'GET',
-                    async: false,
-                    data: {
-                        selectedId: selectedId,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        var formType = response.data.form_type;
-                        if (formType === 2 || formType === 3) {
-                            $(".col-replacement-code, .col-replacement-serial").addClass(
-                                'd-none');
-                        }
-                        if (formType === 1 || formType === 3) {
-                            $(".col-extra-warranty").addClass('d-none');
-                        }
-                        if (formType === 3) {
-                            $(".col-replacement-code, .col-replacement-serial, .col-extra-warranty")
-                                .addClass('d-none');
-                        }
-                        $('#status').val(response.data.form_type).change();
-                        populateTableRows(response.product, "#tbody-data", response
-                            .productData, response.data.form_type);
-                        $('#customer_name').val(response.data.customer.customer_name);
-                        $('#customer_id').val(response.data.customer_id);
-                        $('#contact_person').val(response.data.contact_person);
-                        $('#phone_number').val(response.data.phone);
-                        $('#address').val(response.data.address);
-                    }
-                });
-            }
+            const selectedId = $(this).val();
+            if (selectedId != 0) fetchData(selectedId);
         });
     });
 </script>

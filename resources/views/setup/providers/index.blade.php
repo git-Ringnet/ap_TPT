@@ -44,8 +44,8 @@
                             <div class="outer2 text-nowrap">
                                 <table id="example2" class="table table-hover">
                                     <thead class="sticky-head">
-                                        <tr class="height-30">
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                        <tr class="height-40">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name_display" data-sort-type="DESC">
@@ -56,7 +56,7 @@
                                                     <div class="icon" id="icon-provide_name_display"></div>
                                                 </span>
                                             </th>
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name_display" data-sort-type="DESC">
@@ -68,7 +68,7 @@
                                                 </span>
                                             </th>
 
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name" data-sort-type="DESC">
@@ -79,7 +79,7 @@
                                                     <div class="icon" id="icon-provide_name"></div>
                                                 </span>
                                             </th>
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name" data-sort-type="DESC">
@@ -90,7 +90,7 @@
                                                     <div class="icon" id="icon-provide_name"></div>
                                                 </span>
                                             </th>
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name" data-sort-type="DESC">
@@ -101,7 +101,7 @@
                                                     <div class="icon" id="icon-provide_name"></div>
                                                 </span>
                                             </th>
-                                            <th scope="col" class="border-bottom border height-30 py-0">
+                                            <th scope="col" class="border-bottom border height-40 py-0">
                                                 <span class="d-flex justify-content-end">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name" data-sort-type="DESC">
@@ -124,7 +124,7 @@
                                             $total = 0;
                                         @endphp
                                         @foreach ($providers as $item)
-                                            <tr class="position-relative provide-info height-30">
+                                            <tr class="position-relative provide-info height-40">
                                                 <input type="hidden" name="id-provide" class="id-provide"
                                                     id="id-provide" value="{{ $item->id }}">
                                                 <td class="text-13-black border border-bottom py-0 border-top-0">
@@ -211,7 +211,7 @@
                                                 $total++;
                                             @endphp
                                         @endforeach
-                                        <tr class="height-30 border-bottom border">
+                                        <tr class="height-40 border-bottom border">
                                             <td class="border-right border-top-0 border-bottom"></td>
                                             <td class="text-right py-0 border-right border-top-0 border-bottom"
                                                 style="color: red">
@@ -235,7 +235,7 @@
                                                     @php
                                                         $total++;
                                                     @endphp
-                                                    <tr class="position-relative provide-info height-30">
+                                                    <tr class="position-relative provide-info height-40">
                                                         <input type="hidden" name="id-provide" class="id-provide"
                                                             id="id-provide" value="{{ $item->id }}">
                                                         <td class="text-13-black border border-bottom py-0">
@@ -318,7 +318,7 @@
                                                     </tr>
                                                 @endif
                                             @endforeach
-                                            <tr class="height-30">
+                                            <tr class="height-40">
                                                 <td class="border-right border-bottom py-0"></td>
                                                 <td class="text-right border-right border-bottom py-0"
                                                     style="color: red">

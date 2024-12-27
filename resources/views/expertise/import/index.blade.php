@@ -111,7 +111,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -122,7 +122,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -133,7 +133,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -144,7 +144,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -155,7 +155,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -170,7 +170,7 @@
                                 </thead>
                                 <tbody class="tbody-guest">
                                     @foreach ($imports as $item)
-                                        <tr class="position-relative guest-info height-30">
+                                        <tr class="position-relative guest-info height-40">
                                             <td class="text-13-black border-right border-bottom py-0">
                                                 <a href="{{ route('imports.edit', $item->id) }}">
                                                     {{ $item->import_code }}

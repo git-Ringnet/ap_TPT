@@ -14,7 +14,7 @@ class QuotationController extends Controller
     // Hiển thị danh sách báo giá
     public function index()
     {
-        $quotations = Quotation::paginate(10); // Lấy danh sách báo giá, phân trang
+        $quotations = Quotation::get();
         $title = 'Danh sách báo giá';
         return view('expertise.quotations.index', compact('quotations', 'title'));
     }
@@ -24,16 +24,17 @@ class QuotationController extends Controller
     {
         $quoteNumber = (new Receiving)->getQuoteCount('PBG', Quotation::class, 'quotation_code');
         $title = 'Tạo phiếu báo giá';
-        $receivings = Receiving::all();
+        $excludedReceptionIds = Quotation::pluck('reception_id')->toArray();
+        $receivings = Receiving::whereNotIn('id', $excludedReceptionIds)->get();
         return view('expertise.quotations.create', compact('title', 'quoteNumber', 'receivings'));
     }
+
 
     // Lưu báo giá mới vào cơ sở dữ liệu
     public function store(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
-            'reception_id' => 'required|integer',
+            'reception_id' => 'required|integer|unique:quotations,reception_id',
             'quotation_code' => 'required|string|unique:quotations,quotation_code',
             'customer_id' => 'required|integer',
             'address' => 'nullable|string',
@@ -71,7 +72,6 @@ class QuotationController extends Controller
                 ]);
             }
         }
-
         return redirect()->route('quotations.index')->with('msg', 'Tạo báo giá thành công!');
     }
 
@@ -85,21 +85,32 @@ class QuotationController extends Controller
     public function edit(Quotation $quotation)
     {
         $title = 'Chi tiết báo giá';
+
+        // Lấy tất cả các receiving
         $receivings = Receiving::all();
-        $quotation = Quotation::with('services')->findOrFail($quotation->id);
-        // Giả sử 'id' là khóa duy nhất cho mỗi dịch vụ
-        $quotationServices = $quotation->services->keyBy('id');
+        // Lấy các reception_id đã tồn tại trong bảng Quotation
+        $existingReceptionIds = Quotation::pluck('reception_id')->toArray();
+        // Lọc ra các receiving chưa có reception_id trong bảng Quotation
+        $receivings = $receivings->whereNotIn('id', $existingReceptionIds);
+        // Đảm bảo rằng reception_id của Quotation hiện tại được giữ lại
+        $receivings->push(Receiving::find($quotation->reception_id));
+        // Lấy chi tiết của báo giá với quan hệ 'services'
+        $quotation1 = Quotation::with('services')->findOrFail($quotation->id);
+        //'id' là khóa duy nhất cho mỗi dịch vụ
+        $quotationServices = $quotation1->services->keyBy('id');
         $customers = Customers::all();
         $users = User::all();
         $data = Quotation::all();
-        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices', 'customers', 'users','data'));
+
+        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices', 'customers', 'users', 'data'));
     }
+
 
     // Cập nhật thông tin báo giá
     public function update(Request $request, Quotation $quotation)
     {
         $validated = $request->validate([
-            'reception_id' => 'required|integer',
+            'reception_id' => 'required|integer|unique:quotations,reception_id,' . $quotation->id,
             'quotation_code' => 'required|string|unique:quotations,quotation_code,' . $quotation->id,
             'customer_id' => 'required|integer',
             'address' => 'nullable|string',
@@ -121,21 +132,18 @@ class QuotationController extends Controller
 
         // Cập nhật thông tin báo giá
         $quotation->update($validated);
-        $existingServices = $quotation->services->keyBy('id');
+
+        // Xoá tất cả các dịch vụ cũ của báo giá này
+        $quotation->services()->delete();
+
+        // Thêm lại tất cả các dịch vụ mới
         foreach ($validated['services'] ?? [] as $service) {
             $totalWithTax = $service['quantity'] * $service['unit_price'] * (1 + ($service['tax_rate'] ?? 0) / 100);
-            if (
-                !empty($service['id']) && $existingServices->has($service['id'])
-            ) {
-                $existingServices[$service['id']]->update(array_merge($service, ['total' => $totalWithTax]));
-                $existingServices->forget($service['id']);
-            } else {
-                $quotation->services()->create(array_merge($service, [
-                    'total' => $totalWithTax
-                ]));
-            }
+            // Tạo dịch vụ mới
+            $quotation->services()->create(array_merge($service, [
+                'total' => $totalWithTax
+            ]));
         }
-        QuotationService::destroy($existingServices->keys());
         return redirect()->route('quotations.index')->with('msg', 'Cập nhật báo giá thành công!');
     }
 

@@ -261,19 +261,19 @@
                                         <th class="border-right px-2 p-0 text-right" style="width:10%;">
                                             <span class="text-table text-secondary">Serial Number</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                        <th class="border-right note px-2 p-0 text-left col-replacement-code {{ $hideReplacement }}"
                                             style="width:10%;">
                                             <span class="text-table text-secondary">Mã hàng đổi</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left {{ $hideReplacement }}"
+                                        <th class="border-right note px-2 p-0 text-left col-replacement-serial {{ $hideReplacement }}"
                                             style="width:10%;">
                                             <span class="text-table text-secondary">Serial Number đổi</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left {{ $hideExtraWarranty }}"
+                                        <th class="border-right note px-2 p-0 text-left col-extra-warranty {{ $hideExtraWarranty }}"
                                             style="width:8%;">
                                             <span class="text-table text-secondary">Bảo hành thêm</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left" style="width:12%;">
+                                        <th class="border-right note px-2 p-0 text-left col-note" style="width:12%;">
                                             <span class="text-table text-secondary">Ghi chú</span>
                                         </th>
                                     </tr>
@@ -392,8 +392,22 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
+                        var formType = response.data.form_type;
+                        if (formType === 2 || formType === 3) {
+                            $(".col-replacement-code, .col-replacement-serial").addClass(
+                                'd-none');
+                            $(".col-extra-warranty").removeClass('d-none');
+                        }
+                        if (formType === 1 || formType === 3) {
+                            $(".col-extra-warranty").addClass('d-none');
+                        }
+                        if (formType === 3) {
+                            $(".col-replacement-code, .col-replacement-serial, .col-extra-warranty")
+                                .addClass('d-none');
+                        }
                         $('#status').val(response.data.form_type).change();
-                        populateTableRows(response.product, "#tbody-data");
+                        populateTableRows(response.product, "#tbody-data", response
+                            .productData, response.data.form_type);
                         $('#customer_name').val(response.data.customer.customer_name);
                         $('#customer_id').val(response.data.customer_id);
                         $('#contact_person').val(response.data.contact_person);

@@ -105,13 +105,13 @@
                 <div class="row result-filter-guest margin-left30 my-1">
                 </div>
                 <div class="col-12 p-0 m-0">
-                    <div class="card">
+                    <div class="card" style="overflow-x: visible;">
                         <!-- /.card-header -->
                         <div class="outer2 table-responsive text-nowrap">
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-40 py-0 border-right pl-4" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom pl-4" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -122,7 +122,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -133,7 +133,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -144,7 +144,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -155,7 +155,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -166,7 +166,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -177,7 +177,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -188,7 +188,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-top-bottom" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -201,25 +201,33 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="tbody-guest">
+                                <tbody class="tbody-data">
                                     @foreach ($receivings as $item)
-                                        <tr
-                                            class="position-relative guest-info height-40 @if ($item->state == 1) bg-custom-yl @elseif($item->state == 2) bg-custom-pink @else bg-white @endif">
-                                            <td class="text-13-black border-right border-bottom py-0 pl-4">
+                                        <tr data-create-return-url="{{ route('returnforms.create') }}"
+                                            data-edit-return-url="{{ route('returnforms.edit', ':id') }}"
+                                            data-create-quote-url="{{ route('quotations.create') }}"
+                                            data-edit-quote-url="{{ route('quotations.edit', ':id') }}"
+                                            class="position-relative data-info row-data height-40 @if ($item->state == 1) bg-custom-yl @elseif($item->state == 2) bg-custom-pink @else bg-white @endif">
+                                            <input type="hidden" name="id-data" class="id-data" id="id-data"
+                                                value="{{ $item->id }}"
+                                                data-has-return="{{ $item->returnForms->id ?? 0 }}"
+                                                data-has-quote="{{ $item->quotation->id ?? 0 }}">
+                                            <td class="text-13-black border-bottom py-0 pl-4">
                                                 <a
                                                     href="{{ route('receivings.edit', $item->id) }}">{{ $item->form_code_receiving }}</a>
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 {{ $item->customer->customer_name }}
+                                                {{ $item->quotation->quotation_code ?? '' }}
+                                                {{ $item->returnForms->return_code ?? '' }}
                                             </td>
-                                            <td
-                                                class="text-13-black border border-left-0 text-left border-bottom py-0">
+                                            <td class="text-13-black border-left-0 text-left border-bottom py-0">
                                                 {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 {{ $item->close_at ? date_format(new DateTime($item->close_at), 'd/m/Y') : '' }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 @if ($item->form_type == 1)
                                                     Bảo hành
                                                 @elseif($item->form_type == 2)
@@ -228,14 +236,14 @@
                                                     Dịch vụ bảo hành
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 @if ($item->branch_id == 1)
                                                     Nội bộ
                                                 @elseif($item->branch_id == 2)
                                                     Bên ngoài
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 @if ($item->status == 1)
                                                     Tiếp nhận
                                                 @elseif($item->status == 2)
@@ -246,7 +254,7 @@
                                                     Khách không đồng ý
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td class="text-13-black border-left-0 border-bottom py-0">
                                                 @if ($item->state == 1)
                                                     Chưa xử lý
                                                 @elseif($item->state == 2)
@@ -294,6 +302,26 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <ul class="option-button p-2">
+                                <li>
+                                    <button class="option-btn btn" data-action="change-status">Chuyển tình
+                                        trạng
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="option-btn btn" data-action="change-type">Chuyển loại
+                                        phiếu
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="option-btn btn return-form" data-action="return-form">
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="option-btn btn quotation" data-action="quotation">
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -301,3 +329,56 @@
         </section>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        // Hiển thị menu khi nhấp vào hàng dữ liệu
+        $('.row-data').on('click', function(e) {
+            const $row = $(this);
+            const $optionButton = $('.option-button');
+            // Lấy thông tin từ hàng được nhấp
+            const dataRecei = $row.find('.id-data').val();
+            const hasReturn = $row.find('.id-data').data('has-return');
+            const hasQuote = $row.find('.id-data').data('has-quote');
+            // URL cho phiếu trả hàng và báo giá
+            const urls = {
+                createReturn: `${$row.data('create-return-url')}?recei=${dataRecei}`,
+                editReturn: $row.data('edit-return-url').replace(':id', hasReturn),
+                createQuote: `${$row.data('create-quote-url')}?recei=${dataRecei}`,
+                editQuote: $row.data('edit-quote-url').replace(':id', hasQuote),
+            };
+            // Cập nhật trạng thái nút
+            updateButtonText($optionButton.find('.return-form'), hasReturn, 'Tạo phiếu trả hàng',
+                'Sửa phiếu trả hàng', urls.createReturn, urls.editReturn);
+            updateButtonText($optionButton.find('.quotation'), hasQuote, 'Tạo phiếu báo giá',
+                'Sửa phiếu báo giá', urls.createQuote, urls.editQuote);
+            const {
+                clientX: x,
+                clientY: y
+            } = e;
+            $optionButton.css({
+                top: `${y}px`,
+                left: `${x}px`,
+                position: 'fixed',
+                zIndex: 1000,
+            }).show();
+        });
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.row-data').length && !$(e.target).closest('.option-button')
+                .length) {
+                $('.option-button').hide();
+            }
+        });
+        $('.option-btn').on('click', function() {
+            const url = $(this).data('url');
+            if (url) window.open(url, '_blank');
+        });
+
+        function updateButtonText($button, hasItem, createText, editText, createUrl, editUrl) {
+            if (hasItem === 0) {
+                $button.text(createText).data('url', createUrl);
+            } else {
+                $button.text(editText).data('url', editUrl);
+            }
+        }
+    });
+</script>

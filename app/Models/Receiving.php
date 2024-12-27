@@ -57,4 +57,12 @@ class Receiving extends Model
 
         return $invoiceNumber;
     }
+    public function returnForms()
+    {
+        return $this->hasOne(ReturnForm::class, 'reception_id');
+    }
+    public function quotation()
+    {
+        return $this->hasOne(Quotation::class, 'reception_id');
+    }
 }

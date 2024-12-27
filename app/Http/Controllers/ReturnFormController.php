@@ -34,7 +34,8 @@ class ReturnFormController extends Controller
     {
         $quoteNumber = (new Receiving)->getQuoteCount('PTH', ReturnForm::class, 'return_code');
         $title = 'Tạo phiếu trả hàng';
-        $receivings = Receiving::all();
+        $existingReceptionIds = ReturnForm::pluck('reception_id')->toArray();
+        $receivings = Receiving::whereNotIn('id', $existingReceptionIds)->get();
         return view('expertise.returnforms.create', compact('quoteNumber', 'title', 'receivings'));
     }
 
@@ -45,7 +46,7 @@ class ReturnFormController extends Controller
     {
         // Validate dữ liệu đầu vào
         $validated = $request->validate([
-            'reception_id' => 'required',
+            'reception_id' => 'required|unique:return_form,reception_id',
             'return_code' => 'required|unique:return_form,return_code',
             'customer_id' => 'required|exists:customers,id',
             'address' => 'nullable|string',
@@ -163,17 +164,26 @@ class ReturnFormController extends Controller
      */
     public function edit(string $id)
     {
+        // Lấy thông tin phiếu trả hàng và quan hệ với productReturns và reception
         $returnForm = ReturnForm::with('productReturns', 'reception')->findOrFail($id);
         $title = 'Chi tiết phiếu trả hàng';
-        $receivings = Receiving::all();
+        // Lấy tất cả các reception_id đã có trong bảng return_form
+        $existingReceptionIds = ReturnForm::pluck('reception_id')->toArray();
+        // Lọc ra tất cả các receiving, nhưng giữ lại reception_id của returnForm hiện tại
+        $receivings = Receiving::whereNotIn('id', $existingReceptionIds)
+            ->orWhere('id', $returnForm->reception_id)
+            ->get();
+        // Các thông tin khác liên quan đến phiếu trả hàng
         $returnProducts = $returnForm->productReturns->keyBy('id');
-        // dd($returnProducts);
         $dataProduct = Product::all();
         $data = ReturnForm::with('productReturns', 'reception')->get();
         $customers = Customers::all();
         $users = User::all();
-        return view('expertise.returnforms.edit', compact('returnForm',  'title', 'receivings', 'returnProducts', 'dataProduct', 'data', 'customers', 'users'));
+
+        // Trả về view với các dữ liệu đã chuẩn bị
+        return view('expertise.returnforms.edit', compact('returnForm', 'title', 'receivings', 'returnProducts', 'dataProduct', 'data', 'customers', 'users'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -184,7 +194,7 @@ class ReturnFormController extends Controller
         $returnForm = ReturnForm::findOrFail($id);
         // Xác thực dữ liệu đầu vào
         $validated = $request->validate([
-            'reception_id' => 'required',
+            'reception_id' => 'required|unique:return_form,reception_id,' . $returnForm->id,
             'return_code' => 'required|unique:return_form,return_code,' . $returnForm->id,
             'customer_id' => 'required|exists:customers,id',
             'address' => 'nullable|string',
@@ -295,9 +305,11 @@ class ReturnFormController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ReturnForm $returnForm)
+    public function destroy(string $id)
     {
+        $returnForm = ReturnForm::findOrFail($id);
         $returnForm->delete();
-        return redirect()->route('returnforms.index')->with('msg', 'Return form deleted successfully!');
+        $returnForm->productReturns()->delete();
+        return redirect()->route('returnforms.index')->with('msg', 'Xoá phiếu trả hàng thành công!');
     }
 }

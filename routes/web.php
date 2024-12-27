@@ -24,8 +24,9 @@ Route::resource('products', ProductController::class);
 Route::resource('users', UserController::class);
 Route::resource('warehouses', WarehouseController::class);
 Route::resource('receivings', ReceivingController::class);
-Route::resource('quotations', QuotationController::class);
 Route::resource('returnforms', ReturnFormController::class);
+Route::resource('quotations', QuotationController::class);
+
 // 
 Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])->name('getReceiving');
 // Check SN

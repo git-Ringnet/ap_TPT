@@ -53,7 +53,7 @@
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead class="border-custom">
                                 <tr>
-                                    <th class="height-30 py-0 border-right pl-4" scope="col" style="">
+                                    <th class="height-40 py-0 border-right pl-4" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -64,7 +64,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -75,7 +75,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -86,7 +86,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -97,7 +97,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -108,7 +108,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -133,7 +133,7 @@
                                 @endphp
                                 @foreach ($users as $item)
                                     @if ($item->group_id == 0)
-                                        <tr class="position-relative user-info height-30">
+                                        <tr class="position-relative user-info height-40">
                                             <input type="hidden" name="id-user" class="id-user" id="id-user"
                                                 value="{{ $item->id }}">
                                             <td class="text-13-black pl-0 border-bottom border py-0 pl-4">
@@ -225,7 +225,7 @@
                                     </tr>
                                     @foreach ($users as $item)
                                         @if ($item->group_id == $value->id)
-                                            <tr class="position-relative user-info height-30">
+                                            <tr class="position-relative user-info height-40">
                                                 <input type="hidden" name="id-user" class="id-user" id="id-user"
                                                     value="{{ $item->id }}">
                                                 <td class="text-13-black pl-0 border-bottom border py-0 pl-4">

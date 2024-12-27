@@ -12,7 +12,9 @@
                                 id="reception">
                                 <option value="">Chưa chọn phiếu</option>
                                 @foreach ($receivings as $item)
-                                    <option value="{{ $item->id }}">{{ $item->form_code_receiving }}
+                                    <option value="{{ $item->id }}"
+                                        {{ $item->id == request()->query('recei') ? 'selected' : '' }}>
+                                        {{ $item->form_code_receiving }}
                                     </option>
                                 @endforeach
                             </select>
@@ -71,7 +73,7 @@
                         <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click font-weight-bold" style="flex: 1.6;">Khách hàng</span>
-                            <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name" readonly
+                            <input autocomplete="off" required id="customer_name" readonly
                                 class="text-13-black w-100 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
                             <input type="hidden" name="customer_id" id="customer_id">
                         </div>
@@ -89,8 +91,7 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
                                 phiếu</span>
-                            <input name="quotation_date" placeholder="Nhập thông tin" autocomplete="off"
-                                type="date"
+                            <input name="quotation_date" placeholder="Nhập thông tin" autocomplete="off" type="date"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                 style=" flex:2;" value="{{ now()->format('Y-m-d') }}" />
                         </div>
@@ -226,17 +227,18 @@
                                             name="services[0][brand]" value="">
                                     </td>
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                        <input type="number" min="1" autocomplete="off"
+                                        <input type="text" min="1" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32 bg-input-guest-blue"
                                             name="services[0][quantity]">
                                     </td>
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                        <input type="number" step="0.01" min="0" autocomplete="off"
+                                        <input type="text" step="0.01" min="0" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 unit_price height-32 bg-input-guest-blue"
                                             name="services[0][unit_price]">
                                     </td>
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                        <select class="border-0 pl-1 pr-2 py-1 w-100 height-32 bg-input-guest-blue"
+                                        <select
+                                            class="border-0 pl-1 pr-2 py-1 w-100 height-32 bg-input-guest-blue tax_rate"
                                             name="services[0][tax_rate]">
                                             <option value="10">10%</option>
                                             <option value="8">8%</option>
@@ -244,7 +246,7 @@
                                         </select>
                                     </td>
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                        <input type="number" step="0.01" min="0" readonly
+                                        <input type="text" step="0.01" min="0" readonly
                                             class="border-0 pl-1 pr-2 py-1 w-100 total height-32"
                                             name="services[0][total]" value="0">
                                     </td>
@@ -297,19 +299,18 @@
                                         </div>
                                         <div class="d-flex justify-content-between mt-2 align-items-center">
                                             <span class="text-14-black">VAT 8%</span>
-                                            <span id="product-tax" class="text-14-black">0</span>
+                                            <span id="product-tax8" class="text-14-black">0</span>
                                         </div>
                                         <div class="d-flex justify-content-between mt-2 align-items-center">
                                             <span class="text-14-black">VAT 10%</span>
-                                            <span id="product-tax" class="text-14-black">0</span>
+                                            <span id="product-tax10" class="text-14-black">0</span>
                                         </div>
                                         <div class="d-flex justify-content-between mt-2">
                                             <span class="text-20-bold">Tổng cộng:</span>
                                             <span id="grand-total" class="text-20-bold text-right">
                                                 0
                                             </span>
-                                            <input type="hidden" name="total_amountuuxuu" value="0"
-                                                id="total">
+                                            <input type="hidden" name="total_amount" value="0" id="total">
                                         </div>
                                     </div>
                                 </div>
@@ -324,27 +325,32 @@
 <script src="{{ asset('js/quotation.js') }}"></script>
 <script>
     $(document).ready(function() {
+        // Trích xuất tham số từ URL
+        const getQueryParameter = name => new URLSearchParams(window.location.search).get(name);
+        const receiParam = getQueryParameter('recei');
+        const fetchData = (selectedId) => {
+            $.ajax({
+                url: '{{ route('getReceiving') }}',
+                type: 'GET',
+                data: {
+                    selectedId: selectedId,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    $('#customer_name').val(response.data.customer.customer_name);
+                    $('#customer_id').val(response.data.customer_id);
+                    $('#contact_person').val(response.data.contact_person);
+                    $('#phone').val(response.data.phone);
+                    $('#address').val(response.data.address);
+                }
+            });
+        };
+        if (receiParam) fetchData(receiParam);
+
+        // Xử lý thay đổi khi chọn reception
         $('#reception').change(function() {
-            var selectedId = $(this).val();
-            if (selectedId != 0) {
-                // Gửi yêu cầu AJAX tới server để lấy dữ liệu chi tiết
-                $.ajax({
-                    url: '{{ route('getReceiving') }}',
-                    type: 'GET',
-                    async: false,
-                    data: {
-                        selectedId: selectedId,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        $('#customer_name').val(response.data.customer.customer_name);
-                        $('#customer_id').val(response.data.customer_id);
-                        $('#contact_person').val(response.data.contact_person);
-                        $('#phone').val(response.data.phone);
-                        $('#address').val(response.data.address);
-                    }
-                });
-            }
+            const selectedId = $(this).val();
+            if (selectedId != 0) fetchData(selectedId);
         });
     });
 </script>

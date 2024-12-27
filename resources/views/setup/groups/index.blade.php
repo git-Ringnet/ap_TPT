@@ -5,9 +5,8 @@
         <div class="d-flex align-items-center ml-3">
             <form action="" method="get" id="search-filter" class="p-0 m-0">
                 <div class="position-relative ml-1">
-                    <input type="text" placeholder="Tìm kiếm" id="search" name="keywords"
-                        style="outline: none;" class="pr-4 w-100 input-search text-13"
-                        value="{{ request()->keywords }}" />
+                    <input type="text" placeholder="Tìm kiếm" id="search" name="keywords" style="outline: none;"
+                        class="pr-4 w-100 input-search text-13" value="{{ request()->keywords }}" />
                     <span id="search-icon" class="search-icon">
                         <i class="fas fa-search btn-submit"></i>
                     </span>
@@ -79,8 +78,7 @@
         </div>
         <div class="d-flex content__heading--right">
             <div class="row m-0">
-                <a href="{{ route('groups.create') }}" class="activity mr-3"
-                    data-name1="KH" data-des="Tạo mới">
+                <a href="{{ route('groups.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                     <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
                         <svg class="mr-1" width="12" height="12" viewBox="0 0 18 18" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -109,7 +107,7 @@
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead class="border-custom">
                                 <tr>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -120,7 +118,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -131,7 +129,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -153,7 +151,7 @@
                                         </td>
                                     </tr>
                                     @foreach ($groups as $item)
-                                        <tr class="position-relative group-info height-30">
+                                        <tr class="position-relative group-info height-40">
                                             <input type="hidden" name="id-group" class="id-group" id="id-group"
                                                 value="{{ $item->id }}">
                                             <td
@@ -167,16 +165,14 @@
                                             <td class="text-13-black border-bottom border-top-0 py-0 border-right">
                                                 {{ $item->groupType->name }}
                                             </td>
-                                            <td
-                                                class="position-absolute m-0 p-0 bg-hover-icon icon-center">
+                                            <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
                                                     <a class="activity" data-name1="KH"
                                                         data-des="Xem thông tin khách hàng"
                                                         href="{{ route('groups.edit', ['group' => $item->id]) }}">
                                                         <div class="m-0 px-2 py-1 mx-2 rounded">
-                                                            <svg width="16" height="16"
-                                                                viewBox="0 0 16 16" fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg">
+                                                            <svg width="16" height="16" viewBox="0 0 16 16"
+                                                                fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path opacity="0.985" fill-rule="evenodd"
                                                                     clip-rule="evenodd"
                                                                     d="M11.1719 1.04696C11.7535 0.973552 12.2743 1.11418 12.7344 1.46883C13.001 1.72498 13.2562 1.9906 13.5 2.26571C13.9462 3.00226 13.9358 3.73143 13.4688 4.45321C10.9219 7.04174 8.35416 9.60946 5.76563 12.1563C5.61963 12.245 5.46338 12.3075 5.29688 12.3438C4.59413 12.4153 3.891 12.483 3.1875 12.547C2.61265 12.4982 2.32619 12.1857 2.32813 11.6095C2.3716 10.8447 2.44972 10.0843 2.5625 9.32821C2.60666 9.22943 2.65874 9.13568 2.71875 9.04696C5.26563 6.50008 7.8125 3.95321 10.3594 1.40633C10.6073 1.22846 10.8781 1.10867 11.1719 1.04696ZM11.3594 2.04696C11.5998 2.02471 11.8185 2.08201 12.0156 2.21883C12.2188 2.42196 12.4219 2.62508 12.625 2.82821C12.8393 3.14436 12.8497 3.4673 12.6562 3.79696C12.4371 4.02136 12.2131 4.24011 11.9844 4.45321C11.4427 3.93236 10.9115 3.40111 10.3906 2.85946C10.5933 2.64116 10.8016 2.42762 11.0156 2.21883C11.1255 2.14614 11.2401 2.08885 11.3594 2.04696ZM9.60938 3.60946C10.1552 4.13961 10.6968 4.67608 11.2344 5.21883C9.21353 7.23968 7.19272 9.26049 5.17188 11.2813C4.571 11.3686 3.96684 11.4364 3.35938 11.4845C3.41572 10.8909 3.473 10.2971 3.53125 9.70321C5.56359 7.67608 7.58962 5.64483 9.60938 3.60946Z"
@@ -192,7 +188,8 @@
                                                         <div class="rounded">
                                                             <form
                                                                 onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                                action="{{ route('groups.destroy', ['group' => $item->id]) }}" method="POST" class="d-inline">
+                                                                action="{{ route('groups.destroy', ['group' => $item->id]) }}"
+                                                                method="POST" class="d-inline">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button class="btn btn-sm" type="submit">
@@ -224,10 +221,10 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    <tr class="position-relative group-info height-30">
-                                        <td class="text-red height-30 py-0 border-bottom border-right text-right">
+                                    <tr class="position-relative group-info height-40">
+                                        <td class="text-red height-40 py-0 border-bottom border-right text-right">
                                             Tổng cộng: {{ $groups->count() }}</td>
-                                        <td colspan="2" class="height-30 py-0 border-bottom"></td>
+                                        <td colspan="2" class="height-40 py-0 border-bottom"></td>
                                     </tr>
                                 @endforeach
                             </tbody>

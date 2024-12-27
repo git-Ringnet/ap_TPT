@@ -49,7 +49,7 @@
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead class="border-custom">
                                 <tr>
-                                    <th class="height-30 py-0 border-right pl-4" scope="col" style="">
+                                    <th class="height-40 py-0 border-right pl-4" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -60,7 +60,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -71,7 +71,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -82,7 +82,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-30 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -100,7 +100,7 @@
                                     $total = 0;
                                 @endphp
                                 @foreach ($warehouses as $item)
-                                    <tr class="position-relative warehouse-info height-30"
+                                    <tr class="position-relative warehouse-info height-40"
                                         onclick="handleRowClick('checkbox', event);">
                                         <input type="hidden" name="id-warehouse" class="id-warehouse"
                                             id="id-warehouse" value="{{ $item->id }}">

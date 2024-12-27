@@ -43,7 +43,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -54,7 +54,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -65,7 +65,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -76,7 +76,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -87,7 +87,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="guest_code"
                                                     data-sort-type="DESC">
@@ -98,7 +98,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-30 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -118,7 +118,7 @@
                                     </tr>
                                     @foreach ($customers as $item)
                                         @if ($item->group_id == 0)
-                                            <tr class="position-relative guest-info tr-data height-30">
+                                            <tr class="position-relative guest-info tr-data height-40">
                                                 <input type="hidden" name="id-guest" class="id-guest"
                                                     id="id-guest" value="{{ $item->id }}">
                                                 <td class="text-13-black border-right border-bottom py-0">
@@ -195,7 +195,7 @@
                                             </tr>
                                         @endif
                                     @endforeach
-                                    <tr class="height-30">
+                                    <tr class="height-40">
                                         <td class="border-right border-top-0"></td>
                                         <td class="text-right py-0 border-top-0 border-right" data-id="0"
                                             style="color: red">Có
@@ -220,7 +220,7 @@
                                                 @php
                                                     $total++;
                                                 @endphp
-                                                <tr class="position-relative guest-info height-30">
+                                                <tr class="position-relative guest-info height-40">
                                                     <input type="hidden" name="id-guest" class="id-guest"
                                                         id="id-guest" value="{{ $item->id }}">
                                                     <td
