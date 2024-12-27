@@ -39,6 +39,26 @@ class Product extends Model
         return $this->hasMany(ProductImport::class, 'product_id', 'id');
     }
 
+    public function imports()
+    {
+        return $this->hasMany(ProductImport::class, 'product_id');
+    }
+
+    public function exports()
+    {
+        return $this->hasMany(ProductExport::class, 'product_id');
+    }
+
+    public function receivedProducts()
+    {
+        return $this->hasMany(ReceivedProduct::class, 'product_id');
+    }
+
+    public function returnProducts()
+    {
+        return $this->hasMany(ProductReturn::class, 'product_id');
+    }
+
     // public function group()
     // {
     //     return $this->belongsTo(Group::class, 'group_id');

@@ -1534,8 +1534,6 @@ input[type="number"] {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     display: table;
     /* Giữ nguyên định dạng bảng */
-    table-layout: fixed;
-    /* Cố định chiều rộng cột */
 }
 
 .sticky-footer th {
@@ -3046,7 +3044,10 @@ input[type="checkbox"]:checked {
     background-color: #e9ecef;
 }
 .bg-blue-light {
-    background-color: #f0f4ff;
+    background-color: #f1fafd;
+}
+.text-blue-light {
+    color: #009ef7;
 }
 
 .header-fixed {
@@ -3169,7 +3170,7 @@ input[type="checkbox"]:checked {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #EC212D;
+    background-color: #ec212d;
     color: white;
     font-size: 10px;
     font-weight: bold;
@@ -3185,55 +3186,61 @@ input[type="checkbox"]:checked {
     padding: 0 3px;
     box-sizing: border-box;
 }
-.w-10{
+.w-10 {
     width: 10%;
 }
-.info-form span{
+.info-form span {
     font-weight: 700 !important;
 }
-.select-nodropdown{
+.select-nodropdown {
     -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
-        background: none;
-        border: none;
-        cursor: not-allowed;
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: not-allowed;
+}
+/* Styling cho container */
+.search-container {
+    position: relative;
+    width: 300px;
+    /* Bạn có thể thay đổi chiều rộng */
 }
 
- .search-list {
-     position: absolute;
-     top: 100%;
-     left: 0;
-     min-width: 100%;
-     max-height: 300px;
-     overflow-y: auto;
-     border: 1px solid #ccc;
-     background-color: #fff;
-     z-index: 1000;
-     padding: 0;
-     margin: 0;
-     list-style: none;
-     display: none;
- }
+.search-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: none;
+}
 
- .search-list.active {
-     display: block;
- }
+.search-list.active {
+    display: block;
+}
 
- .list-item {
-     padding: 10px;
-     cursor: pointer;
- }
+.list-item {
+    padding: 10px;
+    cursor: pointer;
+}
 
- .list-item:hover {
-     background-color: #f0f0f0;
- }
+.list-item:hover {
+    background-color: #f0f0f0;
+}
 
- .search-list.show-up {
-     top: auto;
-     bottom: 100%;
- }
-.list-noti{
+.search-list.show-up {
+    top: auto;
+    bottom: 100%;
+}
+.list-noti {
     display: none;
     top: 40px;
     right: 75px;
@@ -3280,7 +3287,7 @@ input[type="checkbox"]:checked {
     transition: color 0.3s ease-in-out;
     /* Hiệu ứng chuyển màu mượt mà */
 }
-.bg-custom-yl{
+.bg-custom-yl {
     background-color: rgba(255, 232, 103, 1) !important;
 }
 .bg-custom-pink {
@@ -3316,4 +3323,85 @@ input[type="checkbox"]:checked {
 .option-btn:hover {
     background-color: #9699961a;
     /* Màu nền khi hover */
+}
+.container-report {
+    max-width: 1650px;
+    width: 100%;
+    padding-right: 7.5px;
+    padding-left: 7.5px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.bg-yellow-light {
+    background-color: #fff9e3;
+}
+.text-yellow {
+    color: #ffc700;
+}
+.bg-pink-light {
+    background-color: #ffe8ed;
+}
+.text-pink {
+    color: #ff6384;
+}
+.bg-green-light {
+    background-color: #dbf2f2;
+}
+.text-green {
+    color: #50cc8a;
+}
+.content-left {
+    max-width: 750px;
+    width: 750px;
+}
+.content-right {
+    max-width: 750px;
+    width: 750px;
+}
+.margin-top-63 {
+    margin-top: 6.3rem;
+}
+.btn-filter_search-1{
+    height: 30px;
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/**/
+.report-content .table-container {
+    margin-bottom: 60px;
+}
+
+/* Table */
+.report-content .table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.report-content .table th,
+.report-content .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+/* Footer fixed ở cuối trang */
+.footer-summary {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+
+.table-footer {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.table-footer td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-weight: bold;
 }

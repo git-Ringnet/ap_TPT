@@ -14,6 +14,7 @@ use App\Http\Controllers\ReceivingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ProvidersController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnFormController;
 use App\Http\Controllers\SerialNumberController;
 use App\Http\Controllers\WarrantyLookupController;
@@ -73,5 +74,13 @@ Route::get('/checkSN', [SerialNumberController::class, 'checkSN'])->name('checkS
 Route::resource('warrantyLookup', WarrantyLookupController::class);
 //
 Route::get('/searchMiniView', [ImportsController::class, 'searchMiniView'])->name('searchMiniView');
+//report overview
+Route::get('/reportOverview', [ReportController::class, 'reportOverview'])->name('reportOverview');
+//report export import
+Route::get('/reportExportImport', [ReportController::class, 'reportExportImport'])->name('reportExportImport');
+//report receipt return
+Route::get('/reportReceiptReturn', [ReportController::class, 'reportReceiptReturn'])->name('reportReceiptReturn');
+//report quotation
+Route::get('/reportQuotation', [ReportController::class, 'reportQuotation'])->name('reportQuotation');
 
 require __DIR__ . '/auth.php';

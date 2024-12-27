@@ -86,7 +86,8 @@
                             <a class="dropdown-item text-13-black" href="{{ route('inventoryLookup.index') }}">
                                 Tra cứu tồn kho
                             </a>
-                            <a class="dropdown-item text-13-black" href="{{ route('warrantyLookup.index') }}">Tra cứu bảo hành
+                            <a class="dropdown-item text-13-black" href="{{ route('warrantyLookup.index') }}">Tra cứu
+                                bảo hành
                             </a>
                             <a class="dropdown-item text-13-black" href="{{ route('receivings.index') }}">Phiếu tiếp
                                 nhận
@@ -99,12 +100,22 @@
                         </div>
                     </div>
                     <div class="dropdown">
-                        <a class="text-white justify-content-center align-items-center mx-3 px-1 font-weight-600 navbar-head @if (!empty($activeGroup) && $activeGroup == 'statistic') active-navbar @endif"
+                        <a class="text-white justify-content-center align-items-center mx-3 px-1 font-weight-600 navbar-head @if (!empty($activeGroup) && $activeGroup == 'reports') active-navbar @endif"
                             href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                             BÁO CÁO
                         </a>
                         <div class="dropdown-menu" style="">
-                            <a class="dropdown-item text-13-black" href="#">Công nợ khách hàng
+                            <a class="dropdown-item text-13-black" href="{{ route('reportOverview') }}">
+                                Tổng quát báo cáo
+                            </a>
+                            <a class="dropdown-item text-13-black" href="{{ route('reportExportImport') }}">
+                                Báo cáo hàng xuất nhập
+                            </a>
+                            <a class="dropdown-item text-13-black" href="{{ route('reportReceiptReturn') }}">
+                                Báo cáo hàng tiếp nhận - trả hàng
+                            </a>
+                            <a class="dropdown-item text-13-black" href="{{ route('reportQuotation') }}">
+                                Báo cáo phiếu báo giá
                             </a>
                         </div>
                     </div>
@@ -165,7 +176,8 @@
                 class="px-3 py-2 border-bottom border-top bg-grey @if (
                     (!empty($activeGroup) && $activeGroup == 'systemFirst') ||
                         (!empty($activeGroup) && $activeGroup == 'manageProfess') ||
-                        (!empty($activeGroup) && $activeGroup == 'statistic')) d-block @else d-none @endif">
+                        (!empty($activeGroup) && $activeGroup == 'statistic') ||
+                        (!empty($activeGroup) && $activeGroup == 'reports')) d-block @else d-none @endif">
                 <div class="@if (!empty($activeGroup) && $activeGroup == 'systemFirst') d-flex @else d-none @endif">
                     <a href="{{ route('groups.index') }}" class="height-36">
                         <button type="button"
@@ -245,6 +257,32 @@
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'returnforms') active @endif">
                             Phiếu trả hàng
+                        </button>
+                    </a>
+                </div>
+                <div class="@if (!empty($activeGroup) && $activeGroup == 'reports') d-flex @else d-none @endif">
+                    <a href="{{ route('reportOverview') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'overview') active @endif ">
+                            Tổng quát báo cáo
+                        </button>
+                    </a>
+                    <a href="{{ route('reportExportImport') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'export_import') active @endif">
+                            Báo cáo hàng xuất nhập
+                        </button>
+                    </a>
+                    <a href="{{ route('reportReceiptReturn') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'receipt_return') active @endif">
+                            Báo cáo hàng tiếp nhận - trả hàng
+                        </button>
+                    </a>
+                    <a href="{{ route('reportQuotation') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13-black rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'quotations_report') active @endif">
+                            Báo cáo phiếu báo giá
                         </button>
                     </a>
                 </div>
