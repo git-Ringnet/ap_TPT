@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Groups;
 use App\Models\Grouptype;
+use App\Models\GrouptypeMain;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class GroupsController extends Controller
      */
     public function create()
     {
-        $grouptypes = Grouptype::all();
+        $grouptypes = GrouptypeMain::all();
         $title = "Thêm mới nhóm đối tượng";
         return view('setup.groups.create', compact('title', 'grouptypes'));
     }
@@ -108,7 +109,7 @@ class GroupsController extends Controller
         }
         $getId = $id;
         $request->session()->put('idGr', $id);
-        $grouptypes = Grouptype::all();
+        $grouptypes = GrouptypeMain::all();
         $dataGroup = $this->groups->getDataGroup($id);
         return view('setup.groups.edit', compact('title', 'group', 'dataGroup', 'grouptypes'));
     }
