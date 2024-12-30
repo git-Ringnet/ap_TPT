@@ -20,7 +20,7 @@ class Groups extends Model
     ];
     public function grouptype()
     {
-        return $this->belongsTo(GroupType::class, 'group_type_id', 'id');
+        return $this->belongsTo(GroupType::class, 'group_type_id');
     }
     public function getAll()
     {
@@ -128,7 +128,7 @@ class Groups extends Model
                 'results' => Providers::whereIn('id', $data['dataupdate'])
                     ->select('providers.id as id', 'providers.provider_name as name')->get()
             ];
-        } 
+        }
         // elseif ($grouptype == 4) {
         //     $dataRs = [
         //         'obj' => 'products',

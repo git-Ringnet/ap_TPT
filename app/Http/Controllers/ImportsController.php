@@ -33,7 +33,9 @@ class ImportsController extends Controller
     {
         $title = "Phiếu nhập hàng";
         $imports = $this->imports->getAllImports();
-        return view('expertise.import.index', compact('title', 'imports'));
+        $users = User::get();
+        $providers = Providers::get();
+        return view('expertise.import.index', compact('title', 'imports', 'users', 'providers'));
     }
 
     /**
@@ -413,5 +415,27 @@ class ImportsController extends Controller
 
             return response()->json($data);
         }
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        // if (isset($data['ma']) && $data['ma'] !== null) {
+        //     $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        // }
+        // if (isset($data['ten']) && $data['ten'] !== null) {
+        //     $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
+        // }
+        // if (isset($data['address']) && $data['address'] !== null) {
+        //     $filters[] = ['value' => 'Địa chỉ: ' . $data['address'], 'name' => 'dia-chi', 'icon' => 'po'];
+        // }
+        if ($request->ajax()) {
+            $imports = $this->imports->getImportAjax($data);
+            return response()->json([
+                'data' => $imports,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

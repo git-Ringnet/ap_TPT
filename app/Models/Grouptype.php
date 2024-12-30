@@ -9,4 +9,8 @@ class Grouptype extends Model
 {
     use HasFactory;
     protected $table = 'group_types';
+    public function groups()
+    {
+        return $this->hasMany(Groups::class, 'group_type_id', 'id');
+    }
 }

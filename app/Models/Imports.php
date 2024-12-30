@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -81,5 +82,37 @@ class Imports extends Model
 
         // Kết hợp thành mã mới
         return "{$prefix}{$formattedNumber}";
+    }
+    public function getImportAjax($data = null)
+    {
+        // Lấy dữ liệu Imports với quan hệ
+        $imports = Imports::with('user', 'provider')
+            ->orderBy('id', 'desc');
+        if (!empty($data)) {
+            if (!empty($data['search'])) {
+                $imports->where(function ($query) use ($data) {
+                    $query->where('import_code', 'like', '%' . $data['search'] . '%')
+                        ->orWhere('note', 'like', '%' . $data['search'] . '%');
+                });
+            }
+            if (!empty($data['ma'])) {
+                $imports->where('import_code', $data['ma']);
+            }
+            if (!empty($data['note'])) {
+                $imports->where('note', $data['note']);
+            }
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $imports = $imports->whereBetween('date_create', [$dateStart, $dateEnd]);
+            }
+            if (!empty($data['provider'])) {
+                $imports->whereIn('provider.id', $data['provider']);
+            }
+            if (!empty($data['user'])) {
+                $imports->whereIn('user.id', $data['user']);
+            }
+        }
+        return $imports->get();
     }
 }

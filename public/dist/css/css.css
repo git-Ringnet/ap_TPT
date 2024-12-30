@@ -3200,12 +3200,6 @@ input[type="checkbox"]:checked {
     border: none;
     cursor: not-allowed;
 }
-/* Styling cho container */
-.search-container {
-    position: relative;
-    width: 300px;
-    /* Bạn có thể thay đổi chiều rộng */
-}
 
 .search-list {
     position: absolute;
