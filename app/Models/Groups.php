@@ -20,7 +20,7 @@ class Groups extends Model
     ];
     public function grouptype()
     {
-        return $this->belongsTo(GroupType::class, 'group_type_id');
+        return $this->belongsTo(GrouptypeMain::class, 'group_type_id', 'id');
     }
     public function getAll()
     {
