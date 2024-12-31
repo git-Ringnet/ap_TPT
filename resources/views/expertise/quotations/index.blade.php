@@ -201,7 +201,7 @@
                                                 {{ $item->customer->customer_name }}
                                             </td>
                                             <td class="text-13-black border-left-0 text-left border-bottom py-0">
-                                                {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
+                                                {{ date_format(new DateTime($item->quotation_date), 'd/m/Y') }}
                                             </td>
                                             <td class="text-13-black border-bottom py-0">
                                                 <a

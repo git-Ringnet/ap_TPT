@@ -83,5 +83,8 @@ Route::get('/reportExportImport', [ReportController::class, 'reportExportImport'
 Route::get('/reportReceiptReturn', [ReportController::class, 'reportReceiptReturn'])->name('reportReceiptReturn');
 //report quotation
 Route::get('/reportQuotation', [ReportController::class, 'reportQuotation'])->name('reportQuotation');
+//
+Route::get('/filterReportOverview', [ReportController::class, 'filterReportOverview'])->name('filterReportOverview');
+Route::get('/filterReportPeriodTime', [ReportController::class, 'filterReportPeriodTime'])->name('filterReportPeriodTime');
 
 require __DIR__ . '/auth.php';

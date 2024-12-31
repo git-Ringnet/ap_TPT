@@ -260,7 +260,7 @@
                                 </tbody>
                             </table>
                             <div class="footer-summary">
-                                <table class="table-footer">
+                                <table class="table-footer" style="table-layout: auto;">
                                     <tr>
                                         <td class="text-right" colspan="2"></td>
                                         <td class="text-danger">Phiếu hoàn thành:

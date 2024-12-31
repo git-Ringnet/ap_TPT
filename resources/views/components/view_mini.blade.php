@@ -259,7 +259,7 @@
                                     {{ $item->quotation_code }}
                                 </td>
                                 <td class="text-13-black text-left border-bottom">
-                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                    {{ date_format(new DateTime($item->quotation_date), 'd/m/Y') }}
                                 </td>
                                 <td class="text-13-black border-bottom">
                                     @if ($item->reception->form_type == 1)

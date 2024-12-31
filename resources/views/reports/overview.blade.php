@@ -3,7 +3,7 @@
 <div class="container-report margin-top-63">
     <div class="d-flex w-100 justify-content-between">
         <div class="content-left">
-            <div class="w-100">
+            <div class="w-100 phieuXuatNhap">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -12,83 +12,49 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDateExIm), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDateExIm), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders" href="#"
-                                            data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng
-                                            thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuXN"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuXN"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuXN"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuXN"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuXN"
+                                            data-value="4" data-target="timeBlock1">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock1" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -102,11 +68,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác
-                                            nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="phieuXN">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +98,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Phiếu nhập</span>
                                     </div>
-                                    <div class="count text-yellow font-weight-bold">
+                                    <div class="count text-yellow font-weight-bold phieuNhap">
                                         {{ $phieuNhap }}
                                     </div>
                                 </div>
@@ -151,7 +119,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Phiếu xuất</span>
                                     </div>
-                                    <div class="count text-yellow font-weight-bold m-0">
+                                    <div class="count text-yellow font-weight-bold m-0 phieuXuat">
                                         {{ $phieuXuat }}
                                     </div>
                                 </div>
@@ -160,7 +128,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 pt-2">
+            <div class="w-100 pt-2 phieuTiepNhanTraHang">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -169,83 +137,50 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
 
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDatePhieuTNTH), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDatePhieuTNTH), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng
-                                            thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuTNTH"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuTNTH"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuTNTH"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuTNTH"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuTNTH"
+                                            data-target="timeBlock2" data-value="4">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock2" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -259,11 +194,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác
-                                            nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="phieuTNTH">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -287,7 +224,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Phiếu tiếp nhận</span>
                                     </div>
-                                    <div class="count text-green font-weight-bold m-0">
+                                    <div class="count text-green font-weight-bold m-0 phieuTiepNhan">
                                         {{ $phieuTiepNhan }}
                                     </div>
                                 </div>
@@ -308,7 +245,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Phiếu chưa xử lý</span>
                                     </div>
-                                    <div class="count text-green font-weight-bold">
+                                    <div class="count text-green font-weight-bold phieuChuaXL">
                                         {{ $phieuChuaXL }}
                                     </div>
                                 </div>
@@ -361,7 +298,7 @@
 
                                         <span class="font-weight-bold mx-1">Phiếu quá hạn</span>
                                     </div>
-                                    <div class="count text-green font-weight-bold">
+                                    <div class="count text-green font-weight-bold phieuQuaHan">
                                         {{ $phieuQuaHan }}
                                     </div>
                                 </div>
@@ -414,7 +351,7 @@
 
                                         <span class="font-weight-bold mx-1">Phiếu trả hàng</span>
                                     </div>
-                                    <div class="count text-green font-weight-bold">
+                                    <div class="count text-green font-weight-bold phieuTraHang">
                                         {{ $phieuTraHang }}
                                     </div>
                                 </div>
@@ -423,7 +360,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 pt-2">
+            <div class="w-100 pt-2 baoCaoTonKho">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -432,83 +369,49 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDateInventory), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDateInventory), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng
-                                            thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="baoCaoTK"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="baoCaoTK"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="baoCaoTK"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="baoCaoTK"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" data-name="baoCaoTK" data-value="4"
+                                            href="#" data-target="timeBlock3">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock3" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -522,11 +425,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác
-                                            nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="baoCaoTK">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -553,7 +458,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng tồn kho</span>
                                     </div>
-                                    <div class="count text-blue-light font-weight-bold">
+                                    <div class="count text-blue-light font-weight-bold hangTonKho">
                                         {{ $tonKho }}
                                     </div>
                                 </div>
@@ -579,7 +484,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng tới hạn bảo trì</span>
                                     </div>
-                                    <div class="count text-blue-light font-weight-bold">
+                                    <div class="count text-blue-light font-weight-bold hangToiHanBT">
                                         {{ $toiHanBT }}
                                     </div>
                                 </div>
@@ -590,7 +495,7 @@
             </div>
         </div>
         <div class="content-right">
-            <div class="w-100">
+            <div class="w-100 hangXuatNhap">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -599,82 +504,49 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDateProductExIm), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDateProductExIm), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangXN"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangXN"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangXN"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangXN"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangXN"
+                                            data-value="4" data-target="timeBlock4">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock4" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -688,10 +560,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="hangXN">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -715,7 +590,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng nhập</span>
                                     </div>
-                                    <div class="count text-blue-light font-weight-bold">
+                                    <div class="count text-blue-light font-weight-bold hangNhap">
                                         {{ $hangNhap }}
                                     </div>
                                 </div>
@@ -736,7 +611,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng xuất</span>
                                     </div>
-                                    <div class="count text-pink font-weight-bold">
+                                    <div class="count text-pink font-weight-bold hangXuat">
                                         {{ $hangXuat }}
                                     </div>
                                 </div>
@@ -760,7 +635,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 pt-2">
+            <div class="w-100 pt-2 baoCaoHangTNTH">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -769,82 +644,50 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
 
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDateReceiveReturn), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDateReceiveReturn), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangTNTH"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangTNTH"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangTNTH"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangTNTH"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="hangTNTH"
+                                            data-value="4" data-target="timeBlock5">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock5" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -858,10 +701,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="hangTNTH">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -885,7 +731,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng tiếp nhận</span>
                                     </div>
-                                    <div class="count text-blue-light font-weight-bold">
+                                    <div class="count text-blue-light font-weight-bold hangTiepNhan">
                                         {{ $hangTiepNhan }}
                                     </div>
                                 </div>
@@ -906,7 +752,7 @@
                                         </svg>
                                         <span class="font-weight-bold mx-1">Hàng trả hàng</span>
                                     </div>
-                                    <div class="count text-pink font-weight-bold">
+                                    <div class="count text-pink font-weight-bold hangTra">
                                         {{ $hangTraHang }}
                                     </div>
                                 </div>
@@ -930,7 +776,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 pt-2">
+            <div class="w-100 pt-2 phieuBaoGia">
                 <div class="pt-2 border rounded">
                     <div class="row px-3 py-2">
                         <div class="d-flex justify-content-between w-100 align-items-center">
@@ -939,82 +785,50 @@
                             </div>
                             <div class="col d-flex" style="position: relative;height:60px;">
                                 <div class="dropdown w-100">
-                                    <button class="btn w-100 btn-light border rounded dropdown-toggle" id="orders"
-                                        style="display: flex;
-                                            justify-content: space-between;
-                                            align-items: center;"
+                                    <button
+                                        class="btn w-100 btn-light border rounded dropdown-toggle d-flex justify-content-between align-items-center"
                                         type="button" data-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
 
-                                        <div id="all-orders">
+                                        <div>
                                             <div class="d-flex flex-column all-orders">
                                                 <div class="ca d-flex">
-                                                    <div id="it0">02-08-2022</div>-&gt;
-                                                    <div id="id0">25-12-2024</div>
+                                                    <div class="fromDate">
+                                                        {{ date_format(new DateTime($fromDateQuotation), 'd-m-Y') }}
+                                                    </div>-&gt;
+                                                    <div class="toDate">
+                                                        {{ date_format(new DateTime($toDateQuotation), 'd-m-Y') }}
+                                                    </div>
                                                 </div>
-                                                <div class="ca text-left">Tất cả</div>
+                                                <div class="ca text-left text-filter">Tất cả</div>
                                             </div>
                                         </div>
-
-                                        <div id="this-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it1"></div>-&gt;
-                                                    <div id="id1"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng này</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it2"></div>-&gt;
-                                                    <div id="id2"></div>
-                                                </div>
-                                                <div class="ca text-left">Tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="3last-month-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div id="it3"></div>-&gt;
-                                                    <div id="id3"></div>
-                                                </div>
-                                                <div class="ca text-left">3 tháng trước</div>
-                                            </div>
-                                        </div>
-
-                                        <div id="time-orders" style="display: none">
-                                            <div class="d-flex flex-column all-orders">
-                                                <div class="ca d-flex">
-                                                    <div class="start_order"></div>
-                                                    <div class="muitenorder"></div>
-                                                    <div class="end_order"></div>
-                                                </div>
-                                                <div class="ca text-left">Khoảng thời gian</div>
-                                            </div>
-                                        </div>
-
                                     </button>
-                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton"
-                                        style="">
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-all-orders"
-                                            href="#" data-value="0">Tất cả</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-this-month-orders"
-                                            href="#" data-value="1">Tháng này</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-last-month-orders"
-                                            href="#" data-value="2">Tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-3last-month-orders"
-                                            href="#" data-value="3">3 tháng trước</a>
-                                        <a class="dropdown-item dropdown-item-orders" id="btn-time-orders"
-                                            href="#">Khoảng thời
-                                            gian</a>
+                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuBG"
+                                            data-value="0">
+                                            Tất cả
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuBG"
+                                            data-value="1">
+                                            Tháng này
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuBG"
+                                            data-value="2">
+                                            Tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuBG"
+                                            data-value="3">
+                                            3 tháng trước
+                                        </a>
+                                        <a class="dropdown-item report-dropdown" href="#" data-name="phieuBG"
+                                            data-value="4" data-target="timeBlock6">
+                                            Khoảng thời gian
+                                        </a>
                                     </div>
                                 </div>
 
-                                <div class="block-optionss" id="times-orders-options" style="display:none">
+                                <div class="block-optionss" id="timeBlock6" style="display:none">
                                     <div class="wrap w-100">
                                         <div class="input-group p-2 justify-content-around">
                                             <div class="start">
@@ -1028,10 +842,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-contents-center align-items-baseline p-2">
-                                        <button type="button" class="suscess btn btn-primary btn-block mr-2"
-                                            value="4">Xác nhận</button>
-                                        <button type="button" id="cancel-times-orders"
-                                            class="btn btn-default btn-block">Hủy</button>
+                                        <button type="button" class="suscess btn btn-primary btn-block mr-2 xacNhan"
+                                            data-name="phieuBG">
+                                            Xác nhận
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-block cancel ">
+                                            Hủy
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1088,8 +905,9 @@
                                         </div>
                                     </div>
                                     <div class="count text-blue-light">
-                                        <p class="font-weight-bold m-0 p-0">{{ $phieuHoanThanh }}</p>
-                                        <p class="font-weight-bold m-0 p-0">{{ number_format($tongTienHoanThanh) }}
+                                        <p class="font-weight-bold m-0 p-0 phieuHT">{{ $phieuHoanThanh }}</p>
+                                        <p class="font-weight-bold m-0 p-0 tongHoanThanh">
+                                            {{ number_format($tongTienHoanThanh) }}
                                         </p>
                                     </div>
                                 </div>
@@ -1145,8 +963,9 @@
                                         </div>
                                     </div>
                                     <div class="count">
-                                        <p class="font-weight-bold m-0 p-0 text-pink">{{ $phieuKhongDongY }}</p>
-                                        <p class="font-weight-bold m-0 p-0 text-pink">
+                                        <p class="font-weight-bold m-0 p-0 text-pink phieuKhongDongY">
+                                            {{ $phieuKhongDongY }}</p>
+                                        <p class="font-weight-bold m-0 p-0 text-pink tongKhongDongY">
                                             {{ number_format($tongTienKhongDongY) }}</p>
                                     </div>
                                 </div>
@@ -1173,3 +992,214 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('dist/js/report.js') }}"></script>
+<script>
+    //
+    function formatDateReport(dateTimeString) {
+        // Kiểm tra nếu dateTimeString là null, undefined hoặc chuỗi rỗng
+        if (!dateTimeString) {
+            return ''; // Trả về chuỗi rỗng nếu không có giá trị hợp lệ
+        }
+
+        const date = new Date(dateTimeString); // Chuyển chuỗi thành đối tượng Date
+
+        // Kiểm tra nếu đối tượng Date không hợp lệ
+        if (isNaN(date)) {
+            return ''; // Trả về chuỗi rỗng nếu ngày không hợp lệ
+        }
+
+        // Lấy ngày, tháng, năm từ đối tượng Date
+        const day = String(date.getDate()).padStart(2, "0"); // Đảm bảo luôn có 2 chữ số
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Trả về chuỗi định dạng ngày-tháng-năm
+        return `${day}-${month}-${year}`;
+    }
+
+    function formatCurrency(number) {
+        if (number == null || isNaN(number)) return ""; // Trả về rỗng nếu không hợp lệ
+        number = Math.round(number); // Làm tròn số
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $(document).on('click', '.report-dropdown', function(event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định
+        const dataValue = $(this).data('value'); // Lấy data-value
+        const dataName = $(this).data('name'); // Lấy data-name
+
+        // Định nghĩa các giá trị cho text-filter
+        const filterTexts = {
+            0: "Tất cả",
+            1: "Tháng này",
+            2: "Tháng trước",
+            3: "3 tháng trước",
+            4: "Khoảng thời gian",
+        };
+
+        $.ajax({
+            url: '{{ route('filterReportOverview') }}',
+            type: 'GET',
+            data: {
+                dataValue: dataValue,
+                dataName: dataName,
+            },
+            success: function(response) {
+                if (dataName == "phieuXN") {
+                    $('.phieuXuatNhap .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.phieuXuatNhap .toDate').text(formatDateReport(response.details
+                        .ngayKetThuc));
+                    $('.phieuXuatNhap .text-filter').text(filterTexts[dataValue] || "");
+                    $('.phieuXuatNhap .phieuNhap').text(response.details.phieuNhap);
+                    $('.phieuXuatNhap .phieuXuat').text(response.details.phieuXuat);
+                }
+                if (dataName == "phieuTNTH") {
+                    $('.phieuTiepNhanTraHang .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.phieuTiepNhanTraHang .toDate').text(formatDateReport(response.details
+                        .ngayKetThuc));
+                    $('.phieuTiepNhanTraHang .text-filter').text(filterTexts[dataValue] || "");
+                    $('.phieuTiepNhanTraHang .phieuTiepNhan').text(response.details.phieuTiepNhan);
+                    $('.phieuTiepNhanTraHang .phieuChuaXL').text(response.details.phieuChuaXL);
+                    $('.phieuTiepNhanTraHang .phieuQuaHan').text(response.details.phieuQuaHan);
+                    $('.phieuTiepNhanTraHang .phieuTraHang').text(response.details.phieuTraHang);
+                }
+                if (dataName == "baoCaoTK") {
+                    $('.baoCaoTonKho .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.baoCaoTonKho .toDate').text(formatDateReport(response.details.ngayKetThuc));
+                    $('.baoCaoTonKho .text-filter').text(filterTexts[dataValue] || "");
+                    $('.baoCaoTonKho .hangTonKho').text(response.details.tonKho);
+                    $('.baoCaoTonKho .hangToiHanBT').text(response.details.toiHanBT);
+                }
+                if (dataName == "hangXN") {
+                    $('.hangXuatNhap .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.hangXuatNhap .toDate').text(formatDateReport(response.details.ngayKetThuc));
+                    $('.hangXuatNhap .text-filter').text(filterTexts[dataValue] || "");
+                    $('.hangXuatNhap .hangXuat').text(response.details.hangXuat);
+                    $('.hangXuatNhap .hangNhap').text(response.details.hangNhap);
+                }
+                if (dataName == "hangTNTH") {
+                    $('.baoCaoHangTNTH .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.baoCaoHangTNTH .toDate').text(formatDateReport(response.details
+                        .ngayKetThuc));
+                    $('.baoCaoHangTNTH .text-filter').text(filterTexts[dataValue] || "");
+                    $('.baoCaoHangTNTH .hangTiepNhan').text(response.details.hangTiepNhan);
+                    $('.baoCaoHangTNTH .hangTra').text(response.details.hangTra);
+                }
+                if (dataName == "phieuBG") {
+                    $('.phieuBaoGia .fromDate').text(formatDateReport(response.details
+                        .ngayBatDau));
+                    $('.phieuBaoGia .toDate').text(formatDateReport(response.details
+                        .ngayKetThuc));
+                    $('.phieuBaoGia .text-filter').text(filterTexts[dataValue] || "");
+                    $('.phieuBaoGia .phieuHT').text(response.details.phieuHoanThanh);
+                    $('.phieuBaoGia .tongHoanThanh').text(formatCurrency(response.details
+                        .tongTienHoanThanh));
+                    $('.phieuBaoGia .phieuKhongDongY').text(response.details.phieuKhongDongY);
+                    $('.phieuBaoGia .tongKhongDongY').text(formatCurrency(response.details
+                        .tongTienKhongDongY));
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '.xacNhan', function(event) {
+        const dataName = $(this).data('name');
+
+        // Định nghĩa ánh xạ giữa dataName và class của phần tử chứa date_start, date_end
+        const dataMap = {
+            'phieuXN': '.phieuXuatNhap',
+            'phieuTNTH': '.phieuTiepNhanTraHang',
+            'baoCaoTK': '.baoCaoTonKho',
+            'hangXN': '.hangXuatNhap',
+            'hangTNTH': '.baoCaoHangTNTH',
+            'phieuBG': '.phieuBaoGia',
+        };
+
+        // Kiểm tra dataName có trong ánh xạ không
+        if (dataMap[dataName]) {
+            const container = $(dataMap[dataName]);
+            const date_start = container.find('.date_start').val();
+            const date_end = container.find('.date_end').val();
+
+            // Gửi dữ liệu qua Ajax
+            $.ajax({
+                url: '{{ route('filterReportPeriodTime') }}',
+                type: 'GET',
+                data: {
+                    date_start: date_start,
+                    date_end: date_end,
+                    dataName: dataName,
+                },
+                success: function(response) {
+                    if (dataName == "phieuXN") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.phieuNhap').text(response.details.phieuNhap);
+                        container.find('.phieuXuat').text(response.details.phieuXuat);
+                        $(".block-optionss").hide();
+                    }
+                    if (dataName == "phieuTNTH") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.phieuTiepNhan').text(response.details.phieuTiepNhan);
+                        container.find('.phieuChuaXL').text(response.details.phieuChuaXL);
+                        container.find('.phieuQuaHan').text(response.details.phieuQuaHan);
+                        container.find('.phieuTraHang').text(response.details.phieuTraHang);
+                        $(".block-optionss").hide();
+                    }
+                    if (dataName == "baoCaoTK") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.hangTonKho').text(response.details.tonKho);
+                        container.find('.hangToiHanBT').text(response.details.toiHanBT);
+                        $(".block-optionss").hide();
+                    }
+                    if (dataName == "hangXN") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.hangXuat').text(response.details.hangXuat);
+                        container.find('.hangNhap').text(response.details.hangNhap);
+                        $(".block-optionss").hide();
+                    }
+                    if (dataName == "hangTNTH") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.hangTiepNhan').text(response.details.hangTiepNhan);
+                        container.find('.hangTra').text(response.details.hangTra);
+                        $(".block-optionss").hide();
+                    }
+                    if (dataName == "phieuBG") {
+                        container.find('.fromDate').text(formatDateReport(response.details
+                            .ngayBatDau));
+                        container.find('.toDate').text(formatDateReport(response.details
+                            .ngayKetThuc));
+                        container.find('.phieuHT').text(response.details.phieuHoanThanh);
+                        container.find('.tongHoanThanh').text(formatCurrency(response.details
+                            .tongTienHoanThanh));
+                        container.find('.phieuKhongDongY').text(response.details.phieuKhongDongY);
+                        container.find('.tongKhongDongY').text(formatCurrency(response.details
+                            .tongTienKhongDongY));
+                        $(".block-optionss").hide();
+                    }
+                }
+            });
+        } else {
+            console.error(`Không tìm thấy dataName: ${dataName}`);
+        }
+    });
+</script>
