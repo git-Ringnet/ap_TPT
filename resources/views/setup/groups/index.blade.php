@@ -99,7 +99,7 @@
 <div class="content margin-top-75">
     <section class="content">
         <div class="container-fluided">
-            <div class="row result-filter-group margin-left30 my-1">
+            <div class="row result-filter-group margin-left20 my-1">
             </div>
             <div class="col-12 p-0 m-0">
                 <div class="card">

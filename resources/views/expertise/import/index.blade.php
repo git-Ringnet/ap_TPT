@@ -7,7 +7,7 @@
                 <x-filter-text name="ma-phieu" title="Mã phiếu" />
                 <x-filter-checkbox :dataa='$users' name="nguoi-lap-phieu" title="Người lập phiếu"
                     button="nguoi-lap-phieu" namedisplay="name" />
-                <x-filter-checkbox :dataa='$providers' name="nha-cung-cap" title="Nhà cung cấp" button="nguoi-lap-phieu"
+                <x-filter-checkbox :dataa='$providers' name="nha-cung-cap" title="Nhà cung cấp" button="nha-cung-cap"
                     namedisplay="provider_name" />
                 <x-filter-date name="ngay-lap-phieu" title="Ngày lập phiếu" />
                 <x-filter-text name="ghi-chu" title="Ghi chú" />
@@ -36,7 +36,7 @@
     <div class="content margin-top-127">
         <section class="content">
             <div class="container-fluided">
-                <div class="row result-filter-guest margin-left30 my-1">
+                <div class="row result-filter-import margin-left20 my-1">
                 </div>
                 <div class="col-12 p-0 m-0">
                     <div class="card">
@@ -182,6 +182,7 @@
         var formData = {
             search: $('#search').val(),
             ma: getData('#ma-phieu', this),
+            note: getData('#ghi-chu', this),
             date: retrieveDateData(this, 'ngay-lap-phieu'),
             provider: getStatusData(this, 'nha-cung-cap'),
             user: getStatusData(this, 'nguoi-lap-phieu'),

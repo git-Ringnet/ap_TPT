@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Exports extends Model
@@ -70,5 +71,40 @@ class Exports extends Model
         ];
         $import = DB::table($this->table)->insertGetId($arrExport);
         return $import;
+    }
+    public function getExportAjax($data = null)
+    {
+        $exports = Exports::with('user', 'customer')
+            ->orderBy('id', 'desc');
+        if (!empty($data)) {
+            if (!empty($data['search'])) {
+                $exports->where(function ($query) use ($data) {
+                    $query->where('export_code', 'like', '%' . $data['search'] . '%')
+                        ->orWhere('note', 'like', '%' . $data['search'] . '%');
+                });
+            }
+            if (!empty($data['ma'])) {
+                $exports->where('export_code', 'like', '%' . $data['ma'] . '%');
+            }
+            if (!empty($data['note'])) {
+                $exports->where('note', 'like', '%' . $data['note'] . '%');
+            }
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $exports->whereBetween('date_create', [$dateStart, $dateEnd]);
+            }
+            if (!empty($data['customer'])) {
+                $exports->whereHas('customer', function ($query) use ($data) {
+                    $query->whereIn('id', $data['customer']);
+                });
+            }
+            if (!empty($data['user'])) {
+                $exports->whereHas('user', function ($query) use ($data) {
+                    $query->whereIn('id', $data['user']);
+                });
+            }
+        }
+        return $exports->get();
     }
 }

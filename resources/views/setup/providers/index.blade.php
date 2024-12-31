@@ -35,7 +35,7 @@
         {{-- Content --}}
         <section class="content">
             <div class="container-fluided">
-                <div class="row result-filter-provide margin-left30 my-1">
+                <div class="row result-filter-provide margin-left20 my-1">
                 </div>
                 <div class="row">
                     <div class="col-12">

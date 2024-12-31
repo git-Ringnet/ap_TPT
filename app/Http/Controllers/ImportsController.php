@@ -420,15 +420,23 @@ class ImportsController extends Controller
     {
         $data = $request->all();
         $filters = [];
-        // if (isset($data['ma']) && $data['ma'] !== null) {
-        //     $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
-        // }
-        // if (isset($data['ten']) && $data['ten'] !== null) {
-        //     $filters[] = ['value' => 'Tên: ' . $data['ten'], 'name' => 'ten', 'icon' => 'po'];
-        // }
-        // if (isset($data['address']) && $data['address'] !== null) {
-        //     $filters[] = ['value' => 'Địa chỉ: ' . $data['address'], 'name' => 'dia-chi', 'icon' => 'po'];
-        // }
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['user']) && $data['user'] !== null) {
+            $filters[] = ['value' => 'Người lập phiếu: ' . count($data['user']) . ' đã chọn', 'name' => 'nguoi-lap-phieu', 'icon' => 'user'];
+        }
+        if (isset($data['provider']) && $data['provider'] !== null) {
+            $filters[] = ['value' => 'Nhà cung cấp: ' . count($data['provider']) . ' đã chọn', 'name' => 'nha-cung-cap', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
         if ($request->ajax()) {
             $imports = $this->imports->getImportAjax($data);
             return response()->json([

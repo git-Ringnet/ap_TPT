@@ -96,21 +96,25 @@ class Imports extends Model
                 });
             }
             if (!empty($data['ma'])) {
-                $imports->where('import_code', $data['ma']);
+                $imports->where('import_code', 'like', '%' . $data['ma'] . '%');
             }
             if (!empty($data['note'])) {
-                $imports->where('note', $data['note']);
+                $imports->where('note', 'like', '%' . $data['note'] . '%');
             }
             if (!empty($data['date'][0]) && !empty($data['date'][1])) {
                 $dateStart = Carbon::parse($data['date'][0]);
                 $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
-                $imports = $imports->whereBetween('date_create', [$dateStart, $dateEnd]);
+                $imports->whereBetween('date_create', [$dateStart, $dateEnd]);
             }
             if (!empty($data['provider'])) {
-                $imports->whereIn('provider.id', $data['provider']);
+                $imports->whereHas('provider', function ($query) use ($data) {
+                    $query->whereIn('id', $data['provider']);
+                });
             }
             if (!empty($data['user'])) {
-                $imports->whereIn('user.id', $data['user']);
+                $imports->whereHas('user', function ($query) use ($data) {
+                    $query->whereIn('id', $data['user']);
+                });
             }
         }
         return $imports->get();

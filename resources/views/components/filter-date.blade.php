@@ -17,7 +17,7 @@
     <div></div>
     <div class="d-flex align-items-baseline p-2">
         <button type="button" id="cancel-{{ $name }}"
-            class="btn mx-1 btn-block text-13-black btn-cancel-filter"data-button-name="{{ $name }}">
+            class="btn mx-1 btn-block text-13-black btn-cancel-filter" data-button="{{ $name }}">
             Hủy
         </button>
         <button type="submit" class="btn mx-1 btn-block btn-submit text-btnIner-filter"

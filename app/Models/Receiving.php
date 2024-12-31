@@ -65,4 +65,50 @@ class Receiving extends Model
     {
         return $this->hasOne(Quotation::class, 'reception_id');
     }
+    public function getReceiAjax($data = null)
+    {
+        $receivings = Receiving::with('user', 'customer');
+        if (!empty($data)) {
+            if (!empty($data['search'])) {
+                $receivings->where(function ($query) use ($data) {
+                    $query->where('form_code_receiving', 'like', '%' . $data['search'] . '%')
+                        ->orWhere('notes', 'like', '%' . $data['search'] . '%');
+                });
+            }
+            if (!empty($data['ma'])) {
+                $receivings->where('form_code_receiving', 'like', '%' . $data['ma'] . '%');
+            }
+            if (!empty($data['note'])) {
+                $receivings->where('notes', 'like', '%' . $data['note'] . '%');
+            }
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $receivings->whereBetween('date_created', [$dateStart, $dateEnd]);
+            }
+            if (!empty($data['closed_at'][0]) && !empty($data['closed_at'][1])) {
+                $dateStart = Carbon::parse($data['closed_at'][0]);
+                $dateEnd = Carbon::parse($data['closed_at'][1])->endOfDay();
+                $receivings->whereBetween('closed_at', [$dateStart, $dateEnd]);
+            }
+            if (!empty($data['customer'])) {
+                $receivings->whereHas('customer', function ($query) use ($data) {
+                    $query->whereIn('id', $data['customer']);
+                });
+            }
+            if (isset($data['form_type'])) {
+                $receivings = $receivings->whereIn('form_type', $data['form_type']);
+            }
+            if (isset($data['brand_type'])) {
+                $receivings = $receivings->whereIn('branch_id', $data['brand_type']);
+            }
+            if (isset($data['status'])) {
+                $receivings = $receivings->whereIn('status', $data['status']);
+            }
+            if (isset($data['state'])) {
+                $receivings = $receivings->whereIn('state', $data['state']);
+            }
+        }
+        return $receivings->get();
+    }
 }

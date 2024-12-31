@@ -26,7 +26,9 @@ class ExportsController extends Controller
     {
         $title = "Phiếu xuất hàng";
         $exports = Exports::with(['user', 'customer'])->get();
-        return view('expertise.export.index', compact('title', 'exports'));
+        $users = User::all();
+        $customers = Customers::all();
+        return view('expertise.export.index', compact('title', 'exports', 'users', 'customers'));
     }
 
     /**
@@ -242,5 +244,35 @@ class ExportsController extends Controller
         ProductExport::where('export_id', $id)->delete();
         $export->delete();
         return redirect()->route('exports.index')->with('msg', 'Xóa thành công phiếu xuất hàng!');
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['user']) && $data['user'] !== null) {
+            $filters[] = ['value' => 'Người lập phiếu: ' . count($data['user']) . ' đã chọn', 'name' => 'nguoi-lap-phieu', 'icon' => 'user'];
+        }
+        if (isset($data['customer']) && $data['customer'] !== null) {
+            $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if ($request->ajax()) {
+            $exports = $this->exports->getExportAjax($data);
+            return response()->json([
+                'data' => $exports,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

@@ -20,11 +20,18 @@ class ReturnFormController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $returnforms;
+
+    public function __construct(ReturnForm $returnforms)
+    {
+        $this->returnforms = $returnforms;
+    }
     public function index()
     {
         $returnforms = ReturnForm::with(['reception', 'customer', 'productReturns'])->get();
         $title = 'Phiếu trả hàng';
-        return view('expertise.returnforms.index', compact('returnforms', 'title'));
+        $customers = Customers::all();
+        return view('expertise.returnforms.index', compact('returnforms', 'title', 'customers'));
     }
 
     /**
@@ -137,7 +144,11 @@ class ReturnFormController extends Controller
                     'notes' => $returnItem['note'],
                 ]);
                 $stateRecei = $validated['status'] = 1 ? 3 : 4;
-                Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0]);
+                Receiving::find($validated['reception_id'])->update([
+                    'status' => $stateRecei,
+                    'state' => 0,
+                    'closed_at' => $validated['return'] ? now() : null,
+                ]);
             }
 
             DB::commit();
@@ -289,7 +300,7 @@ class ReturnFormController extends Controller
             }
             // Cập nhật trạng thái của Receiving dựa trên trạng thái hiện tại
             $stateRecei = $validated['status'] == 1 ? 3 : 4;
-            Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0]);
+            Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0, 'closed_at' => $validated['return'] ? now() : null,]);
 
             DB::commit();
             return redirect()->route('returnforms.index')->with('msg', 'Cập nhật phiếu trả hàng thành công');
@@ -311,5 +322,59 @@ class ReturnFormController extends Controller
         $returnForm->delete();
         $returnForm->productReturns()->delete();
         return redirect()->route('returnforms.index')->with('msg', 'Xoá phiếu trả hàng thành công!');
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
+        }
+        if (isset($data['receiving_code']) && $data['receiving_code'] !== null) {
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['customer']) && $data['customer'] !== null) {
+            $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if (isset($data['form_type']) && $data['form_type'] !== null) {
+            $statusValues = [];
+            if (in_array(1, $data['form_type'])) {
+                $statusValues[] = '<span style="color: #858585;">Bảo hành</span>';
+            }
+            if (in_array(2, $data['form_type'])) {
+                $statusValues[] = '<span style="color: #08AA36BF;">Dịch vụ</span>';
+            }
+            if (in_array(3, $data['form_type'])) {
+                $statusValues[] = '<span style="color:rgba(67, 54, 154, 0.75);">Bảo hành dịch vụ</span>';
+            }
+            $filters[] = ['value' => 'Loại phiếu: ' . implode(', ', $statusValues), 'name' => 'loai-phieu', 'icon' => 'status'];
+        }
+        if (isset($data['status']) && $data['status'] !== null) {
+            $statusValues = [];
+            if (in_array(1, $data['status'])) {
+                $statusValues[] = '<span style="color: #858585;">Hoàn thành</span>';
+            }
+            if (in_array(2, $data['status'])) {
+                $statusValues[] = '<span style="color: #08AA36BF;">Khách không đồng ý</span>';
+            }
+            $filters[] = ['value' => 'Tình-trạng: ' . implode(', ', $statusValues), 'name' => 'tinh-trang', 'icon' => 'status'];
+        }
+
+        if ($request->ajax()) {
+            $returnforms = $this->returnforms->getReturnFormAjax($data);
+            return response()->json([
+                'data' => $returnforms,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

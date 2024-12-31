@@ -14,11 +14,19 @@ class ReceivingController extends Controller
 {
     // Display a listing of the receiving records
 
+    private $receivings;
+
+    public function __construct()
+    {
+        $this->receivings = new Receiving();
+    }
+
     public function index()
     {
         $receivings = Receiving::all();
         $title = 'Phiếu tiếp nhận';
-        return view('expertise.receivings.index', compact('receivings', 'title'));
+        $customers = Customers::all();
+        return view('expertise.receivings.index', compact('receivings', 'title', 'customers'));
     }
 
     // Show the form for creating a new receiving record
@@ -227,5 +235,94 @@ class ReceivingController extends Controller
                 'msg' => 'pha hoai khong a'
             ]);
         }
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['customer']) && $data['customer'] !== null) {
+            $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if (isset($data['closed_at']) && $data['closed_at'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['closed_at'][0]));
+            $date_end = date("d/m/Y", strtotime($data['closed_at'][1]));
+            $filters[] = ['value' => 'Ngày đóng phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-dong-phieu', 'icon' => 'date'];
+        }
+        // Hàm hỗ trợ tạo filter từ mảng trạng thái
+        function generateStatusFilter($data, $key, $statusMapping, $label, $name)
+        {
+            if (isset($data[$key]) && $data[$key] !== null) {
+                $statusValues = [];
+                foreach ($data[$key] as $status) {
+                    if (isset($statusMapping[$status])) {
+                        $statusValues[] = '<span style="color: ' . $statusMapping[$status]['color'] . ';">' . $statusMapping[$status]['label'] . '</span>';
+                    }
+                }
+                if (!empty($statusValues)) {
+                    return ['value' => $label . ': ' . implode(', ', $statusValues), 'name' => $name, 'icon' => 'status'];
+                }
+            }
+            return null;
+        }
+        // Loại phiếu
+        $formTypeMapping = [
+            1 => ['label' => 'Bảo hành', 'color' => '#858585'],
+            2 => ['label' => 'Dịch vụ', 'color' => '#08AA36BF'],
+            3 => ['label' => 'Bảo hành dịch vụ', 'color' => '#08AA36BF'],
+        ];
+        $formTypeFilter = generateStatusFilter($data, 'form_type', $formTypeMapping, 'Loại phiếu', 'loai-phieu');
+        if ($formTypeFilter) {
+            $filters[] = $formTypeFilter;
+        }
+        // Hàng tiếp nhận
+        $brandTypeMapping = [
+            1 => ['label' => 'Nội bộ', 'color' => '#858585'],
+            2 => ['label' => 'Bên ngoài', 'color' => '#08AA36BF'],
+        ];
+        $brandTypeFilter = generateStatusFilter($data, 'brand_type', $brandTypeMapping, 'Trạng thái', 'trang-thai');
+        if ($brandTypeFilter) {
+            $filters[] = $brandTypeFilter;
+        }
+        // Tình trạng
+        $statusMapping = [
+            1 => ['label' => 'Tiếp nhận', 'color' => '#858585'],
+            2 => ['label' => 'Xử lý', 'color' => '#08AA36BF'],
+            3 => ['label' => 'Hoàn thành', 'color' => '#08AA36BF'],
+            4 => ['label' => 'Khách không đồng ý', 'color' => '#08AA36BF'],
+        ];
+        $statusFilter = generateStatusFilter($data, 'status', $statusMapping, 'Tình trạng', 'tinh-trang');
+        if ($statusFilter) {
+            $filters[] = $statusFilter;
+        }
+        // Trạng thái
+        $stateMapping = [
+            1 => ['label' => 'Quá hạn', 'color' => '#858585'],
+            2 => ['label' => 'Chưa xử lý', 'color' => '#08AA36BF'],
+            0 => ['label' => 'Blank', 'color' => '#08AA36BF'],
+        ];
+        $stateFilter = generateStatusFilter($data, 'state', $stateMapping, 'Trạng thái', 'trang-thai');
+        if ($stateFilter) {
+            $filters[] = $stateFilter;
+        }
+
+        if ($request->ajax()) {
+            $receivings = $this->receivings->getReceiAjax($data);
+            return response()->json([
+                'data' => $receivings,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

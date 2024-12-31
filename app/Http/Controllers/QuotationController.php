@@ -11,12 +11,19 @@ use Illuminate\Http\Request;
 
 class QuotationController extends Controller
 {
+    private $quotations;
+
+    public function __construct(Quotation $quotations)
+    {
+        $this->quotations = $quotations;
+    }
     // Hiển thị danh sách báo giá
     public function index()
     {
         $quotations = Quotation::get();
         $title = 'Danh sách báo giá';
-        return view('expertise.quotations.index', compact('quotations', 'title'));
+        $customers = Customers::all();
+        return view('expertise.quotations.index', compact('quotations', 'title', 'customers'));
     }
 
     // Hiển thị form tạo mới báo giá
@@ -154,5 +161,52 @@ class QuotationController extends Controller
         $quotation->delete();
         $quotation->services()->delete();
         return redirect()->route('quotations.index')->with('msg', 'Xóa báo giá và các dịch vụ thành công!');
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
+        }
+        if (isset($data['receiving_code']) && $data['receiving_code'] !== null) {
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['customer']) && $data['customer'] !== null) {
+            $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if (isset($data['tong_tien']) && $data['tong_tien'][1] !== null) {
+            $filters[] = ['value' => 'Bảo hành: ' . $data['tong_tien'][0] . ' ' . $data['tong_tien'][1], 'name' => 'tong-tien', 'icon' => 'money'];
+        }
+        if (isset($data['status']) && $data['status'] !== null) {
+            $statusValues = [];
+            if (in_array(1, $data['status'])) {
+                $statusValues[] = '<span style="color: #858585;">Bảo hành</span>';
+            }
+            if (in_array(2, $data['status'])) {
+                $statusValues[] = '<span style="color: #08AA36BF;">Dịch vụ</span>';
+            }
+            if (in_array(3, $data['status'])) {
+                $statusValues[] = '<span style="color:rgba(67, 54, 154, 0.75);">Bảo hành dịch vụ</span>';
+            }
+            $filters[] = ['value' => 'Loại phiếu: ' . implode(', ', $statusValues), 'name' => 'loai-phieu', 'icon' => 'status'];
+        }
+
+        if ($request->ajax()) {
+            $quotations = $this->quotations->getQuotationAjax($data);
+            return response()->json([
+                'data' => $quotations,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

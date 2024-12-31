@@ -127,7 +127,7 @@
             </div>
         </div>
     </div>
-    <div class="row result-filter-guest margin-left30 my-1">
+    <div class="row result-filter-guest margin-left20 my-1">
     </div>
     <div class="content margin-top-127">
         <div class="bg-filter-search text-center border">
