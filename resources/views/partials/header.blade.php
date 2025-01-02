@@ -1,4 +1,12 @@
 <!-- resources/views/partials/header.blade.php -->
+@if (Auth::guest())
+    <?php header('Location: ' . route('login'));
+    exit(); ?>
+@endif
+@if (!Auth::user())
+    <?php header('Location: ' . route('login'));
+    exit(); ?>
+@endif
 <!DOCTYPE html>
 <html lang="vi">
 
