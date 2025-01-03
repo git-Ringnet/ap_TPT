@@ -19,10 +19,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Lệnh tự động tăng thời gian tồn kho mỗi ngày
-        $schedule->command('inventory:update-storage')->dailyAt('00:00');
-        $schedule->command('warranty:update-storage')->dailyAt('00:00');
-        $schedule->command('receiving:update-status')->dailyAt('00:00');
+        // Lệnh tự động tăng thời gian tồn kho mỗi ngày Test khi hết test đổi thành ngày
+        $schedule->command('inventory:update-storage')->everyMinute();
+        $schedule->command('warranty:update-storage')->everyMinute();
+        $schedule->command('receiving:update-status')->everyMinute();
     }
 
     /**

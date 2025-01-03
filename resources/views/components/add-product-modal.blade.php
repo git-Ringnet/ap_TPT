@@ -298,9 +298,13 @@
                     success: function(response) {
                         console.log(response.message);
                         if (response.status === 'success') {
-                            $checkIcon.text('✔').css('color', 'green');
+                            $checkIcon.text('✔')
+                                .css('color', 'green')
+                                .attr('title', response.message); // Gắn message vào title
                         } else if (response.status === 'error') {
-                            $checkIcon.text('✖').css('color', 'red');
+                            $checkIcon.text('✖')
+                                .css('color', 'red')
+                                .attr('title', response.message); // Gắn message vào title
                         }
                     },
                     error: function() {

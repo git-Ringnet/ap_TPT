@@ -43,6 +43,11 @@ Route::get('/filter-exports', [ExportsController::class, 'filterData'])->name('f
 Route::get('/filter-receivings', [ReceivingController::class, 'filterData'])->name('filter-receivings');
 Route::get('/filter-quotations', [QuotationController::class, 'filterData'])->name('filter-quotations');
 Route::get('/filter-returnforms', [ReturnFormController::class, 'filterData'])->name('filter-returnforms');
+Route::get('/filter-inven-lookup', [InventoryLookupController::class, 'filterData'])->name('filter-inven-lookup');
+Route::get('/filter-warran-lookup', [WarrantyLookupController::class, 'filterData'])->name('filter-warran-lookup');
+
+
+Route::post('/update-status', [ReceivingController::class, 'updateStatus'])->name('update.status');
 
 Route::get('/', function () {
     return view('welcome');

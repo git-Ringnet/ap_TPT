@@ -216,7 +216,8 @@
                                                     Bên ngoài
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border-left-0 border-bottom py-0 status-text{{ $item->id }}">
                                                 @if ($item->status == 1)
                                                     Tiếp nhận
                                                 @elseif($item->status == 2)
@@ -279,25 +280,23 @@
                                 </tbody>
                             </table>
                             <ul class="option-button p-2">
-                                <li>
-                                    <button class="option-btn btn" data-action="change-status">Chuyển tình
-                                        trạng
-                                    </button>
+                                <li style="position: relative;"> <!-- Đảm bảo cha có position: relative -->
+                                    <button class="option-btn btn status" data-action="change-status">Chuyển tình
+                                        trạng</button>
+                                    <!-- Danh sách tình trạng -->
+                                    <ul class="status-list"
+                                        style="display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; list-style: none;">
+                                    </ul>
                                 </li>
                                 <li>
-                                    <button class="option-btn btn" data-action="change-type">Chuyển loại
-                                        phiếu
-                                    </button>
+                                    <button class="option-btn btn return-form" data-action="return-form">Trả
+                                        form</button>
                                 </li>
                                 <li>
-                                    <button class="option-btn btn return-form" data-action="return-form">
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="option-btn btn quotation" data-action="quotation">
-                                    </button>
+                                    <button class="option-btn btn quotation" data-action="quotation">Báo giá</button>
                                 </li>
                             </ul>
+
                         </div>
                     </div>
                 </div>
@@ -333,28 +332,99 @@
         var nametable = 'data'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    $(document).ready(function() {
+        $('.status').on('click', function(e) {
+            e.stopPropagation();
+            const $statusList = $(this).siblings('.status-list');
+            $('.status-list').not($statusList).hide();
+            $statusList.toggle();
+        });
+
+        $('.status-list').on('click', 'li', function(e) {
+            e.stopPropagation();
+            const statusId = $(this).data('status');
+            const recei = $(this).data('recei');
+            const returndata = $(this).data('return');
+            const statusText = $(this).text();
+            const $td = $(`.status-text${recei}`);
+            $.ajax({
+                url: '/update-status',
+                method: 'POST',
+                data: {
+                    status: statusId,
+                    recei: recei,
+                    returndata: returndata,
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        $td.text(statusText);
+                    } else {
+                        alert('Cập nhật trạng thái không thành công.');
+                    }
+                },
+                error: function() {
+                    alert('Không thể cập nhật trạng thái. Vui lòng thử lại.');
+                },
+            });
+
+            $(this).closest('.status-list').hide();
+        });
+
+        // Ẩn danh sách khi click ra ngoài
+        $(document).on('click', function() {
+            $('.status-list').hide();
+        });
+    });
+
 
     $(document).ready(function() {
-        // Hiển thị menu khi nhấp vào hàng dữ liệu
         $('.row-data').on('click', function(e) {
             const $row = $(this);
             const $optionButton = $('.option-button');
-            // Lấy thông tin từ hàng được nhấp
+            const $statusList = $optionButton.find('.status-list');
             const dataRecei = $row.find('.id-data').val();
             const hasReturn = $row.find('.id-data').data('has-return');
             const hasQuote = $row.find('.id-data').data('has-quote');
-            // URL cho phiếu trả hàng và báo giá
             const urls = {
                 createReturn: `${$row.data('create-return-url')}?recei=${dataRecei}`,
                 editReturn: $row.data('edit-return-url').replace(':id', hasReturn),
                 createQuote: `${$row.data('create-quote-url')}?recei=${dataRecei}`,
                 editQuote: $row.data('edit-quote-url').replace(':id', hasQuote),
             };
-            // Cập nhật trạng thái nút
             updateButtonText($optionButton.find('.return-form'), hasReturn, 'Tạo phiếu trả hàng',
                 'Sửa phiếu trả hàng', urls.createReturn, urls.editReturn);
             updateButtonText($optionButton.find('.quotation'), hasQuote, 'Tạo phiếu báo giá',
                 'Sửa phiếu báo giá', urls.createQuote, urls.editQuote);
+            const statusData = hasReturn !== 0 ? [{
+                    status: 3,
+                    label: 'Hoàn thành'
+                },
+                {
+                    status: 4,
+                    label: 'Không đồng ý'
+                }
+            ] : [{
+                    status: 1,
+                    label: 'Tiếp nhận'
+                },
+                {
+                    status: 2,
+                    label: 'Xử lý'
+                }
+            ];
+            $statusList.empty(); // Xóa danh sách cũ
+            statusData.forEach(({
+                status,
+                label
+            }) => {
+                $statusList.append(`
+            <li data-return="${hasReturn}" data-recei="${dataRecei}" data-status="${status}">
+                ${label}
+            </li>
+        `);
+            });
             const {
                 clientX: x,
                 clientY: y

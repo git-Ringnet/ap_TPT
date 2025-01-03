@@ -245,10 +245,11 @@ function createSerialRow(index, product, serial, name) {
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                     name="" value="1">
             </td>
-            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
                     name="serial[]" value="${serial}">
+                    <span class="list-recei">csad</span>
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
                 <input type="text" autocomplete="off"
@@ -401,7 +402,7 @@ $(document).on("click", ".save-info-product", function (e) {
                 <td class="text-13-black border py-0 text-center">0${
                     index + 1
                 }</td>
-                <td class="text-13-black border py-0 pl-3">
+                <td class="text-13-black border py-0 pl-3 position-relative">
                     <input type="text" name="form_code" value="${
                         product.serial
                     }" class="text-13-black w-100 border-0 serial-input" placeholder="Nhập thông tin">

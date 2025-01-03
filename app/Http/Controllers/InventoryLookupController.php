@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryHistory;
 use App\Models\InventoryLookup;
+use App\Models\Product;
+use App\Models\Providers;
 use Illuminate\Http\Request;
 
 class InventoryLookupController extends Controller
@@ -11,11 +13,17 @@ class InventoryLookupController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $inventoryLookup;
+    public function __construct(InventoryLookup $inventoryLookup)
+    {
+        $this->inventoryLookup = $inventoryLookup;
+    }
     public function index()
     {
         $title = "Tra cứu tồn kho";
         $inventory = InventoryLookup::with(['product', 'serialNumber', 'provider'])->get();
-        return view('expertise.inventoryLookup.index', compact('title', 'inventory'));
+        $providers = Providers::all();
+        return view('expertise.inventoryLookup.index', compact('title', 'inventory', 'providers'));
     }
 
     /**
@@ -87,5 +95,52 @@ class InventoryLookupController extends Controller
     public function destroy(InventoryLookup $inventoryLookup)
     {
         //
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã hàng: ' . $data['ma'], 'name' => 'ma-hang', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên hàng: ' . $data['ten'], 'name' => 'ten-hang', 'icon' => 'product'];
+        }
+        if (isset($data['brand']) && $data['brand'] !== null) {
+            $filters[] = ['value' => 'Hãng: ' . $data['brand'], 'name' => 'hang', 'icon' => 'brand'];
+        }
+        if (isset($data['sn']) && $data['sn'] !== null) {
+            $filters[] = ['value' => 'Serial: ' . $data['sn'], 'name' => 'serial', 'icon' => 'sn'];
+        }
+        if (isset($data['provider']) && $data['provider'] !== null) {
+            $filters[] = ['value' => 'Nhà cung cấp: ' . count($data['provider']) . ' đã chọn', 'name' => 'nha-cung-cap', 'icon' => 'provider'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày nhập hàng: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-nhap-hang', 'icon' => 'date'];
+        }
+        if (isset($data['status']) && $data['status'] !== null) {
+            $statusValues = [];
+            if (in_array(1, $data['status'])) {
+                $statusValues[] = '<span style="color: #858585;">Tới hạn bảo trì</span>';
+            }
+            if (in_array(0, $data['status'])) {
+                $statusValues[] = '<span style="color: #08AA36BF;">Blank</span>';
+            }
+            $filters[] = ['value' => 'Tình trạng: ' . implode(', ', $statusValues), 'name' => 'trang-thai', 'icon' => 'status'];
+        }
+        if (isset($data['time_inven']) && $data['time_inven'][1] !== null) {
+            $filters[] = ['value' => 'Thời gian tồn kho: ' . $data['time_inven'][0] . ' ' . $data['time_inven'][1], 'name' => 'thoi-gian-ton-kho', 'icon' => 'money'];
+        }
+
+        if ($request->ajax()) {
+            $inventoryLookup = $this->inventoryLookup->getInvenAjax($data);
+            return response()->json([
+                'data' => $inventoryLookup,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

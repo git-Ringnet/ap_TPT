@@ -3285,6 +3285,20 @@ input[type="checkbox"]:checked {
     transition: color 0.3s ease-in-out;
     /* Hiệu ứng chuyển màu mượt mà */
 }
+
+.list-recei {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: green;
+    pointer-events: none;
+    /* Không cho phép click vào biểu tượng */
+    transition: color 0.3s ease-in-out;
+    /* Hiệu ứng chuyển màu mượt mà */
+}
+
 .bg-custom-yl {
     background-color: rgba(255, 232, 103, 1) !important;
 }
@@ -3491,5 +3505,25 @@ input[type="checkbox"]:checked {
     background-color: #deeaf6;
 }
 .text-16{
-    font-size: 16px;
+    font-size: 16px;}
+.status-list {
+    z-index: 1000;
+    width: 150px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background: white;
+    border-radius: 5px;
+    left: 100%;
+    /* Đặt bên phải nút */
+    top: 0;
+    /* Cùng hàng với nút */
+    position: absolute;
+}
+
+.status-list li {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.status-list li:hover {
+    background-color: #f0f0f0;
 }

@@ -6,6 +6,7 @@ use App\Models\Customers;
 use App\Models\Product;
 use App\Models\ReceivedProduct;
 use App\Models\Receiving;
+use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -324,5 +325,36 @@ class ReceivingController extends Controller
             ]);
         }
         return false;
+    }
+    public function updateStatus(Request $request)
+    {
+        $status = $request->input('status');
+        $recei = $request->input('recei');
+        $returndata = $request->input('returndata');
+        try {
+            // Cập nhật Receiving
+            if ($recei) {
+                $receiving = Receiving::findOrFail($recei);
+                $receiving->status = $status;
+                $receiving->save();
+            }
+            // Cập nhật ReturnForm nếu tồn tại
+            if ($returndata) {
+                $returnForm = ReturnForm::findOrFail($returndata);
+                // Điều chỉnh status theo logic yêu cầu
+                if ($status == 3) {
+                    $returnForm->status = 1;
+                } elseif ($status == 4) {
+                    $returnForm->status = 2;
+                } else {
+                    $returnForm->status = $status; // Giữ nguyên nếu không thuộc 3 hoặc 4
+                }
+
+                $returnForm->save();
+            }
+            return response()->json(['status' => 'success', 'message' => 'Cập nhật trạng thái thành công']);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 }
