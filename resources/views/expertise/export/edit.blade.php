@@ -21,6 +21,31 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
+                        <button type="button" id="printButton" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
+                            <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+                                fill="none">
+                                <g clip-path="url(#clip0_10424_110572)">
+                                    <path opacity="0.995" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M4.73438 -0.015625C6.90103 -0.015625 9.06772 -0.015625 11.2344 -0.015625C12.0674 0.148911 12.6664 0.617662 13.0312 1.39062C13.1025 1.57308 13.1546 1.76058 13.1875 1.95312C13.2031 2.64055 13.2083 3.32803 13.2031 4.01562C14.6799 3.91059 15.607 4.56684 15.9844 5.98438C15.9844 7.48438 15.9844 8.98438 15.9844 10.4844C15.607 11.9019 14.6799 12.5582 13.2031 12.4531C13.2177 13.3089 13.202 14.1631 13.1562 15.0156C12.9704 15.5194 12.6214 15.8423 12.1094 15.9844C9.35938 15.9844 6.60938 15.9844 3.85938 15.9844C3.34734 15.8423 2.99837 15.5194 2.8125 15.0156C2.76671 14.1631 2.75108 13.3089 2.76562 12.4531C1.30224 12.5609 0.375159 11.9151 -0.015625 10.5156C-0.015625 9.00522 -0.015625 7.49478 -0.015625 5.98438C0.3611 4.56772 1.28818 3.91147 2.76562 4.01562C2.76042 3.32803 2.76562 2.64055 2.78125 1.95312C3.01084 0.874588 3.66188 0.218337 4.73438 -0.015625ZM5.07812 0.921875C7.01566 0.916666 8.95316 0.921875 10.8906 0.9375C11.7125 1.04064 12.1657 1.50418 12.25 2.32812C12.2656 2.89053 12.2708 3.45303 12.2656 4.01562C9.41147 4.01562 6.55728 4.01562 3.70312 4.01562C3.69791 3.45303 3.70312 2.89053 3.71875 2.32812C3.80872 1.50383 4.26184 1.03508 5.07812 0.921875ZM2.29688 4.95312C6.08856 4.94791 9.88022 4.95312 13.6719 4.96875C14.3707 5.03219 14.8134 5.40197 15 6.07812C15.0349 6.79609 15.0505 7.51484 15.0469 8.23438C15.0505 8.95391 15.0349 9.67266 15 10.3906C14.849 10.9583 14.4896 11.3177 13.9219 11.4688C13.6836 11.5044 13.444 11.5201 13.2031 11.5156C13.2031 10.9948 13.2031 10.474 13.2031 9.95312C13.3597 9.95831 13.516 9.95309 13.6719 9.9375C13.9348 9.80163 14.0234 9.58809 13.9375 9.29688C13.8906 9.16666 13.8021 9.07812 13.6719 9.03125C9.88022 9.01041 6.08853 9.01041 2.29688 9.03125C2.01642 9.19225 1.93829 9.42663 2.0625 9.73438C2.11765 9.82728 2.19578 9.895 2.29688 9.9375C2.45278 9.95309 2.60903 9.95831 2.76562 9.95312C2.76562 10.474 2.76562 10.9948 2.76562 11.5156C2.09793 11.6042 1.56147 11.3854 1.15625 10.8594C1.01539 10.6293 0.942475 10.3793 0.9375 10.1094C0.916666 8.85938 0.916666 7.60938 0.9375 6.35938C1.02747 5.53509 1.4806 5.06634 2.29688 4.95312ZM3.70312 9.95312C6.55728 9.95312 9.41147 9.95312 12.2656 9.95312C12.2708 11.4948 12.2656 13.0365 12.25 14.5781C12.224 14.8542 12.0729 15.0052 11.7969 15.0312C9.25522 15.0521 6.71353 15.0521 4.17188 15.0312C3.89584 15.0052 3.74478 14.8542 3.71875 14.5781C3.70312 13.0365 3.69791 11.4948 3.70312 9.95312Z"
+                                        fill="#151516" />
+                                    <path opacity="0.987" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M2.29742 6.01563C2.92251 6.01041 3.54752 6.01563 4.17242 6.03125C4.43539 6.16713 4.52392 6.38066 4.43805 6.67188C4.39117 6.8021 4.30264 6.89063 4.17242 6.9375C3.54742 6.95835 2.92242 6.95835 2.29742 6.9375C2.01696 6.7765 1.93884 6.54213 2.06305 6.23438C2.12601 6.14338 2.20413 6.07047 2.29742 6.01563Z"
+                                        fill="#6C6F74" />
+                                    <path opacity="0.991" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M6.54743 11.0156C7.5058 11.0104 8.46415 11.0156 9.42243 11.0313C9.6854 11.1671 9.77393 11.3807 9.68805 11.6719C9.64118 11.8021 9.55265 11.8906 9.42243 11.9375C8.46408 11.9583 7.50577 11.9583 6.54743 11.9375C6.26696 11.7765 6.18883 11.5421 6.31305 11.2344C6.37602 11.1434 6.45415 11.0705 6.54743 11.0156Z"
+                                        fill="#6C6F74" />
+                                    <path opacity="0.991" fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M6.54743 13.0156C7.5058 13.0104 8.46415 13.0156 9.42243 13.0313C9.6854 13.1671 9.77393 13.3807 9.68805 13.6719C9.64118 13.8021 9.55265 13.8906 9.42243 13.9375C8.46408 13.9583 7.50577 13.9583 6.54743 13.9375C6.26696 13.7765 6.18883 13.5421 6.31305 13.2344C6.37602 13.1434 6.45415 13.0705 6.54743 13.0156Z"
+                                        fill="#6C6F74" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_10424_110572">
+                                        <rect width="16" height="16" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <p class="m-0 p-0 text-dark">In phiếu bảo hành</p>
+                        </button>
                         <button type="submit" id="btn-get-unique-products"
                             class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -78,14 +103,16 @@
                                     class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                         style="flex: 1.5;">Ngày lập phiếu</span>
-                                    <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
+                                    <input name="date_create" placeholder="Nhập thông tin" autocomplete="off"
+                                        required
                                         value="{{ \Carbon\Carbon::parse($export->date_create)->format('Y-m-d') }}"
                                         type="date"
                                         class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"style=" flex:2;" />
                                 </div>
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                    <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">Ghi
+                                    <span class="text-13-black font-weight-bold text-nowrap mr-3"
+                                        style="flex: 1.5;">Ghi
                                         chú</span>
                                     <input
                                         class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
@@ -100,15 +127,17 @@
                                         style="flex: 1.5;">Người lập phiếu</span>
                                     <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name"
                                         value="{{ $export->user->name }}" readonly
-                                        class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
-                                    <input type="hidden" name="user_id" id="user_id" value="{{ $export->user_id }}">
+                                        class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"
+                                        style="flex:2;" />
+                                    <input type="hidden" name="user_id" id="user_id"
+                                        value="{{ $export->user_id }}">
                                 </div>
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black btn-click required-label font-weight-bold"
                                         style="flex: 1.6;">Khách hàng</span>
-                                    <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
-                                        readonly
+                                    <input placeholder="Nhập thông tin" autocomplete="off" required
+                                        id="provider_name" readonly
                                         class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                         style="flex:2;" value="{{ $export->customer->customer_name }}" />
                                     <input type="hidden" name="customer_id" id="provider_id"
@@ -299,8 +328,9 @@
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 text-purble" readonly=""
-                                                    name="" value="{{ $products->sum('quantity') }}">
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 text-purble"
+                                                    readonly="" name=""
+                                                    value="{{ $products->sum('quantity') }}">
                                             </td>
                                             <td colspan="4"
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0">
@@ -363,5 +393,6 @@
         </div>
     </div>
 </form>
+<x-warranty_card :productExports="$productExports" :export="$export"></x-warranty_card>
 <script src="{{ asset('js/imports.js') }}"></script>
 <script src="{{ asset('js/addproduct.js') }}"></script>

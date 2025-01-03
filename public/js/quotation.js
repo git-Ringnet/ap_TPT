@@ -123,6 +123,26 @@ function calculateTotals() {
     $("#product-tax10").text(formatCurrencyVND(tax10Amount));
     $("#grand-total").text(formatCurrencyVND(grandTotal));
     $("#total").val(grandTotal.toFixed(2));
+
+    const printSumElement = document.getElementById("print-sum");
+    if (printSumElement) {
+        printSumElement.textContent = totalBeforeTax.toLocaleString("vi-VN");
+    }
+
+    const printVat8Element = document.getElementById("print-vat-8");
+    if (printVat8Element) {
+        printVat8Element.textContent = tax8Amount.toLocaleString("vi-VN");
+    }
+
+    const printVat10Element = document.getElementById("print-vat-10");
+    if (printVat10Element) {
+        printVat10Element.textContent = tax10Amount.toLocaleString("vi-VN");
+    }
+
+    const sumVatElement = document.getElementById("sum-vat");
+    if (sumVatElement) {
+        sumVatElement.textContent = grandTotal.toLocaleString("vi-VN");
+    }
 }
 $(document).on(
     "input change",

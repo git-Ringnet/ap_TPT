@@ -668,15 +668,19 @@ th {
     .export-add {
         display: none;
     }
+    .header-fixed {
+        display: none !important;
+    }
+    #form-submit {
+        display: none !important;
+    }
+    .print-section {
+        display: block !important;
+    }
 }
 
 tbody tr {
     border-bottom: 1px solid #e9ecef;
-}
-
-tbody th:first-child {
-    width: 82px;
-    padding: 0;
 }
 
 .product-details {
@@ -3285,7 +3289,7 @@ input[type="checkbox"]:checked {
     background-color: rgba(255, 232, 103, 1) !important;
 }
 .bg-custom-pink {
-    background-color:rgba(255, 110, 139, 1) !important;
+    background-color: rgba(255, 110, 139, 1) !important;
 }
 .option-button {
     position: fixed;
@@ -3355,7 +3359,7 @@ input[type="checkbox"]:checked {
 .margin-top-63 {
     margin-top: 6.3rem;
 }
-.btn-filter_search-1{
+.btn-filter_search-1 {
     height: 30px;
     border: 1px solid #d6d6d6;
     border-radius: 4px;
@@ -3398,4 +3402,94 @@ input[type="checkbox"]:checked {
     padding: 10px;
     border: 1px solid #ddd;
     font-weight: bold;
+}
+/*In Phieu*/
+.text-header-print {
+    color: #ff0100;
+}
+.dotted-line {
+    border-bottom: 1px dotted #000;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-checkbox-customer {
+    width: 15px;
+    height: 15px;
+    transform: scale(1.5);
+    margin: 0 10px;
+    appearance: none;
+    border: 1px solid #000;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.input-checkbox-customer:checked {
+    background-color: #fff;
+    position: relative;
+}
+
+.input-checkbox-customer:checked::after {
+    content: "\2713";
+    color: #000;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.mr-6 {
+    margin-right: 6rem;
+}
+.pr-6 {
+    padding-right: 6rem;
+}
+
+.ml-6 {
+    margin-left: 6rem;
+}
+
+.pl-6 {
+    padding-left: 6rem;
+}
+
+.pb-6 {
+    padding-bottom: 6rem !important;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+.info-table th,
+.info-table td {
+    border: 1px solid black;
+    padding: 5px 10px;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.info-table th {
+    font-weight: normal;
+    width: 10%;
+}
+
+.info-table td {
+    width: 25%;
+}
+
+.info-table td[colspan] {
+    text-align: left;
+}
+.bg-quotation {
+    background-color: #deeaf6;
+}
+.text-16{
+    font-size: 16px;
 }
