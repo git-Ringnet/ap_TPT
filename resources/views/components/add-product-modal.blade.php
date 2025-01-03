@@ -325,7 +325,23 @@
         if ($('#tbody-product-data tr').length === 0) {
             alert("Vui lòng thêm sản phẩm.");
             e.preventDefault();
+        } else {
+            if ($('[name="provider_id"]').length) {
+                const providerIdValue = $('#provider_id').val();
+                if (!providerIdValue) {
+                    alert("Vui lòng chọn nhà cung cấp.");
+                    e.preventDefault();
+                }
+            }
+            if ($('[name="customer_id"]').length) {
+                const providerIdValue = $('#provider_id').val();
+                if (!providerIdValue) {
+                    alert("Vui lòng chọn khách hàng.");
+                    e.preventDefault();
+                }
+            }
         }
+
         // Kiểm tra nhập S/N trùng
         let duplicates = [];
         let seen = new Set();
