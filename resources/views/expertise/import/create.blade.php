@@ -57,7 +57,7 @@
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Ngày lập phiếu</span>
                                 <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
-                                    type="date"
+                                    type="date" value="{{ date('Y-m-d') }}"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style=" flex:2;" />
                             </div>
@@ -83,7 +83,8 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Nhà cung cấp</span>
-                                <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;" required id="provider_name"
+                                <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;"
+                                    required id="provider_name"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="provider_id" id="provider_id">
@@ -203,7 +204,8 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products" name="NH"/>
+                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                            name="NH" />
                     </section>
                 </div>
             </div>

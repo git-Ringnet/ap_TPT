@@ -1,4 +1,4 @@
-<div class="list-noti-container" wire:ignore.self>
+<div class="list-noti-container">
     <a class="nav-link position-relative mr-3 notification-icon" id="notification-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -25,13 +25,14 @@
         </ul>
         <div class="tab-content overflow-auto" style="height: 280px;">
             <div class="tab-pane fade show active notification-list" id="info">
-                <a href="#"class="dropdown-item border-bottom rounded bg-white">
-                    @foreach ($notifications as $notification)
-                        <span>
-                            <p>Loại: {{ $notification->type }}, ID phiếu: {{ $notification->type_id }}</p> tới hạn bảo trì định kỳ
-                        </span>
-                    @endforeach
-                </a>
+                @foreach ($notifications as $notification)
+                    <div class="dropdown-item border-bottom rounded bg-white">
+                        <div>
+                            <a href="{{ route('inventoryLookup.edit', $notification->id) }}" class="text-primary">{{ $notification->serial_code }}</a>
+                            <span>tới hạn bảo trì định kỳ</span>
+                        </div>
+                    </div>
+                @endforeach
             </div>
             <div class="tab-pane fade" id="history"></div>
         </div>
