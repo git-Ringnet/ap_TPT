@@ -40,7 +40,7 @@
                 </div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="{{route('receivings.index')}}">
+                        <a href="{{ route('receivings.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -83,8 +83,8 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
                                 phiếu</span>
-                            <input type="text" id="form_code_receiving" name="form_code_receiving"
-                                style="flex:2;" placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
+                            <input type="text" id="form_code_receiving" name="form_code_receiving" style="flex:2;"
+                                placeholder="Nhập thông tin" value="{{ $quoteNumber }}"
                                 class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                         </div>
                         <div

@@ -87,7 +87,6 @@ class SerialNumberController extends Controller
                 if (!$seri) {
                     return response()->json(['status' => 'error', 'message' => 'Số serial không tồn tại.']);
                 }
-
                 // Logic đặc biệt cho form_type = 3
                 if ($request->form_type == 3) {
                     $seriWithStatus4Or5 = $this->getSerialWithStatus($serialNumber, [4, 5]);
@@ -96,8 +95,6 @@ class SerialNumberController extends Controller
                     }
                     $seri = $seriWithStatus4Or5;
                 }
-
-
                 $warranty = $this->getWarranty($seri->id, $request->product_id);
                 if (!$warranty) {
                     return response()->json(['status' => 'error', 'message' => 'Không tìm thấy thông tin bảo hành.']);
@@ -114,6 +111,10 @@ class SerialNumberController extends Controller
                 }
             }
         }
+    }
+    private function getSerialWarranty($serialCode)
+    {
+        return SerialNumber::with('warrantyLookups')->where('serial_code', $serialCode)->first();
     }
     private function getSerial($serialCode)
     {

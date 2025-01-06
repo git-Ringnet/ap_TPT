@@ -285,10 +285,14 @@
                 },
                 success: function(response) {
                     const formType = response.data.form_type;
-                    const hideClass = formType === 2 || formType === 3 ?
-                        '.col-replacement-code, .col-replacement-serial' : '';
-                    $(".col-replacement-code, .col-replacement-serial, .col-extra-warranty")
-                        .addClass(hideClass);
+                    const hideReplacement = formType === 2 || formType === 3 ? "d-none" : "";
+                    const hideExtraWarranty = formType === 1 || formType === 3 ? "d-none" : "";
+
+                    // Thêm hoặc xóa lớp "d-none" cho các cột dựa trên logic
+                    $(".col-replacement-code, .col-replacement-serial")
+                        .toggleClass("d-none", hideReplacement === "d-none");
+                    $(".col-extra-warranty")
+                        .toggleClass("d-none", hideExtraWarranty === "d-none");
                     $('#status').val(formType).change();
                     populateTableRows(response.product, "#tbody-data", response.productData,
                         formType);
