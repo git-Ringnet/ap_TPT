@@ -160,10 +160,10 @@
                                             </td>
                                             <td
                                                 class="text-13-black text-left border-bottom border-top-0 py-0 border-right">
-                                                {{ $item->name }}
+                                                {{ $item->group_name }}
                                             </td>
                                             <td class="text-13-black border-bottom border-top-0 py-0 border-right">
-                                                {{ $item->groupType->name }}
+                                                {{ $item->groupType->group_name }}
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
