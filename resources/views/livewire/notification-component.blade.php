@@ -24,7 +24,7 @@
             </li>
         </ul>
         <div class="tab-content overflow-auto" style="height: 280px;">
-            <div class="tab-pane fade show active notification-list" id="info" wire:poll="fetchNotifications">
+            <div class="tab-pane fade show active notification-list" id="info" wire:poll.{{ $isListNotiVisible ? "" : "stop" }}="fetchNotifications">
                 <a href="#"class="dropdown-item border-bottom rounded bg-white">
                     @foreach ($notifications as $notification)
                         <span>
@@ -46,12 +46,14 @@
     notificationIcon.addEventListener('click', function(event) {
         event.stopPropagation(); // Ngừng sự kiện lan truyền để không bị đóng khi nhấn vào icon
         listNoti.classList.toggle('show');
+        @this.set('isListNotiVisible', listNoti.classList.contains('show'));
     });
 
     // Đóng danh sách khi nhấn vào ngoài
     document.addEventListener('click', function(event) {
         if (!notificationIcon.contains(event.target) && !listNoti.contains(event.target)) {
             listNoti.classList.remove('show');
+            @this.set('isListNotiVisible', false);
         }
     });
 </script>

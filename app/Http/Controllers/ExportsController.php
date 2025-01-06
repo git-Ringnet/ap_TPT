@@ -9,6 +9,7 @@ use App\Models\ProductExport;
 use App\Models\SerialNumber;
 use App\Models\User;
 use App\Models\warrantyLookup;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ExportsController extends Controller
@@ -82,6 +83,14 @@ class ExportsController extends Controller
                         'status' => 0,
                         'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $serial['warranty'] . ' months')),
                     ]);
+                    //
+                    $today = Carbon::now();
+                    $records = warrantyLookup::where('status', 0)->get();
+                    foreach ($records as $record) {
+                        if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                            $record->update(['status' => 1]);
+                        }
+                    }
                 }
             }
         }
@@ -200,6 +209,14 @@ class ExportsController extends Controller
                         'status' => 0,
                         'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $data['warranty'] . ' months')),
                     ]);
+                    //
+                    $today = Carbon::now();
+                    $records = warrantyLookup::where('status', 0)->get();
+                    foreach ($records as $record) {
+                        if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                            $record->update(['status' => 1]);
+                        }
+                    }
                 } else {
                     // Cập nhật ghi chú nếu cần
                     $existingWarranty->update([

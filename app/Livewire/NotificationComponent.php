@@ -8,7 +8,8 @@ use Livewire\Component;
 class NotificationComponent extends Component
 {
     public $notifications = [];
-
+    public $isListNotiVisible = false;
+    
     public function fetchNotifications()
     {
         // Lấy thông báo từ database

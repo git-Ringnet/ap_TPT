@@ -102,7 +102,7 @@
                                                 </span>
                                             </th>
                                             <th scope="col" class="border-bottom border height-40 py-0">
-                                                <span class="d-flex justify-content-end">
+                                                <span class="d-flex">
                                                     <a href="#" class="sort-link btn-submit"
                                                         data-sort-by="provide_name" data-sort-type="DESC">
                                                         <button class="btn-sort text-14" type="submit">
@@ -147,7 +147,7 @@
                                                     {{ $item->email }}
                                                 </td>
                                                 <td
-                                                    class="text-13-black text-right border border-bottom py-0 border-top-0 border-left-0">
+                                                    class="text-13-black border border-bottom py-0 border-top-0 border-left-0">
                                                     {{ $item->note }}
                                                 </td>
                                                 <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
