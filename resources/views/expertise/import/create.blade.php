@@ -83,7 +83,7 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Nhà cung cấp</span>
-                                <input placeholder="Nhập thông tin" autocomplete="off" readonly required id="provider_name"
+                                <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;" required id="provider_name"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="provider_id" id="provider_id">

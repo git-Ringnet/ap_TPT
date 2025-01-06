@@ -84,7 +84,7 @@
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Khách hàng</span>
                                 <input placeholder="Nhập thông tin" autocomplete="off" required id="provider_name"
-                                    readonly required
+                                    required onkeypress="return false;"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="customer_id" id="provider_id">

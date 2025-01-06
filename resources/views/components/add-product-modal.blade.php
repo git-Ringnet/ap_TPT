@@ -322,24 +322,9 @@
 
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
-        if ($('#tbody-product-data tr').length === 0) {
+        if ($('#tbody-product-data tr#serials-data').length === 0) {
             alert("Vui lòng thêm sản phẩm.");
             e.preventDefault();
-        } else {
-            if ($('[name="provider_id"]').length) {
-                const providerIdValue = $('#provider_id').val();
-                if (!providerIdValue) {
-                    alert("Vui lòng chọn nhà cung cấp.");
-                    e.preventDefault();
-                }
-            }
-            if ($('[name="customer_id"]').length) {
-                const providerIdValue = $('#provider_id').val();
-                if (!providerIdValue) {
-                    alert("Vui lòng chọn khách hàng.");
-                    e.preventDefault();
-                }
-            }
         }
 
         // Kiểm tra nhập S/N trùng
