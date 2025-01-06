@@ -106,9 +106,9 @@
                                     </td>
                                     @if ($name == 'XH' || $name == 'CXH')
                                         <td class="text-13-black border py-0 pl-3">
-                                            <input type="text" id="product_warranty_input"
-                                                name="product_warranty_input" style="flex:2;" readonly
-                                                class="text-13-black w-100 border-0">
+                                            <input type="number" id="product_warranty_input"
+                                                name="product_warranty_input" style="flex:2;"
+                                                class="text-13-black w-100 border-0 bg-input-guest-blue p-2">
                                         </td>
                                     @endif
                                 </tr>

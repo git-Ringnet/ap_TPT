@@ -24,12 +24,11 @@
             </li>
         </ul>
         <div class="tab-content overflow-auto" style="height: 280px;">
-            <div class="tab-pane fade show active notification-list" id="info" wire:poll="fetchNotifications">
+            <div class="tab-pane fade show active notification-list" id="info">
                 <a href="#"class="dropdown-item border-bottom rounded bg-white">
                     @foreach ($notifications as $notification)
                         <span>
-                            <p>Loại: {{ $notification->type }}, ID phiếu: {{ $notification->type_id }}</p> tới hạn bảo
-                            trì định kỳ
+                            <p>Loại: {{ $notification->type }}, ID phiếu: {{ $notification->type_id }}</p> tới hạn bảo trì định kỳ
                         </span>
                     @endforeach
                 </a>
