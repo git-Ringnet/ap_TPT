@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -15,20 +15,25 @@ class UserSeeder extends Seeder
     public function run()
     {
         // Tạo người dùng mặc định
-        User::create([
+        $admin = User::create([
             'name' => 'Admin User',
             'email' => 'admin@ringnet.vn',
             'password' => Hash::make('Ringnet@123'),
         ]);
-        User::create([
+        $admin->assignRole('Admin');
+
+        $warehouseManager = User::create([
             'name' => 'Quản lý kho',
             'email' => 'quankho@ringnet.vn',
             'password' => Hash::make('Ringnet@123'),
         ]);
-        User::create([
+        $warehouseManager->assignRole('Quản lý kho');
+
+        $serviceUser = User::create([
             'name' => 'Dịch vụ',
             'email' => 'dichvu@ringnet.vn',
             'password' => Hash::make('Ringnet@123'),
         ]);
+        $serviceUser->assignRole('Bảo hành');
     }
 }
