@@ -8,11 +8,13 @@
         <div class="d-flex w-100 my-2">
             <div class="px-1">
                 <p class="m-0 p-0 text-13-black">Từ ngày</p>
-                <input type="date" class="w-100 form-control mr-1" id="fromDate">
+                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatFrom">
+                <input type="hidden" class="w-100 form-control mr-1" id="fromDate">
             </div>
-            <div class="mr-4">
+            <div class="px-1">
                 <p class="m-0 p-0 text-13-black">Đến ngày</p>
-                <input type="date" class="w-100 form-control ml-1" id="toDate">
+                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatTo">
+                <input type="hidden" class="w-100 form-control ml-1" id="toDate">
             </div>
         </div>
         <div class="w-100 my-2 px-1">
@@ -232,7 +234,7 @@
                                     {{ $item->form_code_receiving }}
                                 </td>
                                 <td class="text-13-black text-left border-bottom">
-                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                    {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                 </td>
                                 <td class="text-13-black border-bottom">
                                     @if ($item->status == 1)
@@ -284,7 +286,7 @@
                                     {{ $item->return_code }}
                                 </td>
                                 <td class="text-13-black text-left border-bottom">
-                                    {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
+                                    {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                 </td>
                                 <td class="text-13-black border-bottom">
                                     @if ($item->status == 1)
@@ -307,6 +309,36 @@
 <script src="{{ asset('/js/view-mini.js') }}"></script>
 <script>
     $(document).ready(function() {
+        flatpickr("#formatFrom", {
+            locale: "vn",
+            dateFormat: "d/m/Y",
+            onChange: function(selectedDates) {
+                // Lấy giá trị ngày đã chọn
+                if (selectedDates.length > 0) {
+                    const formattedDate = flatpickr.formatDate(
+                        selectedDates[0],
+                        "Y-m-d"
+                    );
+                    document.getElementById("fromDate").value =
+                        formattedDate;
+                }
+            },
+        });
+        flatpickr("#formatTo", {
+            locale: "vn",
+            dateFormat: "d/m/Y",
+            onChange: function(selectedDates) {
+                // Lấy giá trị ngày đã chọn
+                if (selectedDates.length > 0) {
+                    const formattedDate = flatpickr.formatDate(
+                        selectedDates[0],
+                        "Y-m-d"
+                    );
+                    document.getElementById("toDate").value =
+                        formattedDate;
+                }
+            },
+        });
         // Hàm giả lập tải dữ liệu
         function loadData() {
             // Hiển thị hiệu ứng load
@@ -454,6 +486,8 @@
         const searchData = JSON.parse(localStorage.getItem('searchData'));
         if (searchData) {
             // Điền lại giá trị vào input tìm kiếm
+            $('#formatFrom').val(moment(searchData.fromDate).format('DD/MM/YYYY'));
+            $('#formatTo').val(moment(searchData.toDate).format('DD/MM/YYYY'));
             $('#fromDate').val(searchData.fromDate);
             $('#toDate').val(searchData.toDate);
             $('.idProviderMiniView').val(searchData.idGuest);

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use NunoMaduro\Collision\Provider;
 
 class Groups extends Model
 {
@@ -65,37 +64,28 @@ class Groups extends Model
         $data = [];
         if ($grouptype == 1) {
             $data = [
+                'obj' => 'customers',
+                'results' => Customers::where('group_id', $id)
+                    ->select('customers.id as id', 'customers.customer_name as name')->get()
+            ];
+        } elseif ($grouptype == 2) {
+            $data = [
+                'obj' => 'providers',
+                'results' => Providers::where('group_id', $id)
+                    ->select('providers.id as id', 'providers.provider_name as name')->get()
+            ];
+        } elseif ($grouptype == 3) {
+            $data = [
+                'obj' => 'products',
+                'results' => Product::where('group_id', $id)->select('products.id as id', 'products.product_name as name')->get()
+            ];
+        } elseif ($grouptype == 4) {
+            $data = [
                 'obj' => 'users',
                 'results' => User::where('group_id', $id)
                     ->select('users.id as id', 'users.name as name')->get()
             ];
-        } elseif ($grouptype == 2) {
-            $data = [
-                'obj' => 'guest',
-                'results' => Customers::where('group_id', $id)
-                    ->select('customers.id as id', 'customers.customer_name as name')->get()
-            ];
-        } elseif ($grouptype == 3) {
-            $data = [
-                'obj' => 'provides',
-                'results' => Providers::where('group_id', $id)
-                    ->select('providers.id as id', 'providers.provider_name as name')->get()
-            ];
         }
-        // elseif ($grouptype == 4) {
-        //     $data = [
-        //         'obj' => 'products',
-        //         'results' => Products::where('group_id', $id)->where('workspace_id', Auth::user()->current_workspace)
-        //             ->select('products.id as id', 'products.product_name as name')->get()
-        //     ];
-        // }
-        // elseif ($grouptype == 5) {
-        //     $data = [
-        //         'obj' => 'products',
-        //         'results' => Products::where('group_id', $id)->where('workspace_id', Auth::user()->current_workspace)
-        //             ->select('products.id as id', 'products.product_name as name')->get()
-        //     ];
-        // }
         return $data;
     }
     public function updateGroup($data, $id)
@@ -108,34 +98,59 @@ class Groups extends Model
             ->whereIn('id', $data['dataupdate'])
             ->update(['group_id' => $data['group_id']]);
         $grouptype = Groups::find($data['group_id']);
-        $grouptype = $grouptype->grouptype_id;
+        $grouptype = $grouptype->group_type_id;
         $dataRs = [];
         if ($grouptype == 1) {
+            $dataRs = [
+                'obj' => 'customers',
+                'results' => Customers::whereIn('id', $data['dataupdate'])
+                    ->select('customers.id as id', 'customers.customer_name as name')->get()
+            ];
+        } elseif ($grouptype == 2) {
+            $dataRs = [
+                'obj' => 'providers',
+                'results' => Providers::whereIn('id', $data['dataupdate'])
+                    ->select('providers.id as id', 'providers.provider_name as name')->get()
+            ];
+        } elseif ($grouptype == 3) {
+            $dataRs = [
+                'obj' => 'products',
+                'results' => Product::whereIn('id', $data['dataupdate'])
+                    ->select('products.id as id', 'products.product_name as name')->get()
+            ];
+        } elseif ($grouptype == 4) {
             $dataRs = [
                 'obj' => 'users',
                 'results' => User::whereIn('id', $data['dataupdate'])
                     ->select('users.id as id', 'users.name as name')->get()
             ];
-        } elseif ($grouptype == 2) {
-            $dataRs = [
-                'obj' => 'guest',
-                'results' => Customers::whereIn('id', $data['dataupdate'])
-                    ->select('customers.id as id', 'customers.customer_name as name')->get()
+        }
+        return $dataRs;
+    }
+    public function dataObj($idGr)
+    {
+        $data = [];
+        if ($idGr == 1) {
+            $data = [
+                'obj' => 'customers',
+                'results' => Customers::where('group_id', 0)->select('customers.id as id', 'customers.customer_name as name')->get()
             ];
-        } elseif ($grouptype == 3) {
-            $dataRs = [
-                'obj' => 'provides',
-                'results' => Providers::whereIn('id', $data['dataupdate'])
-                    ->select('providers.id as id', 'providers.provider_name as name')->get()
+        } elseif ($idGr == 2) {
+            $data = [
+                'obj' => 'providers',
+                'results' => Providers::where('group_id', 0)->select('providers.id as id', 'providers.provider_name as name')->get()
+            ];
+        } elseif ($idGr == 3) {
+            $data = [
+                'obj' => 'products',
+                'results' => Product::where('group_id', 0)->select('products.id as id', 'products.product_name as name')->get()
+            ];
+        } elseif ($idGr == 4) {
+            $data = [
+                'obj' => 'users',
+                'results' => User::where('group_id', 0)->select('users.id as id', 'users.name as name')->get()
             ];
         }
-        // elseif ($grouptype == 4) {
-        //     $dataRs = [
-        //         'obj' => 'products',
-        //         'results' => Products::whereIn('id', $data['dataupdate'])
-        //             ->select('products.id as id', 'products.product_name as name')->get()
-        //     ];
-        // }
-        return $dataRs;
+        return $data;
     }
 }
