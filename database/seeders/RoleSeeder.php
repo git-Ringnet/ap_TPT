@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -14,19 +13,31 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name' => 'Quản lý kho']);
-        Role::create(['name' => 'Bảo hành']);
-        Role::create(['name' => 'Admin']);
+        // Tạo vai trò
+        $adminRole = Role::create(['name' => 'Admin']);
+        $warehouseRole = Role::create(['name' => 'Quản lý kho']);
+        $serviceRole = Role::create(['name' => 'Bảo hành']);
 
+        // Danh sách quyền
         $permissions = [
             'admin',
             'quankho',
             'dichvu'
         ];
+        // Tạo quyền và gán quyền vào vai trò
+        foreach ($permissions as $permissionName) {
+            $permission = Permission::firstOrCreate(['name' => $permissionName]);
 
-        // Create permissions
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+            if ($permissionName === 'admin') {
+                // Gán quyền 'admin' cho vai trò Admin
+                $adminRole->givePermissionTo($permission);
+            } elseif ($permissionName === 'quankho') {
+                // Gán quyền 'quankho' cho vai trò Quản lý kho
+                $warehouseRole->givePermissionTo($permission);
+            } elseif ($permissionName === 'dichvu') {
+                // Gán quyền 'dichvu' cho vai trò Bảo hành
+                $serviceRole->givePermissionTo($permission);
+            }
         }
     }
 }
