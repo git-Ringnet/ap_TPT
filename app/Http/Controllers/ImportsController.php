@@ -292,7 +292,7 @@ class ImportsController extends Controller
                 ->when($request->creator, function ($query, $creator) {
                     return $query->where('imports.user_id', $creator);
                 })
-                ->whereBetween(DB::raw("DATE(imports.created_at)"), [$fromDate, $toDate])
+                ->whereBetween(DB::raw("DATE(imports.date_create)"), [$fromDate, $toDate])
                 ->with('user', 'provider')
                 ->get();
 
@@ -315,7 +315,7 @@ class ImportsController extends Controller
                 ->when($request->creator, function ($query, $creator) {
                     return $query->where('exports.user_id', $creator);
                 })
-                ->whereBetween(DB::raw("DATE(exports.created_at)"), [$fromDate, $toDate])
+                ->whereBetween(DB::raw("DATE(exports.date_create)"), [$fromDate, $toDate])
                 ->with('user', 'customer')
                 ->get();
 
@@ -338,7 +338,7 @@ class ImportsController extends Controller
                 ->when($request->creator, function ($query, $creator) {
                     return $query->where('receiving.user_id', $creator);
                 })
-                ->whereBetween(DB::raw("DATE(receiving.created_at)"), [$fromDate, $toDate])
+                ->whereBetween(DB::raw("DATE(receiving.date_created)"), [$fromDate, $toDate])
                 ->with('user', 'customer')
                 ->get();
 
@@ -352,7 +352,7 @@ class ImportsController extends Controller
                         3 => 'Hoàn thành',
                         4 => 'Khách không đồng ý',
                     },
-                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'date_create' => Carbon::parse($detail->date_created)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
                     'customer_name' => $detail->customer->customer_name,
                 ];
             });
@@ -367,7 +367,7 @@ class ImportsController extends Controller
                 ->when($request->creator, function ($query, $creator) {
                     return $query->where('quotations.user_id', $creator);
                 })
-                ->whereBetween(DB::raw("DATE(quotations.created_at)"), [$fromDate, $toDate])
+                ->whereBetween(DB::raw("DATE(quotations.quotation_date)"), [$fromDate, $toDate])
                 ->with('customer')
                 ->get();
 
@@ -380,7 +380,7 @@ class ImportsController extends Controller
                         2 => 'Dịch vụ',
                         3 => 'Dịch vụ bảo hành',
                     },
-                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'date_create' => Carbon::parse($detail->quotation_date)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
                     'customer_name' => $detail->customer->customer_name,
                 ];
             });
@@ -395,7 +395,7 @@ class ImportsController extends Controller
                 ->when($request->creator, function ($query, $creator) {
                     return $query->where('return_form.user_id', $creator);
                 })
-                ->whereBetween(DB::raw("DATE(return_form.created_at)"), [$fromDate, $toDate])
+                ->whereBetween(DB::raw("DATE(return_form.date_created)"), [$fromDate, $toDate])
                 ->with('productReturns', 'reception', 'customer')
                 ->get();
 
@@ -408,7 +408,7 @@ class ImportsController extends Controller
                         2 => 'Khách không đồng ý',
                         default => 'Trạng thái không xác định',
                     },
-                    'date_create' => Carbon::parse($detail->date_create)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
+                    'date_create' => Carbon::parse($detail->date_created)->setTimezone('Asia/Ho_Chi_Minh')->format('d/m/Y'),
                     'customer_name' => $detail->customer->customer_name,
                 ];
             });

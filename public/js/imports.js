@@ -32,27 +32,68 @@ $(document).ready(function () {
         $("#searchProvider")
     );
     //Người lập
-    toggleListGuest(
-        $("#user_name"),
-        $("#listUser"),
-        $("#searchUser")
-    );
+    toggleListGuest($("#user_name"), $("#listUser"), $("#searchUser"));
     //lấy tên nhà cung cấp và id
-    $('a[name="search-info"]').on('click', function() {
-        const dataId = $(this).attr('id');
-        const dataName = $(this).data('name');
-        const phone = $(this).data('phone');
-        const address = $(this).data('address');
+    $('a[name="search-info"]').on("click", function () {
+        const dataId = $(this).attr("id");
+        const dataName = $(this).data("name");
+        const phone = $(this).data("phone");
+        const address = $(this).data("address");
         $("#provider_id").val(dataId);
         $("#provider_name").val(dataName);
         $('[name="phone"]').val(phone);
         $('[name="address"]').val(address);
     });
     //lấy người lập
-    $('a[name="create-info"]').on('click', function() {
-        const dataId = $(this).attr('id');
-        const dataName = $(this).data('name');
+    $('a[name="create-info"]').on("click", function () {
+        const dataId = $(this).attr("id");
+        const dataName = $(this).data("name");
         $("#user_id").val(dataId);
         $("#user_name").val(dataName);
     });
 });
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+let name_modal = $("#name_modal").val();
+if (name_modal == "NH" || name_modal == "XH") {
+    //format định dạng
+    flatpickr("#dateCreate", {
+        locale: "vn",
+        dateFormat: "d/m/Y",
+        defaultDate: "today",
+        onChange: function (selectedDates) {
+            // Lấy giá trị ngày đã chọn
+            if (selectedDates.length > 0) {
+                const formattedDate = flatpickr.formatDate(
+                    selectedDates[0],
+                    "Y-m-d"
+                );
+                document.getElementById("hiddenDateCreate").value =
+                    formattedDate;
+            }
+        },
+    });
+} else if (name_modal == "CNH" || name_modal == "CXH") {
+    //format định dạng
+    flatpickr("#dateCreate", {
+        locale: "vn",
+        dateFormat: "d/m/Y",
+        onChange: function (selectedDates) {
+            // Lấy giá trị ngày đã chọn
+            if (selectedDates.length > 0) {
+                const formattedDate = flatpickr.formatDate(
+                    selectedDates[0],
+                    "Y-m-d"
+                );
+                document.getElementById("hiddenDateCreate").value =
+                    formattedDate;
+            }
+        },
+    });
+}

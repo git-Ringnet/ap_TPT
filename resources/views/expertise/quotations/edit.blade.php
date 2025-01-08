@@ -146,14 +146,15 @@
                         <div class="d-flex w-100">
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày
-                                    lập
-                                    phiếu</span>
-                                <input name="quotation_date" placeholder="Nhập thông tin" autocomplete="off"
-                                    type="date"
+                                <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">
+                                    Ngày lập phiếu
+                                </span>
+                                <input placeholder="Nhập thông tin" autocomplete="off" type="text"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                    style=" flex:2;"
-                                    value="{{ \Carbon\Carbon::parse($quotation->quotation_date)->format('Y-m-d') }}" />
+                                    style=" flex:2;" id="dateCreate"
+                                    value="{{ date_format(new DateTime($quotation->quotation_date), 'd/m/Y') }}" />
+                                <input type="hidden" value="{{ $quotation->quotation_date }}" name="quotation_date"
+                                    id="hiddenDateCreate">
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -405,6 +406,21 @@
                     }
                 });
             }
+        });
+        flatpickr("#dateCreate", {
+            locale: "vn",
+            dateFormat: "d/m/Y",
+            onChange: function(selectedDates) {
+                // Lấy giá trị ngày đã chọn
+                if (selectedDates.length > 0) {
+                    const formattedDate = flatpickr.formatDate(
+                        selectedDates[0],
+                        "Y-m-d"
+                    );
+                    document.getElementById("hiddenDateCreate").value =
+                        formattedDate;
+                }
+            },
         });
     });
     $(document).ready(function() {

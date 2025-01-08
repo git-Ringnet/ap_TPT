@@ -36,10 +36,6 @@ return new class extends Migration
                 'id' => 4,
                 'group_name' => 'Nhân viên',
             ],
-            [
-                'id' => 5,
-                'group_name' => 'Kho',
-            ],
         ]);
     }
 

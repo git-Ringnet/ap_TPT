@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customers;
 use App\Models\Groups;
 use App\Models\Grouptype;
 use App\Models\GrouptypeMain;
+use App\Models\Product;
+use App\Models\Providers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -147,12 +150,12 @@ class GroupsController extends Controller
             return back()->with('warning', 'Không tìm thấy loại đối tượng để xóa.');
         }
         // Mảng các điều kiện kiểm tra
-        // $conditions = [
-        //     1 => User::where('group_id', $id)->first(),
-        //     2 => Guest::where('group_id', $id)->first(),
-        //     3 => Provides::where('group_id', $id)->first(),
-        //     4 => Products::where('group_id', $id)->first(),
-        // ];
+        $conditions = [
+            1 => Customers::where('group_id', $id)->first(),
+            2 => Providers::where('group_id', $id)->first(),
+            3 => Product::where('group_id', $id)->first(),
+            4 => User::where('group_id', $id)->first(),
+        ];
         // Kiểm tra nếu group type tồn tại và có bản ghi sử dụng group_id
         if (isset($conditions[$group->group_type_id]) && $conditions[$group->group_type_id]) {
             return back()->with('warning', 'Xóa thất bại do loại đối tượng vẫn đang còn sử dụng!');
@@ -161,57 +164,57 @@ class GroupsController extends Controller
         return back()->with('msg', 'Xóa loại đối tượng thành công.');
     }
     //xóa đối tượng trong nhóm
-    // public function deleteOJ(Request $request)
-    // {
-    //     $id = $request['id'];
-    //     $idGroup = $request['idGroup'];
-    //     $success = false;
-    //     $typeGroup = Groups::where('id', $idGroup)->first();
-    //     if ($typeGroup->grouptype_id == 1) {
-    //         $user = User::where('id', $id)->first();
-    //         if ($user) {
-    //             $user->group_id = 0;
-    //             $user->save();
-    //             $success = true;
-    //         } else {
-    //             $success = false;
-    //         }
-    //     }
-    //     if ($typeGroup->grouptype_id == 2) {
-    //         $guest = Guest::where('id', $id)->first();
-    //         if ($guest) {
-    //             $guest->group_id = 0;
-    //             $guest->save();
-    //             $success = true;
-    //         } else {
-    //             $success = false;
-    //         }
-    //     }
-    //     if ($typeGroup->grouptype_id == 3) {
-    //         $provide = Provides::where('id', $id)->first();
-    //         if ($provide) {
-    //             $provide->group_id = 0;
-    //             $provide->save();
-    //             $success = true;
-    //         } else {
-    //             $success = false;
-    //         }
-    //     }
-    //     if ($typeGroup->grouptype_id == 4) {
-    //         $product = Products::where('id', $id)->first();
-    //         if ($product) {
-    //             $product->group_id = 0;
-    //             $product->save();
-    //             $success = true;
-    //         } else {
-    //             $success = false;
-    //         }
-    //     }
-    //     if ($success) {
-    //         $response = ['success' => true, 'msg' => 'Xóa đối tượng trong nhóm thành công!'];
-    //     } else {
-    //         $response = ['success' => false, 'msg' => 'Không tìm thấy đối tượng trong nhóm!'];
-    //     }
-    //     return response()->json($response);
-    // }
+    public function deleteOJ(Request $request)
+    {
+        $id = $request['id'];
+        $idGroup = $request['idGroup'];
+        $success = false;
+        $typeGroup = Groups::where('id', $idGroup)->first();
+        if ($typeGroup->group_type_id == 1) {
+            $guest = Customers::where('id', $id)->first();
+            if ($guest) {
+                $guest->group_id = 0;
+                $guest->save();
+                $success = true;
+            } else {
+                $success = false;
+            }
+        }
+        if ($typeGroup->group_type_id == 2) {
+            $provide = Providers::where('id', $id)->first();
+            if ($provide) {
+                $provide->group_id = 0;
+                $provide->save();
+                $success = true;
+            } else {
+                $success = false;
+            }
+        }
+        if ($typeGroup->group_type_id == 3) {
+            $product = Product::where('id', $id)->first();
+            if ($product) {
+                $product->group_id = 0;
+                $product->save();
+                $success = true;
+            } else {
+                $success = false;
+            }
+        }
+        if ($typeGroup->group_type_id == 4) {
+            $user = User::where('id', $id)->first();
+            if ($user) {
+                $user->group_id = 0;
+                $user->save();
+                $success = true;
+            } else {
+                $success = false;
+            }
+        }
+        if ($success) {
+            $response = ['success' => true, 'msg' => 'Xóa đối tượng trong nhóm thành công!'];
+        } else {
+            $response = ['success' => false, 'msg' => 'Không tìm thấy đối tượng trong nhóm!'];
+        }
+        return response()->json($response);
+    }
 }

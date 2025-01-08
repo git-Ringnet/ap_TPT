@@ -84,7 +84,7 @@
                                         </select>
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
-                                        <div class="title-info py-2 border border-left-0 height-100">
+                                        <div class="title-info py-2 border border-left-0 height-100 border-top-0">
                                             <p class="p-0 m-0 required-label margin-left32 text-14">
                                                 Mã đối tượng
                                             </p>
@@ -94,7 +94,7 @@
                                             class="border w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
-                                        <div class="title-info py-2 border border-left-0 height-100">
+                                        <div class="title-info py-2 border border-left-0 height-100 border-top-0">
                                             <p class="p-0 m-0 required-label margin-left32 text-14">
                                                 Tên nhóm đối tượng
                                             </p>
@@ -231,6 +231,7 @@
         </div>
     </div>
 </form>
+<script src="{{asset('dist/js/scripts.js')}}"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({
@@ -328,10 +329,14 @@
                         dataupdate: dataupdate,
                     },
                     success: function(data) {
-                        data.results.forEach(function(item) {
-                            appendRowToTable(item.id, item.name);
-                        });
-                        dataupdate = [];
+                        if (data && Array.isArray(data.results)) {
+                            data.results.forEach(function(item) {
+                                appendRowToTable(item.id, item.name);
+                            });
+                            dataupdate = [];
+                        } else {
+                            console.error('data.results không phải là mảng hoặc undefined');
+                        }
                     }
                 });
             } else {

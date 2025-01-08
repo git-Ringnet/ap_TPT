@@ -56,17 +56,12 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Ngày lập phiếu</span>
-                                <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
-                                    type="date" value="{{ date('Y-m-d') }}"
+                                <input placeholder="Nhập thông tin" autocomplete="off" required type="date"
+                                    id="dateCreate"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style=" flex:2;" />
-                            </div>
-                            <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">Ghi
-                                    chú</span>
-                                <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                    autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="note" />
+                                <input type="hidden" value="{{ date('Y-m-d') }}" name="date_create"
+                                    id="hiddenDateCreate">
                             </div>
                         </div>
                         <div class="col-md-4 m-0 p-0">
@@ -95,8 +90,7 @@
                                         <div class="p-1">
                                             <div class="position-relative">
                                                 <input type="text" placeholder="Nhập thông tin"
-                                                    class="pr-4 w-100 input-search bg-input-guest"
-                                                    id="searchProvider">
+                                                    class="pr-4 w-100 input-search bg-input-guest" id="searchProvider">
                                                 <span id="search-icon" class="search-icon">
                                                     <i class="fas fa-search text-table" aria-hidden="true"></i>
                                                 </span>
@@ -121,9 +115,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                            </div>
                         </div>
                         <div class="col-md-4 m-0 p-0">
                             <div style="width: 99%;"
@@ -136,20 +127,32 @@
                             </div>
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
+                        </div>
+                        <div class="col-md-12 m-0 p-0">
+                            <div
+                                class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Địa
                                     chỉ</span>
                                 <input name="address" placeholder="Nhập thông tin" autocomplete="off"
-                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />
+                                    class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:10;" />
                             </div>
-                            <div style="width: 99%;"
-                                class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                        </div>
+                        <div class="col-md-12 m-0 p-0">
+                            <div
+                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">Ghi
+                                    chú</span>
+                                <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    autocomplete="off" placeholder="Nhập thông tin" style="flex:10;"
+                                    name="note" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             {{-- Thông tin sản phẩm --}}
-            <div class="content">
+            <div class="content report-content">
                 <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
                     <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG</p>
                 </div>
@@ -210,6 +213,16 @@
                         <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
                             name="XH" />
                     </section>
+                </div>
+                <div class="footer-summary">
+                    <table class="table-footer">
+                        <tr>
+                            <td class="text-right" colspan="2"></td>
+                            <td class="text-danger text-center ml-2">Tổng cộng: <span id="sumSN"></span>
+                            </td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>

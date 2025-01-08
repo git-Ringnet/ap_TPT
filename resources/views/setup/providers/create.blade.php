@@ -85,7 +85,7 @@
                             </div>
 
                             <div class="d-flex align-items-center height-60-mobile">
-                                <div class="title-info py-2 border border-left-0 height-100">
+                                <div class="title-info py-2 border border-left-0 height-100 border-top-0">
                                     <p class="p-0 m-0 required-label margin-left32 text-14">Tên nhà cung cấp</p>
                                 </div>
                                 <input type="text" required placeholder="Nhập thông tin" name="provider_name"
@@ -94,7 +94,7 @@
                             </div>
 
                             <div class="d-flex align-items-center height-60-mobile">
-                                <div class="title-info py-2 border border-left-0 height-100">
+                                <div class="title-info py-2 border border-left-0 height-100 border-top-0">
                                     <p class="p-0 m-0 margin-left32 text-14">Địa chỉ</p>
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="address" autocomplete="off"
@@ -102,11 +102,11 @@
                             </div>
 
                             <div class="d-flex align-items-center height-60-mobile">
-                                <div class="title-info py-2 border border-left-0 height-100">
+                                <div class="title-info py-2 border border-left-0 height-100 border-top-0">
                                     <p class="p-0 m-0 margin-left32 text-14">Điện thoại</p>
                                 </div>
                                 <input type="number" placeholder="Nhập thông tin" name="phone" autocomplete="off"
-                                    class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                    class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue border-top-0">
                             </div>
 
                             <div class="d-flex align-items-center height-60-mobile">

@@ -84,7 +84,7 @@
 
                         <!-- Mã đối tượng -->
                         <div class="d-flex align-items-center height-60-mobile">
-                            <div class="title-info height-100 py-2 border border-left-0">
+                            <div class="title-info height-100 py-2 border border-left-0 border-top-0">
                                 <p class="p-0 m-0 required-label margin-left32 text-14">Mã đối tượng</p>
                             </div>
                             <input type="text" required placeholder="Nhập thông tin" name="group_code"
@@ -98,7 +98,7 @@
 
                         <!-- Tên nhóm đối tượng -->
                         <div class="d-flex align-items-center height-60-mobile">
-                            <div class="title-info height-100 py-2 border border-left-0">
+                            <div class="title-info height-100 py-2 border border-left-0 border-top-0">
                                 <p class="p-0 m-0 required-label margin-left32 text-14">Tên nhóm đối tượng</p>
                             </div>
                             <input type="text" required placeholder="Nhập thông tin" name="group_name"

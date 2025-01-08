@@ -6,6 +6,7 @@ use App\Models\InventoryLookup;
 use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateInventoryStatus extends Command
 {

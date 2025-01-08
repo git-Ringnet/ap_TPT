@@ -2,7 +2,11 @@
 
 namespace App\Console;
 
+use App\Console\Commands\UpdateInventoryStatus;
+use App\Console\Commands\UpdateReceivingStatus;
+use App\Console\Commands\UpdateWanrratyStatus;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -11,7 +15,9 @@ class Kernel extends ConsoleKernel
      * Đăng ký các lệnh Artisan của bạn.
      */
     protected $commands = [
-        //
+        UpdateInventoryStatus::class,
+        UpdateWanrratyStatus::class,
+        UpdateReceivingStatus::class,
     ];
 
     /**
@@ -19,10 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Lệnh tự động tăng thời gian tồn kho mỗi ngày Test khi hết test đổi thành ngày
         $schedule->command('inventory:update-storage')->everyMinute();
-        $schedule->command('warranty:update-storage')->everyMinute();
-        $schedule->command('receiving:update-status')->everyMinute();
+        $schedule->command('warranty:update-storage')->daily();
+        $schedule->command('receiving:update-status')->hourly();
     }
 
     /**

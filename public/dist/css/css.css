@@ -3111,7 +3111,7 @@ input[type="checkbox"]:checked {
     width: 100%;
     overflow-x: auto;
     scrollbar-width: thin;
-    max-height: calc(100vh - 400px);
+    max-height: calc(100vh - 500px);
 }
 
 .overflow-content-quote th {
@@ -3404,6 +3404,7 @@ input[type="checkbox"]:checked {
     bottom: 0;
     left: 0;
     width: 100%;
+    background: white;
 }
 
 .table-footer {

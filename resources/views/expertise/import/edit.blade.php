@@ -91,21 +91,12 @@
                                     class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                         style="flex: 1.5;">Ngày lập phiếu</span>
-                                    <input name="date_create" placeholder="{{ $placeholder }}" autocomplete="off"
-                                        required
-                                        value="{{ \Carbon\Carbon::parse($import->date_create)->format('Y-m-d') }}"
-                                        type="date" {{ $readonly }}
+                                    <input placeholder="{{ $placeholder }}" autocomplete="off" required id="dateCreate"
+                                        value="{{ date_format(new DateTime($import->date_create), 'd/m/Y') }}"
+                                        type="text" {{ $readonly }}
                                         class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"style=" flex:2;" />
-                                </div>
-                                <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                    <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">Ghi
-                                        chú</span>
-                                    <input
-                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"
-                                        value="{{ $import->note }}" autocomplete="off"
-                                        placeholder="{{ $placeholder }}" style="flex:2;" name="note"
-                                        {{ $readonly }} />
+                                    <input type="hidden" value="{{ $import->date_create }}" name="date_create"
+                                        id="hiddenDateCreate">
                                 </div>
                             </div>
                             <div class="col-md-4 m-0 p-0">
@@ -165,9 +156,6 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
-                                </div>
                             </div>
                             <div class="col-md-4 m-0 p-0">
                                 <div style="width: 99%;"
@@ -182,15 +170,30 @@
                                 </div>
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-0 p-0">
+                                <div
+                                    class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                         style="flex: 1.5;">Địa
                                         chỉ</span>
                                     <input name="address" placeholder="{{ $placeholder }}" autocomplete="off"
                                         value="{{ $import->address }}" {{ $readonly }}
-                                        class="text-13-black w-50 border-0 addr bg-input-guest addr {{ $bg }} py-2 px-2"style="flex:2;" />
+                                        class="text-13-black w-50 border-0 addr bg-input-guest addr {{ $bg }} py-2 px-2"style="flex:10;" />
                                 </div>
-                                <div style="width: 99%;"
-                                    class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                            </div>
+                            <div class="col-md-12 m-0 p-0">
+                                <div
+                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    <span class="text-13-black font-weight-bold text-nowrap mr-3"
+                                        style="flex: 1.5;">Ghi
+                                        chú</span>
+                                    <input
+                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"
+                                        value="{{ $import->note }}" autocomplete="off"
+                                        placeholder="{{ $placeholder }}" style="flex:10;" name="note"
+                                        {{ $readonly }} />
                                 </div>
                             </div>
                         </div>
@@ -232,6 +235,9 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-product-data">
+                                    @php
+                                        $sum = 0;
+                                    @endphp
                                     @foreach ($productImports as $productId => $products)
                                         @php
                                             // Lấy thông tin sản phẩm của product_id
@@ -304,6 +310,9 @@
                                             </tr>
                                         @endforeach
 
+                                        @php
+                                            $sum += $products->sum('quantity');
+                                        @endphp
                                         {{-- Tổng số lượng --}}
                                         <tr id="serials-count" class="bg-white"
                                             data-product-code="{{ $product->product_name }}"
@@ -313,12 +322,12 @@
                                             </td>
                                             <td
                                                 class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right text-purble">
-                                                Số lượng serial:
+                                                Tổng số lượng:
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 height-32 text-purble"
-                                                    readonly="" name=""
+                                                    readonly="" name="serial_count"
                                                     value="{{ $products->sum('quantity') }}">
                                             </td>
                                             <td colspan="3"
@@ -379,6 +388,17 @@
                             <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll"
                                 name="CNH" />
                         </section>
+                    </div>
+                    <div class="footer-summary">
+                        <table class="table-footer">
+                            <tr>
+                                <td class="text-right" colspan="2"></td>
+                                <td class="text-danger text-center ml-2">Tổng cộng: <span
+                                        id="sumSN">{{ $sum }}</span>
+                                </td>
+                                <td colspan="3"></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
