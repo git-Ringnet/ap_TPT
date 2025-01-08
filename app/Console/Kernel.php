@@ -25,11 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::info("Scheduler is running...");
-        // Lệnh tự động tăng thời gian tồn kho mỗi ngày Test khi hết test đổi thành ngày
-        $schedule->command('inventory:update-storage')->everyMinute()->withoutOverlapping();
-        $schedule->command('warranty:update-storage')->everyMinute()->withoutOverlapping();
-        $schedule->command('receiving:update-status')->everyMinute()->withoutOverlapping();
+        $schedule->command('inventory:update-storage')->everyMinute();
+        $schedule->command('warranty:update-storage')->daily();
+        $schedule->command('receiving:update-status')->hourly();
     }
 
     /**
