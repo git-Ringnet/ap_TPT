@@ -64,6 +64,7 @@ $(document).ready(function () {
         }
         updateRowNumbers();
         updateSerialCount();
+        calculateTotalSerialCount();
     });
 
     // Hàm cập nhật số thứ tự
@@ -189,7 +190,6 @@ $(document).on("click", ".submit-button", function (event) {
 
     let dataType = $("#modal-id").attr("data-type");
     if (dataType === "update") {
-        console.log(product);
         $tbody.find("tr[data-product-id='" + product.id + "']").remove();
         $("#modal-id").attr("data-type", "create");
     }
@@ -204,7 +204,7 @@ $(document).on("click", ".submit-button", function (event) {
     $tbody.append(countRow); // Thêm dòng đếm số lượng vào cuối bảng
 
     $(".btn-destroy-modal").click(); // Đóng modal
-    console.log(product);
+    calculateTotalSerialCount();
 });
 
 // Hàm tạo hàng dữ liệu với serial
@@ -288,7 +288,7 @@ function createCountRow(count, product, name) {
     return `
         <tr id="serials-count" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4"></td>
-            <td class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">Số lượng serial:</td>
+            <td class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right text-purble">Tổng số lượng:</td>
             <td class="border-right p-2 text-13 align-center border-bottom border-top-0">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
@@ -446,4 +446,19 @@ function updateSerialCount() {
         }
     });
     $(".count-seri").text(count);
+}
+//Hàm tổng số lượng s/n
+function calculateTotalSerialCount() {
+    let inputs = document.querySelectorAll('input[name="serial_count"]');
+    let total = 0;
+
+    inputs.forEach((input) => {
+        let value = parseFloat(input.value);
+        if (!isNaN(value)) {
+            total += value;
+        }
+    });
+    $("#sumSN").text(total);
+
+    return total;
 }

@@ -21,7 +21,11 @@ class InventoryLookupController extends Controller
     public function index()
     {
         $title = "Tra cứu tồn kho";
-        $inventory = InventoryLookup::with(['product', 'serialNumber', 'provider'])->get();
+        $inventory = InventoryLookup::with(['product', 'serialNumber', 'provider'])
+            ->whereHas('serialNumber', function ($query) {
+                $query->where('status', 1);
+            })
+            ->get();
         $providers = Providers::all();
         return view('expertise.inventoryLookup.index', compact('title', 'inventory', 'providers'));
     }
@@ -61,6 +65,7 @@ class InventoryLookupController extends Controller
             ->first();
         $histories = InventoryHistory::with('inventoryLookup')
             ->where("inventory_lookup_id", $id)
+            ->orderBy('created_at', 'desc')
             ->get();
         return view('expertise.inventoryLookup.edit', compact('title', 'inventoryLookup', 'histories'));
     }
@@ -76,7 +81,7 @@ class InventoryLookupController extends Controller
         $inventoryLookup->status = 0;
         $inventoryLookup->save();
         //Lưu lịch sử 
-        if (!empty($data['warranty_date'])) {
+        if (!empty($request->warranty_date)) {
             // Thêm mới vào inventory_history
             InventoryHistory::create([
                 'inventory_lookup_id' => $id,

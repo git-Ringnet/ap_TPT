@@ -72,7 +72,7 @@
                                                 kho</span>
                                         </th>
                                         <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
-                                            <span class="text-table text-13-black font-weight-bold">Ngày bảo hành</span>
+                                            <span class="text-table text-13-black font-weight-bold">Ngày bảo trì</span>
                                         </th>
                                         <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
                                             <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
@@ -100,8 +100,10 @@
                                             {{ $inventoryLookup->storage_duration }} ngày
                                         </td>
                                         <td class="text-13-black border-right border-bottom">
-                                            <input type="date" name="warranty_date"
+                                            <input type="date" id="dateCreate"
                                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2">
+                                            <input type="hidden" name="warranty_date" value="{{ date('Y-m-d') }}"
+                                                id="hiddenDateCreate">
                                         </td>
                                         <td class="text-13-black border-right border-bottom">
                                             <input type="text" name="note" autocomplete="off"
@@ -133,7 +135,8 @@
                                         <span class="text-table text-13-black font-weight-bold">Ngày nhập hàng</span>
                                     </th>
                                     <th class="border-right px-2 p-0 text-left" style="width: 8%;">
-                                        <span class="text-table text-13-black font-weight-bold">Thời gian tồn kho</span>
+                                        <span class="text-table text-13-black font-weight-bold">Thời gian tồn
+                                            kho</span>
                                     </th>
                                     <th class="border-right px-2 p-0" style="width: 8%;">
                                         <span class="text-table text-13-black font-weight-bold">Ngày bảo hành</span>
@@ -171,3 +174,21 @@
         </div>
     </div>
 </form>
+<script>
+    flatpickr("#dateCreate", {
+        locale: "vn",
+        dateFormat: "d/m/Y",
+        defaultDate: "today",
+        onChange: function(selectedDates) {
+            // Lấy giá trị ngày đã chọn
+            if (selectedDates.length > 0) {
+                const formattedDate = flatpickr.formatDate(
+                    selectedDates[0],
+                    "Y-m-d"
+                );
+                document.getElementById("hiddenDateCreate").value =
+                    formattedDate;
+            }
+        },
+    });
+</script>

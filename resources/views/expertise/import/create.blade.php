@@ -56,10 +56,11 @@
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                     style="flex: 1.5;">Ngày lập phiếu</span>
-                                <input name="date_create" placeholder="Nhập thông tin" autocomplete="off" required
-                                    type="date" value="{{ date('Y-m-d') }}"
+                                <input placeholder="Nhập thông tin" autocomplete="off" required type="date"
+                                    id="dateCreate"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style=" flex:2;" />
+                                <input type="hidden" value="{{ date('Y-m-d') }}" name="date_create" id="hiddenDateCreate">
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
@@ -149,7 +150,7 @@
                 </div>
             </div>
             {{-- Thông tin sản phẩm --}}
-            <div class="content">
+            <div class="content report-content">
                 <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
                     <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG</p>
                 </div>
@@ -207,6 +208,16 @@
                         <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
                             name="NH" />
                     </section>
+                </div>
+                <div class="footer-summary">
+                    <table class="table-footer">
+                        <tr>
+                            <td class="text-right" colspan="2"></td>
+                            <td class="text-danger text-center ml-2">Tổng cộng: <span id="sumSN"></span>
+                            </td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
