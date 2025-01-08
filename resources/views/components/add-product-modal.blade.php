@@ -240,7 +240,8 @@
                                     min="1">
                                 dòng
                             </span>
-                            <span class="mr-5 text-danger font-weight-bold">Số lượng : <b>0</b></span>
+                            <span class="mr-5 text-danger font-weight-bold">Số lượng : <b
+                                    class="count-seri">0</b></span>
                         </div>
                     </div>
                 </div>
@@ -248,6 +249,7 @@
         </div>
     </div>
 </div>
+<script src="{{ asset('js/barcode.js') }}"></script>
 <script>
     // Name modal
     let nameModal = $("#name_modal").val();
@@ -257,7 +259,7 @@
 
     // Check serial number
     $(document).ready(function() {
-        $(document).on('blur', '.seri-input-check', function() {
+        $(document).on('change', '.seri-input-check', function() {
             const $input = $(this);
             const $checkIcon = $input.siblings('.check-icon');
             const serialNumber = $input.val().trim(); // Giá trị nhập vào
@@ -282,7 +284,7 @@
                 return; // Không thực hiện kiểm tra AJAX nếu trùng lặp
             }
 
-            // Kiểm tra nếu ô nhập liệu không trống
+            // Kiểm tra nếu ô nhập liệu không trống và thực hiện AJAX ngay lập tức
             if (serialNumber !== "") {
                 $.ajax({
                     url: '{{ route('checkSNImport') }}',
@@ -297,14 +299,13 @@
                     },
                     success: function(response) {
                         console.log(response.message);
-                        if (response.status === 'success') {
-                            $checkIcon.text('✔')
-                                .css('color', 'green')
-                                .attr('title', response.message); // Gắn message vào title
+                        if (response.status === 'success' && serialNumber !== "") {
+                            console.log(serialNumber);
+                            $checkIcon.text('✔').css('color', 'green').attr('title',
+                                response.message);
                         } else if (response.status === 'error') {
-                            $checkIcon.text('✖')
-                                .css('color', 'red')
-                                .attr('title', response.message); // Gắn message vào title
+                            $checkIcon.text('✖').css('color', 'red').attr('title', response
+                                .message);
                         }
                     },
                     error: function() {
@@ -315,10 +316,13 @@
             } else {
                 // Nếu ô trống, giữ biểu tượng mặc định hoặc không làm gì cả
                 $checkIcon.text('').css('color', 'transparent');
+                console.log(serialNumber);
             }
+            updateSerialCount();
         });
-
     });
+
+
 
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();

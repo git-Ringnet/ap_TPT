@@ -1,7 +1,7 @@
 $(document).ready(function () {
-    let rowCount = $("#table-body tr").length; // Đếm số dòng ban đầu
     // Hàm thêm dòng
     $("#add-rows").click(function (event) {
+        let rowCount = $("#table-body tr").length;
         event.preventDefault(); // Ngăn nút submit form
         const numRows = parseInt($("#row-count").val(), 10); // Lấy số lượng dòng cần thêm từ input
 
@@ -9,7 +9,6 @@ $(document).ready(function () {
             alert("Vui lòng nhập số dòng hợp lệ (lớn hơn 0)");
             return;
         }
-
         for (let i = 0; i < numRows; i++) {
             rowCount++; // Tăng số thứ tự
             const newRow = `
@@ -37,8 +36,6 @@ $(document).ready(function () {
             `;
             $("#table-body").append(newRow); // Thêm dòng mới vào bảng
         }
-
-        $("#row-count").val(""); // Xóa giá trị trong input sau khi thêm
     });
 
     // Hàm xóa dòng
@@ -66,6 +63,7 @@ $(document).ready(function () {
             serialCountRow.find('input[name="serial_count"]').val(serialCount);
         }
         updateRowNumbers();
+        updateSerialCount();
     });
 
     // Hàm cập nhật số thứ tự
@@ -126,7 +124,7 @@ $(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
     let modalId = $(this).data("modal-id");
     $("#" + modalId)
         .find("input")
-        .not("#name_modal") // Loại trừ phần tử có ID là name_modal
+        .not("#name_modal,#row-count") // Loại trừ phần tử có ID là name_modal
         .val("");
     $(".check-icon").text("");
 });
@@ -247,9 +245,9 @@ function createSerialRow(index, product, serial, name) {
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative">
                 <input type="text" autocomplete="off"
-                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
+                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly
                     name="serial[]" value="${serial}">
-                    <span class="list-recei">csad</span>
+                    <span class="list-recei"></span>
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
                 <input type="text" autocomplete="off"
@@ -405,7 +403,8 @@ $(document).on("click", ".save-info-product", function (e) {
                 <td class="text-13-black border py-0 pl-3 position-relative">
                     <input type="text" name="form_code" value="${
                         product.serial
-                    }" class="text-13-black w-100 border-0 serial-input" placeholder="Nhập thông tin">
+                    }" class="text-13-black w-100 border-0 serial-input seri-input-check" placeholder="Nhập thông tin">
+                     <span class="check-icon"></span>
                 </td>
                 <td class="text-13-black border py-0 text-center">
                     <button class="btn btn-sm delete-row">
@@ -433,3 +432,18 @@ $(document).on("click", ".save-info-product", function (e) {
     $("#product_id_input").val(productId);
     $("#modal-id").attr("data-type", "update");
 });
+function updateSerialCount() {
+    let count = 0;
+    $(".seri-input-check").each(function () {
+        const $input = $(this);
+        const $checkIcon = $input.siblings(".check-icon");
+        const serialNumber = $input.val().trim();
+        if (serialNumber === "") {
+            $checkIcon.text("").css("color", "transparent");
+        }
+        if (serialNumber !== "") {
+            count++;
+        }
+    });
+    $(".count-seri").text(count);
+}

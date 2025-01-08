@@ -271,7 +271,8 @@
                         <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
-                                    <button type="button" data-toggle="modal" data-target="#modal-id"
+                                    <button type="button" data-modal-id="modal-id" data-toggle="modal"
+                                        data-target="#modal-id"
                                         class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                         id="btn-add-row" style="margin-right:10px">
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"

@@ -279,7 +279,7 @@
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly
                                                         name="serial[]" {{ $readonly }}
                                                         value="{{ $item->serialNumber->serial_code }}">
                                                 </td>
@@ -317,8 +317,9 @@
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 text-purble" readonly=""
-                                                    name="" value="{{ $products->sum('quantity') }}">
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32 text-purble"
+                                                    readonly="" name=""
+                                                    value="{{ $products->sum('quantity') }}">
                                             </td>
                                             <td colspan="3"
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0">
@@ -356,7 +357,8 @@
                                 <section class="content mt-2">
                                     <div class="container-fluided">
                                         <div class="d-flex ml-4">
-                                            <button type="button" data-toggle="modal" data-target="#modal-id"
+                                            <button type="button" data-modal-id="modal-id" data-toggle="modal"
+                                                data-target="#modal-id"
                                                 class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                                 style="margin-right:10px">
                                                 <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
