@@ -12,29 +12,59 @@
     </a>
     <div class="list-noti">
         <ul class="nav nav-tabs p-2">
-            <li>
-                <a class="text-secondary active mx-2 m-0 text-13" data-toggle="tab" href="#info">
-                    Tra cứu tồn kho
-                </a>
-            </li>
-            <li>
-                <a class="text-secondary m-0 mx-2 text-13" data-toggle="tab" href="#history">
-                    Phiếu tiếp nhận
-                </a>
-            </li>
+            @unlessrole('Bảo hành')
+                <li>
+                    <a class="text-secondary active mx-2 m-0 text-13" data-toggle="tab" href="#info">
+                        Tra cứu tồn kho
+                    </a>
+                </li>
+            @endunlessrole
+            @unlessrole('Quản lý kho')
+                <li>
+                    <a class="text-secondary @role('Bảo hành') active @endrole m-0 mx-2 text-13" data-toggle="tab"
+                        href="#history">
+                        Phiếu tiếp nhận
+                    </a>
+                </li>
+            @endunlessrole
         </ul>
         <div class="tab-content overflow-auto" style="height: 280px;">
-            <div class="tab-pane fade show active notification-list" id="info">
-                @foreach ($notifications as $notification)
-                    <div class="dropdown-item border-bottom rounded bg-white">
-                        <div>
-                            <a href="{{ route('inventoryLookup.edit', $notification->id) }}" class="text-primary">{{ $notification->serial_code }}</a>
-                            <span>tới hạn bảo trì định kỳ</span>
+            @unlessrole('Bảo hành')
+                <div class="tab-pane fade show active notification-list" id="info">
+                    @foreach ($notifications as $notification)
+                        <div class="dropdown-item border-bottom rounded bg-white">
+                            <div>
+                                <a href="{{ route('inventoryLookup.edit', $notification->id) }}"
+                                    class="text-primary">{{ $notification->serial_code }}</a>
+                                <span>tới hạn bảo trì định kỳ</span>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-            <div class="tab-pane fade" id="history"></div>
+                    @endforeach
+                </div>
+            @endunlessrole
+            @unlessrole('Quản lý kho')
+                <div class="tab-pane fade @role('Bảo hành') show active @endrole" id="history">
+                    <button id="markAllRead" class="btn btn-primary btn-sm">Đánh dấu tất cả đã đọc</button>
+                    @foreach (auth()->user()->notifications as $notification)
+                        <div class="dropdown-item border-bottom rounded bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
+                            data-id="{{ $notification->id }}">
+                            <div>
+                                <span>Phiếu
+                                    <a href="{{ route('receivings.edit', $notification->data['receiving_id']) }}"
+                                        class="text-primary">
+                                        {{ $notification->data['recei_code'] }}
+                                    </a>
+                                    {{ $notification->data['message'] }}
+                                </span>
+                            </div>
+                            @if ($notification->unread())
+                                <button class="btn btn-sm btn-link text-success mark-as-read"
+                                    data-id="{{ $notification->id }}">Đánh dấu đã đọc</button>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endunlessrole
         </div>
     </div>
 </div>
@@ -53,5 +83,55 @@
         if (!notificationIcon.contains(event.target) && !listNoti.contains(event.target)) {
             listNoti.classList.remove('show');
         }
+    });
+
+    $(document).ready(function() {
+        // Mark a single notification as read
+        $('.mark-as-read').on('click', function() {
+            const id = $(this).data('id'); // Get notification ID
+
+            $.ajax({
+                url: `/notifications/${id}/mark-as-read`,
+                type: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update UI: remove 'bg-light' and the button
+                        const notificationItem = $(`.notification-item[data-id="${id}"]`);
+                        notificationItem.removeClass('bg-light');
+                        notificationItem.find('.mark-as-read').remove();
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error marking notification as read:', xhr.responseText);
+                },
+            });
+        });
+
+        // Mark all notifications as read
+        $('#markAllRead').on('click', function() {
+            $.ajax({
+                url: `/notifications/mark-all-as-read`,
+                type: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update UI: remove 'bg-light' and all buttons
+                        $('.notification-item.bg-light').each(function() {
+                            $(this).removeClass('bg-light');
+                            $(this).find('.mark-as-read').remove();
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error marking all notifications as read:', xhr
+                        .responseText);
+                },
+            });
+        });
     });
 </script>

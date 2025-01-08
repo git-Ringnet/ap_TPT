@@ -450,3 +450,51 @@ function handleAjaxRequest(formData, route, nametable) {
         },
     });
 }
+
+function formatDate(date) {
+    let day = date.getDate();
+    let month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+    let year = date.getFullYear();
+
+    // Định dạng ngày dưới dạng YYYY-MM-DD
+    return `${year}-${month.toString().padStart(2, "0")}-${day
+        .toString()
+        .padStart(2, "0")}`;
+}
+function setFilterValues(buttonName) {
+    let month, quarter, year, startMonth;
+
+    // Xử lý theo từng loại button
+    if (buttonName === "thang") {
+        month = $(".month-filter").val();
+        year = $(".year-filter-thang").val();
+        $("#type-filter").val("month");
+
+        if (month && year) {
+            let date = new Date(year, month - 1, 1);
+            if (date.getMonth() === month - 1) {
+                $("#time-filter").val(formatDate(date));
+            }
+        }
+    } else if (buttonName === "quy") {
+        quarter = $(".quarter-filter").val();
+        year = $(".year-filter-quy").val();
+        $("#type-filter").val("quarter");
+
+        if (quarter && year) {
+            startMonth = (parseInt(quarter) - 1) * 3;
+            let date = new Date(year, startMonth, 1);
+            $("#time-filter").val(formatDate(date));
+        }
+    } else if (buttonName === "nam") {
+        year = $(".year-filter-nam").val();
+        $("#type-filter").val("year");
+
+        if (year) {
+            let date = new Date(year, 0, 1);
+            $("#time-filter").val(formatDate(date));
+        }
+    }
+
+    return { month, quarter, year };
+}

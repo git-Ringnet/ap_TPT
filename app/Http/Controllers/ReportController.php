@@ -22,6 +22,12 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $reports;
+
+    public function __construct()
+    {
+        $this->reports = new Report();
+    }
     public function index()
     {
         //
@@ -131,6 +137,7 @@ class ReportController extends Controller
             ->get()
             ->map(function ($product) {
                 return [
+                    'product_id' => $product->id,
                     'product_code' => $product->product_code,
                     'product_name' => $product->product_name,
                     'total_import' => $product->imports->sum('quantity'),
@@ -142,7 +149,7 @@ class ReportController extends Controller
 
     public function reportReceiptReturn()
     {
-        $title = 'Báo cáo hàng xuất nhập';
+        $title = 'Báo cáo hàng tiếp nhận - trả hàng';
         $products = Product::with(['receivedProducts', 'returnProducts'])
             ->get()
             ->map(function ($product) {
@@ -648,7 +655,7 @@ class ReportController extends Controller
                 'ngayKetThuc' => $date_end
             ];
         }
-        if($dataName == "phieuBG") {
+        if ($dataName == "phieuBG") {
             $phieuHoanThanh = ReturnForm::where('status', 1)->whereBetween('created_at', [$date_start, $date_end])->count();
             $phieuKhongDongY = ReturnForm::where('status', 2)->whereBetween('created_at', [$date_start, $date_end])->count();
             $tongTienHoanThanh = ReturnForm::join('receiving', 'return_form.reception_id', '=', 'receiving.id')
@@ -675,51 +682,50 @@ class ReportController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function filterExportImport(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Report $report)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Report $report)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Report $report)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Report $report)
-    {
-        //
+        $data = $request->all();
+        $filters = [];
+        $currentMonth = null;
+        $currentQuarter = null;
+        $currentYear = null;
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã hàng: ' . $data['ma'], 'name' => 'ma-hang', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Mã hàng: ' . $data['ten'], 'name' => 'ten-hang', 'icon' => 'po'];
+        }
+        if (isset($data['so_luong_nhap']) && $data['so_luong_nhap'][1] !== null) {
+            $filters[] = ['value' => 'Số lượng nhập: ' . $data['so_luong_nhap'][0] . ' ' . $data['so_luong_nhap'][1], 'name' => 'so-luong-nhap', 'icon' => 'money'];
+        }
+        if (isset($data['so_luong_xuat']) && $data['so_luong_xuat'][1] !== null) {
+            $filters[] = ['value' => 'Số lượng xuất: ' . $data['so_luong_xuat'][0] . ' ' . $data['so_luong_xuat'][1], 'name' => 'so-luong-xuat', 'icon' => 'money'];
+        }
+        // Xử lý dữ liệu từ $data
+        if (isset($data['type']) && isset($data['month']) || isset($data['quarter']) || isset($data['year'])) {
+            $value = ''; // Giá trị mặc định
+            if ($data['type'] === 'thang' && isset($data['month']) && isset($data['year'])) {
+                $value = 'THÁNG ' . $data['month'] . '/' . $data['year'];
+                $currentMonth = $data['month'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'quy' && isset($data['quarter']) && isset($data['year'])) {
+                $value = 'QUÝ ' . $data['quarter'] . '/' . $data['year'];
+                $currentQuarter = $data['quarter'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'nam' && isset($data['year'])) {
+                $value = 'NĂM ' . $data['year'];
+                $currentYear = $data['year'];
+            }
+            $filters[] = ['value' => $value];
+        }
+        if ($request->ajax()) {
+            $reports = $this->reports->getProductsAjax($data);
+            $result = $this->reports->mergeProductData($data, $reports);
+            return response()->json([
+                'data' => $result,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }

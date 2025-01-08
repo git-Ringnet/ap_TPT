@@ -6,11 +6,13 @@ use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\InventoryLookupController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductReturnController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\ReceivingController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\ProvidersController;
@@ -19,6 +21,24 @@ use App\Http\Controllers\ReturnFormController;
 use App\Http\Controllers\SerialNumberController;
 use App\Http\Controllers\WarrantyLookupController;
 use Illuminate\Support\Facades\Route;
+
+Route::group(['middleware' => ['permission:admin']], function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('roles-permissions', [RolePermissionController::class, 'index'])->name('roles-permissions.index');
+
+        // Routes cho vai trò
+        Route::post('roles', [RolePermissionController::class, 'storeRole'])->name('roles.store');
+        Route::put('roles/{id}', [RolePermissionController::class, 'updateRole'])->name('roles.update');
+        Route::delete('roles/{id}', [RolePermissionController::class, 'destroyRole'])->name('roles.destroy');
+
+        // Routes cho quyền
+        Route::post('permissions', [RolePermissionController::class, 'storePermission'])->name('permissions.store');
+        Route::delete('permissions/{id}', [RolePermissionController::class, 'destroyPermission'])->name('permissions.destroy');
+    });
+});
+Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::patch('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+
 
 // Products
 Route::resource('products', ProductController::class);
@@ -45,6 +65,7 @@ Route::get('/filter-quotations', [QuotationController::class, 'filterData'])->na
 Route::get('/filter-returnforms', [ReturnFormController::class, 'filterData'])->name('filter-returnforms');
 Route::get('/filter-inven-lookup', [InventoryLookupController::class, 'filterData'])->name('filter-inven-lookup');
 Route::get('/filter-warran-lookup', [WarrantyLookupController::class, 'filterData'])->name('filter-warran-lookup');
+Route::get('/filter-reports-export-import', [ReportController::class, 'filterExportImport'])->name('reports.export_import');
 
 
 Route::post('/update-status', [ReceivingController::class, 'updateStatus'])->name('update.status');

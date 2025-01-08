@@ -9,6 +9,7 @@ use App\Models\Receiving;
 use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Notifications\ReceiNotification;
 use Illuminate\Http\Request;
 
 class ReceivingController extends Controller
@@ -336,6 +337,10 @@ class ReceivingController extends Controller
             if ($recei) {
                 $receiving = Receiving::findOrFail($recei);
                 $receiving->status = $status;
+                // Nếu status != 1, đặt state = 0
+                if ($status != 1) {
+                    $receiving->state = 0;
+                }
                 $receiving->save();
             }
             // Cập nhật ReturnForm nếu tồn tại
@@ -349,12 +354,25 @@ class ReceivingController extends Controller
                 } else {
                     $returnForm->status = $status; // Giữ nguyên nếu không thuộc 3 hoặc 4
                 }
-
                 $returnForm->save();
             }
-            return response()->json(['status' => 'success', 'message' => 'Cập nhật trạng thái thành công']);
+            return response()->json(['status' => 'success', 'message' => 'Cập nhật trạng thái thành công', 'id' => $recei]);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
+    }
+    public function updateStatusNoitifi($id, Request $request)
+    {
+        $receiving = Receiving::findOrFail($id); // Lấy phiếu tiếp nhận
+        $receiving->status = $request->status;  // Cập nhật trạng thái
+        $receiving->save();
+
+        // Gửi thông báo đến người dùng
+        $users = User::all(); // Có thể lọc ra nhóm người dùng cụ thể nếu cần
+        foreach ($users as $user) {
+            $user->notify(new ReceiNotification($receiving));
+        }
+
+        return redirect()->route('receivings.index')->with('success', 'Trạng thái đã được cập nhật và thông báo đã được gửi.');
     }
 }
