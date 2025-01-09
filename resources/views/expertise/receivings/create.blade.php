@@ -139,8 +139,7 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
                                 phiếu</span>
-                            <input placeholder="Nhập thông tin" autocomplete="off"
-                                type="date" id="dateCreate"
+                            <input placeholder="Nhập thông tin" autocomplete="off" type="date" id="dateCreate"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                 style=" flex:2;" />
                             <input type="hidden" value="{{ now()->format('Y-m-d') }}" name="date_created"
@@ -285,24 +284,92 @@
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script>
     $(document).ready(function() {
-        // Kiểm tra các radio button khi thay đổi giá trị
+        // Xử lý sự kiện thay đổi radio button
         $('input[type="radio"]').on('change', function() {
-            // Kiểm tra xem có ít nhất một radio button được chọn cho mỗi nhóm
-            let isBranchChecked = $('input[name="branch_id"]:checked').length > 0;
-            let isFormTypeChecked = $('input[name="form_type"]:checked').length > 0;
-
-            // Lấy phần tử có id="content-wrapper"
+            let branchId = $('input[name="branch_id"]:checked').val();
+            let formType = $('input[name="form_type"]:checked').val();
+            let serialData = collectSerialData();
             let contentWrapper = $('#content-wrapper');
 
-            // Nếu cả hai nhóm đều có radio button được chọn, remove class blur-wrapper
-            if (isBranchChecked && isFormTypeChecked) {
+            if (branchId && formType) {
                 contentWrapper.removeClass('blur-wrapper');
+                if (serialData.length > 0) {
+                    checkSerials(branchId, formType, serialData, function(response) {
+                        if (response.status === 'success') {
+                            serialData.forEach((item) => {
+                                let serialResult = response.serials.find(
+                                    (serial) => serial.serial === item.serial
+                                );
+                                let listRecei = item.inputElement
+                                    .closest('td')
+                                    .find('.list-recei');
+
+                                if (serialResult && serialResult.valid) {
+                                    listRecei.html(
+                                        '<span class="text-success">✔</span>');
+                                } else {
+                                    listRecei.html(
+                                        '<span class="text-danger">✖</span>');
+                                }
+                            });
+                        } else {
+                            console.error('Lỗi:', response.message);
+                        }
+                    });
+                }
             } else {
-                // Nếu không, thêm class blur-wrapper
                 contentWrapper.addClass('blur-wrapper');
             }
         });
+        $('#btn-get-unique-products').on('click', function(event) {
+            event.preventDefault();
+            let branchId = $('input[name="branch_id"]:checked').val();
+            let formType = $('input[name="form_type"]:checked').val();
+            let serialData = collectSerialData();
+            let hasInvalidSerial = false;
+            let invalidMessages = [];
+
+            if (branchId && formType && serialData.length > 0) {
+                checkSerials(branchId, formType, serialData, function(response) {
+                    if (response.status === 'success') {
+                        serialData.forEach((item) => {
+                            let serialResult = response.serials.find(
+                                (serial) => serial.serial === item.serial
+                            );
+
+                            if (serialResult && !serialResult.valid) {
+                                hasInvalidSerial = true;
+                                invalidMessages.push(
+                                    `Serial: ${item.serial} - ${serialResult.message}`
+                                );
+                                item.rowElement.css('border',
+                                    '2px solid red'); // Tô viền đỏ
+                            } else {
+                                item.rowElement.css('border',
+                                    ''); // Xóa viền đỏ nếu hợp lệ
+                            }
+                        });
+
+                        if (hasInvalidSerial) {
+                            alert(`Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+                            return false;
+                        } else {
+                            alert('Tất cả serial hợp lệ! Đang xử lý...');
+                            $('#form-submit').submit();
+
+                        }
+                    } else {
+                        console.error('Lỗi:', response.message);
+                    }
+                });
+            } else {
+                alert('Vui lòng chọn Branch và Form Type và nhập Serial.');
+            }
+        });
+
     });
+
+
     $(document).ready(function() {
         function toggleListGuest(input, list, filterInput) {
             input.on("click", function() {

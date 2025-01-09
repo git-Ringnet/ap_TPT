@@ -462,3 +462,50 @@ function calculateTotalSerialCount() {
 
     return total;
 }
+// Hàm chung để xử lý việc lấy dữ liệu serial
+function collectSerialData() {
+    let serialData = [];
+    $("#tbody-product-data tr#serials-data").each(function () {
+        let productId = $(this).data("product-id");
+        let serialInput = $(this).find("input.serial");
+
+        if (serialInput.length > 0) {
+            serialInput.each(function () {
+                serialData.push({
+                    productId: productId,
+                    serial: $(this).val(),
+                    inputElement: $(this),
+                    rowElement: $(this).closest("tr"),
+                });
+            });
+        }
+    });
+    return serialData;
+}
+
+// Hàm chung để kiểm tra serial qua AJAX
+function checkSerials(branchId, formType, serialData, callback) {
+    if (branchId && formType && serialData.length > 0) {
+        $.ajax({
+            url: "/check-serial",
+            type: "POST",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            data: {
+                branch_id: branchId,
+                form_type: formType,
+                serial_data: serialData.map((item) => ({
+                    productId: item.productId,
+                    serial: item.serial,
+                })),
+            },
+            success: function (response) {
+                callback(response);
+            },
+            error: function (xhr) {
+                console.error("Lỗi khi gửi yêu cầu AJAX:", xhr.responseText);
+            },
+        });
+    }
+}

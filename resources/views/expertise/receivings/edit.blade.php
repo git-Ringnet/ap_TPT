@@ -197,7 +197,8 @@
                                 <input placeholder="Nhập thông tin" autocomplete="off" type="text"
                                     id="dateCreate"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                    style=" flex:2;" value="{{ date_format(new DateTime($receiving->date_created), 'd/m/Y') }}" />
+                                    style=" flex:2;"
+                                    value="{{ date_format(new DateTime($receiving->date_created), 'd/m/Y') }}" />
                                 <input type="hidden" value="{{ $receiving->date_created }}" name="date_created"
                                     id="hiddenDateCreate">
                             </div>
@@ -433,6 +434,90 @@
 <x-receive_card :receiving="$receiving" :receivedProducts="$receivedProducts"></x-receive_card>
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script>
+    $(document).ready(function() {
+        // Xử lý sự kiện thay đổi radio button
+        $('input[type="radio"]').on('change', function() {
+            let branchId = $('input[name="branch_id"]:checked').val();
+            let formType = $('input[name="form_type"]:checked').val();
+            let serialData = collectSerialData();
+            let contentWrapper = $('#content-wrapper');
+
+            if (branchId && formType) {
+                contentWrapper.removeClass('blur-wrapper');
+                if (serialData.length > 0) {
+                    checkSerials(branchId, formType, serialData, function(response) {
+                        if (response.status === 'success') {
+                            serialData.forEach((item) => {
+                                let serialResult = response.serials.find(
+                                    (serial) => serial.serial === item.serial
+                                );
+                                let listRecei = item.inputElement
+                                    .closest('td')
+                                    .find('.list-recei');
+
+                                if (serialResult && serialResult.valid) {
+                                    listRecei.html(
+                                        '<span class="text-success">✔</span>');
+                                } else {
+                                    listRecei.html(
+                                        '<span class="text-danger">✖</span>');
+                                }
+                            });
+                        } else {
+                            console.error('Lỗi:', response.message);
+                        }
+                    });
+                }
+            } else {
+                contentWrapper.addClass('blur-wrapper');
+            }
+        });
+        $('#btn-get-unique-products').on('click', function(event) {
+            let branchId = $('input[name="branch_id"]:checked').val();
+            let formType = $('input[name="form_type"]:checked').val();
+            let serialData = collectSerialData();
+            let hasInvalidSerial = false;
+            let invalidMessages = [];
+
+            if (branchId && formType && serialData.length > 0) {
+                checkSerials(branchId, formType, serialData, function(response) {
+                    if (response.status === 'success') {
+                        serialData.forEach((item) => {
+                            let serialResult = response.serials.find(
+                                (serial) => serial.serial === item.serial
+                            );
+
+                            if (serialResult && !serialResult.valid) {
+                                hasInvalidSerial = true;
+                                invalidMessages.push(
+                                    `Serial: ${item.serial} - ${serialResult.message}`
+                                );
+                                item.rowElement.css('border',
+                                    '2px solid red'); // Tô viền đỏ
+                            } else {
+                                item.rowElement.css('border',
+                                    ''); // Xóa viền đỏ nếu hợp lệ
+                            }
+                        });
+
+                        if (hasInvalidSerial) {
+                            alert(`Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+                            event.preventDefault();
+                            return false; // Chặn tiếp tục xử lý
+                        } else {
+                            alert('Tất cả serial hợp lệ! Đang xử lý...');
+                            $('#form-submit').submit();
+                        }
+                    } else {
+                        console.error('Lỗi:', response.message);
+                    }
+                });
+            } else {
+                alert('Vui lòng chọn Branch và Form Type và nhập Serial.');
+            }
+        });
+
+    });
     $(document).ready(function() {
         function toggleListGuest(input, list, filterInput) {
             input.on("click", function() {

@@ -40,7 +40,7 @@ class UpdateReceivingStatus extends Command
         ];
 
         // Tiếp nhận (< 3 ngày, state = 0)
-        Receiving::where('status', 1)
+        Receiving::whereIn('status', [1, 2])
             ->where('date_created', '>=', $today->copy()->subDays(3))
             ->get()
             ->each(function ($receiving) use ($states) {
@@ -53,7 +53,7 @@ class UpdateReceivingStatus extends Command
             });
 
         // Chưa xử lý (>= 3 ngày, state = 1)
-        Receiving::where('status', 1)
+        Receiving::whereIn('status', [1, 2])
             ->where('date_created', '<', $today->copy()->subDays(3))
             ->where('date_created', '>=', $today->copy()->subDays(21))
             ->get()
@@ -89,7 +89,9 @@ class UpdateReceivingStatus extends Command
 
     private function notifyStateChange($receiving, $oldState, $newState)
     {
-        $users = User::all(); // Lọc user cần thiết nếu muốn
+        $users = User::whereDoesntHave('permissions', function ($query) {
+            $query->where('name', 'quankho');
+        })->get();
         foreach ($users as $user) {
             $user->notify(new \App\Notifications\ReceiNotification($receiving, $oldState, $newState));
         }

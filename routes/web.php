@@ -52,6 +52,8 @@ Route::resource('quotations', QuotationController::class);
 Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])->name('getReceiving');
 // Check SN
 Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
+Route::post('/check-serial', [SerialNumberController::class, 'checkSerial']);
+
 // Filter
 Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');
 Route::get('/filter-provides', [ProvidersController::class, 'filterData'])->name('filter-provides');

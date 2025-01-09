@@ -163,4 +163,56 @@ class SerialNumberController extends Controller
             }
         }
     }
+
+    public function checkSerial(Request $request)
+    {
+        $branchId = $request->branch_id;
+        $formType = $request->form_type;
+        $serialData = $request->serial_data;
+        $results = [];
+
+        foreach ($serialData as $data) {
+            $serialNumber = $data['serial'];
+            $productId = $data['productId'];
+            $valid = false; // Mặc định là không hợp lệ
+            $message = '';
+
+            if ($branchId == 1) {
+                $seri = $this->getSerial($serialNumber);
+                if (!$seri) {
+                    $message = 'Số serial không tồn tại.';
+                } elseif ($formType == 3) {
+                    $seriWithStatus4Or5 = $this->getSerialWithStatus($serialNumber, [4, 5]);
+                    if (!$seriWithStatus4Or5) {
+                        $message = 'Số serial không nằm trong diện bảo hành dịch vụ.';
+                    } else {
+                        $seri = $seriWithStatus4Or5;
+                        $valid = true;
+                    }
+                } else {
+                    $warranty = $this->getWarranty($seri->id, $productId);
+                    if (!$warranty) {
+                        $message = 'Không tìm thấy thông tin bảo hành.';
+                    } else {
+                        $valid = true;
+                    }
+                }
+            } elseif ($branchId == 2) {
+                $seri = $this->getSerial($serialNumber);
+                if ($seri) {
+                    $message = 'Số serial thuộc trong kho, không phải hàng bên ngoài.';
+                } else {
+                    $valid = true;
+                }
+            }
+
+            $results[] = [
+                'serial' => $serialNumber,
+                'valid' => $valid,
+                'message' => $message,
+            ];
+        }
+
+        return response()->json(['status' => 'success', 'serials' => $results]);
+    }
 }
