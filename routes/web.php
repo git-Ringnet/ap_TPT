@@ -37,7 +37,7 @@ Route::group(['middleware' => ['permission:admin']], function () {
     });
 });
 Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-Route::patch('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+Route::patch('/notifications/mark-all-as-read/{type}', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
 
 // Products

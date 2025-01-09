@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 
 use App\Models\InventoryLookup;
 use App\Models\Notification;
+use App\Models\User;
+use App\Notifications\InventoryLookupNotification;
+use App\Notifications\ReceiNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -45,23 +48,9 @@ class UpdateInventoryStatus extends Command
                 // Lần bảo trì đầu tiên
                 $record->status = 1;
                 $record->save();
-                // Lấy ngày hiện tại
-                $today = Carbon::now()->format('Y-m-d');
-
-                // Kiểm tra thông báo đã tồn tại trong cùng ngày, cùng type và type_id
-                $exists = Notification::where('type', '1')
-                    ->where('type_id', $record->id)
-                    ->whereDate('created_at', $today)
-                    ->exists();
-
-                // Nếu chưa tồn tại, thêm mới thông báo
-                if (!$exists) {
-                    Notification::create([
-                        'type' => '1',
-                        'type_id' => $record->id,
-                        'status' => '1',
-                    ]);
-                }
+                // Gửi thông báo lần bảo trì đầu tiên
+                $message = "tới hạn bảo trì";
+                $this->notifyStatusChange($record, $message);
             } else if ($record->warranty_date) {
                 // Các lần bảo trì tiếp theo
                 $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
@@ -70,27 +59,21 @@ class UpdateInventoryStatus extends Command
                     // Nếu đã tới thời gian bảo trì tiếp theo
                     $record->status = 1;
                     $record->save();
-                    // Lấy ngày hiện tại
-                    $today = Carbon::now()->format('Y-m-d');
-
-                    // Kiểm tra thông báo đã tồn tại trong cùng ngày, cùng type và type_id
-                    $exists = Notification::where('type', '1')
-                        ->where('type_id', $record->id)
-                        ->whereDate('created_at', $today)
-                        ->exists();
-
-                    // Nếu chưa tồn tại, thêm mới thông báo
-                    if (!$exists) {
-                        Notification::create([
-                            'type' => '1',
-                            'type_id' => $record->id,
-                            'status' => '1',
-                        ]);
-                    }
+                    // Gửi thông báo lần bảo trì tiếp theo
+                    $message = "tới hạn bảo trì";
+                    $this->notifyStatusChange($record, $message);
                 }
             }
         }
 
         $this->info('Đã cập nhật thời gian tồn kho cho tất cả các sản phẩm.');
+    }
+    private function notifyStatusChange($record, $message)
+    {
+        $users = User::all(); // Lọc user cần thiết nếu muốn
+        foreach ($users as $user) {
+            // Gửi thông báo đến từng user
+            $user->notify(new InventoryLookupNotification($record, $message));
+        }
     }
 }

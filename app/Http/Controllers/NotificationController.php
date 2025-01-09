@@ -70,10 +70,24 @@ class NotificationController extends Controller
         return response()->json(['success' => true, 'id' => $id]);
     }
 
-    public function markAllAsRead()
+    public function markAllAsRead($type, Request $request)
     {
-        auth()->user()->unreadNotifications->markAsRead();
+        // Lấy mảng các ID từ yêu cầu
+        $ids = $request->input('ids', []);
 
+        // Kiểm tra nếu có ID
+        if (!empty($ids)) {
+            // Xử lý theo loại (type) để xác định bảng hoặc quan hệ
+            if ($type == 'receiving') {
+                // Đánh dấu các thông báo theo receiving_id đã đọc
+                auth()->user()->notifications()->whereIn('data->receiving_id', $ids)->update(['read_at' => now()]);
+            } elseif ($type == 'inventoryLookup') {
+                // Đánh dấu các thông báo theo inventoryLookup_id đã đọc
+                auth()->user()->notifications()->whereIn('data->inventoryLookup_id', $ids)->update(['read_at' => now()]);
+            }
+        }
+
+        // Trả về phản hồi JSON khi hoàn tất
         return response()->json(['success' => true]);
     }
 }

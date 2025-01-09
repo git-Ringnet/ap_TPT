@@ -30,41 +30,63 @@
         </ul>
         <div class="tab-content overflow-auto" style="height: 280px;">
             @unlessrole('Bảo hành')
-                <div class="tab-pane fade show active notification-list" id="info">
+                <div class="tab-pane fade show active notification-list" id="info"
+                    style="background: none !important;">
+                    <button class="mt-1 btn btn-outline-success btn-sm rounded-pill float-right markAllRead"
+                        data-type="inventoryLookup"
+                        data-ids="{{ json_encode($notifications->pluck('data.inventoryLookup_id')->toArray()) }}">
+                        <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
+                    </button>
                     @foreach ($notifications as $notification)
-                        <div class="dropdown-item border-bottom rounded bg-white">
-                            <div>
-                                <a href="{{ route('inventoryLookup.edit', $notification->id) }}"
-                                    class="text-primary">{{ $notification->serial_code }}</a>
-                                <span>tới hạn bảo trì định kỳ</span>
+                        @if (isset($notification->data['inventoryLookup_id']))
+                            <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
+                                data-id="{{ $notification->id }}">
+                                <div>
+                                    <span class="text-perpage">
+                                        <a href="{{ route('inventoryLookup.edit', $notification->data['inventoryLookup_id']) }}"
+                                            class="text-primary">
+                                            {{ $notification->data['serial_code'] }}
+                                        </a>
+                                        {{ $notification->data['message'] }}
+                                    </span>
+                                </div>
+                                @if ($notification->unread())
+                                    <button class="btn btn-sm btn-link text-success mark-as-read"
+                                        data-type="inventoryLookup" data-id="{{ $notification->id }}">Đánh dấu đã
+                                        đọc</button>
+                                @endif
                             </div>
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @endunlessrole
             @unlessrole('Quản lý kho')
                 <div class="tab-pane fade @role('Bảo hành') show active @endrole bg-none"
                     style="background: none !important;" id="history">
-                    <button id="markAllRead" class="mt-1 btn btn-outline-success btn-sm rounded-pill float-right">
+                    <button class="mt-1 btn btn-outline-success btn-sm rounded-pill float-right markAllRead"
+                        data-type="receiving"
+                        data-ids="{{ json_encode($notifications->pluck('data.receiving_id')->toArray()) }}">
                         <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
                     </button>
-                    @foreach (auth()->user()->notifications as $notification)
-                        <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
-                            data-id="{{ $notification->id }}">
-                            <div>
-                                <span class="text-perpage">Phiếu
-                                    <a href="{{ route('receivings.edit', $notification->data['receiving_id']) }}"
-                                        class="text-primary">
-                                        {{ $notification->data['recei_code'] }}
-                                    </a>
-                                    {{ $notification->data['message'] }}
-                                </span>
+                    @foreach ($notifications as $notification)
+                        @if (isset($notification->data['receiving_id']))
+                            <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
+                                data-id="{{ $notification->id }}">
+                                <div>
+                                    <span class="text-perpage">Phiếu
+                                        <a href="{{ route('receivings.edit', $notification->data['receiving_id']) }}"
+                                            class="text-primary">
+                                            {{ $notification->data['recei_code'] }}
+                                        </a>
+                                        {{ $notification->data['message'] }}
+                                    </span>
+                                </div>
+                                @if ($notification->unread())
+                                    <button class="btn btn-sm btn-link text-success mark-as-read" data-type="receiving"
+                                        data-id="{{ $notification->id }}">Đánh dấu đã đọc</button>
+                                @endif
                             </div>
-                            @if ($notification->unread())
-                                <button class="btn btn-sm btn-link text-success mark-as-read"
-                                    data-id="{{ $notification->id }}">Đánh dấu đã đọc</button>
-                            @endif
-                        </div>
+                        @endif
                     @endforeach
                 </div>
             @endunlessrole
@@ -114,20 +136,29 @@
         });
 
         // Mark all notifications as read
-        $('#markAllRead').on('click', function() {
+        $('.markAllRead').on('click', function() {
+            const type = $(this).data('type');
+            const ids = $(this).data('ids');
             $.ajax({
-                url: `/notifications/mark-all-as-read`,
+                url: `/notifications/mark-all-as-read/${type}`,
                 type: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                 },
+                data: {
+                    ids: ids
+                },
                 success: function(response) {
                     if (response.success) {
-                        // Update UI: remove 'bg-light' and all buttons
-                        $('.notification-item.bg-light').each(function() {
-                            $(this).removeClass('bg-light');
-                            $(this).find('.mark-as-read').remove();
-                        });
+                        if (type === "inventoryLookup") {
+                            $('.notification-item.bg-light').each(function() {
+                                $(`.mark-as-read[data-type="inventoryLookup"]`).remove();
+                            });
+                        } else if(type === "receiving"){
+                            $('.notification-item.bg-light').each(function() {
+                                $(`.mark-as-read[data-type="receiving"]`).remove();
+                            });
+                        }
                     }
                 },
                 error: function(xhr) {
