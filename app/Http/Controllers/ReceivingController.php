@@ -338,7 +338,7 @@ class ReceivingController extends Controller
                 $receiving = Receiving::findOrFail($recei);
                 $receiving->status = $status;
                 // Nếu status != 1, đặt state = 0
-                if ($status != 1) {
+                if ($status != 1 && $status != 2) {
                     $receiving->state = 0;
                 }
                 $receiving->save();
@@ -352,7 +352,7 @@ class ReceivingController extends Controller
                 } elseif ($status == 4) {
                     $returnForm->status = 2;
                 } else {
-                    $returnForm->status = $status; // Giữ nguyên nếu không thuộc 3 hoặc 4
+                    $returnForm->status = $status;
                 }
                 $returnForm->save();
             }
@@ -370,7 +370,7 @@ class ReceivingController extends Controller
         // Gửi thông báo đến người dùng
         $users = User::all(); // Có thể lọc ra nhóm người dùng cụ thể nếu cần
         foreach ($users as $user) {
-            $user->notify(new ReceiNotification($receiving));
+            $user->notify(new ReceiNotification($receiving, '', $request->status));
         }
 
         return redirect()->route('receivings.index')->with('success', 'Trạng thái đã được cập nhật và thông báo đã được gửi.');

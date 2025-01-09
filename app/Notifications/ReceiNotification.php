@@ -18,7 +18,7 @@ class ReceiNotification extends Notification
     private $oldState;
     private $newState;
 
-    public function __construct($receiving, $oldState, $newState)
+    public function __construct($receiving, $oldState = null, $newState = null)
     {
         $this->receiving = $receiving;
         $this->oldState = $oldState;

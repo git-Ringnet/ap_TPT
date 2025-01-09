@@ -360,8 +360,10 @@
                     console.log(response);
                     if (response.status === 'success') {
                         $td.text(statusText);
-                        $('input.id-data[value="' + response.id + '"]').closest('tr')
-                            .removeClass('bg-custom-yl');
+                        if (statusId != 1 && statusId != 2) {
+                            $('input.id-data[value="' + response.id + '"]').closest('tr')
+                                .removeClass('bg-custom-yl');
+                        }
                     } else {
                         alert('Cập nhật trạng thái không thành công.');
                     }

@@ -10,18 +10,18 @@
         </svg>
         <span class="badge badge-danger navbar-badge" id="notification-count">{{ count($notifications) }}</span>
     </a>
-    <div class="list-noti">
+    <div class="list-noti p-2">
         <ul class="nav nav-tabs p-2">
             @unlessrole('Bảo hành')
                 <li>
-                    <a class="text-secondary active mx-2 m-0 text-13" data-toggle="tab" href="#info">
+                    <a class="text-secondary active mx-2 m-0 text-12" data-toggle="tab" href="#info">
                         Tra cứu tồn kho
                     </a>
                 </li>
             @endunlessrole
             @unlessrole('Quản lý kho')
                 <li>
-                    <a class="text-secondary @role('Bảo hành') active @endrole m-0 mx-2 text-13" data-toggle="tab"
+                    <a class="text-secondary @role('Bảo hành') active @endrole m-0 mx-2 text-12" data-toggle="tab"
                         href="#history">
                         Phiếu tiếp nhận
                     </a>
@@ -43,13 +43,16 @@
                 </div>
             @endunlessrole
             @unlessrole('Quản lý kho')
-                <div class="tab-pane fade @role('Bảo hành') show active @endrole" id="history">
-                    <button id="markAllRead" class="btn btn-primary btn-sm">Đánh dấu tất cả đã đọc</button>
+                <div class="tab-pane fade @role('Bảo hành') show active @endrole bg-none"
+                    style="background: none !important;" id="history">
+                    <button id="markAllRead" class="mt-1 btn btn-outline-success btn-sm rounded-pill float-right">
+                        <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
+                    </button>
                     @foreach (auth()->user()->notifications as $notification)
-                        <div class="dropdown-item border-bottom rounded bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
+                        <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
                             data-id="{{ $notification->id }}">
                             <div>
-                                <span>Phiếu
+                                <span class="text-perpage">Phiếu
                                     <a href="{{ route('receivings.edit', $notification->data['receiving_id']) }}"
                                         class="text-primary">
                                         {{ $notification->data['recei_code'] }}

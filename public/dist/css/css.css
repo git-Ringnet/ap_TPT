@@ -3243,7 +3243,7 @@ input[type="checkbox"]:checked {
     top: 40px;
     right: 75px;
     background: white;
-    width: 20%;
+    width: auto;
     border-radius: 5px;
     position: absolute;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -3527,4 +3527,9 @@ input[type="checkbox"]:checked {
 
 .status-list li:hover {
     background-color: #f0f0f0;
+}
+.text-12 {
+    font-size: 12px;
+    color: #151516 !important;
+    font-weight: 500;
 }
