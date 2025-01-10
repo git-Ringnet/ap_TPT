@@ -42,7 +42,7 @@
             </div>
             <div class="scrollbar" id="scrollbar">
                 @foreach ($filters as $filter)
-                    <button class="dropdown-item btndropdown text-13-black btn-filter"
+                    <button class="dropdown-item btndropdown border-bottom btn-filter"
                         id="btn-{{ \Illuminate\Support\Str::slug($filter) }}"
                         data-button="{{ \Illuminate\Support\Str::slug($filter) }}" type="button">
                         {{ $filter }}
@@ -51,12 +51,12 @@
             </div>
             @if (!empty($filtersTime))
                 <li class="dropdown-submenu">
-                    <div class="dropdown-item text-13-black btn-filter test" type="button">
+                    <div class="dropdown-item btn-filter test" type="button">
                         Thời gian
                     </div>
                     <ul class="dropdown-menu">
                         @foreach ($filtersTime as $filter)
-                            <button class="dropdown-item btndropdown text-13-black btn-filter"
+                            <button class="dropdown-item btndropdown border-bottom btn-filter"
                                 id="btn-{{ \Illuminate\Support\Str::slug($filter) }}"
                                 data-button="{{ \Illuminate\Support\Str::slug($filter) }}" type="button">
                                 {{ $filter }}

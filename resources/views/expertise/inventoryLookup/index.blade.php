@@ -1,8 +1,8 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'inventoryLookup'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
-    <div class="content-header-fixed p-0 border-0">
-        <div class="content__header--inner border-bottom">
+    <div class="content-header-fixed px-1">
+        <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="[
                 'Mã hàng',
                 'Tên hàng',
@@ -40,7 +40,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -51,7 +51,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -62,7 +62,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -73,7 +73,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -84,7 +84,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="guest_code"
                                                     data-sort-type="DESC">
@@ -95,7 +95,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="guest_code"
                                                     data-sort-type="DESC">
@@ -106,7 +106,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -117,7 +117,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -135,30 +135,38 @@
                                         <tr class="position-relative inven-lookup-info height-40">
                                             <input type="hidden" name="id-inven-lookup" class="id-inven-lookup"
                                                 id="id-inven-lookup" value="{{ $item->id }}">
-                                            <td class="text-13-black border-right border-bottom py-0">
+                                            <td
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->product->product_code }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->product->product_name }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->product->brand }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 <a href="{{ route('inventoryLookup.edit', $item->id) }}">
                                                     {{ $item->serialNumber->serial_code ?? '' }}
                                                 </a>
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->provider->provider_name }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->import_date), 'd/m/Y') }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->storage_duration }} ngày
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 @if ($item->status == '1')
                                                     <span class="text-danger">Tới hạn bảo trì</span>
                                                 @endif

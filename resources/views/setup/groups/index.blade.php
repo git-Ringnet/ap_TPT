@@ -1,6 +1,6 @@
 @include('partials.header', ['activeGroup' => 'systemFirst', 'activeName' => 'groups'])
 @section('title', $title)
-<div class="content-header-fixed p-0">
+<div class="content-header-fixed px-1">
     <div class="content__header--inner">
         <div class="d-flex align-items-center ml-3">
             <form action="" method="get" id="search-filter" class="p-0 m-0">
@@ -129,7 +129,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right" scope="col" style="">
+                                    <th class="height-40 py-0" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -145,7 +145,7 @@
                             <tbody class="tbody-group">
                                 @foreach ($groupedGroups as $groupType => $groups)
                                     <tr>
-                                        <td class="text-purble font-weight-bold border-bottom py-1 border-top-0"
+                                        <td class="text-purble border-bottom py-1 border-top-0 pl-4"
                                             style="font-size: 16px;" colspan="3">Nhóm đối tượng :
                                             {{ $groupType }}
                                         </td>
@@ -155,7 +155,7 @@
                                             <input type="hidden" name="id-group" class="id-group" id="id-group"
                                                 value="{{ $item->id }}">
                                             <td
-                                                class="text-13-black text-left border-bottom border-top-0 py-0 border-right">
+                                                class="text-13-black text-left border-bottom border-top-0 py-0 border-right pl-4">
                                                 <a href="{{ route('groups.edit', ['group' => $item->id]) }}">
                                                     {{ $item->group_code }}
                                                 </a>
@@ -164,10 +164,11 @@
                                                 class="text-13-black text-left border-bottom border-top-0 py-0 border-right">
                                                 {{ $item->group_name }}
                                             </td>
-                                            <td class="text-13-black border-bottom border-top-0 py-0 border-right">
+                                            <td class="text-13-black border-bottom border-top-0 py-0">
                                                 {{ $item->groupType->group_name }}
                                             </td>
-                                            <td class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
+                                            <td
+                                                class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
                                                 <div class="d-flex w-100">
                                                     <a href="#">
                                                         <div class="rounded">
@@ -208,8 +209,8 @@
                                     @endforeach
                                     <tr class="position-relative group-info height-40">
                                         <td
-                                            class="text-red height-40 py-0 border-bottom border-right border-top-0 text-right">
-                                            Tổng cộng: {{ $groups->count() }}</td>
+                                            class="text-13-black text-purble height-40 py-0 border-bottom border-right border-top-0 text-right">
+                                            Có {{ $groups->count() }} loại {{ $groupType }}</td>
                                         <td colspan="2" class="height-40 py-0 border-bottom border-top-0"></td>
                                     </tr>
                                 @endforeach

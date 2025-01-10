@@ -233,8 +233,7 @@
                         </table>
                         <div class="my-2 d-flex justify-content-between">
                             <span>
-                                <button id="add-rows"
-                                    class="border-0 bg-transparent pl-3 text-purble font-weight-bold">Thêm</button>
+                                <button id="add-rows" class="border-0 bg-transparent pl-3 text-purble">Thêm</button>
                                 <input type="number" id="row-count" class="rounded d-inline-block p-0 text-center"
                                     style="width: 36px; height: 22px; font-size: 12px;" value="5"
                                     min="1">

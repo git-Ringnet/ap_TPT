@@ -53,7 +53,7 @@
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead class="border-custom">
                                 <tr>
-                                    <th class="height-40 py-0 border-right pl-4 border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right pl-4" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -64,7 +64,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -75,7 +75,7 @@
                                             <div class="icon" id="icon-group_name_display"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -86,7 +86,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -97,7 +97,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -108,7 +108,7 @@
                                             <div class="icon" id="icon-group_code"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right border-bottom-0" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
                                                 data-sort-type="DESC">
@@ -122,8 +122,8 @@
                                 </tr>
                             </thead>
                             <tbody class="tbody-user">
-                                <tr>
-                                    <td class="text-purble font-weight-bold border-bottom py-1 border-right pl-4"
+                                <tr class="height-40">
+                                    <td class="text-purble border-bottom py-1 border-top-0 border-right pl-4"
                                         style="font-size: 16px;" colspan="10" class="border-bottom">Nhóm nhân viên:
                                         Chưa chọn nhóm
                                     </td>
@@ -136,26 +136,31 @@
                                         <tr class="position-relative user-info height-40">
                                             <input type="hidden" name="id-user" class="id-user" id="id-user"
                                                 value="{{ $item->id }}">
-                                            <td class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-right-0">
+                                            <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
                                                 {{ $item->employee_code }}
                                             </td>
-                                            <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 <a class="duongdan" href="{{ route('users.edit', $item->id) }}">
                                                     {{ $item->name }}
                                                 </a>
                                             </td>
-                                            <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 @foreach ($item->roles as $role)
                                                     <span class="badge bg-info">{{ $role->name }}</span>
                                                 @endforeach
                                             </td>
-                                            <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 {{ $item->address }}
                                             </td>
-                                            <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 {{ $item->phone }}
                                             </td>
-                                            <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                 {{ $item->email }}
                                             </td>
                                             <td class="position-absolute m-0 p-0 border-0 bg-hover-icon icon-center">
@@ -201,9 +206,22 @@
                                         @endphp
                                     @endif
                                 @endforeach
+                                <tr class="height-40 border-bottom border">
+                                    <td class="border-bottom border text-left py-0 border-top-0 border-right">
+                                    </td>
+                                    <td
+                                        class="border-left-0 border-bottom border text-right py-0 border-top-0 text-purble">
+                                        Có
+                                        <strong>{{ $total }}</strong> nhân viên
+                                    </td>
+                                    <td class="border-top-0 border-right border-bottom" colspan="4"></td>
+                                </tr>
                                 @foreach ($groups as $value)
-                                    <tr>
-                                        <td class="text-purble font-weight-bold border-bottom py-1 border-right pl-4 border-top-0"
+                                    @php
+                                        $total = 0;
+                                    @endphp
+                                    <tr class="height-40">
+                                        <td class="text-purble border-bottom py-1 border-right pl-4 border-top-0"
                                             style="font-size: 16px;" colspan="10" class="border-bottom">Nhóm
                                             nhân viên: {{ $value->group_name }}
                                         </td>
@@ -213,26 +231,31 @@
                                             <tr class="position-relative user-info height-40">
                                                 <input type="hidden" name="id-user" class="id-user" id="id-user"
                                                     value="{{ $item->id }}">
-                                                <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0 pl-4 border-top-0">
+                                                <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
                                                     {{ $item->employee_code }}
                                                 </td>
-                                                <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     <a class="duongdan" href="{{ route('users.edit', $item->id) }}">
                                                         {{ $item->name }}
                                                     </a>
                                                 </td>
-                                                <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     @foreach ($item->roles as $role)
                                                         <span class="badge bg-info">{{ $role->name }}</span>
                                                     @endforeach
                                                 </td>
-                                                <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     {{ $item->address }}
                                                 </td>
-                                                <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     {{ $item->phone }}
                                                 </td>
-                                                <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                                <td
+                                                    class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                     {{ $item->email }}
                                                 </td>
                                                 <td
@@ -279,6 +302,16 @@
                                             @endphp
                                         @endif
                                     @endforeach
+                                    <tr class="height-40 border-bottom border">
+                                        <td class="border-bottom border text-left py-0 border-top-0 border-right">
+                                        </td>
+                                        <td
+                                            class="border-left-0 border-bottom border text-right py-0 border-top-0 text-purble">
+                                            Có
+                                            <strong>{{ $total }}</strong> nhân viên
+                                        </td>
+                                        <td class="border-top-0 border-right border-bottom" colspan="4"></td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

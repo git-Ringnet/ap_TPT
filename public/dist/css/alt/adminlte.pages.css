@@ -705,7 +705,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.075);
   border-radius: 0.25rem;
   background-color: #fff;
-  border: 1px solid #dee2e6;
+  border: 1px solid #C6CFFC;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;

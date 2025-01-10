@@ -1,7 +1,7 @@
 @include('partials.header', ['activeGroup' => 'reports', 'activeName' => 'export_import'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
-    <div class="content-header-fixed p-0 border-0">
+    <div class="content-header-fixed px-1">
         <div class="content__header--inner border-bottom">
             <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Số lượng nhập', 'Số lượng xuất']" :filtersTime="['Tháng', 'Quý', 'Năm']">
                 <x-filter-text name="ma-hang" title="Mã hàng" />

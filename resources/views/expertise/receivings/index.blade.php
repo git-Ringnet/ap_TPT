@@ -1,8 +1,8 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'receivings'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
-    <div class="content-header-fixed p-0 border-0">
-        <div class="content__header--inner border-bottom">
+    <div class="content-header-fixed px-1">
+        <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="[
                 'Mã phiếu',
                 'Khách hàng',
@@ -73,7 +73,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-40 py-0 border-top-bottom pl-4" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -84,7 +84,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -95,7 +95,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -106,7 +106,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -117,7 +117,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -128,7 +128,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -139,7 +139,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -150,7 +150,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -161,7 +161,7 @@
                                                 <div class="icon" id="icon-guest_code"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-bottom" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -185,22 +185,27 @@
                                                 value="{{ $item->id }}"
                                                 data-has-return="{{ $item->returnForms->id ?? 0 }}"
                                                 data-has-quote="{{ $item->quotation->id ?? 0 }}">
-                                            <td class="text-13-black border-bottom py-0 pl-4">
+                                            <td
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 <a
                                                     href="{{ route('receivings.edit', $item->id) }}">{{ $item->form_code_receiving }}</a>
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->customer->customer_name }}
                                                 {{ $item->quotation->quotation_code ?? '' }}
                                                 {{ $item->returnForms->return_code ?? '' }}
                                             </td>
-                                            <td class="text-13-black border-left-0 text-left border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->closed_at ? date_format(new DateTime($item->closed_at), 'd/m/Y') : '' }}
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 @if ($item->form_type == 1)
                                                     Bảo hành
                                                 @elseif($item->form_type == 2)
@@ -209,7 +214,8 @@
                                                     Dịch vụ bảo hành
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 @if ($item->branch_id == 1)
                                                     Nội bộ
                                                 @elseif($item->branch_id == 2)
@@ -217,7 +223,7 @@
                                                 @endif
                                             </td>
                                             <td
-                                                class="text-13-black border-left-0 border-bottom py-0 status-text{{ $item->id }}">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 status-text{{ $item->id }}">
                                                 @if ($item->status == 1)
                                                     Tiếp nhận
                                                 @elseif($item->status == 2)
@@ -228,14 +234,16 @@
                                                     Khách không đồng ý
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 @if ($item->state == 1)
                                                     Chưa xử lý
                                                 @elseif($item->state == 2)
                                                     Quá hạn
                                                 @endif
                                             </td>
-                                            <td class="text-13-black border-left-0 text-left border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->notes }}
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">

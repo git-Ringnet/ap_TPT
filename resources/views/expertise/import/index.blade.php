@@ -1,8 +1,8 @@
 @include('partials.header', ['activeGroup' => 'manageProfess', 'activeName' => 'imports'])
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
-    <div class="content-header-fixed p-0 border-0">
-        <div class="content__header--inner border-bottom">
+    <div class="content-header-fixed px-1">
+        <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="['Mã phiếu', 'Ngày lập phiếu', 'Nhà cung cấp', 'Người lập phiếu', 'Ghi chú']">
                 <x-filter-text name="ma-phieu" title="Mã phiếu" />
                 <x-filter-checkbox :dataa='$users' name="nguoi-lap-phieu" title="Người lập phiếu"
@@ -45,7 +45,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-40 py-0 border-top-0" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -56,7 +56,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-0" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -67,7 +67,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-0" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -78,7 +78,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-0" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -89,7 +89,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-top-0" scope="col">
+                                        <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_code" data-sort-type="DESC">
@@ -107,22 +107,26 @@
                                         <tr class="position-relative import-info height-40">
                                             <input type="hidden" name="id-import" class="id-import" id="id-import"
                                                 value="{{ $item->id }}">
-                                            <td class="text-13-black border-right border-bottom py-0">
+                                            <td
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 <a href="{{ route('imports.edit', $item->id) }}">
                                                     {{ $item->import_code }}
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 text-left border-bottom py-0">
+                                                class="text-13-black border border-left-0 text-left border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->provider_name }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->name }}
                                             </td>
-                                            <td class="text-13-black border border-left-0 border-bottom py-0">
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->note }}
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">

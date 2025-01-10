@@ -104,10 +104,12 @@
                                         onclick="handleRowClick('checkbox', event);">
                                         <input type="hidden" name="id-warehouse" class="id-warehouse"
                                             id="id-warehouse" value="{{ $item->id }}">
-                                        <td class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-left-0">
+                                        <td
+                                            class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-left-0">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-left-0">
+                                        <td
+                                            class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-left-0">
                                             {{ $item->warehouse_code }}
                                         </td>
                                         <td class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
@@ -115,7 +117,8 @@
                                                 {{ $item->warehouse_name }}
                                             </a>
                                         </td>
-                                        <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
+                                        <td
+                                            class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                             {{ $item->address }}
                                         </td>
                                         <td class="position-absolute m-0 p-0 border-0 bg-hover-icon icon-center">
@@ -159,6 +162,16 @@
                                         $total++;
                                     @endphp
                                 @endforeach
+                                <tr class="height-40 border-bottom border">
+                                    <td class="border-bottom border text-left py-0 border-top-0 border-right">
+                                    </td>
+                                    <td
+                                        class="border-left-0 border-bottom border text-right py-0 border-top-0 text-purble">
+                                        Có
+                                        <strong>{{ $total }}</strong> kho
+                                    </td>
+                                    <td class="border-top-0 border-right border-bottom" colspan="4"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

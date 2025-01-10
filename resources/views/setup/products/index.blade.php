@@ -50,7 +50,7 @@
                         <table id="example2" class="table table-hover bg-white rounded">
                             <thead class="border-custom">
                                 <tr>
-                                    <th class="height-40 py-0 border-right pl-4" scope="col" style="">
+                                    <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit"
                                                 data-sort-by="group_name_display" data-sort-type="DESC">
@@ -97,8 +97,8 @@
                                 </tr>
                             </thead>
                             <tbody class="tbody-product">
-                                <tr>
-                                    <td class="text-purble font-weight-bold border-bottom py-1 border-right pl-4 border-top-0"
+                                <tr class="height-40">
+                                    <td class="text-purble border-bottom py-1 border-right pl-4 border-top-0"
                                         style="font-size: 16px;" colspan="10" class="border-bottom">Nhóm hàng hóa:
                                         Chưa chọn nhóm
                                     </td>
@@ -111,18 +111,21 @@
                                         <tr class="position-relative product-info height-40">
                                             <input type="hidden" name="id-product" class="id-product"
                                                 id="id-product" value="{{ $item->id }}">
-                                            <td class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-right-0">
+                                            <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
                                                 {{ $item->product_code }}
                                             </td>
-                                            <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 <a class="duongdan" href="{{ route('products.edit', $item->id) }}">
                                                     {{ $item->product_name }}
                                                 </a>
                                             </td>
-                                            <td class="text-13-black border-bottom border py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 {{ $item->brand }}
                                             </td>
-                                            <td class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
+                                            <td
+                                                class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                 {{ $item->warranty }} tháng
                                             </td>
                                             <td class="position-absolute m-0 p-0 border-0 bg-hover-icon icon-center">
@@ -168,9 +171,22 @@
                                         @endphp
                                     @endif
                                 @endforeach
+                                <tr class="height-40 border-bottom border">
+                                    <td class="border-bottom border text-left py-0 border-top-0 border-right">
+                                    </td>
+                                    <td
+                                        class="border-left-0 border-bottom border text-right py-0 border-top-0 text-purble">
+                                        SL hàng hoá:
+                                        <strong>{{ $total }}</strong>
+                                    </td>
+                                    <td class="border-top-0 border-right border-bottom" colspan="2"></td>
+                                </tr>
                                 @foreach ($groups as $value)
-                                    <tr>
-                                        <td class="text-purble font-weight-bold border-bottom py-1 border-right pl-4 border-top-0"
+                                    @php
+                                        $total = 0;
+                                    @endphp
+                                    <tr class="height-40">
+                                        <td class="text-purble border-bottom py-1 border-right pl-4 border-top-0"
                                             style="font-size: 16px;" colspan="10" class="border-bottom">Nhóm
                                             hàng
                                             hóa: {{ $value->group_name }}
@@ -182,19 +198,22 @@
                                                 onclick="handleRowClick('checkbox', event);">
                                                 <input type="hidden" name="id-product" class="id-product"
                                                     id="id-product" value="{{ $item->id }}">
-                                                <td class="text-13-black border-bottom border py-0 border-right-0 border-top-0 pl-4">
+                                                <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
                                                     {{ $item->product_code }}
                                                 </td>
-                                                <td class="text-13-black border-bottom border py-0 border-right-0 border-top-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     <a class="duongdan"
                                                         href="{{ route('products.edit', $item->id) }}">
                                                         {{ $item->product_name }}
                                                     </a>
                                                 </td>
-                                                <td class="text-13-black border-bottom border py-0 border-right-0 border-top-0">
+                                                <td
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     {{ $item->brand }}
                                                 </td>
-                                                <td class="text-13-black border-bottom border text-left py-0 border-right-0 border-top-0">
+                                                <td
+                                                    class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                     {{ $item->warranty }} tháng
                                                 </td>
                                                 <td
@@ -241,6 +260,16 @@
                                             @endphp
                                         @endif
                                     @endforeach
+                                    <tr class="height-40 border-bottom border">
+                                        <td class="border-bottom border text-left py-0 border-top-0 border-right">
+                                        </td>
+                                        <td
+                                            class="border-left-0 border-bottom border text-right py-0 border-top-0 text-purble">
+                                            SL hàng hoá:
+                                            <strong>{{ $total }}</strong>
+                                        </td>
+                                        <td class="border-top-0 border-right border-bottom" colspan="2"></td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

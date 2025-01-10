@@ -683,7 +683,7 @@
 
 .timeline::before {
   border-radius: 0.25rem;
-  background-color: #dee2e6;
+  background-color: #C6CFFC;
   bottom: 0;
   content: "";
   left: 31px;
@@ -790,11 +790,11 @@
 .timeline-inverse > div > .timeline-item {
   box-shadow: none;
   background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  border: 1px solid #C6CFFC;
 }
 
 .timeline-inverse > div > .timeline-item > .timeline-header {
-  border-bottom-color: #dee2e6;
+  border-bottom-color: #C6CFFC;
 }
 
 .dark-mode .timeline::before {
