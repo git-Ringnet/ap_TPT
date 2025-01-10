@@ -450,4 +450,50 @@
         // Chuyển mảng thành chuỗi JSON và gán vào data-test
         $('#data-test').val(JSON.stringify(uniqueProductsArray));
     });
+
+    if (nameModal === "XH") {
+        $(document).on('click', '.search-info', function(e) {
+            e.preventDefault();
+
+            // Lấy thông tin từ data-* attributes
+            const productId = $(this).data('id');
+            const serialInputs = $('.seri-input-check').map(function() {
+                return $(this).val().trim(); // Lấy giá trị từ input và loại bỏ khoảng trắng
+            }).get();
+
+            // Gửi serialNumbers tới server để kiểm tra
+            if (serialInputs.length > 0) {
+                $.ajax({
+                    url: '/check-serial-numbers',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    data: {
+                        productId: productId,
+                        serialNumbers: serialInputs,
+                    },
+                    success: function(response) {
+                        $('.seri-input-check').each(function() {
+                            const serial = $(this).val().trim();
+
+                            // Kiểm tra nếu serial hợp lệ
+                            if (response.exists.includes(serial)) {
+                                $(this).siblings('.check-icon').css('color', 'green').text(
+                                    '✔');
+                            }
+                            // Nếu không hợp lệ
+                            else if (response.invalid.includes(serial)) {
+                                $(this).siblings('.check-icon').css('color', 'red').text(
+                                    '✖');
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error('Error checking serial numbers:', xhr.responseText);
+                    },
+                });
+            }
+        });
+    }
 </script>

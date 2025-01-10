@@ -53,6 +53,7 @@ Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])-
 // Check SN
 Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
 Route::post('/check-serial', [SerialNumberController::class, 'checkSerial']);
+Route::post('/check-serial-numbers', [SerialNumberController::class, 'checkSerialNumbers'])->name('check.serial.numbers');
 
 // Filter
 Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');

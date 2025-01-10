@@ -379,4 +379,12 @@
             $('#dropdown-content').removeClass('show');
         }
     });
+    $(document).ready(function() {
+        // Tự động ẩn thông báo sau 3 giây
+        setTimeout(function() {
+            $('.alert-dismissible').fadeOut('slow', function() {
+                $(this).remove(); // Xóa phần tử khỏi DOM
+            });
+        }, 3000);
+    });
 </script>

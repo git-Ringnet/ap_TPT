@@ -215,4 +215,32 @@ class SerialNumberController extends Controller
 
         return response()->json(['status' => 'success', 'serials' => $results]);
     }
+    
+    public function checkSerialNumbers(Request $request)
+    {
+        $productId = $request->input('productId');
+        $serialNumbers = $request->input('serialNumbers', []);
+
+        // Tách các serial numbers hợp lệ và không hợp lệ
+        $validSerials = [];
+        $invalidSerials = [];
+
+        foreach ($serialNumbers as $serial) {
+            $exists = SerialNumber::where('product_id', $productId)
+                ->where('serial_code', $serial)
+                ->where('status', 1)
+                ->exists();
+
+            if ($exists) {
+                $validSerials[] = $serial;
+            } else {
+                $invalidSerials[] = $serial;
+            }
+        }
+
+        return response()->json([
+            'exists' => $validSerials,
+            'invalid' => $invalidSerials,
+        ]);
+    }
 }
