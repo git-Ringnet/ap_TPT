@@ -15,14 +15,14 @@ class ReceiNotification extends Notification
      * Create a new notification instance.
      */
     private $receiving;
-    private $oldState;
     private $newState;
+    private $message;
 
-    public function __construct($receiving, $oldState = null, $newState = null)
+    public function __construct($receiving, $newState = null, $message = null)
     {
         $this->receiving = $receiving;
-        $this->oldState = $oldState;
         $this->newState = $newState;
+        $this->message = $message;
     }
 
     public function via($notifiable)
@@ -35,7 +35,8 @@ class ReceiNotification extends Notification
         return [
             'receiving_id' => $this->receiving->id,
             'recei_code' => $this->receiving->form_code_receiving,
-            'message' => "{$this->newState}.",
+            'state' => "{$this->newState}.",
+            'message' => "{$this->message}.",
         ];
     }
 

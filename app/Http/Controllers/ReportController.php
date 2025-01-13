@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customers;
 use App\Models\Exports;
 use App\Models\Imports;
 use App\Models\InventoryLookup;
@@ -154,6 +155,7 @@ class ReportController extends Controller
             ->get()
             ->map(function ($product) {
                 return [
+                    'product_id' => $product->id,
                     'product_code' => $product->product_code,
                     'product_name' => $product->product_name,
                     'total_receive' => $product->receivedProducts->sum('quantity'),
@@ -165,12 +167,13 @@ class ReportController extends Controller
 
     public function reportQuotation()
     {
-        $title = 'Báo cáo hàng xuất nhập';
+        $title = 'Báo cáo phiếu báo giá';
         $quotations = Quotation::join('receiving', 'receiving.id', 'quotations.reception_id')
             ->join('return_form', 'return_form.reception_id', 'receiving.id')
             ->select('quotations.*', 'return_form.status')
             ->get();
-        return view('reports.quotation', compact('title', 'quotations'));
+        $customers = Customers::all();
+        return view('reports.quotation', compact('title', 'quotations', 'customers'));
     }
 
     public function filterReportOverview(Request $request)
@@ -696,10 +699,10 @@ class ReportController extends Controller
             $filters[] = ['value' => 'Mã hàng: ' . $data['ten'], 'name' => 'ten-hang', 'icon' => 'po'];
         }
         if (isset($data['so_luong_nhap']) && $data['so_luong_nhap'][1] !== null) {
-            $filters[] = ['value' => 'Số lượng nhập: ' . $data['so_luong_nhap'][0] . ' ' . $data['so_luong_nhap'][1], 'name' => 'so-luong-nhap', 'icon' => 'money'];
+            $filters[] = ['value' => 'Số lượng nhập ' . $data['so_luong_nhap'][0] . ' ' . $data['so_luong_nhap'][1], 'name' => 'so-luong-nhap', 'icon' => 'money'];
         }
         if (isset($data['so_luong_xuat']) && $data['so_luong_xuat'][1] !== null) {
-            $filters[] = ['value' => 'Số lượng xuất: ' . $data['so_luong_xuat'][0] . ' ' . $data['so_luong_xuat'][1], 'name' => 'so-luong-xuat', 'icon' => 'money'];
+            $filters[] = ['value' => 'Số lượng xuất ' . $data['so_luong_xuat'][0] . ' ' . $data['so_luong_xuat'][1], 'name' => 'so-luong-xuat', 'icon' => 'money'];
         }
         // Xử lý dữ liệu từ $data
         if (isset($data['type']) && isset($data['month']) || isset($data['quarter']) || isset($data['year'])) {
@@ -723,6 +726,117 @@ class ReportController extends Controller
             $result = $this->reports->mergeProductData($data, $reports);
             return response()->json([
                 'data' => $result,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
+    }
+    public function filterReceiptReturn(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        $currentMonth = null;
+        $currentQuarter = null;
+        $currentYear = null;
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã hàng: ' . $data['ma'], 'name' => 'ma-hang', 'icon' => 'po'];
+        }
+        if (isset($data['ten']) && $data['ten'] !== null) {
+            $filters[] = ['value' => 'Tên hàng: ' . $data['ten'], 'name' => 'ten-hang', 'icon' => 'po'];
+        }
+        if (isset($data['so_luong_nhap']) && $data['so_luong_nhap'][1] !== null) {
+            $filters[] = ['value' => 'Hàng tiếp nhận ' . $data['so_luong_nhap'][0] . ' ' . $data['so_luong_nhap'][1], 'name' => 'hang-tiep-nhan', 'icon' => 'money'];
+        }
+        if (isset($data['so_luong_xuat']) && $data['so_luong_xuat'][1] !== null) {
+            $filters[] = ['value' => 'hàng đã trả ' . $data['so_luong_xuat'][0] . ' ' . $data['so_luong_xuat'][1], 'name' => 'hang-da-tra', 'icon' => 'money'];
+        }
+        // Xử lý dữ liệu từ $data
+        if (isset($data['type']) && isset($data['month']) || isset($data['quarter']) || isset($data['year'])) {
+            $value = ''; // Giá trị mặc định
+            if ($data['type'] === 'thang' && isset($data['month']) && isset($data['year'])) {
+                $value = 'THÁNG ' . $data['month'] . '/' . $data['year'];
+                $currentMonth = $data['month'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'quy' && isset($data['quarter']) && isset($data['year'])) {
+                $value = 'QUÝ ' . $data['quarter'] . '/' . $data['year'];
+                $currentQuarter = $data['quarter'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'nam' && isset($data['year'])) {
+                $value = 'NĂM ' . $data['year'];
+                $currentYear = $data['year'];
+            }
+            $filters[] = ['value' => $value];
+        }
+        if ($request->ajax()) {
+            $reports = $this->reports->getAjaxReceiptReturn($data);
+            $result = $this->reports->mergeProductData($data, $reports);
+            $count = $this->reports->countReceiptReturn($result);
+            return response()->json([
+                'data' => $result,
+                'count' => $count,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
+    }
+    public function filterQuotation(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        $currentMonth = null;
+        $currentQuarter = null;
+        $currentYear = null;
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã hàng: ' . $data['ma'], 'name' => 'ma-hang', 'icon' => 'po'];
+        }
+        if (isset($data['receiving_code']) && $data['receiving_code'] !== null) {
+            $filters[] = ['value' => 'Phiếu tiếp nhận: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];
+        }
+        if (isset($data['customer']) && $data['customer'] !== null) {
+            $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if (isset($data['tong_tien']) && $data['tong_tien'][1] !== null) {
+            $filters[] = ['value' => 'Bảo hành: ' . $data['tong_tien'][0] . ' ' . $data['tong_tien'][1], 'name' => 'tong-tien', 'icon' => 'money'];
+        }
+        if (isset($data['status']) && $data['status'] !== null) {
+            $statusValues = [];
+            if (in_array(3, $data['status'])) {
+                $statusValues[] = '<span style="color:08AA36BF;">Hoàn thành</span>';
+            }
+            if (in_array(4, $data['status'])) {
+                $statusValues[] = '<span style="color:#dc3545;">Không đồng ý</span>';
+            }
+            $filters[] = ['value' => 'Tình trạng: ' . implode(', ', $statusValues), 'name' => 'tinh-trang', 'icon' => 'status'];
+        }
+
+        // Xử lý dữ liệu từ $data
+        if (isset($data['type']) && isset($data['month']) || isset($data['quarter']) || isset($data['year'])) {
+            $value = ''; // Giá trị mặc định
+            if ($data['type'] === 'thang' && isset($data['month']) && isset($data['year'])) {
+                $value = 'THÁNG ' . $data['month'] . '/' . $data['year'];
+                $currentMonth = $data['month'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'quy' && isset($data['quarter']) && isset($data['year'])) {
+                $value = 'QUÝ ' . $data['quarter'] . '/' . $data['year'];
+                $currentQuarter = $data['quarter'];
+                $currentYear = $data['year'];
+            } elseif ($data['type'] === 'nam' && isset($data['year'])) {
+                $value = 'NĂM ' . $data['year'];
+                $currentYear = $data['year'];
+            }
+            $filters[] = ['value' => $value];
+        }
+        if ($request->ajax()) {
+            $result = $this->reports->getAjaxRPQuotation($data);
+            $countTotal = $this->reports->statusCountTotal($result);
+            return response()->json([
+                'data' => $result,
+                'countTotal' => $countTotal,
                 'filters' => $filters,
             ]);
         }

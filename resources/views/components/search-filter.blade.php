@@ -51,7 +51,7 @@
             </div>
             @if (!empty($filtersTime))
                 <li class="dropdown-submenu">
-                    <div class="dropdown-item btn-filter test" type="button">
+                    <div class="dropdown-item btn-filter border-bottom test" type="button">
                         Thời gian
                     </div>
                     <ul class="dropdown-menu">

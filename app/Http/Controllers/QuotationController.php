@@ -170,7 +170,7 @@ class QuotationController extends Controller
             $filters[] = ['value' => 'Mã phiếu: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
         }
         if (isset($data['receiving_code']) && $data['receiving_code'] !== null) {
-            $filters[] = ['value' => 'Mã phiếu: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];
+            $filters[] = ['value' => 'Phiếu tiếp nhận: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];
         }
         if (isset($data['note']) && $data['note'] !== null) {
             $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];

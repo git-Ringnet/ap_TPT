@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Report extends Model
@@ -55,8 +56,9 @@ class Report extends Model
 
         foreach ($filterableFields as $key => $field) {
             if (!empty($filter[$key])) {
-                $mergedData = array_filter($mergedData, function ($item) use ($filter, $field) {
-                    return strpos(strtolower($item[$field]), strtolower($filter[$key])) !== false;
+                $searchTerm = strtolower($filter[$key]); // Make search term case insensitive.
+                $mergedData = array_filter($mergedData, function ($item) use ($searchTerm, $field) {
+                    return strpos(strtolower($item[$field]), $searchTerm) !== false;
                 });
             }
         }
@@ -109,88 +111,177 @@ class Report extends Model
             }
         };
 
-        // Truy vấn nhập
-        $imports = DB::table('product_import')
+        // Truy vấn nhập (giữ tất cả sản phẩm)
+        $imports = DB::table('products')
+            ->leftJoin('product_import', 'products.id', '=', 'product_import.product_id')
             ->leftJoin('imports', 'product_import.import_id', '=', 'imports.id')
-            ->leftJoin('products', 'products.id', '=', 'product_import.product_id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'imports.date_create');
             })
             ->select(
-                'product_import.product_id as id',
+                'products.id',
                 'products.product_code',
                 'products.product_name',
                 DB::raw('COUNT(product_import.product_id) as product_import')
             )
-            ->groupBy('product_import.product_id', 'products.product_code', 'products.product_name')
+            ->groupBy('products.id', 'products.product_code', 'products.product_name')
             ->get();
 
-        // Truy vấn xuất
-        $exports = DB::table('product_export')
+        // Truy vấn xuất (giữ tất cả sản phẩm)
+        $exports = DB::table('products')
+            ->leftJoin('product_export', 'products.id', '=', 'product_export.product_id')
             ->leftJoin('exports', 'product_export.export_id', '=', 'exports.id')
-            ->leftJoin('products', 'products.id', '=', 'product_export.product_id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'exports.date_create');
             })
             ->select(
-                'product_export.product_id as id',
+                'products.id',
                 'products.product_code',
                 'products.product_name',
                 DB::raw('COUNT(product_export.product_id) as product_export')
             )
-            ->groupBy('product_export.product_id', 'products.product_code', 'products.product_name')
+            ->groupBy('products.id', 'products.product_code', 'products.product_name')
             ->get();
 
         // Trả về kết quả
         return compact('imports', 'exports');
     }
 
-    // public function getProductsAjax($data = null)
-    // {
-    //     $products = DB::table('products')
-    //         ->leftJoin(
-    //             DB::raw('(SELECT product_id, SUM(quantity) as total_import FROM product_import GROUP BY product_id) as imports'),
-    //             'products.id',
-    //             '=',
-    //             'imports.product_id'
-    //         )
-    //         ->leftJoin(
-    //             DB::raw('(SELECT product_id, SUM(quantity) as total_export FROM product_export GROUP BY product_id) as exports'),
-    //             'products.id',
-    //             '=',
-    //             'exports.product_id'
-    //         )
-    //         ->select(
-    //             'products.id',
-    //             'products.product_code',
-    //             'products.product_name',
-    //             DB::raw('COALESCE(imports.total_import, 0) as total_import'),
-    //             DB::raw('COALESCE(exports.total_export, 0) as total_export')
-    //         );
-    // if (!empty($data['search'])) {
-    //     $products->where(function ($query) use ($data) {
-    //         $query->where('products.product_code', 'like', '%' . $data['search'] . '%')
-    //             ->orWhere('products.product_name', 'like', '%' . $data['search'] . '%');
-    //     });
-    // }
-    // $filterableFields = [
-    //     'ma' => 'products.product_code',
-    //     'ten' => 'products.product_name',
+    public function getAjaxReceiptReturn($data = null)
+    {
+        // Hàm xử lý điều kiện lọc theo type (tháng, quý, năm)
+        $applyFilters = function ($query, $data, $dateField) {
+            if (isset($data['type']) && (isset($data['month']) || isset($data['quarter']) || isset($data['year']))) {
+                if ($data['type'] === 'thang' && isset($data['month']) && isset($data['year'])) {
+                    $query->whereYear($dateField, $data['year'])
+                        ->whereMonth($dateField, $data['month']);
+                } elseif ($data['type'] === 'quy' && isset($data['quarter']) && isset($data['year'])) {
+                    $startMonth = (($data['quarter'] - 1) * 3) + 1;
+                    $endMonth = $startMonth + 2;
+                    $query->whereYear($dateField, $data['year'])
+                        ->whereBetween(DB::raw("MONTH($dateField)"), [$startMonth, $endMonth]);
+                } elseif ($data['type'] === 'nam' && isset($data['year'])) {
+                    $query->whereYear($dateField, $data['year']);
+                }
+            }
+        };
 
-    // ];
-    // foreach ($filterableFields as $key => $field) {
-    //     if (!empty($data[$key])) {
-    //         $products->where($field, 'like', '%' . $data[$key] . '%');
-    //     }
-    // }
-    // if (isset($data['so_luong_nhap'][0]) && isset($data['so_luong_nhap'][1])) {
-    //     $products = $products->having('total_import', $data['so_luong_nhap'][0], $data['so_luong_nhap'][1]);
-    // }
-    // if (
-    //     isset($data['so_luong_xuat'][0]) && isset($data['so_luong_xuat'][1])
-    // ) {
-    //     $products = $products->having('total_export', $data['so_luong_xuat'][0], $data['so_luong_xuat'][1]);
-    // }
-    //     return $products->get();
-    // }
+        // Truy vấn nhập (giữ tất cả sản phẩm)
+        $imports = DB::table('products')
+            ->leftJoin('received_products', 'products.id', '=', 'received_products.product_id')
+            ->leftJoin('receiving', 'received_products.reception_id', '=', 'receiving.id')
+            ->where(function ($query) use ($applyFilters, $data) {
+                $applyFilters($query, $data, 'receiving.date_created');
+            })
+            ->select(
+                'products.id',
+                'products.product_code',
+                'products.product_name',
+                DB::raw('COUNT(received_products.product_id) as product_import')
+            )
+            ->groupBy('products.id', 'products.product_code', 'products.product_name')
+            ->get();
+
+        // Truy vấn xuất (giữ tất cả sản phẩm)
+        $exports = DB::table('products')
+            ->leftJoin('product_returns', 'products.id', '=', 'product_returns.product_id')
+            ->leftJoin('return_form', 'product_returns.return_form_id', '=', 'return_form.id')
+            ->where(function ($query) use ($applyFilters, $data) {
+                $applyFilters($query, $data, 'return_form.date_created');
+            })
+            ->select(
+                'products.id',
+                'products.product_code',
+                'products.product_name',
+                DB::raw('COUNT(product_returns.product_id) as product_export')
+            )
+            ->groupBy('products.id', 'products.product_code', 'products.product_name')
+            ->get();
+
+        // Trả về kết quả
+        return compact('imports', 'exports');
+    }
+
+
+    public function countReceiptReturn($data)
+    {
+        $totals = [
+            'total_import' => 0,
+            'total_export' => 0,
+        ];
+
+        foreach ($data as $item) {
+            $totals['total_import'] += $item['product_import'] ?? 0;
+            $totals['total_export'] += $item['product_export'] ?? 0;
+        }
+
+        return $totals;
+    }
+
+    public function getAjaxRPQuotation($data = null)
+    {
+        // Hàm xử lý điều kiện lọc theo type (tháng, quý, năm)
+        $applyFilters = function ($query, $data, $dateField) {
+            if (isset($data['type']) && (isset($data['month']) || isset($data['quarter']) || isset($data['year']))) {
+                if ($data['type'] === 'thang' && isset($data['month']) && isset($data['year'])) {
+                    $query->whereYear($dateField, $data['year'])
+                        ->whereMonth($dateField, $data['month']);
+                } elseif ($data['type'] === 'quy' && isset($data['quarter']) && isset($data['year'])) {
+                    $startMonth = (($data['quarter'] - 1) * 3) + 1;
+                    $endMonth = $startMonth + 2;
+                    $query->whereYear($dateField, $data['year'])
+                        ->whereBetween(DB::raw("MONTH($dateField)"), [$startMonth, $endMonth]);
+                } elseif ($data['type'] === 'nam' && isset($data['year'])) {
+                    $query->whereYear($dateField, $data['year']);
+                }
+            }
+        };
+        $quotations = Quotation::join('receiving', 'receiving.id', 'quotations.reception_id')
+            ->join('return_form', 'return_form.reception_id', 'receiving.id')
+            ->where(function ($query) use ($applyFilters, $data) {
+                $applyFilters($query, $data, 'quotations.quotation_date');
+            })
+            ->select('quotations.*', 'receiving.form_code_receiving as form_code_receiving', 'receiving.status as status_recei', 'return_form.status');
+        if (!empty($data['search'])) {
+            $quotations->where(function ($query) use ($data) {
+                $query->where('quotation_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('form_code_receiving', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        $filterableFields = [
+            'ma' => 'quotation_code',
+            'receiving_code' => 'form_code_receiving',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $quotations->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+        if (isset($data['customer'])) {
+            $quotations = $quotations->whereIn('quotations.customer_id', $data['customer']);
+        }
+        if (isset($data['status'])) {
+            $quotations = $quotations->whereIn('receiving.status', $data['status']);
+        }
+        if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+            $dateStart = Carbon::parse($data['date'][0]);
+            $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+            $quotations->whereBetween('quotations.quotation_date', [$dateStart, $dateEnd]);
+        }
+        if (isset($data['tong_tien'][0]) && isset($data['tong_tien'][1])) {
+            $quotations = $quotations->where('quotations.total_amount', $data['tong_tien'][0], $data['tong_tien'][1]);
+        }
+        return $quotations = $quotations->get();
+    }
+    public function statusCountTotal($quotations)
+    {
+        $statusCounts = $quotations->groupBy('status_recei')->map(function ($group) {
+            return $group->count();
+        });
+
+        $totalAmounts = $quotations->groupBy('status_recei')->map(function ($group) {
+            return $group->sum('total_amount');
+        });
+        return compact('statusCounts', 'totalAmounts');
+    }
 }

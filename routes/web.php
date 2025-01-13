@@ -20,6 +20,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnFormController;
 use App\Http\Controllers\SerialNumberController;
 use App\Http\Controllers\WarrantyLookupController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['permission:admin']], function () {
@@ -38,7 +39,10 @@ Route::group(['middleware' => ['permission:admin']], function () {
 });
 Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 Route::patch('/notifications/mark-all-as-read/{type}', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
-
+Route::get('/notifications/count', function () {
+    $count = Auth::user()->unreadNotifications->count();
+    return response()->json(['count' => $count]);
+});
 
 // Products
 Route::resource('products', ProductController::class);
@@ -69,6 +73,8 @@ Route::get('/filter-returnforms', [ReturnFormController::class, 'filterData'])->
 Route::get('/filter-inven-lookup', [InventoryLookupController::class, 'filterData'])->name('filter-inven-lookup');
 Route::get('/filter-warran-lookup', [WarrantyLookupController::class, 'filterData'])->name('filter-warran-lookup');
 Route::get('/filter-reports-export-import', [ReportController::class, 'filterExportImport'])->name('reports.export_import');
+Route::get('/filter-reports-receipt-return', [ReportController::class, 'filterReceiptReturn'])->name('reports.receipt_return');
+Route::get('/filter-reports-quotation', [ReportController::class, 'filterQuotation'])->name('reports.quotation');
 
 
 Route::post('/update-status', [ReceivingController::class, 'updateStatus'])->name('update.status');

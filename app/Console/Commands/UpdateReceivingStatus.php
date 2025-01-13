@@ -33,7 +33,7 @@ class UpdateReceivingStatus extends Command
         $today = Carbon::now();
 
         // Các trạng thái để so sánh
-        $states = [
+        $messages = [
             '0' => 'tiếp nhận',
             '1' => 'chưa xử lý',
             '2' => 'quá hạn',
@@ -43,13 +43,9 @@ class UpdateReceivingStatus extends Command
         Receiving::whereIn('status', [1, 2])
             ->where('date_created', '>=', $today->copy()->subDays(3))
             ->get()
-            ->each(function ($receiving) use ($states) {
-                $oldState = $states[$receiving->state] ?? 'Không xác định';
-                $newState = $states[0];
+            ->each(function ($receiving) use ($messages) {
+                $newState = 0;
                 $receiving->update(['state' => 0]);
-
-                // Gửi thông báo
-                $this->notifyStateChange($receiving, $oldState, $newState);
             });
 
         // Chưa xử lý (>= 3 ngày, state = 1)
@@ -57,26 +53,26 @@ class UpdateReceivingStatus extends Command
             ->where('date_created', '<', $today->copy()->subDays(3))
             ->where('date_created', '>=', $today->copy()->subDays(21))
             ->get()
-            ->each(function ($receiving) use ($states) {
-                $oldState = $states[$receiving->state] ?? 'Không xác định';
-                $newState = $states[1];
-                $receiving->update(['state' => 1]);
+            ->each(function ($receiving) use ($messages) {
 
+                $newState = 1;
+                $message = $messages[1];
+                $receiving->update(['state' => 1]);
                 // Gửi thông báo
-                $this->notifyStateChange($receiving, $oldState, $newState);
+                $this->notifyStateChange($receiving, $newState, $message);
             });
 
         // Quá hạn (>= 21 ngày, state = 2)
         Receiving::whereNotIn('status', [3, 4])
             ->where('date_created', '<', $today->copy()->subDays(21))
             ->get()
-            ->each(function ($receiving) use ($states) {
-                $oldState = $states[$receiving->state] ?? 'Không xác định';
-                $newState = $states[2];
+            ->each(function ($receiving) use ($messages) {
+                $newState = 2;
+                $message = $messages[2];
                 $receiving->update(['state' => 2]);
 
                 // Gửi thông báo
-                $this->notifyStateChange($receiving, $oldState, $newState);
+                $this->notifyStateChange($receiving, $newState, $message);
             });
 
         // Hoàn thành hoặc khách không đồng ý
@@ -87,13 +83,22 @@ class UpdateReceivingStatus extends Command
         return Command::SUCCESS;
     }
 
-    private function notifyStateChange($receiving, $oldState, $newState)
+    private function notifyStateChange($receiving, $newState, $message)
     {
         $users = User::whereDoesntHave('permissions', function ($query) {
             $query->where('name', 'quankho');
         })->get();
         foreach ($users as $user) {
-            $user->notify(new \App\Notifications\ReceiNotification($receiving, $oldState, $newState));
+            // Kiểm tra xem thông báo đã tồn tại chưa
+            $notificationExists = $user->notifications()
+                ->where('type', \App\Notifications\ReceiNotification::class)
+                ->where('data->receiving_id', $receiving->id)
+                ->where('data->state', $newState)
+                ->exists();
+            // Chỉ gửi thông báo nếu chưa tồn tại
+            if (!$notificationExists) {
+                $user->notify(new \App\Notifications\ReceiNotification($receiving, $newState, $message));
+            }
         }
     }
 }
