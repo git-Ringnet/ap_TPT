@@ -787,7 +787,7 @@ class ReportController extends Controller
         $currentQuarter = null;
         $currentYear = null;
         if (isset($data['ma']) && $data['ma'] !== null) {
-            $filters[] = ['value' => 'Mã hàng: ' . $data['ma'], 'name' => 'ma-hang', 'icon' => 'po'];
+            $filters[] = ['value' => 'Mã phiếu: ' . $data['ma'], 'name' => 'ma-phieu', 'icon' => 'po'];
         }
         if (isset($data['receiving_code']) && $data['receiving_code'] !== null) {
             $filters[] = ['value' => 'Phiếu tiếp nhận: ' . $data['receiving_code'], 'name' => 'phieu-tiep-nhan', 'icon' => 'po'];

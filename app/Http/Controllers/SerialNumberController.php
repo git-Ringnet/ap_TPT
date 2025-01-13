@@ -128,7 +128,6 @@ class SerialNumberController extends Controller
             ->first();
     }
 
-
     private function getWarranty($serialId, $productId = null)
     {
         $query = DB::table('warranty_lookup')->where('sn_id', $serialId);
@@ -191,10 +190,19 @@ class SerialNumberController extends Controller
                     }
                 } else {
                     $warranty = $this->getWarranty($seri->id, $productId);
-                    if (!$warranty) {
+
+                    if (!in_array($formType, [1, 2])) {
+                        $message = 'Loại biểu mẫu không hợp lệ.';
+                    } elseif (!$warranty) {
                         $message = 'Không tìm thấy thông tin bảo hành.';
                     } else {
-                        $valid = true;
+                        $isValidType1 = ($formType == 1 && $warranty->status == 0);
+                        $isValidType2 = ($formType == 2 && $warranty->status == 1);
+                        if ($isValidType1 || $isValidType2) {
+                            $valid = true;
+                        } else {
+                            $message = 'Sản phẩm còn bảo hành.';
+                        }
                     }
                 }
             } elseif ($branchId == 2) {
@@ -215,7 +223,7 @@ class SerialNumberController extends Controller
 
         return response()->json(['status' => 'success', 'serials' => $results]);
     }
-    
+
     public function checkSerialNumbers(Request $request)
     {
         $productId = $request->input('productId');

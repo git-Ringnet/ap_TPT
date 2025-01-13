@@ -193,8 +193,6 @@
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->customer->customer_name }}
-                                                {{ $item->quotation->quotation_code ?? '' }}
-                                                {{ $item->returnForms->return_code ?? '' }}
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -392,7 +390,8 @@
 
 
     $(document).ready(function() {
-        $('.row-data').on('click', function(e) {
+        $('.row-data').on('contextmenu', function(e) {
+            e.preventDefault();
             const $row = $(this);
             const $optionButton = $('.option-button');
             const $statusList = $optionButton.find('.status-list');

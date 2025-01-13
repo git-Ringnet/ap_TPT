@@ -2,7 +2,7 @@
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed px-1">
-        <div class="content__header--inner border-bottom">
+        <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Hàng tiếp nhận', 'Hàng đã trả']" :filtersTime="['Tháng', 'Quý', 'Năm']">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
                 <x-filter-text name="ten-hang" title="Tên hàng" />
@@ -16,15 +16,16 @@
             </x-search-filter>
         </div>
     </div>
-    <div class="content margin-top-127">
-        <div class="bg-filter-search text-center border">
-            <p class="font-weight-bold text-uppercase info-chung--heading text-center py-2">
-                BÁO CÁO HÀNG TIẾP NHẬN - TRẢ HÀNG
-            </p>
-        </div>
+    <div class="content margin-top-86">
+
         <section class="content report-content">
+            <div class="row result-filter-rp_receipt_return margin-left20">
+            </div>
             <div class="container-fluided">
-                <div class="row result-filter-rp_receipt_return margin-left20">
+                <div class="bg-filter-search text-center border border-bottom-0">
+                    <p class="font-weight-bold text-uppercase info-chung--heading text-center py-2">
+                        BÁO CÁO HÀNG TIẾP NHẬN - TRẢ HÀNG
+                    </p>
                 </div>
                 <div class="col-12 p-0 m-0">
                     <div class="card">
