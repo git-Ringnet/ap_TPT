@@ -501,11 +501,11 @@
                         });
 
                         if (hasInvalidSerial) {
-                            alert(`Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+                            showAutoToast("warning", `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
                             event.preventDefault();
                             return false; // Chặn tiếp tục xử lý
                         } else {
-                            alert('Tất cả serial hợp lệ! Đang xử lý...');
+                            showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');
                             $('#form-submit').submit();
                         }
                     } else {
@@ -513,7 +513,7 @@
                     }
                 });
             } else {
-                alert('Vui lòng chọn Branch và Form Type và nhập Serial.');
+                showAutoToast("warning", 'Vui lòng chọn Hãng tiếp nhận, Loại phiếu và nhập Serial.');
             }
         });
 

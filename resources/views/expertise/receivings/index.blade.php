@@ -372,11 +372,11 @@
                                 .removeClass('bg-custom-yl');
                         }
                     } else {
-                        alert('Cập nhật trạng thái không thành công.');
+                        showAutoToast("warning", 'Cập nhật trạng thái không thành công.');
                     }
                 },
                 error: function() {
-                    alert('Không thể cập nhật trạng thái. Vui lòng thử lại.');
+                    showAutoToast("warning", 'Không thể cập nhật trạng thái. Vui lòng thử lại.');
                 },
             });
 

@@ -19,6 +19,30 @@
 //         options.hide();
 //     });
 // }
+function showAutoToast(type, message) {
+    let color;
+    switch (type) {
+        case "success":
+            color = "#09BD3C"; // Màu xanh lá cây cho thông báo thành công
+            break;
+        case "warning":
+            color = "#FF9500"; // Màu cam cho thông báo cảnh báo
+            break;
+        default:
+            color = "#343a40"; // Màu mặc định
+    }
+
+    Toastify({
+        text: message, // Nội dung thông báo
+        duration: 3000, // Thời gian hiển thị (ms)
+        close: true, // Cho phép đóng thông báo
+        gravity: "top", // Vị trí hiển thị (top, bottom, left, right)
+        position: "center",
+        style: {
+            background: color, // Màu nền
+        },
+    }).showToast(); // Hiển thị thông báo toast
+}
 $(document).on("click", function (event) {
     if (
         !$(event.target).closest(".dropdown-menu,.block-options,.item-filter")
@@ -187,7 +211,8 @@ $(document).ready(function () {
                     endDate.getMonth() === startDate.getMonth() &&
                     endDate.getDate() < startDate.getDate())
             ) {
-                alert(
+                showAutoToast(
+                    "warning",
                     "Ngày kết thúc không được nhỏ hơn hoặc bằng ngày bắt đầu!"
                 );
                 $(this).val("");
@@ -439,7 +464,7 @@ function handleAjaxRequest(formData, route, nametable) {
         },
         error: function (xhr, status, error) {
             console.error("AJAX Error:", status, error);
-            alert("Đã xảy ra lỗi, vui lòng thử lại.");
+            showAutoToast("warning", "Đã xảy ra lỗi, vui lòng thử lại.");
         },
     });
 

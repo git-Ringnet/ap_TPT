@@ -1,3 +1,27 @@
+function showAutoToast(type, message) {
+    let color;
+    switch (type) {
+        case "success":
+            color = "#09BD3C"; // Màu xanh lá cây cho thông báo thành công
+            break;
+        case "warning":
+            color = "#FF9500"; // Màu cam cho thông báo cảnh báo
+            break;
+        default:
+            color = "#343a40"; // Màu mặc định
+    }
+
+    Toastify({
+        text: message, // Nội dung thông báo
+        duration: 3000, // Thời gian hiển thị (ms)
+        close: true, // Cho phép đóng thông báo
+        gravity: "top", // Vị trí hiển thị (top, bottom, left, right)
+        position: "center",
+        style: {
+            background: color, // Màu nền
+        },
+    }).showToast(); // Hiển thị thông báo toast
+}
 $(document).ready(function () {
     // Hàm thêm dòng
     $("#add-rows").click(function (event) {
@@ -6,7 +30,10 @@ $(document).ready(function () {
         const numRows = parseInt($("#row-count").val(), 10); // Lấy số lượng dòng cần thêm từ input
 
         if (isNaN(numRows) || numRows <= 0) {
-            alert("Vui lòng nhập số dòng hợp lệ (lớn hơn 0)");
+            showAutoToast(
+                "warning",
+                "Vui lòng nhập số dòng hợp lệ (lớn hơn 0)"
+            );
             return;
         }
         for (let i = 0; i < numRows; i++) {
@@ -142,7 +169,10 @@ $(document).on("click", ".submit-button", function (event) {
         }
     });
     if (hasError) {
-        alert("Có số serial không hợp lệ, vui lòng kiểm tra lại.");
+        showAutoToast(
+            "warning",
+            "Có số serial không hợp lệ, vui lòng kiểm tra lại."
+        );
         return;
     } else {
         console.log("Tất cả serial đều hợp lệ.");
@@ -153,11 +183,11 @@ $(document).on("click", ".submit-button", function (event) {
     let product = getProduct(); // Lấy thông tin sản phẩm
 
     if (!product || Object.keys(product).length === 0) {
-        alert("Vui lòng nhập thông tin sản phẩm.");
+        showAutoToast("warning", "Vui lòng nhập thông tin sản phẩm.");
         return;
     }
     if (serialNumbers.length === 0) {
-        alert("Vui lòng nhập ít nhất một serial number");
+        showAutoToast("warning", "Vui lòng nhập ít nhất một serial number");
         return;
     }
 
@@ -177,12 +207,12 @@ $(document).on("click", ".submit-button", function (event) {
 
     // Nếu có giá trị trùng, thông báo
     if (duplicates.length > 0) {
-        alert("Các S/N bị trùng: " + duplicates.join(", "));
+        showAutoToast("warning", "Các S/N bị trùng: " + duplicates.join(", "));
         return;
     }
 
     if (!product || Object.keys(product).length === 0) {
-        alert("Vui lòng nhập thông tin sản phẩm.");
+        showAutoToast("warning", "Vui lòng nhập thông tin sản phẩm.");
         return;
     }
 

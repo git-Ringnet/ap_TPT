@@ -249,6 +249,7 @@
     </div>
 </div>
 <script src="{{ asset('js/barcode.js') }}"></script>
+<script src="{{asset('dist/js/scripts.js')}}"></script>
 <script>
     // Name modal
     let nameModal = $("#name_modal").val();
@@ -326,7 +327,7 @@
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
         if ($('#tbody-product-data tr#serials-data').length === 0) {
-            alert("Vui lòng thêm sản phẩm.");
+            showAutoToast("warning", "Vui lòng thêm sản phẩm.");
             e.preventDefault();
         }
 
@@ -346,7 +347,7 @@
 
         // Nếu có giá trị trùng, thông báo
         if (duplicates.length > 0) {
-            alert("Các S/N bị trùng: " + duplicates.join(", "));
+            showAutoToast("warning", "Các S/N bị trùng: " + duplicates.join(", "));
             e.preventDefault();
         }
 
@@ -407,7 +408,7 @@
                 message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
             }
 
-            alert(message);
+            showAutoToast("warning", message);
             e.preventDefault(); // Ngăn form submit
         }
 
