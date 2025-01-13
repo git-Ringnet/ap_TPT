@@ -43,7 +43,7 @@ class ReturnFormController extends Controller
         $quoteNumber = (new Receiving)->getQuoteCount('PTH', ReturnForm::class, 'return_code');
         $title = 'Tạo phiếu trả hàng';
         $existingReceptionIds = ReturnForm::pluck('reception_id')->toArray();
-        $receivings = Receiving::whereNotIn('id', $existingReceptionIds)->get();
+        $receivings = Receiving::whereNotIn('id', $existingReceptionIds)->where('status', 2)->get();
         return view('expertise.returnforms.create', compact('quoteNumber', 'title', 'receivings'));
     }
 
@@ -103,8 +103,8 @@ class ReturnFormController extends Controller
 
                     // Thêm vào bảng warranty_lookup cho serial thay thế
                     $oldWarrantyLookup = warrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
-                    // dd($oldWarrantyLookup);
                     if ($oldWarrantyLookup) {
+                        dd('cassd');
                         $WarrantyLookup =  WarrantyLookup::create([
                             'product_id' => $returnItem['product_id'],
                             'sn_id' => $replacementSerialId,
@@ -125,28 +125,41 @@ class ReturnFormController extends Controller
                     // Nếu không có seri thay thế thì cập nhật vào seri cũ thêm thời gian bảo hành
                     $WarrantyLookup = warrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     if ($WarrantyLookup) {
+                        // Nếu tìm thấy, cập nhật thông tin
                         $WarrantyLookup->update([
                             'warranty' => $WarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
                             'warranty_expire_date' => Carbon::parse($WarrantyLookup->warranty_expire_date)
                                 ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
                             'status' => 0,
-
                         ]);
                         $today = Carbon::now();
                         if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
                             $WarrantyLookup->update(['status' => 1]);
                         }
+                    } else {
+                        // Nếu không tìm thấy, tạo mới bản ghi
+                        $WarrantyLookup = warrantyLookup::create([
+                            'product_id' => $returnItem['product_id'],
+                            'sn_id' => $returnItem['serial_id'],
+                            'customer_id' => $validated['customer_id'],
+                            'export_return_date' => $validated['date_created'],
+                            'warranty' => $returnItem['extra_warranty'] ?? 0,
+                            'warranty_expire_date' =>
+                            Carbon::parse($validated['date_created'])
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
+                            'status' => 0,
+                        ]);
+                    }
+                    // Kiểm tra lại trạng thái của warranty sau khi tạo hoặc cập nhật
+                    $today = Carbon::now();
+                    if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
+                        $WarrantyLookup->update(['status' => 1]);
                     }
                 }
                 // Cập nhật trạng thái của serial chính thành 4
                 $serial = SerialNumber::find($returnItem['serial_id']);
                 if ($serial) {
                     $serial->update(['status' => 4]);
-                } else {
-                    DB::rollBack();
-                    return back()->withErrors([
-                        'error' => "Không tìm thấy serial_id '{$returnItem['serial_id']}' trong bảng seri."
-                    ])->withInput();
                 }
                 // Tạo bản ghi product_return
                 ProductReturn::create([
@@ -274,22 +287,37 @@ class ReturnFormController extends Controller
                     // Cập nhật/Thêm bản ghi vào warranty_lookup
                     $oldWarrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     if ($oldWarrantyLookup) {
-                        WarrantyLookup::create([
+                        $WarrantyLookup = WarrantyLookup::create([
                             'product_id' => $returnItem['product_id'],
                             'sn_id' => $replacementSerialId,
                             'customer_id' => $validated['customer_id'],
                             'export_return_date' => $oldWarrantyLookup->export_return_date,
                             'warranty' => $oldWarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                            'warranty_expire_date' => Carbon::parse($oldWarrantyLookup->warranty_expire_date)
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
                             'status' => 0,
+
                         ]);
+                        $today = Carbon::now();
+                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
+                            $WarrantyLookup->update(['status' => 1]);
+                        }
                     }
                 } else {
                     // Nếu không có serial thay thế, cập nhật warranty cho serial hiện tại
-                    $warrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
-                    if ($warrantyLookup) {
-                        $warrantyLookup->update([
-                            'warranty' => $warrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                    $WarrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
+                    if ($WarrantyLookup) {
+                        $WarrantyLookup->update([
+                            'warranty' => $WarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                            'warranty_expire_date' => Carbon::parse($WarrantyLookup->warranty_expire_date)
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
+                            'status' => 0,
+
                         ]);
+                        $today = Carbon::now();
+                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
+                            $WarrantyLookup->update(['status' => 1]);
+                        }
                     }
                 }
                 // Cập nhật trạng thái của serial chính thành 4
@@ -334,11 +362,38 @@ class ReturnFormController extends Controller
      */
     public function destroy(string $id)
     {
+        // Tìm phiếu trả hàng và liên kết của nó
         $returnForm = ReturnForm::findOrFail($id);
+
+        // Trước khi xóa phiếu trả hàng, cần phải giảm giá trị warranty của các sản phẩm trong phiếu trả hàng
+        $returnForm->productReturns->each(function ($returnItem) {
+            // Tìm WarrantyLookup tương ứng với serial_id của sản phẩm
+            $WarrantyLookup = WarrantyLookup::where('sn_id', $returnItem->serial_number_id)->first();
+            if ($WarrantyLookup) {
+                // Trừ đi thời gian bảo hành (warranty) và ngày hết hạn bảo hành (warranty_expire_date)
+                $newWarranty = $WarrantyLookup->warranty - ($returnItem->extra_warranty ?? 0);
+                $newWarrantyExpireDate = Carbon::parse($WarrantyLookup->warranty_expire_date)
+                    ->subMonths((int) ($returnItem->extra_warranty ?? 0));
+                // Kiểm tra nếu newWarranty <= 0 thì xoá WarrantyLookup
+                if ($newWarranty <= 0) {
+                    $WarrantyLookup->delete();
+                } else {
+                    // Cập nhật WarrantyLookup với giá trị mới
+                    $WarrantyLookup->update([
+                        'warranty' => $newWarranty,
+                        'warranty_expire_date' => $newWarrantyExpireDate,
+                    ]);
+                }
+            }
+        });
+
+        // Xóa phiếu trả hàng và các sản phẩm liên quan
         $returnForm->delete();
         $returnForm->productReturns()->delete();
+        // Trả về thông báo và chuyển hướng
         return redirect()->route('returnforms.index')->with('msg', 'Xoá phiếu trả hàng thành công!');
     }
+
     public function filterData(Request $request)
     {
         $data = $request->all();

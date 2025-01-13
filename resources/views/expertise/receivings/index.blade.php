@@ -182,7 +182,7 @@
                                             data-edit-quote-url="{{ route('quotations.edit', ':id') }}"
                                             class="position-relative data-info row-data height-40 @if ($item->state == 1) bg-custom-yl @elseif($item->state == 2) bg-custom-pink @else bg-white @endif">
                                             <input type="hidden" name="id-data" class="id-data" id="id-data"
-                                                value="{{ $item->id }}"
+                                                value="{{ $item->id }}" data-status="{{ $item->status }}"
                                                 data-has-return="{{ $item->returnForms->id ?? 0 }}"
                                                 data-has-quote="{{ $item->quotation->id ?? 0 }}">
                                             <td
@@ -295,11 +295,10 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <button class="option-btn btn return-form" data-action="return-form">Trả
-                                        form</button>
+                                    <button class="option-btn btn return-form" data-action="return-form"></button>
                                 </li>
                                 <li>
-                                    <button class="option-btn btn quotation" data-action="quotation">Báo giá</button>
+                                    <button class="option-btn btn quotation" data-action="quotation"></button>
                                 </li>
                             </ul>
 
@@ -366,6 +365,8 @@
                     console.log(response);
                     if (response.status === 'success') {
                         $td.text(statusText);
+                        $('input.id-data[value="' + response.id + '"]').data('status',
+                            statusId);
                         if (statusId != 1 && statusId != 2) {
                             $('input.id-data[value="' + response.id + '"]').closest('tr')
                                 .removeClass('bg-custom-yl');
@@ -390,7 +391,7 @@
 
 
     $(document).ready(function() {
-        $('.row-data').on('contextmenu', function(e) {
+        $(document).on('contextmenu', '.row-data', function(e) {
             e.preventDefault();
             const $row = $(this);
             const $optionButton = $('.option-button');
@@ -398,16 +399,27 @@
             const dataRecei = $row.find('.id-data').val();
             const hasReturn = $row.find('.id-data').data('has-return');
             const hasQuote = $row.find('.id-data').data('has-quote');
+            const dataStatus = $row.find('.id-data').data('status');
+
             const urls = {
                 createReturn: `${$row.data('create-return-url')}?recei=${dataRecei}`,
                 editReturn: $row.data('edit-return-url').replace(':id', hasReturn),
                 createQuote: `${$row.data('create-quote-url')}?recei=${dataRecei}`,
                 editQuote: $row.data('edit-quote-url').replace(':id', hasQuote),
             };
-            updateButtonText($optionButton.find('.return-form'), hasReturn, 'Tạo phiếu trả hàng',
-                'Sửa phiếu trả hàng', urls.createReturn, urls.editReturn);
-            updateButtonText($optionButton.find('.quotation'), hasQuote, 'Tạo phiếu báo giá',
-                'Sửa phiếu báo giá', urls.createQuote, urls.editQuote);
+
+            // Kiểm tra nếu dataStatus = 1 thì ẩn các nút tạo và sửa
+            if (dataStatus === 1) {
+                $optionButton.find('.return-form, .quotation').addClass('d-none');
+            } else {
+                // Hiển thị và cập nhật nút tạo/sửa khi dataStatus không phải là 1
+                $optionButton.find('.return-form, .quotation').removeClass('d-none');
+                updateButtonText($optionButton.find('.return-form'), hasReturn, 'Tạo phiếu trả hàng',
+                    'Sửa phiếu trả hàng', urls.createReturn, urls.editReturn);
+                updateButtonText($optionButton.find('.quotation'), hasQuote, 'Tạo phiếu báo giá',
+                    'Sửa phiếu báo giá', urls.createQuote, urls.editQuote);
+            }
+
             const statusData = hasReturn !== 0 ? [{
                     status: 3,
                     label: 'Hoàn thành'
@@ -425,17 +437,19 @@
                     label: 'Xử lý'
                 }
             ];
+
             $statusList.empty(); // Xóa danh sách cũ
             statusData.forEach(({
                 status,
                 label
             }) => {
                 $statusList.append(`
-            <li data-return="${hasReturn}" data-recei="${dataRecei}" data-status="${status}">
-                ${label}
-            </li>
-        `);
+                <li data-return="${hasReturn}" data-recei="${dataRecei}" data-status="${status}">
+                    ${label}
+                </li>
+            `);
             });
+
             const {
                 clientX: x,
                 clientY: y
@@ -447,12 +461,14 @@
                 zIndex: 1000,
             }).show();
         });
+
         $(document).on('click', function(e) {
             if (!$(e.target).closest('.row-data').length && !$(e.target).closest('.option-button')
                 .length) {
                 $('.option-button').hide();
             }
         });
+
         $('.option-btn').on('click', function() {
             const url = $(this).data('url');
             if (url) window.open(url, '_blank');

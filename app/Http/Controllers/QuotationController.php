@@ -32,7 +32,7 @@ class QuotationController extends Controller
         $quoteNumber = (new Receiving)->getQuoteCount('PBG', Quotation::class, 'quotation_code');
         $title = 'Tạo phiếu báo giá';
         $excludedReceptionIds = Quotation::pluck('reception_id')->toArray();
-        $receivings = Receiving::whereNotIn('id', $excludedReceptionIds)->get();
+        $receivings = Receiving::whereNotIn('id', $excludedReceptionIds)->where('status', 2)->get();
         return view('expertise.quotations.create', compact('title', 'quoteNumber', 'receivings'));
     }
 
