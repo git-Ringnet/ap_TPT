@@ -37,6 +37,7 @@ class InventoryLookupNotification extends Notification
         return [
             'inventoryLookup_id' => $this->inventoryLookup->id,
             'serial_code' => $this->inventoryLookup->serialNumber->serial_code,
+            'warranty_date' => $this->inventoryLookup->warranty_date,
             'message' => $this->message,
             'storage_duration' => $this->inventoryLookup->storage_duration,
         ];

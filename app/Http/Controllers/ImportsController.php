@@ -90,7 +90,7 @@ class ImportsController extends Controller
         foreach ($uniqueProductsArray as $serial) {
             if (isset($serial['serial']) && !empty($serial['serial'])) {
                 $newSerial = SerialNumber::create([
-                    'serial_code' => $serial['serial'],
+                    'serial_code' => str_replace(' ', '', $serial['serial']),
                     'product_id' => $serial['product_id'],
                     'note' => $serial['note_seri'],
                 ]);
@@ -235,7 +235,7 @@ class ImportsController extends Controller
         foreach ($newSerials as $serialData) {
             if (isset($serialData['serial']) && !empty($serialData['serial'])) {
                 $newSerial = SerialNumber::create([
-                    'serial_code' => $serialData['serial'],
+                    'serial_code' => str_replace(' ', '', $serialData['serial']),
                     'product_id' => $serialData['product_id'], // Nếu cần lưu product_id
                 ]);
                 // Thêm sn_id vào danh sách serialIds để dùng sau
