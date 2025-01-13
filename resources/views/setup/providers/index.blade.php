@@ -33,7 +33,7 @@
     {{-- Content --}}
     <section class="content">
         <div class="container-fluided">
-            <div class="row result-filter-provide margin-left20 my-1">
+            <div class="row result-filter-provide margin-left20 my-1 mr-0">
             </div>
             <div class="col-12 p-0 m-0">
                 <div class="card ">
@@ -192,12 +192,12 @@
                                     @endphp
                                 @endforeach
                                 <tr class="height-40 border-bottom border">
-                                    <td class="border-right border-top-0 border-bottom"></td>
-                                    <td class="text-right py-0 border-right border-top-0 border-bottom text-purble">
+                                    <td class="border-left border-top-0 border-bottom"></td>
+                                    <td class="text-right py-0 border-left border-top-0 border-bottom text-purble">
                                         Có
                                         <strong>{{ $total }}</strong> nhà cung cấp
                                     </td>
-                                    <td class="border-top-0 border-right border-bottom" colspan="13"></td>
+                                    <td class="border-top-0 border-left border-bottom" colspan="13"></td>
                                 </tr>
                                 @foreach ($groups as $value)
                                     @php

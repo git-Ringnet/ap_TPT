@@ -31,12 +31,15 @@ class UpdateWanrratyStatus extends Command
         $today = Carbon::now();
 
         // Lấy tất cả bản ghi đang trong trạng thái "đang bảo hành"
-        $records = warrantyLookup::where('status', 0)->get();
+        $records = WarrantyLookup::all();
 
         foreach ($records as $record) {
             // Kiểm tra nếu đã hết hạn bảo hành
             if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                 $record->update(['status' => 1]); // Cập nhật trạng thái thành "hết bảo hành"
+            }
+            else{
+                $record->update(['status' => 0]);
             }
         }
 

@@ -33,7 +33,7 @@
 <div class="content margin-top-127">
     <section class="content">
         <div class="container-fluided">
-            <div class="row result-filter-guest margin-left20 my-1">
+            <div class="row result-filter-guest margin-left20 my-1 mr-0">
             </div>
             <div class="col-12 p-0 m-0">
                 <div class="card">
@@ -141,7 +141,7 @@
                                                 class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                 {{ $item->email }}</td>
                                             <td
-                                                class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0 border-right-0">
+                                                class="text-13-black border-bottom border text-left py-0 border-top-0 border-right-0">
                                                 {{ $item->note }}</td>
                                             <td
                                                 class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
@@ -199,7 +199,7 @@
                                         $total = 0;
                                     @endphp
                                     <tr class="height-40">
-                                        <td class="text-purble border-bottom-0 py-1 border-right pl-4 border-top-0"
+                                        <td class="text-purble border-bottom py-1 border-right pl-4 border-top-0"
                                             style="font-size: 16px;" colspan="6">Khách hàng :
                                             {{ $value->group_name }}</td>
                                     </tr>
@@ -212,24 +212,24 @@
                                                 <input type="hidden" name="id-guest" class="id-guest"
                                                     id="id-guest" value="{{ $item->id }}">
                                                 <td
-                                                    class="text-13-black border border-left-0 border-bottom-0 py-0 pl-4">
+                                                    class="text-13-black border-right-0 border-bottom border-top-0 py-0 pl-4">
                                                     <a
                                                         href="{{ route('customers.edit', ['customer' => $item->id]) }}">{{ $item->customer_code }}
                                                     </a>
                                                 </td>
-                                                <td class="text-13-black border border-left-0 border-bottom-0 py-0">
+                                                <td class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0">
                                                     {{ $item->customer_name }}
                                                 </td>
-                                                <td class="text-13-black border border-left-0 border-bottom-0 py-0">
+                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->address }}
                                                 </td>
-                                                <td class="text-13-black border border-left-0 border-bottom-0 py-0">
+                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->phone }}
                                                 </td>
-                                                <td class="text-13-black border border-left-0 border-bottom-0 py-0">
+                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->email }}</td>
                                                 <td
-                                                    class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
+                                                    class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->note }}</td>
                                                 <td
                                                     class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
@@ -273,16 +273,16 @@
                                         @endif
                                     @endforeach
                                     <tr class="height-40">
-                                        <td class="border-right border-bottom"></td>
+                                        <td class="border-right-0 border-top-0 border-bottom"></td>
                                         <td
-                                            class="text-right py-0 border-right-0 border-bottom text-13-black text-purble">
+                                            class="text-right py-0 border-top-0 border-left border-right-0 border-bottom text-13-black text-purble">
                                             Có
                                             <strong class="total_guest" data-id="{{ $value->id }}">
                                                 {{ $total }}
                                             </strong>khách hàng
                                         </td>
-                                        <td colspan="3" class="border-bottom border-left"></td>
-                                        <td class="text-right guest_debt_total border-bottom"
+                                        <td colspan="3" class="border-top-0 border-bottom border-left"></td>
+                                        <td class="text-right guest_debt_total border-bottom border-top-0"
                                             data-id="{{ $value->id }}">
                                         </td>
                                     </tr>

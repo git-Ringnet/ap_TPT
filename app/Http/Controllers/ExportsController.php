@@ -87,10 +87,13 @@ class ExportsController extends Controller
                     ]);
                     //
                     $today = Carbon::now();
-                    $records = warrantyLookup::where('status', 0)->get();
+                    $records = WarrantyLookup::all();
                     foreach ($records as $record) {
                         if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                             $record->update(['status' => 1]);
+                        }
+                        else{
+                            $record->update(['status' => 0]);
                         }
                     }
                 }
@@ -257,10 +260,13 @@ class ExportsController extends Controller
 
         // Cập nhật trạng thái bảo hành
         $today = Carbon::now();
-        $records = WarrantyLookup::where('status', 0)->get();
+        $records = WarrantyLookup::all();
         foreach ($records as $record) {
             if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                 $record->update(['status' => 1]);
+            }
+            else{
+                $record->update(['status' => 0]);
             }
         }
 
