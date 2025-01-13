@@ -63,6 +63,9 @@ class UpdateInventoryStatus extends Command
                     $message = "tới hạn bảo trì";
                     $this->notifyStatusChange($record, $message);
                 }
+            } else {
+                $record->status = 0;
+                $record->save();
             }
         }
 

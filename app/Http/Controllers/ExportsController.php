@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductExport;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Models\warrantyHistory;
 use App\Models\warrantyLookup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -153,6 +154,10 @@ class ExportsController extends Controller
         // Cập nhật dữ liệu
         $export->update($validatedData);
 
+        // Cập nhật export_return_date của warrantyLookup
+        warrantyLookup::whereIn('sn_id', ProductExport::where('export_id', $id)->pluck('sn_id'))
+            ->update(['export_return_date' => $request->date_create, 'customer_id' => $request->customer_id]);
+
         // Lấy dữ liệu từ form gửi lên
         $dataTest = json_decode($request->input('data-test'), true);
 
@@ -249,6 +254,14 @@ class ExportsController extends Controller
             ->whereIn('sn_id', $removedSnIds)
             ->delete();
 
+        $today = Carbon::now();
+        $records = warrantyLookup::where('status', 0)->get();
+        foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $record->update(['status' => 1]);
+            }
+        }
+
         return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
     }
 
@@ -258,8 +271,32 @@ class ExportsController extends Controller
     public function destroy(String $id)
     {
         $export = Exports::findOrFail($id);
-        ProductExport::where('export_id', $id)->delete();
-        $export->delete();
+        $productExports = ProductExport::where('export_id', $id)->get();
+
+        foreach ($productExports as $productExport) {
+            $exists = SerialNumber::where('id', $productExport->sn_id)
+                ->where('status', 2)
+                ->exists();
+            if (!$exists) {
+                return redirect()->route('exports.index')->with('warning', 'Xóa thất bại: Có SerialNumber không hợp lệ.');
+            }
+        }
+
+        // Nếu tất cả SerialNumber hợp lệ, thực hiện xóa
+        foreach ($productExports as $productExport) {
+            $warrantyLookups = warrantyLookup::where('sn_id', $productExport->sn_id)->get();
+            foreach ($warrantyLookups as $warrantyLookup) {
+                warrantyHistory::where('warranty_lookup_id', $warrantyLookup->id)->delete();
+            }
+            warrantyLookup::where('sn_id', $productExport->sn_id)->delete();
+            SerialNumber::where('id', $productExport->sn_id)->update(['status' => 1]);
+            $productExport->delete();
+        }
+
+        if (!ProductExport::where('export_id', $id)->exists()) {
+            $export->delete();
+        }
+
         return redirect()->route('exports.index')->with('msg', 'Xóa thành công phiếu xuất hàng!');
     }
     public function filterData(Request $request)

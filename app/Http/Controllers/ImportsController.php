@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Exports;
 use App\Models\Imports;
+use App\Models\InventoryHistory;
 use App\Models\InventoryLookup;
 use App\Models\Product;
 use App\Models\ProductImport;
@@ -109,6 +110,32 @@ class ImportsController extends Controller
                     'storage_duration' => 0,
                     'status' => 0,
                 ]);
+
+                $records = InventoryLookup::all();
+                foreach ($records as $record) {
+                    // Tính thời gian tồn kho
+                    $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
+                    $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
+
+                    // Cập nhật thời gian tồn kho
+                    $record->update(['storage_duration' => $storageDuration]);
+
+                    // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
+                    if ($storageDuration >= 90 && !$record->warranty_date) {
+                        // Lần bảo trì đầu tiên
+                        $record->status = 1;
+                        $record->save();
+                    } else if ($record->warranty_date) {
+                        // Các lần bảo trì tiếp theo
+                        $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
+
+                        if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
+                            // Nếu đã tới thời gian bảo trì tiếp theo
+                            $record->status = 1;
+                            $record->save();
+                        }
+                    }
+                }
             }
         }
 
@@ -183,6 +210,10 @@ class ImportsController extends Controller
 
         // Cập nhật dữ liệu
         $import->update($validatedData);
+
+        // Cập nhật import_date của InventoryLookup
+        InventoryLookup::whereIn('sn_id', ProductImport::where('import_id', $id)->pluck('sn_id'))
+            ->update(['import_date' => $request->date_create, 'provider_id' => $request->provider_id]);
 
         // Lấy dữ liệu từ form gửi lên
         $dataTest = json_decode($request->input('data-test'), true);
@@ -265,6 +296,35 @@ class ImportsController extends Controller
             InventoryLookup::whereIn('sn_id', $removedSnIds)->delete();
         }
 
+        $records = InventoryLookup::all();
+        foreach ($records as $record) {
+            // Tính thời gian tồn kho
+            $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
+            $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
+
+            // Cập nhật thời gian tồn kho
+            $record->update(['storage_duration' => $storageDuration]);
+
+            // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
+            if ($storageDuration >= 90 && !$record->warranty_date) {
+                // Lần bảo trì đầu tiên
+                $record->status = 1;
+                $record->save();
+            } else if ($record->warranty_date) {
+                // Các lần bảo trì tiếp theo
+                $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
+
+                if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
+                    // Nếu đã tới thời gian bảo trì tiếp theo
+                    $record->status = 1;
+                    $record->save();
+                }
+            } else {
+                $record->status = 0;
+                $record->save();
+            }
+        }
+
         return redirect()->route('imports.index')->with('msg', 'Cập nhật thành công phiếu nhập hàng!');
     }
 
@@ -274,8 +334,32 @@ class ImportsController extends Controller
     public function destroy(String $id)
     {
         $import = Imports::findOrFail($id);
-        ProductImport::where('import_id', $id)->delete();
-        $import->delete();
+        $productImports = ProductImport::where('import_id', $id)->get();
+
+        foreach ($productImports as $productImport) {
+            $exists = SerialNumber::where('id', $productImport->sn_id)
+                ->where('status', 1)
+                ->exists();
+            if (!$exists) {
+                return redirect()->route('imports.index')->with('warning', 'Xóa thất bại: Có SerialNumber không hợp lệ.');
+            }
+        }
+
+        // Nếu tất cả SerialNumber hợp lệ, thực hiện xóa
+        foreach ($productImports as $productImport) {
+            $inventoryLookups = InventoryLookup::where('sn_id', $productImport->sn_id)->get();
+            foreach ($inventoryLookups as $inventoryLookup) {
+                InventoryHistory::where('inventory_lookup_id', $inventoryLookup->id)->delete();
+            }
+            InventoryLookup::where('sn_id', $productImport->sn_id)->delete();
+            SerialNumber::where('id', $productImport->sn_id)->delete();
+            $productImport->delete();
+        }
+
+        if (!ProductImport::where('import_id', $id)->exists()) {
+            $import->delete();
+        }
+
         return redirect()->route('imports.index')->with('msg', 'Xóa thành công phiếu nhập hàng!');
     }
     public function searchMiniView(Request $request)
