@@ -11,6 +11,7 @@ use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
 use App\Models\warrantyLookup;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -104,14 +105,21 @@ class ReturnFormController extends Controller
                     $oldWarrantyLookup = warrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     // dd($oldWarrantyLookup);
                     if ($oldWarrantyLookup) {
-                        WarrantyLookup::create([
+                        $WarrantyLookup =  WarrantyLookup::create([
                             'product_id' => $returnItem['product_id'],
                             'sn_id' => $replacementSerialId,
                             'customer_id' => $validated['customer_id'],
                             'export_return_date' => $oldWarrantyLookup->export_return_date,
                             'warranty' => $oldWarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                            'warranty_expire_date' => Carbon::parse($oldWarrantyLookup->warranty_expire_date)
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
                             'status' => 0,
+
                         ]);
+                        $today = Carbon::now();
+                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
+                            $WarrantyLookup->update(['status' => 1]);
+                        }
                     }
                 } else {
                     // Nếu không có seri thay thế thì cập nhật vào seri cũ thêm thời gian bảo hành
@@ -119,7 +127,15 @@ class ReturnFormController extends Controller
                     if ($WarrantyLookup) {
                         $WarrantyLookup->update([
                             'warranty' => $WarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                            'warranty_expire_date' => Carbon::parse($WarrantyLookup->warranty_expire_date)
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
+                            'status' => 0,
+
                         ]);
+                        $today = Carbon::now();
+                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
+                            $WarrantyLookup->update(['status' => 1]);
+                        }
                     }
                 }
                 // Cập nhật trạng thái của serial chính thành 4

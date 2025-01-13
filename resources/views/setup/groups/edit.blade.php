@@ -231,7 +231,7 @@
         </div>
     </div>
 </form>
-<script src="{{asset('dist/js/scripts.js')}}"></script>
+<script src="{{ asset('dist/js/scripts.js') }}"></script>
 <script>
     $(document).ready(function() {
         $.ajaxSetup({

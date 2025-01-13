@@ -2,7 +2,7 @@
 @section('title', $title)
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed px-1">
-        <div class="content__header--inner border-bottom">
+        <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Số lượng nhập', 'Số lượng xuất']" :filtersTime="['Tháng', 'Quý', 'Năm']">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
                 <x-filter-text name="ten-hang" title="Tên hàng" />
@@ -16,15 +16,16 @@
             </x-search-filter>
         </div>
     </div>
-    <div class="content margin-top-127">
-        <div class="bg-filter-search text-center border">
-            <p class="font-weight-bold text-uppercase info-chung--heading text-center py-2">
-                BÁO CÁO HÀNG XUẤT NHẬP
-            </p>
-        </div>
+
+    <div class="content margin-top-86">
         <section class="content report-content">
+            <div class="row result-filter-rp_export_import margin-left20">
+            </div>
             <div class="container-fluided">
-                <div class="row result-filter-rp_export_import margin-left20">
+                <div class="bg-filter-search text-center border-bottom-0">
+                    <p class="font-weight-bold text-uppercase info-chung--heading text-center py-2">
+                        BÁO CÁO HÀNG XUẤT NHẬP
+                    </p>
                 </div>
                 <div class="col-12 p-0 m-0">
                     <div class="card">
@@ -33,7 +34,7 @@
                             <table id="example2" class="table table-hover bg-white rounded">
                                 <thead class="border-custom">
                                     <tr>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="key"
                                                     data-sort-type="DESC">
@@ -44,7 +45,7 @@
                                                 <div class="icon" id="icon-key"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -55,7 +56,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">
@@ -66,7 +67,7 @@
                                                 <div class="icon" id="icon-guest_name_display"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border" scope="col">
+                                        <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="guest_name_display" data-sort-type="DESC">

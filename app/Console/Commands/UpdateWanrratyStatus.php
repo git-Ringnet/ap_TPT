@@ -37,8 +37,7 @@ class UpdateWanrratyStatus extends Command
             // Kiểm tra nếu đã hết hạn bảo hành
             if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                 $record->update(['status' => 1]); // Cập nhật trạng thái thành "hết bảo hành"
-            }
-            else{
+            } else {
                 $record->update(['status' => 0]);
             }
         }
