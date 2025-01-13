@@ -75,8 +75,16 @@ class UpdateInventoryStatus extends Command
     {
         $users = User::all(); // Lọc user cần thiết nếu muốn
         foreach ($users as $user) {
-            // Gửi thông báo đến từng user
-            $user->notify(new InventoryLookupNotification($record, $message));
+            // Gửi thông báo nếu chưa tồn tại thông báo tương tự cho user
+            $existingNotification = $user->notifications()
+                ->where('type', InventoryLookupNotification::class)
+                ->where('data->inventoryLookup_id', $record->id)
+                ->where('data->message', $message)
+                ->exists();
+
+            if (!$existingNotification) {
+                $user->notify(new InventoryLookupNotification($record, $message));
+            }
         }
     }
 }
