@@ -139,7 +139,7 @@
                                             kho</span>
                                     </th>
                                     <th class="border-right px-2 p-0" style="width: 8%;">
-                                        <span class="text-table text-13-black font-weight-bold">Ngày bảo hành</span>
+                                        <span class="text-table text-13-black font-weight-bold">Ngày bảo trì</span>
                                     </th>
                                     <th class="border-right px-2 p-0" style="width: 10%;">
                                         <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
