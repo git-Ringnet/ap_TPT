@@ -44,13 +44,13 @@
                             <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
                                 data-id="{{ $notification->id }}">
                                 <div>
-                                    <span class="text-perpage">
+                                    <div class="text-perpage">
                                         <a href="{{ route('inventoryLookup.edit', $notification->data['inventoryLookup_id']) }}"
                                             class="text-primary">
                                             {{ $notification->data['serial_code'] }}
                                         </a>
                                         {{ $notification->data['message'] }}
-                                    </span>
+                                    </div>
                                 </div>
                                 @if ($notification->unread())
                                     <button class="btn btn-sm btn-link text-success mark-as-read"
@@ -75,13 +75,13 @@
                             <div class="dropdown-item border-bottom bg-white notification-item {{ $notification->unread() ? 'bg-light' : '' }}"
                                 data-id="{{ $notification->id }}">
                                 <div>
-                                    <span class="text-perpage">Phiếu
+                                    <div class="text-perpage">Phiếu
                                         <a href="{{ route('receivings.edit', $notification->data['receiving_id']) }}"
                                             class="text-primary">
                                             {{ $notification->data['recei_code'] }}
                                         </a>
                                         {{ $notification->data['message'] }}
-                                    </span>
+                                    </div>
                                 </div>
                                 @if ($notification->unread())
                                     <button class="btn btn-sm btn-link text-success mark-as-read" data-type="receiving"

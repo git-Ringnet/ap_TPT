@@ -80,6 +80,7 @@ class UpdateInventoryStatus extends Command
                 ->where('type', InventoryLookupNotification::class)
                 ->where('data->inventoryLookup_id', $record->id)
                 ->where('data->message', $message)
+                ->where('data->warranty_date', $record->warranty_date)
                 ->exists();
 
             if (!$existingNotification) {
