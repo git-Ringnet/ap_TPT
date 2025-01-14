@@ -44,68 +44,68 @@
                                 <tr>
                                     <th class="height-40 py-0 border border-right-0" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="key"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="customer_code"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Mã khách hàng</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-key"></div>
+                                            <div class="icon" id="icon-customer_code"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border border-right-0" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="guest_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="customer_name"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Tên khách hàng</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-guest_name_display"></div>
+                                            <div class="icon" id="icon-customer_name"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border border-right-0" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="guest_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="address"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Địa chỉ</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-guest_name_display"></div>
+                                            <div class="icon" id="icon-address"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border border-right-0" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="guest_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="phone"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Số điện thoại</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-guest_name_display"></div>
+                                            <div class="icon" id="icon-phone"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border border-right-0" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="guest_code"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="email"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Email</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-guest_code"></div>
+                                            <div class="icon" id="icon-email"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border" scope="col">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="guest_code"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="note"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Ghi chú</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-guest_code"></div>
+                                            <div class="icon" id="icon-note"></div>
                                         </span>
                                     </th>
                                 </tr>
@@ -217,16 +217,20 @@
                                                         href="{{ route('customers.edit', ['customer' => $item->id]) }}">{{ $item->customer_code }}
                                                     </a>
                                                 </td>
-                                                <td class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0">
+                                                <td
+                                                    class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0">
                                                     {{ $item->customer_name }}
                                                 </td>
-                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
+                                                <td
+                                                    class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->address }}
                                                 </td>
-                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
+                                                <td
+                                                    class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->phone }}
                                                 </td>
-                                                <td class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
+                                                <td
+                                                    class="text-13-black border border-right-0 border-bottom border-top-0 py-0">
                                                     {{ $item->email }}</td>
                                                 <td
                                                     class="text-13-black border border-right-0 border-bottom border-top-0 py-0">

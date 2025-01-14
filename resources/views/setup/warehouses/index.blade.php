@@ -51,46 +51,46 @@
                                 <tr>
                                     <th class="height-40 py-0 border-right pl-4" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="group_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="id"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">STT</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_name_display"></div>
+                                            <div class="icon" id="icon-id"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="group_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="warehouse_code"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Mã Kho</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_name_display"></div>
+                                            <div class="icon" id="icon-warehouse_code"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="warehouse_name"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Tên Kho</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_code"></div>
+                                            <div class="icon" id="icon-warehouse_name"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="address"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Địa chỉ</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_code"></div>
+                                            <div class="icon" id="icon-address"></div>
                                         </span>
                                     </th>
                                 </tr>

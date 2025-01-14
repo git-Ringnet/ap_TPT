@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customers;
+use App\Models\warrantyHistory;
 use App\Models\warrantyLookup;
 use Illuminate\Http\Request;
 
@@ -56,9 +57,9 @@ class WarrantyLookupController extends Controller
         $title = "Tra cứu bảo hành";
         $warrantyLookup = warrantyLookup::with(['product'])
             ->where("id", $id)->first();
-
-
-        return view('expertise.warrantyLookup.edit', compact('title', 'warrantyLookup'));
+        $warrantyHistory = warrantyHistory::with(['warrantyLookup', 'receiving', 'returnForm', 'productReturn'])
+            ->where('warranty_lookup_id', $id)->orderBy('id', 'desc')->get();
+        return view('expertise.warrantyLookup.edit', compact('title', 'warrantyLookup', 'warrantyHistory'));
     }
 
     /**

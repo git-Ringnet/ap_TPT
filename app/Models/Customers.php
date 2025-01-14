@@ -46,6 +46,9 @@ class Customers extends Model
                 $guests->where($field, 'like', '%' . $data[$key] . '%');
             }
         }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $guests = $guests->orderBy($data['sort'][0], $data['sort'][1]);
+        }
         return $guests->get();
     }
     public function addGuest($data)

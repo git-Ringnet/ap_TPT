@@ -67,7 +67,10 @@ class Receiving extends Model
     }
     public function getReceiAjax($data = null)
     {
-        $receivings = Receiving::with('user', 'customer');
+        $receivings = Receiving::with(['user', 'customer'])
+            ->select('receiving.*', 'users.name as username', 'customers.customer_name as customername')
+            ->join('users', 'receiving.user_id', '=', 'users.id') // Join với bảng users
+            ->join('customers', 'receiving.customer_id', '=', 'customers.id');
         if (!empty($data)) {
             if (!empty($data['search'])) {
                 $receivings->where(function ($query) use ($data) {
@@ -107,6 +110,9 @@ class Receiving extends Model
             }
             if (isset($data['state'])) {
                 $receivings = $receivings->whereIn('state', $data['state']);
+            }
+            if (isset($data['sort']) && isset($data['sort'][0])) {
+                $receivings = $receivings->orderBy($data['sort'][0], $data['sort'][1]);
             }
         }
         return $receivings->get();

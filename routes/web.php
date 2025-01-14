@@ -57,9 +57,11 @@ Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])-
 // Check SN
 Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
 Route::post('/check-serial', [SerialNumberController::class, 'checkSerial']);
+Route::get('/check-serial-replace', [SerialNumberController::class, 'checkSNReplace'])->name('checkSNReplace');
 Route::post('/check-serial-numbers', [SerialNumberController::class, 'checkSerialNumbers'])->name('check.serial.numbers');
 
 // Filter
+Route::get('/filter-group', [GroupsController::class, 'filterData'])->name('filter-groups');
 Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');
 Route::get('/filter-provides', [ProvidersController::class, 'filterData'])->name('filter-provides');
 Route::get('/filter-products', [ProductController::class, 'filterData'])->name('filter-products');

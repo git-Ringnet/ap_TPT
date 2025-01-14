@@ -64,79 +64,79 @@
                                     <tr>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="key"
-                                                    data-sort-type="DESC">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="return_code" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Mã phiếu</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-key"></div>
+                                                <div class="icon" id="icon-return_code"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="customername" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Khách hàng</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-customername"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="date_created" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ngày lập phiếu</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-date_created"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="form_code_receiving" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Phiếu tiếp nhận</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-form_code_receiving"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_code" data-sort-type="DESC">
+                                                    data-sort-by="returnstatus" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Tình trạng</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_code"></div>
+                                                <div class="icon" id="icon-returnstatus"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_code" data-sort-type="DESC">
+                                                    data-sort-by="form_type" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Loại phiếu</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_code"></div>
+                                                <div class="icon" id="icon-form_type"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_code" data-sort-type="DESC">
+                                                <a href="#" class="sort-link btn-submit" data-sort-by="notes"
+                                                    data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ghi chú</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_code"></div>
+                                                <div class="icon" id="icon-notes"></div>
                                             </span>
                                         </th>
                                     </tr>

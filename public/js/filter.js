@@ -331,7 +331,6 @@ function updateFilters(
         var value = parseInt($(this).find(idClass).val());
         var source = $(this).find(idClass).data("source") || null;
 
-        // Match based on id and optionally source_id if it exists
         var match = ids.find(function (obj) {
             return (
                 obj.id === value &&
@@ -344,10 +343,11 @@ function updateFilters(
             $(this).attr("data-position", ids.indexOf(match) + 1);
         } else {
             $(this).hide();
+            $(this).attr("data-position", Number.MAX_SAFE_INTEGER); // Đưa về cuối nếu không khớp
         }
     });
 
-    // Sort elements and append to tbody
+    // Sắp xếp và gắn lại các phần tử hiển thị
     var clonedElements = $(elementClass).clone();
     var sortedElements = clonedElements.sort(function (a, b) {
         return $(a).data("position") - $(b).data("position");
@@ -412,6 +412,8 @@ function getSortData(element) {
     $(".icon").text(""); // Clear icons
     $("#icon-" + sort_by).html(sort_type === "ASC" ? svgtop : svgbot);
     var sort = [sort_by, sort_type];
+    console.log(sort);
+
     return sort;
 }
 

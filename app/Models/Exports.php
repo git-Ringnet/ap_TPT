@@ -74,8 +74,10 @@ class Exports extends Model
     }
     public function getExportAjax($data = null)
     {
-        $exports = Exports::with('user', 'customer')
-            ->orderBy('id', 'desc');
+        $exports = Exports::with(['user', 'customer'])
+            ->select('exports.*', 'users.name as username', 'customers.customer_name as customername')
+            ->join('users', 'exports.user_id', '=', 'users.id') // Join với bảng users
+            ->join('customers', 'exports.customer_id', '=', 'customers.id');
         if (!empty($data)) {
             if (!empty($data['search'])) {
                 $exports->where(function ($query) use ($data) {
@@ -104,6 +106,9 @@ class Exports extends Model
                     $query->whereIn('id', $data['user']);
                 });
             }
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $exports = $exports->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $exports->get();
     }

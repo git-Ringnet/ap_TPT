@@ -41,11 +41,14 @@ class InventoryLookup extends Model
 
     public function  getInvenAjax($data = null)
     {
-        $invenLookup = InventoryLookup::select('inventory_lookup.*')
-            ->join('products', 'products.id', '=', 'inventory_lookup.product_id')
+        $invenLookup = InventoryLookup::join('products', 'products.id', '=', 'inventory_lookup.product_id')
             ->join('serial_numbers', 'serial_numbers.id', '=', 'inventory_lookup.sn_id')
             ->join('providers', 'providers.id', '=', 'inventory_lookup.provider_id')
-            ->with('product', 'serialNumber', 'provider');
+            ->with('product', 'serialNumber', 'provider')
+            ->whereHas('serialNumber', function ($query) {
+                $query->where('status', 1);
+            })
+            ->select('inventory_lookup.*', 'serial_numbers.serial_code as sericode', 'products.*', 'providers.provider_name as providername', 'inventory_lookup.status as status', 'inventory_lookup.id as id');
         if (!empty($data['search'])) {
             $invenLookup->where(function ($query) use ($data) {
                 $query->where('products.product_code', 'like', '%' . $data['search'] . '%')
@@ -82,6 +85,9 @@ class InventoryLookup extends Model
         }
         if (isset($data['time_inven'][0]) && isset($data['time_inven'][1])) {
             $invenLookup = $invenLookup->where('storage_duration', $data['time_inven'][0], $data['time_inven'][1]);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $invenLookup = $invenLookup->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $invenLookup->get();
     }

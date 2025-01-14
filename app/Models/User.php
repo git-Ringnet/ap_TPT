@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Laravel\Jetstream\Rules\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -54,13 +55,15 @@ class User extends Authenticatable
     }
     public function getAllUsers($data = null)
     {
-        $users = DB::table('users');
-
+        $users = DB::table('users')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.name as rolename');
         // Tìm kiếm chung
         if (!empty($data['search'])) {
             $users->where(function ($query) use ($data) {
                 $query->where('employee_code', 'like', '%' . $data['search'] . '%')
-                    ->orWhere('name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('users.name', 'like', '%' . $data['search'] . '%')
                     ->orWhere('address', 'like', '%' . $data['search'] . '%')
                     ->orWhere('phone', 'like', '%' . $data['search'] . '%')
                     ->orWhere('email', 'like', '%' . $data['search'] . '%');
@@ -69,7 +72,7 @@ class User extends Authenticatable
         // Lọc theo các trường cụ thể
         $filterableFields = [
             'ma' => 'employee_code',
-            'ten' => 'name',
+            'ten' => 'users.name',
             'address' => 'address',
             'phone' => 'phone',
             'email' => 'email',
@@ -81,7 +84,10 @@ class User extends Authenticatable
             }
         }
         if (isset($data['roles']) && is_array($data['roles']) && !empty($data['roles'])) {
-            $users = $users->whereIn('role', $data['roles']);
+            $users = $users->whereIn('roles.id', $data['roles']);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $users = $users->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $users->get();
     }

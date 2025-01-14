@@ -89,6 +89,9 @@ class Product extends Model
         if (isset($data['bao_hanh'][0]) && isset($data['bao_hanh'][1])) {
             $products = $products->where('warranty', $data['bao_hanh'][0], $data['bao_hanh'][1]);
         }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $products = $products->orderBy($data['sort'][0], $data['sort'][1]);
+        }
 
         return $products->get();
     }

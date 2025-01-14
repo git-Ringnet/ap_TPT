@@ -217,4 +217,17 @@ class GroupsController extends Controller
         }
         return response()->json($response);
     }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if ($request->ajax()) {
+            $groups = $this->groups->getAllGroup($data);
+            return response()->json([
+                'data' => $groups,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
+    }
 }

@@ -44,69 +44,69 @@
                                 <tr class="height-40">
                                     <th scope="col" class="height-40 py-0 border border-right-0">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="provide_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="provider_code"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Mã nhà cung cấp
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name_display"></div>
+                                            <div class="icon" id="icon-provider_code"></div>
                                         </span>
                                     </th>
                                     <th scope="col" class="height-40 py-0 border border-right-0">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="provide_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="provider_name"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Tên nhà cung cấp
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name_display"></div>
+                                            <div class="icon" id="icon-provider_name"></div>
                                         </span>
                                     </th>
 
                                     <th scope="col" class="height-40 py-0 border border-right-0">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="provide_name"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="address"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Địa chỉ
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name"></div>
+                                            <div class="icon" id="icon-address"></div>
                                         </span>
                                     </th>
                                     <th scope="col" class="height-40 py-0 border border-right-0">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="provide_name"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="phone"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Điện thoại
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name"></div>
+                                            <div class="icon" id="icon-phone"></div>
                                         </span>
                                     </th>
                                     <th scope="col" class="height-40 py-0 border border-right-0">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="provide_name"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="email"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Email
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name"></div>
+                                            <div class="icon" id="icon-email"></div>
                                         </span>
                                     </th>
                                     <th scope="col" class="height-40 py-0 border">
                                         <span class="d-flex">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="provide_name" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="note"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort text-14" type="submit">
                                                     Ghi chú
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-provide_name"></div>
+                                            <div class="icon" id="icon-note"></div>
                                         </span>
                                     </th>
                                 </tr>

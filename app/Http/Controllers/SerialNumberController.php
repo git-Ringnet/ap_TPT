@@ -251,4 +251,19 @@ class SerialNumberController extends Controller
             'invalid' => $invalidSerials,
         ]);
     }
+
+
+    public function checkSNReplace(Request $request)
+    {
+        $seriRecord = SerialNumber::where('serial_code', $request->serialNumber)
+            ->where('product_id', $request->product_id)
+            ->where('status', 1)
+            ->first();
+
+        if ($seriRecord) {
+            return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
+        }
+    }
 }

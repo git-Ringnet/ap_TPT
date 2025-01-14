@@ -249,7 +249,7 @@
     </div>
 </div>
 <script src="{{ asset('js/barcode.js') }}"></script>
-<script src="{{asset('dist/js/scripts.js')}}"></script>
+<script src="{{ asset('dist/js/scripts.js') }}"></script>
 <script>
     // Name modal
     let nameModal = $("#name_modal").val();

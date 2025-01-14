@@ -86,8 +86,19 @@ class Imports extends Model
     public function getImportAjax($data = null)
     {
         // Lấy dữ liệu Imports với quan hệ
-        $imports = Imports::with('user', 'provider')
-            ->orderBy('id', 'desc');
+        $imports = Imports::with(['user', 'provider'])
+            ->select(
+                'imports.*',
+                'users.name as username',
+                'providers.provider_name as provide_name'
+            )
+            ->join('users', 'imports.user_id', '=', 'users.id') // Join với bảng users
+            ->join(
+                'providers',
+                'imports.provider_id',
+                '=',
+                'providers.id'
+            );
         if (!empty($data)) {
             if (!empty($data['search'])) {
                 $imports->where(function ($query) use ($data) {
@@ -116,6 +127,9 @@ class Imports extends Model
                     $query->whereIn('id', $data['user']);
                 });
             }
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $imports = $imports->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $imports->get();
     }

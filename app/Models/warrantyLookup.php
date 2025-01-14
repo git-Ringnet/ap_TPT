@@ -36,11 +36,19 @@ class warrantyLookup extends Model
     }
     public function  getWarranAjax($data = null)
     {
-        $warrantyLookup = warrantyLookup::select('warranty_lookup.*')
-            ->join('products', 'products.id', '=', 'warranty_lookup.product_id')
+        $warrantyLookup = warrantyLookup::join('products', 'products.id', '=', 'warranty_lookup.product_id')
             ->join('serial_numbers', 'serial_numbers.id', '=', 'warranty_lookup.sn_id')
             ->join('customers', 'customers.id', '=', 'warranty_lookup.customer_id')
-            ->with('product', 'serialNumber', 'customer');
+            ->with('product', 'serialNumber', 'customer')
+            ->select(
+                'warranty_lookup.*',
+                'serial_numbers.serial_code as sericode',
+                'products.*',
+                'customers.customer_name as customername',
+                'warranty_lookup.status as status',
+                'warranty_lookup.id as id',
+                'warranty_lookup.warranty as warrantyLookup',
+            );
         if (!empty($data['search'])) {
             $warrantyLookup->where(function ($query) use ($data) {
                 $query->where('products.product_code', 'like', '%' . $data['search'] . '%')
@@ -77,6 +85,9 @@ class warrantyLookup extends Model
         }
         if (isset($data['bao_hanh'][0]) && isset($data['bao_hanh'][1])) {
             $warrantyLookup = $warrantyLookup->where('warranty_lookup.warranty', $data['bao_hanh'][0], $data['bao_hanh'][1]);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $warrantyLookup = $warrantyLookup->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $warrantyLookup->get();
     }

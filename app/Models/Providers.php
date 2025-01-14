@@ -59,6 +59,9 @@ class Providers extends Model
                 $provides->where($field, 'like', '%' . $data[$key] . '%');
             }
         }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $provides = $provides->orderBy($data['sort'][0], $data['sort'][1]);
+        }
 
         return $provides->get();
     }

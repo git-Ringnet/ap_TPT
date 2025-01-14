@@ -79,7 +79,7 @@
                         <thead>
                             <tr style="height:44px;">
                                 <th class="border-right px-2 p-0">
-                                    <span class="text-table text-13-black font-weight-bold pl-3">Phiếu tiếp
+                                    <span class="text-table text-13-black font-weight-bold">Phiếu tiếp
                                         nhận</span>
                                 </th>
                                 <th class="border-right px-2 p-0 text-left">
@@ -104,14 +104,57 @@
                                     <span class="text-table text-13-black font-weight-bold">Serial Number đổi</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
-                                    <span class="text-table text-13-black font-weight-bold">Bảo hành thêm</span>
+                                    <span class="text-table text-13-black font-weight-bold">Bảo hành thêm (tháng)</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
                                     <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                 </th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            @foreach ($warrantyHistory as $item)
+                                <tr class="position-relative inven-lookup-info height-40">
+                                    <input type="hidden" name="id-inven-lookup" class="id-inven-lookup"
+                                        id="id-inven-lookup" value="{{ $item->id }}">
+                                    <td class="text-13-black border-right border-bottom border-top-0 py-0">
+                                        {{ $item->receiving->form_code_receiving }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ date_format(new DateTime($item->receiving->date_created), 'd/m/Y') }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->returnForm->return_code }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ date_format(new DateTime($item->returnForm->date_created), 'd/m/Y') }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        @if ($item->receiving->form_type == 1)
+                                            Bảo hành
+                                        @elseif($item->receiving->form_type == 2)
+                                            Dịch vụ
+                                        @elseif($item->receiving->form_type == 3)
+                                            Dịch vụ bảo hành
+                                        @endif
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->serialNumber->serial_code ?? '' }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->product_replace->product_code ?? '' }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->replacementSerialNumber->serial_code ?? '' }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->extra_warranty ?? '' }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->notes ?? '' }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </section>
             </div>

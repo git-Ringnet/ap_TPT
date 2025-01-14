@@ -47,7 +47,10 @@ class Quotation extends Model
     }
     public function getQuotationAjax($data = null)
     {
-        $quotations = Quotation::with('customer', 'reception');
+        $quotations = Quotation::with(['customer', 'reception'])
+            ->select('quotations.*', 'customers.customer_name as customername', 'receiving.form_code_receiving as form_code_receiving', 'receiving.form_type')
+            ->join('customers', 'quotations.customer_id', '=', 'customers.id')
+            ->join('receiving', 'quotations.reception_id', '=', 'receiving.id');
         // Tìm kiếm chung
         if (!empty($data['search'])) {
             $quotations->where(function ($query) use ($data) {
@@ -87,6 +90,9 @@ class Quotation extends Model
         }
         if (isset($data['tong_tien'][0]) && isset($data['tong_tien'][1])) {
             $quotations = $quotations->where('total_amount', $data['tong_tien'][0], $data['tong_tien'][1]);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $quotations = $quotations->orderBy($data['sort'][0], $data['sort'][1]);
         }
 
         return $quotations->get();

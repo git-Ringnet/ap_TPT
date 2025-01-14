@@ -52,46 +52,46 @@
                                 <tr>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="group_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="product_code"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Mã hàng</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_name_display"></div>
+                                            <div class="icon" id="icon-product_code"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit"
-                                                data-sort-by="group_name_display" data-sort-type="DESC">
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="product_name"
+                                                data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Tên hàng</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_name_display"></div>
+                                            <div class="icon" id="icon-product_name"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="brand"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Hãng</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_code"></div>
+                                            <div class="icon" id="icon-brand"></div>
                                         </span>
                                     </th>
                                     <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
-                                            <a href="#" class="sort-link btn-submit" data-sort-by="group_type"
+                                            <a href="#" class="sort-link btn-submit" data-sort-by="warranty"
                                                 data-sort-type="DESC">
                                                 <button class="btn-sort" type="submit">
                                                     <span class="text-14">Bảo hành</span>
                                                 </button>
                                             </a>
-                                            <div class="icon" id="icon-group_code"></div>
+                                            <div class="icon" id="icon-warranty"></div>
                                         </span>
                                     </th>
                                 </tr>

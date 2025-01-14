@@ -49,7 +49,10 @@ class ReturnForm extends Model
     }
     public function getReturnFormAjax($data = null)
     {
-        $returnForms = ReturnForm::with('customer', 'reception');
+        $returnForms = ReturnForm::with('customer', 'reception')
+            ->select('return_form.*', 'customers.customer_name as customername', 'receiving.form_code_receiving as form_code_receiving', 'receiving.form_type', 'return_form.status as returnstatus')
+            ->join('customers', 'return_form.customer_id', '=', 'customers.id')
+            ->join('receiving', 'return_form.reception_id', '=', 'receiving.id');
         // Tìm kiếm chung
         if (!empty($data['search'])) {
             $returnForms->where(function ($query) use ($data) {
@@ -89,6 +92,9 @@ class ReturnForm extends Model
             $dateStart = Carbon::parse($data['date'][0]);
             $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
             $returnForms->whereBetween('date_created', [$dateStart, $dateEnd]);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $returnForms = $returnForms->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $returnForms->get();
     }

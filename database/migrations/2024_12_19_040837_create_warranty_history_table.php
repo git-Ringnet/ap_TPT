@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('warranty_lookup_id')->comment("id tra cứu bảo hành")->nullable();
             $table->integer('receiving_id')->comment("id phiếu tiếp nhận")->nullable();
             $table->integer('return_id')->comment("id phiếu trả hàng")->nullable();
+            $table->integer('product_return_id')->comment("id sản phẩm trả")->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

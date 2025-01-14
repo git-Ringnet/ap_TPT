@@ -10,6 +10,7 @@ use App\Models\Receiving;
 use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Models\warrantyHistory;
 use App\Models\warrantyLookup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class ReturnFormController extends Controller
         try {
             // Tạo bản ghi return_form
             $returnForm = ReturnForm::create($validated);
+
             // Lặp qua danh sách "return"
             foreach ($validated['return'] as $returnItem) {
                 $replacementSerialId = null;
@@ -162,7 +164,7 @@ class ReturnFormController extends Controller
                     $serial->update(['status' => 4]);
                 }
                 // Tạo bản ghi product_return
-                ProductReturn::create([
+                $product_return = ProductReturn::create([
                     'return_form_id' => $returnForm->id,
                     'product_id' => $returnItem['product_id'],
                     'quantity' => $returnItem['quantity'],
@@ -172,6 +174,16 @@ class ReturnFormController extends Controller
                     'extra_warranty' => $returnItem['extra_warranty'],
                     'notes' => $returnItem['note'],
                 ]);
+                // Tạo bản ghi History
+                warrantyHistory::create([
+                    'warranty_lookup_id' => $oldWarrantyLookup->id ?? $WarrantyLookup->id,
+                    'receiving_id' => $validated['reception_id'],
+                    'return_id' => $returnForm->id,
+                    'product_return_id' => $product_return->id,
+                    'note' => $returnItem['note'],
+
+                ]);
+
                 $stateRecei = $validated['status'] = 1 ? 3 : 4;
                 Receiving::find($validated['reception_id'])->update([
                     'status' => $stateRecei,
@@ -234,7 +246,6 @@ class ReturnFormController extends Controller
         $returnForm = ReturnForm::findOrFail($id);
         // Xác thực dữ liệu đầu vào
         $validated = $request->validate([
-            'reception_id' => 'required|unique:return_form,reception_id,' . $returnForm->id,
             'return_code' => 'required|unique:return_form,return_code,' . $returnForm->id,
             'customer_id' => 'required|exists:customers,id',
             'address' => 'nullable|string',
@@ -260,8 +271,10 @@ class ReturnFormController extends Controller
         try {
             // Cập nhật bản ghi return_form
             $returnForm->update($validated);
+
             // Xóa các bản ghi product_return cũ liên quan
             ProductReturn::where('return_form_id', $returnForm->id)->delete();
+
             // Lặp qua danh sách "return" để xử lý từng sản phẩm
             foreach ($validated['return'] as $returnItem) {
                 $replacementSerialId = null;
@@ -296,7 +309,6 @@ class ReturnFormController extends Controller
                             'warranty_expire_date' => Carbon::parse($oldWarrantyLookup->warranty_expire_date)
                                 ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
                             'status' => 0,
-
                         ]);
                         $today = Carbon::now();
                         if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
@@ -320,6 +332,7 @@ class ReturnFormController extends Controller
                         }
                     }
                 }
+
                 // Cập nhật trạng thái của serial chính thành 4
                 $serial = SerialNumber::find($returnItem['serial_id']);
                 if ($serial) {
@@ -330,8 +343,9 @@ class ReturnFormController extends Controller
                         'error' => "Không tìm thấy serial_id '{$returnItem['serial_id']}' trong bảng seri."
                     ])->withInput();
                 }
+
                 // Tạo mới bản ghi product_return
-                ProductReturn::create([
+                $product_return = ProductReturn::create([
                     'return_form_id' => $returnForm->id,
                     'product_id' => $returnItem['product_id'],
                     'quantity' => $returnItem['quantity'],
@@ -341,10 +355,24 @@ class ReturnFormController extends Controller
                     'extra_warranty' => $returnItem['extra_warranty'],
                     'notes' => $returnItem['note'],
                 ]);
+
+                // Tạo bản ghi warrantyHistory
+                warrantyHistory::create([
+                    'warranty_lookup_id' => $oldWarrantyLookup->id ?? $WarrantyLookup->id,
+                    'receiving_id' => $validated['reception_id'],
+                    'return_id' => $returnForm->id,
+                    'product_return_id' => $product_return->id,
+                    'note' => $returnItem['note'],
+                ]);
+
+                // Cập nhật trạng thái của receiving
+                $stateRecei = $validated['status'] = 1 ? 3 : 4;
+                Receiving::find($validated['reception_id'])->update([
+                    'status' => $stateRecei,
+                    'state' => 0,
+                    'closed_at' => $validated['return'] ? now() : null,
+                ]);
             }
-            // Cập nhật trạng thái của Receiving dựa trên trạng thái hiện tại
-            $stateRecei = $validated['status'] == 1 ? 3 : 4;
-            Receiving::find($validated['reception_id'])->update(['status' => $stateRecei, 'state' => 0, 'closed_at' => $validated['return'] ? now() : null,]);
 
             DB::commit();
             return redirect()->route('returnforms.index')->with('msg', 'Cập nhật phiếu trả hàng thành công');
@@ -357,6 +385,8 @@ class ReturnFormController extends Controller
         }
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -364,7 +394,11 @@ class ReturnFormController extends Controller
     {
         // Tìm phiếu trả hàng và liên kết của nó
         $returnForm = ReturnForm::findOrFail($id);
-
+        $recei = Receiving::find($returnForm->reception_id);
+        if ($recei) {
+            $recei->status = 2;
+            $recei->save();
+        }
         // Trước khi xóa phiếu trả hàng, cần phải giảm giá trị warranty của các sản phẩm trong phiếu trả hàng
         $returnForm->productReturns->each(function ($returnItem) {
             // Tìm WarrantyLookup tương ứng với serial_id của sản phẩm

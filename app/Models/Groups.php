@@ -153,4 +153,19 @@ class Groups extends Model
         }
         return $data;
     }
+    public function getAllGroup($data = null)
+    {
+        $groups = DB::table($this->table)->leftJoin('group_types', 'group_types.id', 'groups.group_type_id')
+            ->select('groups.*', 'group_types.group_name as nameGroup');
+        if (!empty($data)) { // Kiểm tra $data có dữ liệu
+            $groups->where(function ($query) use ($data) {
+                $query->where('groups.group_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('groups.group_name', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $groups = $groups->orderBy($data['sort'][0], $data['sort'][1]);
+        }
+        return $groups->get();
+    }
 }

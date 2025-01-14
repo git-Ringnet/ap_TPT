@@ -36,6 +36,9 @@ class Warehouse extends Model
                 $warehouse->where($field, 'like', '%' . $data[$key] . '%');
             }
         }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $warehouse = $warehouse->orderBy($data['sort'][0], $data['sort'][1]);
+        }
         return $warehouse->get();
     }
 }
