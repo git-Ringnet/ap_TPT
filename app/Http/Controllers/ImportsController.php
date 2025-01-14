@@ -186,24 +186,20 @@ class ImportsController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        // dd($request->all());
         // Validate dữ liệu đầu vào
-        $validatedData = $request->validate(
-            [
-                'import_code' => 'required|string|max:255|unique:imports,import_code,' . $id,
-                'user_id'     => 'required|integer|exists:users,id',
-                'phone'       => 'nullable|string|max:15',
-                'date_create' => 'required|date',
-                'provider_id' => 'required|integer|exists:providers,id',
-                'address'     => 'nullable|string|max:255',
-                'note'        => 'nullable|string|max:500',
-            ],
-            [
-                'import_code.required' => 'Mã phiếu là bắt buộc.',
-                'user_id.required'     => 'Người nhập là bắt buộc.',
-                'date_create.required' => 'Ngày tạo là bắt buộc.',
-            ]
-        );
+        $validatedData = $request->validate([
+            'import_code' => 'required|string|max:255|unique:imports,import_code,' . $id,
+            'user_id'     => 'required|integer|exists:users,id',
+            'phone'       => 'nullable|string|max:15',
+            'date_create' => 'required|date',
+            'provider_id' => 'required|integer|exists:providers,id',
+            'address'     => 'nullable|string|max:255',
+            'note'        => 'nullable|string|max:500',
+        ], [
+            'import_code.required' => 'Mã phiếu là bắt buộc.',
+            'user_id.required'     => 'Người nhập là bắt buộc.',
+            'date_create.required' => 'Ngày tạo là bắt buộc.',
+        ]);
 
         // Tìm import theo ID
         $import = Imports::findOrFail($id);
@@ -218,71 +214,82 @@ class ImportsController extends Controller
         // Lấy dữ liệu từ form gửi lên
         $dataTest = json_decode($request->input('data-test'), true);
 
-        // Lấy danh sách serial từ data-test
-        $formSerials = array_column($dataTest, 'serial');
+        // Chuẩn hóa serial từ form (loại bỏ khoảng trắng và chuyển chữ thường)
+        $formSerials = array_map(function ($serial) {
+            return strtolower(trim(str_replace(' ', '', $serial)));
+        }, array_column($dataTest, 'serial'));
 
-        // Lấy serials đã có trong database
+        // Chuẩn hóa serial trong database
         $existingSerials = SerialNumber::whereIn('serial_code', $formSerials)->get();
-        $existingSerialCodes = $existingSerials->pluck('serial_code')->toArray();
-        $serialIds = $existingSerials->pluck('id', 'serial_code')->toArray(); // Map serial_code -> sn_id
+        $existingSerialCodes = $existingSerials->pluck('serial_code')->map(function ($serial) {
+            return strtolower(trim(str_replace(' ', '', $serial)));
+        })->toArray();
 
-        // Lấy danh sách các serial cần thêm mới
+        $serialIds = $existingSerials->pluck('id', 'serial_code')->mapWithKeys(function ($id, $serial) {
+            return [strtolower(trim(str_replace(' ', '', $serial))) => $id];
+        })->toArray();
+
+        // Lọc các serial cần thêm mới
         $newSerials = array_filter($dataTest, function ($data) use ($existingSerialCodes) {
-            return isset($data['serial']) && !empty($data['serial']) && !in_array($data['serial'], $existingSerialCodes);
+            $normalizedSerial = strtolower(trim(str_replace(' ', '', $data['serial'] ?? '')));
+            return isset($data['serial']) && !empty($data['serial']) && !in_array($normalizedSerial, $existingSerialCodes);
         });
 
-        // Thêm mới các serials
+        // Thêm mới các serial
         foreach ($newSerials as $serialData) {
             if (isset($serialData['serial']) && !empty($serialData['serial'])) {
-                $newSerial = SerialNumber::create([
-                    'serial_code' => str_replace(' ', '', $serialData['serial']),
-                    'product_id' => $serialData['product_id'], // Nếu cần lưu product_id
-                ]);
-                // Thêm sn_id vào danh sách serialIds để dùng sau
-                $serialIds[$serialData['serial']] = $newSerial->id;
+                $normalizedSerial = strtolower(trim(str_replace(' ', '', $serialData['serial'])));
 
-                // **Thêm mới vào InventoryLookup nếu chưa tồn tại**
-                $existingInventory = InventoryLookup::where('sn_id', $newSerial->id)->first();
-                if (!$existingInventory) {
-                    InventoryLookup::create([
-                        'product_id' => $serialData['product_id'],
-                        'sn_id' => $newSerial->id,
-                        'provider_id' => $request->provider_id,
-                        'import_date' => $request->date_create,
-                        'storage_duration' => 0,
-                        'status' => 0,
-                    ]);
-                }
+                $newSerial = SerialNumber::create([
+                    'serial_code' => $normalizedSerial,
+                    'product_id' => $serialData['product_id'],
+                ]);
+
+                $serialIds[$normalizedSerial] = $newSerial->id;
+
+                // Thêm vào InventoryLookup
+                InventoryLookup::create([
+                    'product_id' => $serialData['product_id'],
+                    'sn_id' => $newSerial->id,
+                    'provider_id' => $request->provider_id,
+                    'import_date' => $request->date_create,
+                    'storage_duration' => 0,
+                    'status' => 0,
+                ]);
             }
         }
 
         // Thêm mới hoặc cập nhật ProductImport
         foreach ($dataTest as $data) {
-            if (isset($data['serial']) && !empty($data['serial']) && isset($serialIds[$data['serial']])) {
-                $snId = $serialIds[$data['serial']];
+            if (isset($data['serial']) && !empty($data['serial'])) {
+                $normalizedSerial = strtolower(trim(str_replace(' ', '', $data['serial'])));
+                if (isset($serialIds[$normalizedSerial])) {
+                    $snId = $serialIds[$normalizedSerial];
 
-                ProductImport::updateOrCreate(
-                    [
-                        'import_id' => $id, // import_id từ form
-                        'product_id' => $data['product_id'], // Đảm bảo product_id từ data-test
-                        'sn_id' => $snId, // Liên kết với serial vừa tạo
-                    ],
-                    [
-                        'note' => $data['note_seri'] ?? '', // Ghi chú nếu có
-                    ]
-                );
+                    ProductImport::updateOrCreate(
+                        [
+                            'import_id' => $id,
+                            'product_id' => $data['product_id'],
+                            'sn_id' => $snId,
+                        ],
+                        [
+                            'note' => $data['note_seri'] ?? '',
+                        ]
+                    );
+                }
             }
         }
 
-        // Lấy danh sách sn_id từ form (chỉ lấy các giá trị hợp lệ)
+        // Lấy danh sách sn_id từ form
         $formSerialIds = array_filter(array_map(function ($data) use ($serialIds) {
-            return isset($data['serial']) && !empty($data['serial']) ? $serialIds[$data['serial']] ?? null : null;
+            $normalizedSerial = strtolower(trim(str_replace(' ', '', $data['serial'] ?? '')));
+            return isset($data['serial']) && !empty($data['serial']) ? $serialIds[$normalizedSerial] ?? null : null;
         }, $dataTest));
 
         // Tìm các serial bị xóa khỏi form
         $removedSnIds = ProductImport::where('import_id', $id)
             ->whereNotIn('sn_id', $formSerialIds)
-            ->pluck('sn_id'); // Lấy danh sách sn_id trước khi xóa
+            ->pluck('sn_id');
 
         // Xóa các serial không còn trong form
         ProductImport::where('import_id', $id)
@@ -291,42 +298,12 @@ class ImportsController extends Controller
 
         if ($removedSnIds->isNotEmpty()) {
             SerialNumber::whereIn('id', $removedSnIds)->delete();
-
-            // **Xóa khỏi InventoryLookup nếu tồn tại**
             InventoryLookup::whereIn('sn_id', $removedSnIds)->delete();
-        }
-
-        $records = InventoryLookup::all();
-        foreach ($records as $record) {
-            // Tính thời gian tồn kho
-            $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
-            $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
-
-            // Cập nhật thời gian tồn kho
-            $record->update(['storage_duration' => $storageDuration]);
-
-            // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
-            if ($storageDuration >= 90 && !$record->warranty_date) {
-                // Lần bảo trì đầu tiên
-                $record->status = 1;
-                $record->save();
-            } else if ($record->warranty_date) {
-                // Các lần bảo trì tiếp theo
-                $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
-
-                if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
-                    // Nếu đã tới thời gian bảo trì tiếp theo
-                    $record->status = 1;
-                    $record->save();
-                }
-            } else {
-                $record->status = 0;
-                $record->save();
-            }
         }
 
         return redirect()->route('imports.index')->with('msg', 'Cập nhật thành công phiếu nhập hàng!');
     }
+
 
     /**
      * Remove the specified resource from storage.
