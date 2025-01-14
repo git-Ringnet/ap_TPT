@@ -56,6 +56,8 @@ class WarrantyLookupController extends Controller
         $title = "Tra cứu bảo hành";
         $warrantyLookup = warrantyLookup::with(['product'])
             ->where("id", $id)->first();
+
+
         return view('expertise.warrantyLookup.edit', compact('title', 'warrantyLookup'));
     }
 

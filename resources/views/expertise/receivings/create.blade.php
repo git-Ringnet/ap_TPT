@@ -91,7 +91,8 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click required-label font-weight-bold"
                                 style="flex: 1.6;">Khách hàng</span>
-                            <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
+                            <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;"
+                                required id="customer_name"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                 style="flex:2;" />
                             <input type="hidden" name="customer_id" id="customer_id">
@@ -328,7 +329,13 @@
             let serialData = collectSerialData();
             let hasInvalidSerial = false;
             let invalidMessages = [];
-
+            const idcus = $('#customer_id').val();
+            if (!idcus) {
+                showAutoToast("warning",
+                    `Vui lòng chọn khách hàng!`);
+                $("#customer_name").click();
+                return false;
+            } else {}
             if (branchId && formType && serialData.length > 0) {
                 checkSerials(branchId, formType, serialData, function(response) {
                     if (response.status === 'success') {

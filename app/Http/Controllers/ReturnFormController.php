@@ -104,13 +104,12 @@ class ReturnFormController extends Controller
                     // Thêm vào bảng warranty_lookup cho serial thay thế
                     $oldWarrantyLookup = warrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     if ($oldWarrantyLookup) {
-                        dd('cassd');
                         $WarrantyLookup =  WarrantyLookup::create([
                             'product_id' => $returnItem['product_id'],
                             'sn_id' => $replacementSerialId,
                             'customer_id' => $validated['customer_id'],
                             'export_return_date' => $oldWarrantyLookup->export_return_date,
-                            'warranty' => $oldWarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
+                            'warranty' => $oldWarrantyLookup->warranty + ((int)$returnItem['extra_warranty'] ?? 0),
                             'warranty_expire_date' => Carbon::parse($oldWarrantyLookup->warranty_expire_date)
                                 ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
                             'status' => 0,
@@ -127,9 +126,10 @@ class ReturnFormController extends Controller
                     if ($WarrantyLookup) {
                         // Nếu tìm thấy, cập nhật thông tin
                         $WarrantyLookup->update([
-                            'warranty' => $WarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
-                            'warranty_expire_date' => Carbon::parse($WarrantyLookup->warranty_expire_date)
-                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
+                            'warranty' => $returnItem['extra_warranty'] ?? 0, // Gán số tháng bảo hành
+                            'export_return_date' => Carbon::parse($validated['date_created']), // Ngày tạo phiếu trả
+                            'warranty_expire_date' => Carbon::parse($validated['date_created'])
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)), // Ngày hết hạn bảo hành
                             'status' => 0,
                         ]);
                         $today = Carbon::now();
@@ -308,11 +308,11 @@ class ReturnFormController extends Controller
                     $WarrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     if ($WarrantyLookup) {
                         $WarrantyLookup->update([
-                            'warranty' => $WarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
-                            'warranty_expire_date' => Carbon::parse($WarrantyLookup->warranty_expire_date)
-                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
+                            'warranty' => $returnItem['extra_warranty'] ?? 0, // Gán số tháng bảo hành
+                            'export_return_date' => Carbon::parse($validated['date_created']), // Ngày tạo phiếu trả
+                            'warranty_expire_date' => Carbon::parse($validated['date_created'])
+                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)), // Ngày hết hạn bảo hành
                             'status' => 0,
-
                         ]);
                         $today = Carbon::now();
                         if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
