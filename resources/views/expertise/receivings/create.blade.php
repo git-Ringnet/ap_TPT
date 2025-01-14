@@ -73,7 +73,7 @@
             {{-- Thông tin khách hàng --}}
             <div class="border">
                 <div class="info-form">
-                    <div class="bg-filter-search border-0 text-center">
+                    <div class="bg-filter-search border text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
                             THÔNG TIN PHIẾU TIẾP NHẬN
                         </p>
@@ -351,7 +351,8 @@
                         });
 
                         if (hasInvalidSerial) {
-                            showAutoToast("warning", `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+                            showAutoToast("warning",
+                                `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
                             return false;
                         } else {
                             showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');

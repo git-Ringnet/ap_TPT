@@ -155,6 +155,7 @@ $(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
         .not("#name_modal,#row-count") // Loại trừ phần tử có ID là name_modal
         .val("");
     $(".check-icon").text("");
+    $(".count-seri").text("0");
 });
 // Hàm xử lý khi bấm nút Xác nhận
 $(document).on("click", ".submit-button", function (event) {
@@ -461,6 +462,7 @@ $(document).on("click", ".save-info-product", function (e) {
     );
     $("#product_id_input").val(productId);
     $("#modal-id").attr("data-type", "update");
+    updateSerialCount();
 });
 function updateSerialCount() {
     let count = 0;

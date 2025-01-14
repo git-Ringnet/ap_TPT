@@ -88,7 +88,7 @@
             {{-- Thông tin khách hàng --}}
             <div class="border">
                 <div class="info-form">
-                    <div class="bg-filter-search border-0 text-center">
+                    <div class="bg-filter-search border text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
                             THÔNG TIN PHIẾU TRẢ HÀNG
                         </p>
