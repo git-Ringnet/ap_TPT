@@ -51,13 +51,13 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-13-black border-right border-bottom">
+                                    <td class="text-13-black border-right border-bottom-0 border-top-0">
                                         {{ $warrantyLookup->product->product_code }}
                                     </td>
-                                    <td class="text-13-black border-right border-bottom">
+                                    <td class="text-13-black border-right border-bottom-0 border-top-0">
                                         {{ $warrantyLookup->product->product_name }}
                                     </td>
-                                    <td class="text-13-black border-right border-bottom">
+                                    <td class="text-13-black border-right border-bottom-0 border-top-0">
                                         {{ $warrantyLookup->product->brand }}
                                     </td>
                                 </tr>
@@ -69,7 +69,7 @@
         </div>
         {{-- Thông tin sản phẩm --}}
         <div class="content">
-            <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
+            <div id="title--fixed" class="bg-filter-search text-center border border-bottom-0 border-top-0">
                 <p class="font-weight-bold text-uppercase info-chung--heading text-center">LỊCH SỬ BẢO HÀNH
                 </p>
             </div>

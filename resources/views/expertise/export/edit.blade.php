@@ -107,7 +107,7 @@
                         <div class="row">
                             <div class="col-md-4 m-0 p-0">
                                 <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                         style="flex: 1.5;">Mã phiếu</span>
                                     <input type="text" name="export_code" style="flex:2;" {{ $readonly }}
@@ -115,7 +115,7 @@
                                         class="text-13-black w-50 border-0 bg-input-guest date_picker py-2 px-2 {{ $bg }}">
                                 </div>
                                 <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                         style="flex: 1.5;">Ngày lập phiếu</span>
                                     <input placeholder="{{ $placeholder }}" autocomplete="off" required
@@ -128,7 +128,7 @@
                             </div>
                             <div class="col-md-4 m-0 p-0">
                                 <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
                                         style="flex: 1.5;">Người lập phiếu</span>
                                     <input autocomplete="off" placeholder="{{ $placeholder }}" required
@@ -139,7 +139,7 @@
                                         value="{{ $export->user_id }}">
                                 </div>
                                 <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black btn-click required-label font-weight-bold"
                                         style="flex: 1.6;">Khách hàng</span>
                                     <input placeholder="{{ $placeholder }}" autocomplete="off" required
@@ -188,7 +188,7 @@
                             </div>
                             <div class="col-md-4 m-0 p-0">
                                 <div style="width: 99%;"
-                                    class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                         style="flex: 1.5;">SĐT
                                         liên hệ</span>
@@ -198,30 +198,30 @@
                                         style="flex:2;" />
                                 </div>
                                 <div style="width: 99%;"
-                                    class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                    class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 </div>
                             </div>
                             <div class="col-md-12 m-0 p-0">
-                                <div
-                                    class="d-flex justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <div style="width: 99.7%;"
+                                    class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                         style="flex: 1.5;">Địa
                                         chỉ</span>
                                     <input name="address" placeholder="{{ $placeholder }}" autocomplete="off"
                                         value="{{ $export->address }}" {{ $readonly }}
-                                        class="text-13-black w-50 border-0 addr bg-input-guest addr {{ $bg }} py-2 px-2"style="flex:10;" />
+                                        class="text-13-black w-50 border-0 addr bg-input-guest addr {{ $bg }} py-2 px-2"style="flex: 9.8;" />
                                 </div>
                             </div>
                             <div class="col-md-12 m-0 p-0">
-                                <div
-                                    class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                <div style="width: 99.7%;"
+                                    class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black font-weight-bold text-nowrap mr-3"
                                         style="flex: 1.5;">Ghi chú
                                     </span>
                                     <input
                                         class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"
                                         value="{{ $export->note }}" autocomplete="off"
-                                        placeholder="{{ $placeholder }}" style="flex:10;" name="note"
+                                        placeholder="{{ $placeholder }}" style="flex: 9.8;" name="note"
                                         {{ $readonly }} />
                                 </div>
                             </div>
@@ -230,7 +230,7 @@
                 </div>
                 {{-- Thông tin sản phẩm --}}
                 <div class="content">
-                    <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
+                    <div id="title--fixed" class="bg-filter-search text-center border border-bottom-0 border-top-0">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG
                         </p>
                     </div>
@@ -259,12 +259,12 @@
                                             <span class="text-table text-13-black font-weight-bold">Bảo hành
                                                 (Tháng)</span>
                                         </th>
+                                        <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
+                                            <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
+                                        </th>
                                         @if ($isCheck)
-                                            <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
-                                                <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
-                                            </th>
+                                            <th class="border-right" style="width: 5%;"></th>
                                         @endif
-                                        <th class="" style="width: 5%;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-product-data">
@@ -333,7 +333,7 @@
                                                         value="{{ $item->note }}">
                                                 </td>
                                                 @if ($isCheck)
-                                                    <td class="p-2 align-top border-bottom border-top-0">
+                                                    <td class="p-2 align-top border-bottom border-top-0 border-right">
                                                         <svg class="delete-row" width="17" height="17"
                                                             viewBox="0 0 17 17" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg">

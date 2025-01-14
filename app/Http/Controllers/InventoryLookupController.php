@@ -63,11 +63,15 @@ class InventoryLookupController extends Controller
         $inventoryLookup = InventoryLookup::with(['product', 'serialNumber'])
             ->where("id", $id)
             ->first();
-        $histories = InventoryHistory::with('inventoryLookup')
-            ->where("inventory_lookup_id", $id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return view('expertise.inventoryLookup.edit', compact('title', 'inventoryLookup', 'histories'));
+        if ($inventoryLookup) {
+            $histories = InventoryHistory::with('inventoryLookup')
+                ->where("inventory_lookup_id", $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+            return view('expertise.inventoryLookup.edit', compact('title', 'inventoryLookup', 'histories'));
+        } else {
+            abort(404);
+        }
     }
 
     /**
