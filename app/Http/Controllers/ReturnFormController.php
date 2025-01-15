@@ -95,7 +95,7 @@ class ReturnFormController extends Controller
                     if (!$seriRecord) {
                         DB::rollBack();
                         return back()->with(
-                            'error',
+                            'warning',
                             "Không tìm thấy serial_code '{$returnItem['replacement_serial_number_id']}' trong bảng Kho."
                         );
                     }
