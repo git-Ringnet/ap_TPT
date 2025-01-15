@@ -129,7 +129,7 @@
                         </div>
                         <div class="d-flex w-100">
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Mã
                                     phiếu</span>
                                 <input type="text" id="form_code_receiving" name="form_code_receiving"
@@ -138,7 +138,7 @@
                                     class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
                             </div>
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click required-label font-weight-bold"
                                     style="flex: 1.6;">Khách hàng</span>
                                 <input placeholder="Nhập thông tin" autocomplete="off" required id="customer_name"
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">Người lập phiếu</span>
                                 <input type="hidden" name="user_id" value="{{ $receiving->user_id }}">
                                 <input class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" autocomplete="off"
@@ -190,7 +190,7 @@
                         </div>
                         <div class="d-flex w-100">
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày
                                     lập
                                     phiếu</span>
@@ -203,14 +203,14 @@
                                     id="hiddenDateCreate">
                             </div>
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
                                 <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     value="{{ $receiving->contact_person }}" style="flex:2;" />
                             </div>
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3" style="flex: 1.5;">SĐT liên hệ</span>
                                 <input class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     autocomplete="off" placeholder="Nhập thông tin" style="flex:2;" name="phone"
@@ -220,7 +220,7 @@
                         </div>
                         <div class="d-flex w-100">
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Địa chỉ</span>
                                 <input id="" placeholder="Nhập thông tin" name="address"
                                     value="{{ $receiving->address }}"
@@ -229,7 +229,7 @@
                         </div>
                         <div class="d-flex w-100">
                             <div
-                                class="d-flex w-100 justify-content-between py-2 px-3 border align-items-center text-left text-nowrap position-relative height-44">
+                                class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
                                 <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
                                     value="{{ $receiving->notes }}"
@@ -247,7 +247,7 @@
                 @endif
                 {{-- Thông tin sản phẩm --}}
                 <div class="content">
-                    <div id="title--fixed" class="bg-filter-search text-center border-custom border-0">
+                    <div id="title--fixed" class="bg-filter-search text-center border-0">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">THÔNG TIN HÀNG
                         </p>
                     </div>
@@ -344,7 +344,7 @@
                                                         class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
                                                         value="{{ $item->note }}">
                                                 </td>
-                                                <td class="p-2 align-top border-bottom border-top-0">
+                                                <td class="p-2 align-top border-bottom border-top-0 border-right">
                                                     <svg class="delete-row" width="17" height="17"
                                                         viewBox="0 0 17 17" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
