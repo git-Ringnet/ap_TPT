@@ -247,7 +247,7 @@
                                         <tr class="row-product bg-white">
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                                {{ $loop->iteration }} <!-- Sử dụng vòng lặp Laravel để đánh số -->
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
