@@ -56,7 +56,7 @@
                             <tbody>
                                 <tr class="height-40 position-relative">
                                     <input type="hidden" name="product_id" id="product_id_input">
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border border-bottom-0 py-0 pl-3">
                                         <input type="text" id="product_code_input" name="product_code_input"
                                             style="flex:2;" placeholder="Chọn thông tin" readonly
                                             class="text-13-black w-100 border-0">
@@ -96,16 +96,16 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border border-bottom-0 py-0 pl-3">
                                         <input type="text" id="product_name_input" name="product_name_input"
                                             style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
-                                    <td class="text-13-black border py-0 pl-3">
+                                    <td class="text-13-black border border-bottom-0 py-0 pl-3">
                                         <input type="text" id="product_brand_input" name="product_brand_input"
                                             style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
                                     @if ($name == 'XH' || $name == 'CXH')
-                                        <td class="text-13-black border py-0 pl-3">
+                                        <td class="text-13-black border border-bottom-0 py-0 pl-3">
                                             <input type="number" id="product_warranty_input"
                                                 name="product_warranty_input" style="flex:2;"
                                                 class="text-13-black w-100 border-0 bg-input-guest-blue p-2">
