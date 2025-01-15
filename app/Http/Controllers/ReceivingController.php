@@ -214,6 +214,17 @@ class ReceivingController extends Controller
     // Remove the specified receiving record from storage
     public function destroy(Receiving $receiving)
     {
+        $receivedProducts = $receiving->receivedProducts;
+
+        // Duyệt qua từng sản phẩm và cập nhật trạng thái của serial number
+        foreach ($receivedProducts as $product) {
+            $serialNumber = $product->serial;
+            if ($serialNumber) {
+                $serialNumber->update(['status' => 2]);
+            }
+        }
+
+        // Xóa bản ghi receiving
         $receiving->delete();
 
         return redirect()->route('receivings.index')->with('success', 'Receiving record deleted successfully.');
