@@ -112,7 +112,7 @@
                                             class="text-13-black border-bottom border py-0 pl-4 border-top-0 border-left-0">
                                             {{ $item->warehouse_code }}
                                         </td>
-                                        <td class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
+                                        <td class="text-13-black border-bottom border py-0 border-top-0 border-left-0 max-width180">
                                             <a class="duongdan" href="{{ route('warehouses.edit', $item->id) }}">
                                                 {{ $item->warehouse_name }}
                                             </a>

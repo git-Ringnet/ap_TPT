@@ -115,7 +115,7 @@
                                                 {{ $item->product_code }}
                                             </td>
                                             <td
-                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
+                                                class="text-13-black border-bottom border py-0 border-top-0 border-left-0 max-width180">
                                                 <a class="duongdan" href="{{ route('products.edit', $item->id) }}">
                                                     {{ $item->product_name }}
                                                 </a>
@@ -202,7 +202,7 @@
                                                     {{ $item->product_code }}
                                                 </td>
                                                 <td
-                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
+                                                    class="text-13-black border-bottom border py-0 border-top-0 border-left-0 max-width180">
                                                     <a class="duongdan"
                                                         href="{{ route('products.edit', $item->id) }}">
                                                         {{ $item->product_name }}

@@ -142,7 +142,7 @@
                                                 {{ $item->quotation_code }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 text-left border-bottom py-0">
+                                                class="text-13-black border border-left-0 text-left border-bottom py-0 max-width180">
                                                 {{ $item->customer->customer_name }}
                                             </td>
                                             <td class="text-13-black border border-left-0 border-bottom py-0">

@@ -100,7 +100,7 @@
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black text-left border-bottom border-top-0 py-0 border-right">
+                                                class="text-13-black text-left border-bottom border-top-0 py-0 border-right max-width180">
                                                 {{ $item->group_name }}
                                             </td>
                                             <td class="text-13-black border-bottom border-top-0 py-0">

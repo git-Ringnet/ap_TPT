@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Groups;
 use App\Models\Product;
+use App\Models\SerialNumber;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -58,7 +59,10 @@ class ProductController extends Controller
     {
         $title = 'Chỉnh sửa hàng hoá';
         $groups = Groups::where('group_type_id', 3)->get();
-        return view('setup.products.edit', compact('product', 'title', 'groups'));
+        $serialNumbers = SerialNumber::where('product_id', $product->id)
+            ->with(['productImports.import'])
+            ->get();
+        return view('setup.products.edit', compact('product', 'title', 'groups', 'serialNumbers'));
     }
 
     // Update the specified product in storage

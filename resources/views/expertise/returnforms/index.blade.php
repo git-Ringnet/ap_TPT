@@ -152,7 +152,7 @@
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->customer->customer_name }}
                                             </td>
                                             <td

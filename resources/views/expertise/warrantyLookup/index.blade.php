@@ -100,7 +100,7 @@
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="export_return_date" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Ngày xuất/trả hàng</span>
+                                                        <span class="text-14">Ngày xuất</span>
                                                     </button>
                                                 </a>
                                                 <div class="icon" id="icon-export_return_date"></div>
@@ -140,7 +140,7 @@
                                                 {{ $item->product->product_code }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->product->product_name }}
                                             </td>
                                             <td
@@ -154,7 +154,7 @@
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->customer->customer_name }}
                                             </td>
                                             <td

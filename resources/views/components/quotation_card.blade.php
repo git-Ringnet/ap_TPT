@@ -61,8 +61,8 @@
                     <th class="border border-dark py-0 bg-quotation text-center">ĐVT</th>
                     <th class="border border-dark py-0 bg-quotation text-center">Hãng</th>
                     <th class="border border-dark py-0 bg-quotation text-center">Số lượng</th>
-                    <th class="border border-dark py-0 bg-quotation text-center">Đơn giá</th>
                     <th class="border border-dark py-0 bg-quotation text-center">Thuế</th>
+                    <th class="border border-dark py-0 bg-quotation text-center">Đơn giá</th>
                     <th class="border border-dark py-0 bg-quotation text-center">Thành tiền</th>
                 </tr>
             </thead>
@@ -76,11 +76,11 @@
                         <td class="border border-dark text-center">{{ $item->unit }}</td>
                         <td class="border border-dark text-center">{{ $item->brand }}</td>
                         <td class="border border-dark text-center">{{ $item->quantity }}</td>
+                        <td class="border border-dark text-center">{{ number_format($item->tax_rate) }} %</td>
                         <td class="border border-dark text-right">
                             {{ number_format($item->unit_price, 0, '', '.') }}
                         </td>
-                        <td class="border border-dark text-center">{{ number_format($item->tax_rate) }} %</td>
-                        <td class="border border-dark text-right">{{ number_format($item->total, 0, '', '.') }}</td>
+                        <td class="border border-dark text-right">{{ number_format($item->quantity * $item->unit_price , 0, '', '.' ) }}</td>
                     </tr>
                 @endforeach
                 <tr>

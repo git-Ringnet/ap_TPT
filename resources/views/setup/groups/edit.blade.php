@@ -61,6 +61,15 @@
             </div>
         </div>
         <div class="content editgroup" style="margin-top:8.7rem">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <section class="">
                 <div id="info" class="content tab-pane in active">
                     <section class="content">

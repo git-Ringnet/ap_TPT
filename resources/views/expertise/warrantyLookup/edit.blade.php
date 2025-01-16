@@ -89,7 +89,7 @@
                                     <span class="text-table text-13-black font-weight-bold">Phiếu trả hàng</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
-                                    <span class="text-table text-13-black font-weight-bold">Ngày lập phiếu</span>
+                                    <span class="text-table text-13-black font-weight-bold">Ngày trả hàng</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
                                     <span class="text-table text-13-black font-weight-bold">Loại phiếu</span>
@@ -117,13 +117,17 @@
                                     <input type="hidden" name="id-inven-lookup" class="id-inven-lookup"
                                         id="id-inven-lookup" value="{{ $item->id }}">
                                     <td class="text-13-black border-right border-bottom border-top-0 py-0">
-                                        {{ $item->receiving->form_code_receiving }}
+                                        <a href="{{ route('receivings.edit', $item->receiving->id) }}">
+                                            {{ $item->receiving->form_code_receiving }}
+                                        </a>
                                     </td>
                                     <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
                                         {{ date_format(new DateTime($item->receiving->date_created), 'd/m/Y') }}
                                     </td>
                                     <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
-                                        {{ $item->returnForm->return_code }}
+                                        <a href="{{ route('returnforms.edit', $item->returnForm->id) }}">
+                                            {{ $item->returnForm->return_code }}
+                                        </a>
                                     </td>
                                     <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
                                         {{ date_format(new DateTime($item->returnForm->date_created), 'd/m/Y') }}

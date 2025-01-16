@@ -204,7 +204,7 @@
                                 <td class="text-13-black text-left border-bottom">
                                     {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom max-width120">
                                     {{ $item->provider_name }}
                                 </td>
                             </tr>
@@ -220,7 +220,7 @@
                                 <td class="text-13-black text-left border-bottom">
                                     {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom max-width120">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -247,7 +247,7 @@
                                         Khách không đồng ý
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom max-width120">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -272,7 +272,7 @@
                                         Dịch vụ bảo hành
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom max-width120">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -295,7 +295,7 @@
                                         Khách không đồng ý
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom max-width120">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>

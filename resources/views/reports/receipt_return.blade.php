@@ -92,7 +92,7 @@
                                                 {{ $item['product_code'] }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 product_name text-left border-bottom py-0">
+                                                class="text-13-black border border-left-0 product_name text-left border-bottom py-0 max-width180">
                                                 {{ $item['product_name'] }}
                                             </td>
                                             <td

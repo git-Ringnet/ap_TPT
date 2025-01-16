@@ -140,7 +140,7 @@
                                                 {{ $item->product->product_code }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->product->product_name }}
                                             </td>
                                             <td
@@ -154,7 +154,7 @@
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->provider->provider_name }}
                                             </td>
                                             <td

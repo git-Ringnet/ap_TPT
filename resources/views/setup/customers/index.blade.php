@@ -126,7 +126,7 @@
                                                 </a>
                                             </td>
                                             <td
-                                                class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0">
+                                                class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0 max-width180">
                                                 {{ $item->customer_name }}
                                             </td>
                                             <td
@@ -218,7 +218,7 @@
                                                     </a>
                                                 </td>
                                                 <td
-                                                    class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0">
+                                                    class="text-13-black border-bottom border-right-0 border py-0 pl-4 border-top-0 max-width180">
                                                     {{ $item->customer_name }}
                                                 </td>
                                                 <td
