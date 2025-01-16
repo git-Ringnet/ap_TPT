@@ -10,7 +10,8 @@
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Chọn phiếu tiếp nhận :</span>
                         <div class="form-check form-check-inline mr-1">
-                            <select class="form-check-input border-0 text text-13-black" name="reception_id" required
+                            <input type="hidden" name="reception_id" value="{{$returnForm->reception_id}}">
+                            <select class="form-check-input border-0 text text-13-black" name="reception" required
                                 disabled id="reception">
                                 <option value="">Chưa chọn phiếu</option>
                                 @foreach ($receivings as $item)
@@ -264,14 +265,14 @@
                         <section class="content overflow-content-quote" style="overflow-x:visible">
                             <table class="table" id="inputcontent">
                                 @php
-                                    $hideReplacement =
-                                        $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
-                                            ? 'd-none'
-                                            : '';
-                                    $hideExtraWarranty =
-                                        $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
-                                            ? 'd-none'
-                                            : '';
+$hideReplacement =
+    $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
+    ? 'd-none'
+    : '';
+$hideExtraWarranty =
+    $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
+    ? 'd-none'
+    : '';
                                 @endphp
                                 <thead>
                                     <tr style="height:44px;">

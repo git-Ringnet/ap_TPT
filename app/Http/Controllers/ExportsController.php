@@ -91,8 +91,7 @@ class ExportsController extends Controller
                     foreach ($records as $record) {
                         if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                             $record->update(['status' => 1]);
-                        }
-                        else{
+                        } else {
                             $record->update(['status' => 0]);
                         }
                     }
@@ -145,6 +144,7 @@ class ExportsController extends Controller
                 'date_create' => 'required|date',
                 'customer_id' => 'required|integer|exists:customers,id',
                 'address'     => 'nullable|string|max:255',
+                'contact_person'     => 'nullable|string|max:255',
                 'note'        => 'nullable|string|max:500',
             ],
             [
@@ -264,8 +264,7 @@ class ExportsController extends Controller
         foreach ($records as $record) {
             if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
                 $record->update(['status' => 1]);
-            }
-            else{
+            } else {
                 $record->update(['status' => 0]);
             }
         }

@@ -39,9 +39,11 @@ $(document).ready(function () {
         const dataName = $(this).data("name");
         const phone = $(this).data("phone");
         const address = $(this).data("address");
+        const contact = $(this).data("contact");
         $("#provider_id").val(dataId);
         $("#provider_name").val(dataName);
         $('[name="phone"]').val(phone);
+        $('[name="contact_person"]').val(contact);
         $('[name="address"]').val(address);
     });
     //lấy người lập

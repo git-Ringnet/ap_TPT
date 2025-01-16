@@ -162,7 +162,7 @@
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 <a
-                                                    href="{{ route('receivings.edit', $item->reception_id) }}">{{ $item->reception->form_code_receiving }}</a>
+                                                    href="{{ route('receivings.edit', $item->reception_id) }}">{{ $item->reception->form_code_receiving??"" }}</a>
                                             </td>
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">

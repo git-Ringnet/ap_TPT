@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->dateTime('date_create');
             $table->integer('customer_id');
+            $table->text('contact_person')->nullable();
             $table->text('address')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();

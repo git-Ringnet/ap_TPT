@@ -20,17 +20,6 @@ class CustomersController extends Controller
     }
     public function index()
     {
-        // if (Auth::check()) {
-        //     $title = "Khách hàng";
-        //     $customers = $this->customers->getAllGuest();
-        //     $dataa = $this->customers->getAllGuest();
-        //     $users = $this->customers->getUserInGuests();
-        //     $count = $customers->where('group_id', 0)->count();
-        //     $groups = Groups::where('grouptype_id', 2)->get();
-        //     return view('setup.customers.index', compact('title', 'customers', 'groups', 'count', 'users', 'dataa'));
-        // } else {
-        //     return redirect()->back()->with('warning', 'Vui lòng đăng nhập!');
-        // }
         $title = "Khách hàng";
         $customers = $this->customers->getAllGuest();
         $count = $customers->where('group_id', 0)->count();
@@ -101,6 +90,7 @@ class CustomersController extends Controller
             'customer_code' => $request->customer_code,
             'customer_name' => $request->customer_name,
             'address' => $request->address,
+            'contact_person' => $request->contact_person,
             'phone' => $request->phone,
             'email' => $request->email,
             'tax_code' => $request->tax_code,

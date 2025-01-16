@@ -116,7 +116,7 @@
                                                 <a href="#" title="{{ $item->customer_name }}" style="flex:2;"
                                                     id="{{ $item->id }}" data-name="{{ $item->customer_name }}"
                                                     data-phone="{{ $item->phone }}"
-                                                    data-address="{{ $item->address }}" name="search-info"
+                                                    data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}"  name="search-info"
                                                     class="search-info">
                                                     <span class="text-13-black-black">{{ $item->customer_name }}</span>
                                                 </a>
@@ -411,9 +411,11 @@
             const dataName = $(this).data('name');
             const phone = $(this).data('phone');
             const address = $(this).data('address');
+            const contact = $(this).data('contact');
             $("#customer_id").val(dataId);
             $("#customer_name").val(dataName);
             $('[name="phone"]').val(phone);
+            $('[name="contact_person"]').val(contact);
             $('[name="address"]').val(address);
         });
     });

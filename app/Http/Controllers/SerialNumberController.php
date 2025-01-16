@@ -156,9 +156,9 @@ class SerialNumberController extends Controller
 
         if ($formType == 3) { // Loại phiếu bảo hành dịch vụ
             if ($status == 1) {
-                return response()->json(['status' => 'success', 'message' => 'Số serial hết bảo hành.']);
+                return response()->json(['status' => 'error', 'message' => 'Số serial hết bảo hành.']);
             } else {
-                return response()->json(['status' => 'error', 'message' => 'Số serial còn bảo hành.']);
+                return response()->json(['status' => 'success', 'message' => 'Số serial còn bảo hành.']);
             }
         }
     }

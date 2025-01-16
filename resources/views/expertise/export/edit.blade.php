@@ -51,14 +51,14 @@
                         <?php $isCheck = true; ?>
                         @foreach ($productExports as $productId => $products)
                             @foreach ($products as $item)
-                                <?php if ($item->serialNumber->status != 2) {
-                                    $isCheck = false;
-                                } ?>
+                                <?php        if ($item->serialNumber->status != 2) {
+            $isCheck = false;
+        } ?>
                             @endforeach
                         @endforeach
                         <?php $readonly = $isCheck ? '' : 'readonly';
-                        $bg = $isCheck ? 'bg-input-guest-blue' : '';
-                        $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
+$bg = $isCheck ? 'bg-input-guest-blue' : '';
+$placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                         @if ($isCheck)
                             <button type="submit" id="btn-get-unique-products"
                                 class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
@@ -174,6 +174,7 @@
                                                                 data-name="{{ $customer_value->customer_name }}"
                                                                 data-phone="{{ $customer_value->phone }}"
                                                                 data-address="{{ $customer_value->address }}"
+                                                                data-contact="{{ $customer_value->contact_person }}"
                                                                 name="search-info" class="search-info">
                                                                 <span
                                                                     class="text-13-black">{{ $customer_value->customer_name }}</span>
@@ -199,6 +200,9 @@
                                 </div>
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
+                                        <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Người liên hệ</span>
+                                    <input name="contact_person" placeholder="{{ $placeholder }}" type="text" value="{{ $export->contact_person }}" {{ $readonly }}
+                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2" style="flex:2;" />
                                 </div>
                             </div>
                             <div class="col-md-12 m-0 p-0">
@@ -269,13 +273,13 @@
                                 </thead>
                                 <tbody id="tbody-product-data">
                                     @php
-                                        $sum = 0;
+$sum = 0;
                                     @endphp
                                     @foreach ($productExports as $productId => $products)
                                         @php
-                                            // Lấy thông tin sản phẩm của product_id
-                                            $product = $products->first()->product;
-                                            $sum += $products->sum('quantity');
+    // Lấy thông tin sản phẩm của product_id
+    $product = $products->first()->product;
+    $sum += $products->sum('quantity');
                                         @endphp
                                         @foreach ($products as $item)
                                             <tr id="serials-data" class="row-product bg-white" data-index="1"

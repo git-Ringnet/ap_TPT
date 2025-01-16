@@ -105,6 +105,7 @@
                                                         data-name="{{ $customer_value->customer_name }}"
                                                         data-phone="{{ $customer_value->phone }}"
                                                         data-address="{{ $customer_value->address }}"
+                                                        data-contact="{{ $customer_value->contact_person }}"
                                                         name="search-info" class="search-info">
                                                         <span
                                                             class="text-13-black">{{ $customer_value->customer_name }}</span>
@@ -127,6 +128,9 @@
                             </div>
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
+                                <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Người liên hệ</span>
+                                <input name="contact_person" placeholder="Nhập thông tin" type="text"
+                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2" style="flex:2;" />
                             </div>
                         </div>
                         <div class="col-md-12 m-0 p-0">

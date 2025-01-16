@@ -24,14 +24,14 @@
                         <?php $isCheck = true; ?>
                         @foreach ($productImports as $productId => $products)
                             @foreach ($products as $item)
-                                <?php if ($item->serialNumber->status != 1) {
-                                    $isCheck = false;
-                                } ?>
+                                    <?php        if ($item->serialNumber->status != 1) {
+            $isCheck = false;
+        } ?>
                             @endforeach
                         @endforeach
                         <?php $readonly = $isCheck ? '' : 'readonly';
-                        $bg = $isCheck ? 'bg-input-guest-blue' : '';
-                        $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
+$bg = $isCheck ? 'bg-input-guest-blue' : '';
+$placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                         @if ($isCheck)
                             <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
                                 id="btn-get-unique-products">
@@ -145,6 +145,7 @@
                                                                 data-name="{{ $provider_value->provider_name }}"
                                                                 data-phone="{{ $provider_value->phone }}"
                                                                 data-address="{{ $provider_value->address }}"
+                                                                data-contact="{{ $provider_value->contact_person }}"
                                                                 name="search-info" class="search-info">
                                                                 <span
                                                                     class="text-13-black">{{ $provider_value->provider_name }}</span>
@@ -170,6 +171,9 @@
                                 </div>
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
+                                    <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Người liên hệ</span>
+                                    <input name="contact_person" placeholder="{{ $placeholder }}" type="text" value="{{ $import->contact_person }}" {{ $readonly }}
+                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2" style="flex:2;" />
                                 </div>
                             </div>
                             <div class="col-md-12 m-0 p-0">
@@ -236,12 +240,12 @@
                                 </thead>
                                 <tbody id="tbody-product-data">
                                     @php
-                                        $sum = 0;
+$sum = 0;
                                     @endphp
                                     @foreach ($productImports as $productId => $products)
                                         @php
-                                            // Lấy thông tin sản phẩm của product_id
-                                            $product = $products->first()->product;
+    // Lấy thông tin sản phẩm của product_id
+    $product = $products->first()->product;
                                         @endphp
                                         {{-- Hiển thị từng serial --}}
                                         @foreach ($products as $item)
@@ -311,7 +315,7 @@
                                         @endforeach
 
                                         @php
-                                            $sum += $products->sum('quantity');
+    $sum += $products->sum('quantity');
                                         @endphp
                                         {{-- Tổng số lượng --}}
                                         <tr id="serials-count" class="bg-white"

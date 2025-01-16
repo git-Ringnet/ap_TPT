@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('date_create');
             $table->integer('provider_id');
             $table->text('address')->nullable();
+            $table->text('contact_person')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

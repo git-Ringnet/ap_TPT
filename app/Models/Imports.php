@@ -18,6 +18,7 @@ class Imports extends Model
         'phone',
         'date_create',
         'provider_id',
+        'contact_person',
         'address',
         'note',
     ];
@@ -53,6 +54,7 @@ class Imports extends Model
             'phone' => $data['phone'],
             'date_create' => $data['date_create'],
             'provider_id' => $data['provider_id'],
+            'contact_person' => $data['contact_person'],
             'address' => $data['address'],
             'note' => $data['note'],
             'created_at' => now()

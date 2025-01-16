@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('customer_code');
             $table->string('customer_name');
             $table->text('address')->nullable();
+            $table->string('contact_person')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('tax_code')->nullable();

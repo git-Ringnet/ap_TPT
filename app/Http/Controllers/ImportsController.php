@@ -194,6 +194,7 @@ class ImportsController extends Controller
             'date_create' => 'required|date',
             'provider_id' => 'required|integer|exists:providers,id',
             'address'     => 'nullable|string|max:255',
+            'contact_person' => 'nullable|string|max:255',
             'note'        => 'nullable|string|max:500',
         ], [
             'import_code.required' => 'Mã phiếu là bắt buộc.',

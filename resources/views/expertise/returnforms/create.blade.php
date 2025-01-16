@@ -24,7 +24,7 @@
                         <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
                         <div class="form-check form-check-inline mr-1">
                             <select class="form-check-input border-0 text text-13-black select-nodropdown"
-                                name="status" id="status" disabled>
+                                name="form_type" id="form_type" disabled>
                                 <option value="0">Chưa chọn</option>
                                 <option value="1">Bảo hành</option>
                                 <option value="2">Dịch vụ</option>
@@ -294,7 +294,7 @@
                         .toggleClass("d-none", hideReplacement === "d-none");
                     $(".col-extra-warranty")
                         .toggleClass("d-none", hideExtraWarranty === "d-none");
-                    $('#status').val(formType).change();
+                    $('#form_type').val(formType).change();
                     populateTableRows(response.product, "#tbody-data", response.productData,
                         formType);
                     $('#customer_name').val(response.data.customer.customer_name);

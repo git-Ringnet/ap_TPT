@@ -76,17 +76,23 @@ class ReturnFormController extends Controller
             'return.*.extra_warranty' => 'nullable|integer|min:0',
             'return.*.note' => 'nullable|string',
         ]);
-
+        // dd($validated);
         DB::beginTransaction();
         try {
             // Tạo bản ghi return_form
             $returnForm = ReturnForm::create($validated);
-
             // Lặp qua danh sách "return"
             foreach ($validated['return'] as $returnItem) {
                 $replacementSerialId = null;
                 // Tìm serial thay thế (nếu có) và lấy export_return_date và warranty từ serial cũ
                 if (!empty($returnItem['replacement_serial_number_id'])) {
+
+                    // Cập nhật trạng thái của serial cũ thành 1 vào kho nếu có seri thay thế
+                    $serial = SerialNumber::find($returnItem['serial_id']);
+                    if ($serial) {
+                        $serial->update(['status' => 1]);
+                    }
+
                     $seriRecord = SerialNumber::where('serial_code', $returnItem['replacement_serial_number_id'])
                         ->where('product_id', $returnItem['replacement_code'])
                         ->where('status', 1)
@@ -124,6 +130,10 @@ class ReturnFormController extends Controller
                         }
                     }
                 } else {
+                    $serial = SerialNumber::find($returnItem['serial_id']);
+                    if ($serial) {
+                        $serial->update(['status' => 5]);
+                    }
                     // Nếu không có seri thay thế thì cập nhật vào seri cũ thêm thời gian bảo hành
                     $WarrantyLookup = warrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
                     if ($WarrantyLookup) {
@@ -159,10 +169,13 @@ class ReturnFormController extends Controller
                         $WarrantyLookup->update(['status' => 1]);
                     }
                 }
-                // Cập nhật trạng thái của serial chính thành 4
-                $serial = SerialNumber::find($returnItem['serial_id']);
-                if ($serial) {
-                    $serial->update(['status' => 4]);
+
+                if (!empty($returnItem['replacement_code']) && !empty($replacementSerialId)) {
+                    $replacementCode = $returnItem['replacement_code'];
+                    $replacementSerialIdValue = $replacementSerialId;
+                } else {
+                    $replacementCode = null;
+                    $replacementSerialIdValue = null;
                 }
                 // Tạo bản ghi product_return
                 $product_return = ProductReturn::create([
@@ -170,8 +183,8 @@ class ReturnFormController extends Controller
                     'product_id' => $returnItem['product_id'],
                     'quantity' => $returnItem['quantity'],
                     'serial_number_id' => $returnItem['serial_id'],
-                    'replacement_code' => $returnItem['replacement_code'],
-                    'replacement_serial_number_id' => $replacementSerialId,
+                    'replacement_code' => $replacementCode,
+                    'replacement_serial_number_id' => $replacementSerialIdValue,
                     'extra_warranty' => $returnItem['extra_warranty'],
                     'notes' => $returnItem['note'],
                 ]);
@@ -184,8 +197,7 @@ class ReturnFormController extends Controller
                     'note' => $returnItem['note'],
 
                 ]);
-
-                $stateRecei = $validated['status'] = 1 ? 3 : 4;
+                $stateRecei = $validated['status'] == 1 ? 3 : 4;
                 Receiving::find($validated['reception_id'])->update([
                     'status' => $stateRecei,
                     'state' => 0,
@@ -247,6 +259,7 @@ class ReturnFormController extends Controller
         $returnForm = ReturnForm::findOrFail($id);
         // Xác thực dữ liệu đầu vào
         $validated = $request->validate([
+            'reception_id' => 'required|integer|unique:quotations,reception_id,' . $returnForm->id,
             'return_code' => 'required|unique:return_form,return_code,' . $returnForm->id,
             'customer_id' => 'required|exists:customers,id',
             'address' => 'nullable|string',
@@ -267,21 +280,42 @@ class ReturnFormController extends Controller
             'return.*.extra_warranty' => 'nullable|integer|min:0',
             'return.*.note' => 'nullable|string',
         ]);
-
         DB::beginTransaction();
         try {
             // Cập nhật bản ghi return_form
             $returnForm->update($validated);
+            // Lấy tất cả bản ghi ProductReturn liên quan đến return_form_id
+            $productReturns = ProductReturn::where(
+                'return_form_id',
+                $returnForm->id
+            )->get();
 
+            foreach ($productReturns as $productReturn) {
+                // Tìm replacementSerial dựa trên serial_number_id
+                $replacementSerial = SerialNumber::find($productReturn->serial_number_id);
+                if ($replacementSerial) {
+                    // Cập nhật trạng thái của serial thay thế thành 1
+                    $replacementSerial->update(['status' => 1]);
+                } else {
+                    // Nếu không tìm thấy replacementSerial, ghi log hoặc xử lý lỗi tùy ý
+                    Log::warning("Không tìm thấy replacementSerial với serial_code: {$productReturn->serial_number_id}");
+                }
+            }
             // Xóa các bản ghi product_return cũ liên quan
-            ProductReturn::where('return_form_id', $returnForm->id)->delete();
-
+            $productReturn =  ProductReturn::where('return_form_id', $returnForm->id)->delete();
             // Lặp qua danh sách "return" để xử lý từng sản phẩm
             foreach ($validated['return'] as $returnItem) {
                 $replacementSerialId = null;
 
                 // Xử lý serial thay thế nếu tồn tại
                 if (!empty($returnItem['replacement_serial_number_id'])) {
+
+                    // Cập nhật trạng thái của serial cũ thành 1 vào kho nếu có seri thay thế
+                    $serial = SerialNumber::find($returnItem['serial_id']);
+                    if ($serial) {
+                        $serial->update(['status' => 1]);
+                    }
+
                     $seriRecord = SerialNumber::where('serial_code', $returnItem['replacement_serial_number_id'])
                         ->where('product_id', $returnItem['replacement_code'])
                         ->where('status', 1)
@@ -334,28 +368,24 @@ class ReturnFormController extends Controller
                     }
                 }
 
-                // Cập nhật trạng thái của serial chính thành 4
-                $serial = SerialNumber::find($returnItem['serial_id']);
-                if ($serial) {
-                    $serial->update(['status' => 4]);
-                } else {
-                    DB::rollBack();
-                    return back()->withErrors([
-                        'error' => "Không tìm thấy serial_id '{$returnItem['serial_id']}' trong bảng seri."
-                    ])->withInput();
-                }
-
                 // Tạo mới bản ghi product_return
-                $product_return = ProductReturn::create([
+                $productReturnData = [
                     'return_form_id' => $returnForm->id,
                     'product_id' => $returnItem['product_id'],
                     'quantity' => $returnItem['quantity'],
                     'serial_number_id' => $returnItem['serial_id'],
-                    'replacement_code' => $returnItem['replacement_code'],
-                    'replacement_serial_number_id' => $replacementSerialId,
                     'extra_warranty' => $returnItem['extra_warranty'],
                     'notes' => $returnItem['note'],
-                ]);
+                ];
+
+                // Kiểm tra xem replacement_code và replacementSerialId có tồn tại hay không
+                if (!empty($returnItem['replacement_code']) && !empty($replacementSerialId)) {
+                    $productReturnData['replacement_code'] = $returnItem['replacement_code'];
+                    $productReturnData['replacement_serial_number_id'] = $replacementSerialId;
+                }
+                // Tạo ProductReturn
+                $product_return = ProductReturn::create($productReturnData);
+
 
                 // Tạo bản ghi warrantyHistory
                 warrantyHistory::create([
@@ -367,7 +397,7 @@ class ReturnFormController extends Controller
                 ]);
 
                 // Cập nhật trạng thái của receiving
-                $stateRecei = $validated['status'] = 1 ? 3 : 4;
+                $stateRecei = $validated['status'] == 1 ? 3 : 4;
                 Receiving::find($validated['reception_id'])->update([
                     'status' => $stateRecei,
                     'state' => 0,

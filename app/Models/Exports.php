@@ -19,6 +19,7 @@ class Exports extends Model
         'phone',
         'date_create',
         'customer_id',
+        'contact_person',
         'address',
         'note',
     ];
@@ -66,6 +67,7 @@ class Exports extends Model
             'date_create' => $data['date_create'],
             'customer_id' => $data['customer_id'],
             'address' => $data['address'],
+            'contact_person' => $data['contact_person'],
             'note' => $data['note'],
             'created_at' => now()
         ];

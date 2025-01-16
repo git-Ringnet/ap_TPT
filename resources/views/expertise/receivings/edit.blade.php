@@ -168,7 +168,7 @@
                                                         style="flex:2;" id="{{ $item->id }}"
                                                         data-name="{{ $item->customer_name }}"
                                                         data-phone="{{ $item->phone }}"
-                                                        data-address="{{ $item->address }}" name="search-info"
+                                                        data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}" name="search-info"
                                                         class="search-info">
                                                         <span
                                                             class="text-13-black-black">{{ $item->customer_name }}</span>
@@ -285,11 +285,11 @@
                                 <tbody id="tbody-product-data">
                                     @foreach ($receivedProducts as $productId => $products)
                                         @php
-                                            $productCode = $products->first()->product->product_code ?? '';
-                                            $productId = $products->first()->product->id ?? '';
-                                            $productName = $products->first()->product->name ?? '';
-                                            $productBrand = $products->first()->product->brand ?? '';
-                                            $serialCount = $products->count();
+    $productCode = $products->first()->product->product_code ?? '';
+    $productId = $products->first()->product->id ?? '';
+    $productName = $products->first()->product->name ?? '';
+    $productBrand = $products->first()->product->brand ?? '';
+    $serialCount = $products->count();
                                         @endphp
                                         @foreach ($products as $item)
                                             <tr id="serials-data" class="row-product bg-white" data-index="1"
@@ -551,9 +551,11 @@
             const dataName = $(this).data('name');
             const phone = $(this).data('phone');
             const address = $(this).data('address');
+            const contact = $(this).data('contact');
             $("#customer_id").val(dataId);
             $("#customer_name").val(dataName);
             $('[name="phone"]').val(phone);
+            $('[name="contact"]').val(contact);
             $('[name="address"]').val(address);
         });
         flatpickr("#dateCreate", {
