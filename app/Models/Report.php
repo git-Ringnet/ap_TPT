@@ -88,6 +88,23 @@ class Report extends Model
                 }
             });
         }
+        if (isset($filter['sort']) && is_array($filter['sort']) && count($filter['sort']) === 2) {
+            $sortField = $filter['sort'][0];
+            $sortOrder = strtolower($filter['sort'][1]);
+
+            usort($mergedData, function ($a, $b) use ($sortField, $sortOrder) {
+                if (!isset($a[$sortField], $b[$sortField])) {
+                    return 0;
+                }
+
+                if ($a[$sortField] == $b[$sortField]) {
+                    return 0;
+                }
+
+                $comparison = $a[$sortField] <=> $b[$sortField];
+                return $sortOrder === 'asc' ? $comparison : -$comparison;
+            });
+        }
         // Trả về mảng kết quả đã lọc
         return array_values($mergedData);
     }
@@ -238,10 +255,11 @@ class Report extends Model
         };
         $quotations = Quotation::join('receiving', 'receiving.id', 'quotations.reception_id')
             ->join('return_form', 'return_form.reception_id', 'receiving.id')
+            ->join('customers', 'customers.id', 'quotations.customer_id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'quotations.quotation_date');
             })
-            ->select('quotations.*', 'receiving.form_code_receiving as form_code_receiving', 'receiving.status as status_recei', 'return_form.status');
+            ->select('quotations.*', 'receiving.form_code_receiving as form_code_receiving', 'receiving.status as status_recei', 'return_form.status', 'customers.customer_name');
         if (!empty($data['search'])) {
             $quotations->where(function ($query) use ($data) {
                 $query->where('quotation_code', 'like', '%' . $data['search'] . '%')
@@ -270,6 +288,9 @@ class Report extends Model
         }
         if (isset($data['tong_tien'][0]) && isset($data['tong_tien'][1])) {
             $quotations = $quotations->where('quotations.total_amount', $data['tong_tien'][0], $data['tong_tien'][1]);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $quotations = $quotations->orderBy($data['sort'][0], $data['sort'][1]);
         }
         return $quotations = $quotations->get();
     }

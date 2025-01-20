@@ -36,46 +36,46 @@
                                     <tr>
                                         <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="key"
+                                                <a href="#" class="sort-link btn-submit" data-sort-by="product_code"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Mã hàng</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-key"></div>
+                                                <div class="icon" id="icon-product_code"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="product_name" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Tên hàng</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-product_name"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="product_import" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Số lượng hàng nhập</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-product_import"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="guest_name_display" data-sort-type="DESC">
+                                                    data-sort-by="product_export" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Số lượng hàng xuất</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-guest_name_display"></div>
+                                                <div class="icon" id="icon-product_export"></div>
                                             </span>
                                         </th>
                                     </tr>

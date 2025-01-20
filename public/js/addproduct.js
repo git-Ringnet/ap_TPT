@@ -148,15 +148,34 @@ function getProduct() {
     return product;
 }
 
-$(document).on("click", ".btn-destroy-modal,.btn-save-print", function () {
-    let modalId = $(this).data("modal-id");
+function clearModalInputs(modalId) {
     $("#" + modalId)
         .find("input")
         .not("#name_modal,#row-count") // Loại trừ phần tử có ID là name_modal
         .val("");
     $(".check-icon").text("");
     $(".count-seri").text("0");
+}
+
+// Xử lý sự kiện cho nút .btn-destroy-modal
+$(document).on("click", ".btn-destroy-modal", function () {
+    let modalId = $(this).data("modal-id");
+    clearModalInputs(modalId);
+    console.log("Đã bấm nút btn-destroy-modal");
 });
+
+// Xử lý sự kiện cho nút .btn-save-print
+$(document).on("click", ".btn-save-print", function () {
+    let modalId = $(this).data("modal-id");
+    clearModalInputs(modalId);
+
+    console.log("Đã bấm nút btn-save-print");
+
+    $("#table-body").empty();
+    $("#row-count").val(5);
+    $("#add-rows").click();
+});
+
 // Hàm xử lý khi bấm nút Xác nhận
 $(document).on("click", ".submit-button", function (event) {
     event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
@@ -416,14 +435,13 @@ $(document).on("click", ".save-info-product", function (e) {
 
     // Xóa nội dung cũ trong tbody trước khi đổ dữ liệu mới
     $("#table-body").empty();
-    $(".btn-save-print").click();
+    $("#modal-id").attr("data-type", "update");
+    $("#modal-id").modal("show");
     $("#product_code_input").val(productCode);
     $("#product_name_input").val(productName || "");
     $("#product_brand_input").val(productBrand || "");
     $("#product_warranty_input").val(productWarranty || "");
     $("#product_id_input").val(productId);
-    $("#modal-id").attr("data-type", "update");
-
     // Đổ dữ liệu chỉ với serial vào tbody
     products.forEach((product, index) => {
         const row = `
@@ -461,7 +479,6 @@ $(document).on("click", ".save-info-product", function (e) {
         productWarranty !== "undefined" ? productWarranty : ""
     );
     $("#product_id_input").val(productId);
-    $("#modal-id").attr("data-type", "update");
     updateSerialCount();
 });
 function updateSerialCount() {
