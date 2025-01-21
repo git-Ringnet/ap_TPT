@@ -49,11 +49,12 @@
                                     <th class="height-40 py-0 border pl-3" style="width: 25%;">Tên hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Hãng</th>
                                     @if ($name == 'XH' || $name == 'CXH')
-                                        <th class="height-40 py-0 border pl-3" style="width: 20%;">Bảo hành (Tháng)</th>
+                                        <th class="height-40 py-0 border pl-3" colspan="2" style="width: 20%;">Bảo
+                                            hành (Tháng)</th>
                                     @endif
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="body-warranty">
                                 <tr class="height-40 position-relative">
                                     <input type="hidden" name="product_id" id="product_id_input">
                                     <td class="text-13-black border border-bottom-0 py-0 pl-3">
@@ -105,13 +106,35 @@
                                             style="flex:2;" readonly class="text-13-black w-100 border-0">
                                     </td>
                                     @if ($name == 'XH' || $name == 'CXH')
-                                        <td class="text-13-black border border-bottom-0 py-0 pl-3">
+                                        <td class="text-13-black border border-bottom-0 py-0">
+                                            <input type="text" name="name_warranty" id="name_warranty"
+                                                style="flex:2;"
+                                                class="text-13-black w-100 border-0 bg-input-guest-blue p-2">
+                                        </td>
+                                        <td class="text-13-black border border-bottom-0 py-0">
                                             <input type="number" id="product_warranty_input"
                                                 name="product_warranty_input" style="flex:2;"
                                                 class="text-13-black w-100 border-0 bg-input-guest-blue p-2">
                                         </td>
                                     @endif
                                 </tr>
+                                @if ($name == 'XH' || $name == 'CXH')
+                                    <tr id="option-warranty">
+                                        <td class="text-13-black border border-bottom-0 border-top-0 py-0"></td>
+                                        <td class="text-13-black border border-bottom-0 border-top-0 py-0"></td>
+                                        <td class="text-13-black border border-bottom-0 border-top-0 py-0"></td>
+                                        <td class="text-13-black border border-bottom-0 py-0 p-2 cursor-pointer"
+                                            id="add-warranty">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                viewBox="0 0 14 14" fill="none">
+                                                <path
+                                                    d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375 1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243 12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375 6.34375H7.65625V2.625Z"
+                                                    fill="black" />
+                                            </svg>
+                                        </td>
+                                        <td class="text-13-black border border-bottom-0 py-0"></td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -322,8 +345,6 @@
         });
     });
 
-
-
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
         if ($('#tbody-product-data tr#serials-data').length === 0) {
@@ -424,6 +445,29 @@
             const note_seri = $row.find('.note_seri').val();
             const status_recept = $row.find('.status_recept').val();
 
+            // Lấy bảo hành từ hàng .row-product
+            const warranties = [];
+            const productWarrantyName = $row.find('.name_warranty').val();
+            const productWarrantyMonth = $row.find('.warranty').val();
+
+            if (productWarrantyName && productWarrantyMonth) {
+                warranties.push([productWarrantyName, productWarrantyMonth]);
+            }
+
+            // Tìm các hàng .row-warranty ngay sau .row-product
+            let $nextRow = $row.next();
+
+            while ($nextRow.hasClass('row-warranty')) {
+                const name_warranty = $nextRow.find('.name_warranty').val();
+                const warranty_month = $nextRow.find('.warranty').val();
+
+                if (name_warranty && warranty_month) {
+                    warranties.push([name_warranty, warranty_month]);
+                }
+
+                $nextRow = $nextRow.next();
+            }
+
             // Khởi tạo object chứa dữ liệu cơ bản
             const productData = {
                 product_id,
@@ -433,7 +477,7 @@
             };
 
             if (nameModal === "XH" || nameModal === "CXH") {
-                productData.warranty = $row.find('.warranty').val();
+                productData.warranty = warranties;
             }
 
             // Tạo khóa duy nhất bao gồm cả note_seri

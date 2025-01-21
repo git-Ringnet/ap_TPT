@@ -51,14 +51,14 @@
                         <?php $isCheck = true; ?>
                         @foreach ($productExports as $productId => $products)
                             @foreach ($products as $item)
-                                <?php        if ($item->serialNumber->status != 2) {
-            $isCheck = false;
-        } ?>
+                                <?php if ($item->serialNumber->status != 2) {
+                                    $isCheck = false;
+                                } ?>
                             @endforeach
                         @endforeach
                         <?php $readonly = $isCheck ? '' : 'readonly';
-$bg = $isCheck ? 'bg-input-guest-blue' : '';
-$placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
+                        $bg = $isCheck ? 'bg-input-guest-blue' : '';
+                        $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                         @if ($isCheck)
                             <button type="submit" id="btn-get-unique-products"
                                 class="custom-btn d-flex align-items-center h-100 mx-1 mr-4">
@@ -200,9 +200,12 @@ $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                                 </div>
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                        <span class="text-13-black text-nowrap mr-3 font-weight-bold" style="flex: 1.5;">Người liên hệ</span>
-                                    <input name="contact_person" placeholder="{{ $placeholder }}" type="text" value="{{ $export->contact_person }}" {{ $readonly }}
-                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2" style="flex:2;" />
+                                    <span class="text-13-black text-nowrap mr-3 font-weight-bold"
+                                        style="flex: 1.5;">Người liên hệ</span>
+                                    <input name="contact_person" placeholder="{{ $placeholder }}" type="text"
+                                        value="{{ $export->contact_person }}" {{ $readonly }}
+                                        class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"
+                                        style="flex:2;" />
                                 </div>
                             </div>
                             <div class="col-md-12 m-0 p-0">
@@ -259,7 +262,7 @@ $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                                             <span class="text-table text-13-black font-weight-bold">Serial
                                                 Number</span>
                                         </th>
-                                        <th class="border-right px-2 p-0" style="width: 10%;">
+                                        <th class="border-right px-2 p-0" style="width: 10%;" colspan="2">
                                             <span class="text-table text-13-black font-weight-bold">Bảo hành
                                                 (Tháng)</span>
                                         </th>
@@ -273,82 +276,143 @@ $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                                 </thead>
                                 <tbody id="tbody-product-data">
                                     @php
-$sum = 0;
+                                        $sum = 0;
                                     @endphp
                                     @foreach ($productExports as $productId => $products)
                                         @php
-    // Lấy thông tin sản phẩm của product_id
-    $product = $products->first()->product;
-    $sum += $products->sum('quantity');
+                                            // Lấy thông tin sản phẩm của product_id
+                                            $product = $products->first()->product;
+                                            $sum += $products->sum('quantity');
+                                            $warrantyList = $products->first()->warranty;
+                                            $warrantyArray = is_string($warrantyList)
+                                                ? json_decode($warrantyList, true)
+                                                : [];
+                                            // Chuyển đổi warranty thành định dạng mong muốn
+                                            $formattedWarranty = array_map(function ($item) {
+                                                return [
+                                                    'name_warranty' => $item[0] ?? '',
+                                                    'product_warranty_input' => $item[1] ?? '',
+                                                ];
+                                            }, $warrantyArray);
                                         @endphp
                                         @foreach ($products as $item)
-                                            <tr id="serials-data" class="row-product bg-white" data-index="1"
-                                                data-product-code="{{ $product->product_code }}"
-                                                data-product-id="{{ $product->id }}">
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                        readonly="" name="product_id[]"
-                                                        value="{{ $product->id }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
-                                                        readonly="" value="{{ $item->product->product_code }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
-                                                        readonly="" value="{{ $item->product->product_name }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 brand height-32"
-                                                        readonly="" value="{{ $item->product->brand }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
-                                                        value="1">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly
-                                                        name="serial[]" readonly=""
-                                                        value="{{ $item->serialNumber->serial_code }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off" {{ $readonly }}
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 {{ $bg }}"
-                                                        name="warranty[]" value="{{ $item->warranty }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off" name="note_seri[]"
-                                                        {{ $readonly }}
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 {{ $bg }}"
-                                                        value="{{ $item->note }}">
-                                                </td>
-                                                @if ($isCheck)
-                                                    <td class="p-2 align-top border-bottom border-top-0 border-right">
-                                                        <svg class="delete-row" width="17" height="17"
-                                                            viewBox="0 0 17 17" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                                d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
-                                                                fill="#6B6F76"></path>
-                                                        </svg>
-                                                    </td>
-                                                @endif
-                                            </tr>
+                                            @php
+                                                $warrantyData = json_decode($item->warranty, true);
+                                            @endphp
+                                            @if ($warrantyData && count($warrantyData) > 0)
+                                                @foreach ($warrantyData as $index => $warranty)
+                                                    <tr class="{{ $index === 0 ? 'row-product' : 'row-warranty' }} bg-white" id="serials-data"
+                                                        data-index="{{ $index }}"
+                                                        data-product-code="{{ $item->product->product_code }}"
+                                                        data-product-id="{{ $item->product->id }}">
+                                                        @if ($index === 0)
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                                    readonly name="product_id[]"
+                                                                    value="{{ $item->product->id }}">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                                                    readonly
+                                                                    value="{{ $item->product->product_code }}">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                                                    readonly
+                                                                    value="{{ $item->product->product_name }}">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 brand height-32"
+                                                                    readonly value="{{ $item->product->brand }}">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32"
+                                                                    readonly value="1">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                <input type="text" autocomplete="off"
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                                                                    readonly name="serial[]"
+                                                                    value="{{ $item->serialNumber->serial_code }}">
+                                                            </td>
+                                                        @else
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                        @endif
+                                                        <td
+                                                            class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            <input type="text" autocomplete="off"
+                                                                {{ $readonly }}
+                                                                class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32 {{ $bg }}"
+                                                                name="name_warranty[]" value="{{ $warranty[0] }}">
+                                                        </td>
+                                                        <td
+                                                            class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            <input type="text" autocomplete="off"
+                                                                {{ $readonly }}
+                                                                class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 {{ $bg }}"
+                                                                name="warranty[]" value="{{ $warranty[1] }}">
+                                                        </td>
+                                                        @if ($index === 0)
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                <input type="text" autocomplete="off"
+                                                                    name="note_seri[]" {{ $readonly }}
+                                                                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 {{ $bg }}"
+                                                                    value="{{ $item->note }}">
+                                                            </td>
+                                                            @if ($isCheck)
+                                                                <td
+                                                                    class="p-2 align-top border-bottom border-top-0 border-right">
+                                                                    <svg class="delete-row" width="17"
+                                                                        height="17" viewBox="0 0 17 17"
+                                                                        fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                            d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                                                                            fill="#6B6F76"></path>
+                                                                    </svg>
+                                                                </td>
+                                                            @endif
+                                                        @else
+                                                            <td
+                                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                            </td>
+                                                            @if ($isCheck)
+                                                                <td
+                                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                </td>
+                                                            @endif
+                                                        @endif
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         @endforeach
+
                                         {{-- Tổng số lượng --}}
                                         <tr id="serials-count" class="bg-white"
                                             data-product-code="{{ $product->product_name }}"
@@ -366,7 +430,7 @@ $sum = 0;
                                                     readonly="" name="serial_count"
                                                     value="{{ $products->sum('quantity') }}">
                                             </td>
-                                            <td colspan="4"
+                                            <td colspan="5"
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                             </td>
                                         </tr>
@@ -375,14 +439,14 @@ $sum = 0;
                                         @if ($isCheck)
                                             <tr id="add-row-product" class="bg-white" data-product-code="SP1"
                                                 data-product-id="{{ $product->id }}">
-                                                <td colspan="8"
+                                                <td colspan="9"
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                                                     <button type="button" class="save-info-product btn"
                                                         data-product-id="{{ $product->id }}"
                                                         data-product-code="{{ $product->product_code }}"
                                                         data-product-name="{{ $product->product_name }}"
                                                         data-product-brand="{{ $product->brand }}"
-                                                        data-product-warranty="{{ $product->warranty }}">
+                                                        data-product-warranty="{{ json_encode($formattedWarranty) }}">
                                                         <svg width="14" height="14" viewBox="0 0 14 14"
                                                             fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375

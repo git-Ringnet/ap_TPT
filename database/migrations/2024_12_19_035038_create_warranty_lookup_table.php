@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('product_id');
             $table->integer('sn_id');
             $table->integer('customer_id')->nullable();
+            $table->string('name_warranty')->nullable();
             $table->dateTime('export_return_date');
             $table->integer('warranty');
             $table->integer('status');

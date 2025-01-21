@@ -180,7 +180,7 @@
                                     <th class="border-right px-2 p-0" style="width: 10%;">
                                         <span class="text-table text-13-black font-weight-bold">Serial Number</span>
                                     </th>
-                                    <th class="border-right px-2 p-0" style="width: 10%;">
+                                    <th class="border-right px-2 p-0" style="width: 10%;" colspan="2">
                                         <span class="text-table text-13-black font-weight-bold">Bảo hành (Tháng)</span>
                                     </th>
                                     <th class="border-right note px-2 p-0 text-left" style="width: 15%;">

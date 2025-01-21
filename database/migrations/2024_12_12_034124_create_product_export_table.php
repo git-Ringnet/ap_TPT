@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('product_id');
             $table->integer('quantity')->default(1);
             $table->integer('sn_id');
-            $table->integer('warranty');
+            $table->string('warranty');
             $table->text('note')->nullable();
             $table->timestamps();
         });

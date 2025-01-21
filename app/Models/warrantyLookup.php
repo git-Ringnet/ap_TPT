@@ -15,6 +15,7 @@ class warrantyLookup extends Model
         'customer_id',
         'export_return_date',
         'warranty',
+        'name_warranty',
         'status',
         'warranty_expire_date',
     ];

@@ -72,33 +72,39 @@ class ExportsController extends Controller
                         'product_id' => $serial['product_id'],
                         'quantity' => 1,
                         'sn_id' => $sn->id,
-                        'warranty' => $serial['warranty'],
+                        'warranty' => json_encode($serial['warranty']),
                         'note' => $serial['note_seri'],
                     ]);
-                    //Tra cứu bảo hành
-                    warrantyLookup::create([
-                        'product_id' => $serial['product_id'],
-                        'sn_id' => $sn->id,
-                        'customer_id' => $request->customer_id,
-                        'export_return_date' => $request->date_create,
-                        'warranty' => $serial['warranty'],
-                        'status' => 0,
-                        'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $serial['warranty'] . ' months')),
-                    ]);
-                    //
-                    $today = Carbon::now();
-                    $records = WarrantyLookup::all();
-                    foreach ($records as $record) {
-                        if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
-                            $record->update(['status' => 1]);
-                        } else {
-                            $record->update(['status' => 0]);
-                        }
+                    // Tạo bản ghi bảo hành cho từng warranty
+                    foreach ($serial['warranty'] as $warranty) {
+                        $warrantyName = $warranty[0] ?? null; // Tên bảo hành
+                        $warrantyMonth = $warranty[1] ?? 0;   // Số tháng bảo hành
+
+                        warrantyLookup::create([
+                            'product_id' => $serial['product_id'],
+                            'sn_id' => $sn->id,
+                            'customer_id' => $request->customer_id,
+                            'export_return_date' => $request->date_create,
+                            'warranty' => $warrantyMonth,
+                            'name_warranty' => $warrantyName,
+                            'status' => 0,
+                            'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyMonth . ' months')),
+                        ]);
                     }
                 }
             }
         }
-        return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');;
+        //Cập nhật trạng thái bảo hành
+        $today = Carbon::now();
+        $records = WarrantyLookup::all();
+        foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $record->update(['status' => 1]);
+            } else {
+                $record->update(['status' => 0]);
+            }
+        }
+        return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');
     }
 
     /**
@@ -213,24 +219,36 @@ class ExportsController extends Controller
                     // Cập nhật trạng thái serial thành 2 (exported)
                     SerialNumber::where('id', $snId)->update(['status' => 2]);
 
-                    // **Thêm mới vào WarrantyLookup nếu chưa tồn tại**
-                    $existingWarranty = WarrantyLookup::where('sn_id', $snId)->first();
-                    if (!$existingWarranty) {
-                        WarrantyLookup::create([
-                            'product_id' => $data['product_id'],
-                            'sn_id' => $snId,
-                            'customer_id' => $request->customer_id,
-                            'export_return_date' => $request->date_create,
-                            'warranty' => $data['warranty'] ?? 12,
-                            'status' => 0,
-                            'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . ($data['warranty'] ?? 12) . ' months')),
-                        ]);
-                    } else {
-                        // Cập nhật ghi chú nếu cần
-                        $existingWarranty->update([
-                            'warranty' => $data['warranty'] ?? 12,
-                            'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . ($data['warranty'] ?? 12) . ' months')),
-                        ]);
+                    // Duyệt qua các bảo hành trong mảng warranty
+                    foreach ($data['warranty'] as $warrantyItem) {
+                        $nameWarranty = $warrantyItem[0];
+                        $warrantyPeriod = $warrantyItem[1];
+
+                        // Tìm kiếm WarrantyLookup dựa trên sn_id và name_warranty
+                        $existingWarranty = WarrantyLookup::where('sn_id', $snId)
+                            ->where('name_warranty', $nameWarranty)
+                            ->first();
+
+                        if (!$existingWarranty) {
+                            // Nếu không tồn tại, tạo mới
+                            WarrantyLookup::create([
+                                'product_id' => $data['product_id'],
+                                'sn_id' => $snId,
+                                'name_warranty' => $nameWarranty,
+                                'customer_id' => $request->customer_id,
+                                'export_return_date' => $request->date_create,
+                                'warranty' => $warrantyPeriod,
+                                'status' => 0,
+                                'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyPeriod . ' months')),
+                            ]);
+                        } else {
+                            // Nếu đã tồn tại, cập nhật thông tin
+                            $existingWarranty->update([
+                                'warranty' => $warrantyPeriod,
+                                'name_warranty' => $nameWarranty,
+                                'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyPeriod . ' months')),
+                            ]);
+                        }
                     }
                 }
             }
@@ -251,12 +269,35 @@ class ExportsController extends Controller
 
             // Xóa khỏi WarrantyLookup nếu tồn tại
             WarrantyLookup::whereIn('sn_id', $removedSnIds)->delete();
+
+            // Xóa serials bị xóa khỏi ProductExport
+            ProductExport::where('export_id', $id)
+                ->whereIn('sn_id', $removedSnIds)
+                ->delete();
         }
 
-        // Xóa serials bị xóa khỏi ProductExport
-        ProductExport::where('export_id', $id)
-            ->whereIn('sn_id', $removedSnIds)
-            ->delete();
+        // 4. Kiểm tra và xóa các WarrantyLookup không còn hợp lệ
+        foreach ($formSnIds as $snId) {
+            // Lấy danh sách name_warranty từ form ứng với sn_id này
+            $formWarranties = [];
+            foreach ($dataTest as $data) {
+                $normalizedSerial = strtolower(str_replace(' ', '', $data['serial'] ?? ''));
+                if (($existingSerials[$normalizedSerial] ?? null) === $snId) {
+                    $formWarranties = array_merge($formWarranties, array_column($data['warranty'] ?? [], 0));
+                }
+            }
+
+            // Lấy các bản ghi WarrantyLookup hiện tại từ database
+            $warrantyLookups = WarrantyLookup::where('sn_id', $snId)->get();
+
+            foreach ($warrantyLookups as $warranty) {
+                // Kiểm tra nếu name_warranty trong database không nằm trong danh sách từ form
+                if (!in_array($warranty->name_warranty, $formWarranties)) {
+                    // Xóa bản ghi WarrantyLookup
+                    $warranty->delete();
+                }
+            }
+        }
 
         // Cập nhật trạng thái bảo hành
         $today = Carbon::now();

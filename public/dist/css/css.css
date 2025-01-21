@@ -3554,3 +3554,6 @@ input[type="checkbox"]:checked {
 #scrollbar{
     padding: 0 10px;
 }
+.cursor-pointer{
+    cursor: pointer;
+}
