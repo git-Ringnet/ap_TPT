@@ -1,3 +1,4 @@
+let productArr = [];
 function showAutoToast(type, message) {
     let color;
     switch (type) {
@@ -68,7 +69,7 @@ $(document).ready(function () {
     // Hàm xóa dòng
     $(document).on("click", ".delete-row", function (event) {
         event.preventDefault();
-        const currentRow = $(this).closest("tr.row-product");
+        const currentRow = $(this).closest("tr");
         const productId = currentRow.data("product-id");
         const productCode = currentRow.data("product-code");
         // Lưu tất cả các hàng liên quan trước khi xóa
@@ -99,6 +100,19 @@ $(document).ready(function () {
             $(
                 `#tbody-product-data tr#add-row-product[data-product-code="${productCode}"]`
             ).remove();
+            // Xóa khỏi mảng
+            const index = productArr.indexOf(productId);
+            if (index > -1) {
+                productArr.splice(index, 1);
+            }
+
+            // Hiển thị lại mục trong danh sách mã sản phẩm
+            $("#listProducts ul li").each(function () {
+                const item_id = parseInt($(this).data("id"), 10); // Chuyển thành số nguyên
+                if (!productArr.includes(item_id)) {
+                    $(this).show(); // Hiển thị lại nếu không có trong mảng
+                }
+            });
         } else {
             const serialCount = remainingRows.length;
             const serialCountRow = $(
@@ -109,8 +123,7 @@ $(document).ready(function () {
         updateRowNumbers();
         updateSerialCount();
         calculateTotalSerialCount();
-        console.log("Hàng cần xóa:", currentRow);
-        console.log("Hàng liên quan:", currentRow.nextAll("tr"));
+        console.log("Updated productArr:", productArr);
     });
 
     // Hàm cập nhật số thứ tự
@@ -320,6 +333,17 @@ $(document).on("click", ".submit-button", function (event) {
 
     $(".btn-destroy-modal").click(); // Đóng modal
     calculateTotalSerialCount();
+
+    const productId = parseInt(product.id, 10);
+    if (!productArr.includes(productId)) {
+        productArr.push(productId);
+    }
+    $("#listProducts ul li").each(function () {
+        const item_id = $(this).data("id");
+        if (productArr.includes(item_id)) {
+            $(this).hide();
+        }
+    });
 });
 
 // Hàm tạo hàng dữ liệu với serial
@@ -490,8 +514,15 @@ $(document).ready(function () {
         var applyFilter = function () {
             var value = filterInput.val().toUpperCase();
             list.find("li").each(function () {
+                var item_id = $(this).data("id");
                 var text = $(this).find("a").text().toUpperCase();
-                $(this).toggle(text.indexOf(value) > -1);
+
+                // Kiểm tra nếu item_id không có trong productArr và khớp với bộ lọc tìm kiếm
+                if (!productArr.includes(item_id) && text.indexOf(value) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
             });
         };
 

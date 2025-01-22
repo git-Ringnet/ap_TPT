@@ -107,6 +107,11 @@ class ExportsController extends Controller
         $today = Carbon::now();
         $records = WarrantyLookup::all();
         foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $record->update(['status' => 1]); // Cập nhật trạng thái thành "hết bảo hành"
+            } else {
+                $record->update(['status' => 0]);
+            }
             // Lọc ra các bản ghi có cùng sn_id
             $snIdRecords = WarrantyLookup::where('sn_id', $record->sn_id)->get();
 
@@ -129,10 +134,10 @@ class ExportsController extends Controller
             // Nếu có bảo hành hết hạn, cập nhật trạng thái của tất cả bản ghi có cùng sn_id
             if ($expired) {
                 WarrantyLookup::where('sn_id', $record->sn_id)
-                    ->update(['status' => $status]);
+                    ->update(['name_status' => $status]);
             } else {
                 // Nếu không có bảo hành hết hạn, thì cập nhật trạng thái là "Còn bảo hành"
-                $record->update(['status' => "Còn bảo hành"]);
+                $record->update(['name_status' => "Còn bảo hành"]);
             }
         }
         return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');
@@ -337,6 +342,11 @@ class ExportsController extends Controller
         $today = Carbon::now();
         $records = WarrantyLookup::all();
         foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $record->update(['status' => 1]); // Cập nhật trạng thái thành "hết bảo hành"
+            } else {
+                $record->update(['status' => 0]);
+            }
             // Lọc ra các bản ghi có cùng sn_id
             $snIdRecords = WarrantyLookup::where('sn_id', $record->sn_id)->get();
 
@@ -359,11 +369,13 @@ class ExportsController extends Controller
             // Nếu có bảo hành hết hạn, cập nhật trạng thái của tất cả bản ghi có cùng sn_id
             if ($expired) {
                 WarrantyLookup::where('sn_id', $record->sn_id)
-                    ->update(['status' => $status]);
+                    ->update(['name_status' => $status]);
             } else {
                 // Nếu không có bảo hành hết hạn, thì cập nhật trạng thái là "Còn bảo hành"
-                $record->update(['status' => "Còn bảo hành"]);
+                $record->update(['name_status' => "Còn bảo hành"]);
             }
+
+            
         }
 
         return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
