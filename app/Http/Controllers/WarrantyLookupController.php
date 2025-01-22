@@ -21,8 +21,22 @@ class WarrantyLookupController extends Controller
     {
         $title = "Tra cứu bảo hành";
         $warranty = warrantyLookup::with(['product', 'serialNumber', 'customer'])->get();
+        $grouped = $warranty->groupBy('sn_id')->map(function ($items) {
+            // Lấy phần tử đầu tiên
+            $first = $items->first();
+
+            // Nối name_warranty và warranty theo định dạng yêu cầu
+            $first->name_warranty = $items->map(function ($item) {
+                return $item->name_warranty . ": " . $item->warranty;  // Nối name_warranty và warranty
+            })->join('; ');  // Nối các giá trị với dấu phân cách "; "
+
+            return $first;
+        });
+
+        // Kết quả
+        $grouped = $grouped->values();
         $customers = Customers::all();
-        return view('expertise.warrantyLookup.index', compact('title', 'warranty', 'customers'));
+        return view('expertise.warrantyLookup.index', compact('title', 'warranty', 'customers', 'grouped'));
     }
 
     /**

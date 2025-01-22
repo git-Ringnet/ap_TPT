@@ -51,7 +51,27 @@
                             <td class="border border-dark">{{ $item->product->brand }}</td>
                             <td class="border border-dark">1</td>
                             <td class="border border-dark">{{ $item->serialNumber->serial_code }}</td>
-                            <td class="border border-dark">{{ $item->warranty }} tháng</td>
+                            <td class="border border-dark">
+                                @php
+                                    // Kiểm tra nếu warranty là chuỗi và chuyển nó thành mảng
+                                    if (is_string($item->warranty)) {
+                                        $warrantyArray = json_decode($item->warranty, true); // Chuyển chuỗi JSON thành mảng
+                                    } else {
+                                        $warrantyArray = $item->warranty; // Nếu warranty đã là mảng, không cần chuyển
+                                    }
+                                @endphp
+
+                                @foreach ($warrantyArray as $warranty)
+                                    @php
+                                        $name = $warranty[0] ?? 'Không có tên';
+                                        $months = $warranty[1] ?? 'Không có thông tin tháng';
+                                    @endphp
+                                    {{ $name }}: {{ $months }} tháng
+                                    @if (!$loop->last)
+                                        ;
+                                    @endif
+                                @endforeach
+                            </td>
                             <td class="border border-dark">{{ $item->note }}</td>
                         </tr>
                     @endforeach

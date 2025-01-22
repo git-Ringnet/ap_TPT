@@ -34,11 +34,16 @@ class UpdateWanrratyStatus extends Command
         $records = WarrantyLookup::all();
 
         foreach ($records as $record) {
-            // Kiểm tra nếu đã hết hạn bảo hành
             if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
-                $record->update(['status' => 1]); // Cập nhật trạng thái thành "hết bảo hành"
+                $status = $record->name_warranty . ' hết bảo hành';
+                $record->update(['status' => $status]);
+
+                // Kiểm tra và cập nhật các bản ghi có sn_id giống với bản ghi hiện tại
+                WarrantyLookup::where('sn_id', $record->sn_id)
+                    ->where('id', '!=', $record->id)  // Đảm bảo không cập nhật chính nó
+                    ->update(['status' => $status]);
             } else {
-                $record->update(['status' => 0]);
+                $record->update(['status' => "Còn bảo hành"]);
             }
         }
 

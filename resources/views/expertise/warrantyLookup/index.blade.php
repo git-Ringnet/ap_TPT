@@ -131,7 +131,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-warran-lookup">
-                                    @foreach ($warranty as $item)
+                                    @foreach ($grouped as $item)
                                         <tr class="position-relative warran-lookup-info height-40">
                                             <input type="hidden" name="id-warran-lookup" class="id-warran-lookup"
                                                 id="id-warran-lookup" value="{{ $item->id }}">
@@ -163,15 +163,11 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->warranty }} tháng
+                                                {{ $item->name_warranty }}
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                @if (@$item->status == '1')
-                                                    <span class="text-13-black">Hết bảo hành</span>
-                                                @else
-                                                    <span class="text-13-black">Còn bảo hành</span>
-                                                @endif
+                                                {{ $item->status }}
                                             </td>
                                         </tr>
                                     @endforeach

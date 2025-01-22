@@ -102,18 +102,24 @@ class ExportsController extends Controller
                     }
                 }
             }
-            //Cập nhật trạng thái bảo hành
-            $today = Carbon::now();
-            $records = WarrantyLookup::all();
-            foreach ($records as $record) {
-                if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
-                    $record->update(['status' => 1]);
-                } else {
-                    $record->update(['status' => 0]);
-                }
-            }
-            return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');
         }
+        //Cập nhật trạng thái bảo hành
+        $today = Carbon::now();
+        $records = WarrantyLookup::all();
+        foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $status = $record->name_warranty . ' hết bảo hành';
+                $record->update(['status' => $status]);
+
+                // Kiểm tra và cập nhật các bản ghi có sn_id giống với bản ghi hiện tại
+                WarrantyLookup::where('sn_id', $record->sn_id)
+                    ->where('id', '!=', $record->id)  // Đảm bảo không cập nhật chính nó
+                    ->update(['status' => $status]);
+            } else {
+                $record->update(['status' => "Còn bảo hành"]);
+            }
+        }
+        return redirect()->route('exports.index')->with('msg', 'Tạo phiếu xuất hàng thành công!');
     }
 
     /**
@@ -150,7 +156,7 @@ class ExportsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $warehouse_id = GlobalHelper::getWarehouseId();
+        $warehouse_id = GlobalHelper::getWarehouseId() ?? 1;
         // Validate dữ liệu đầu vào
         $validatedData = $request->validate(
             [
@@ -218,12 +224,12 @@ class ExportsController extends Controller
                             'product_id' => $data['product_id'],
                             'sn_id' => $snId,
                             'note' => $data['note_seri'] ?? '',
-                            'warranty' => $data['warranty'] ?? 12,
+                            'warranty' => json_encode($data['warranty']) ?? 12,
                         ]);
                     } else {
                         // Cập nhật ghi chú nếu cần
                         $existingExport->update([
-                            'warranty' => $data['warranty'] ?? 12,
+                            'warranty' => json_encode($data['warranty']) ?? 12,
                             'note' => $data['note_seri'] ?? '',
                         ]);
                     }
@@ -310,20 +316,25 @@ class ExportsController extends Controller
                     }
                 }
             }
-
-            // Cập nhật trạng thái bảo hành
-            $today = Carbon::now();
-            $records = WarrantyLookup::all();
-            foreach ($records as $record) {
-                if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
-                    $record->update(['status' => 1]);
-                } else {
-                    $record->update(['status' => 0]);
-                }
-            }
-
-            return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
         }
+        // Cập nhật trạng thái bảo hành
+        $today = Carbon::now();
+        $records = WarrantyLookup::all();
+        foreach ($records as $record) {
+            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
+                $status = $record->name_warranty . ' hết bảo hành';
+                $record->update(['status' => $status]);
+
+                // Kiểm tra và cập nhật các bản ghi có sn_id giống với bản ghi hiện tại
+                WarrantyLookup::where('sn_id', $record->sn_id)
+                    ->where('id', '!=', $record->id)  // Đảm bảo không cập nhật chính nó
+                    ->update(['status' => $status]);
+            } else {
+                $record->update(['status' => "Còn bảo hành"]);
+            }
+        }
+
+        return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
     }
     /**
      * Remove the specified resource from storage.

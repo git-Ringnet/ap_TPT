@@ -68,14 +68,27 @@ $(document).ready(function () {
     // Hàm xóa dòng
     $(document).on("click", ".delete-row", function (event) {
         event.preventDefault();
-        const currentRow = $(this).closest("tr");
+        const currentRow = $(this).closest("tr.row-product");
         const productId = currentRow.data("product-id");
         const productCode = currentRow.data("product-code");
-        currentRow.remove();
-        // Xóa tất cả các hàng bảo hành liên quan đến sản phẩm đó
-        $(
-            `#tbody-product-data tr.row-warranty[id^="serials-data-${productId}"]`
-        ).remove();
+        // Lưu tất cả các hàng liên quan trước khi xóa
+        const rowsToDelete = [currentRow]; // Gồm hàng hiện tại
+        currentRow.nextAll("tr").each(function () {
+            const $nextRow = $(this);
+
+            // Dừng nếu gặp hàng `row-product` mới
+            if ($nextRow.hasClass("row-product")) {
+                return false;
+            }
+
+            // Thêm các hàng `row-warranty` vào danh sách cần xóa
+            if ($nextRow.hasClass("row-warranty")) {
+                rowsToDelete.push($nextRow);
+            }
+        });
+
+        // Xóa tất cả các hàng trong danh sách
+        rowsToDelete.forEach((row) => row.remove());
         const remainingRows = $(
             `#tbody-product-data tr[data-product-id="${productId}"]`
         ).not("#serials-count, #add-row-product");
@@ -96,6 +109,8 @@ $(document).ready(function () {
         updateRowNumbers();
         updateSerialCount();
         calculateTotalSerialCount();
+        console.log("Hàng cần xóa:", currentRow);
+        console.log("Hàng liên quan:", currentRow.nextAll("tr"));
     });
 
     // Hàm cập nhật số thứ tự
