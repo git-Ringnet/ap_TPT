@@ -34,15 +34,31 @@ class UpdateWanrratyStatus extends Command
         $records = WarrantyLookup::all();
 
         foreach ($records as $record) {
-            if ($today->greaterThanOrEqualTo($record->warranty_expire_date)) {
-                $status = $record->name_warranty . ' hết bảo hành';
-                $record->update(['status' => $status]);
+            // Lọc ra các bản ghi có cùng sn_id
+            $snIdRecords = WarrantyLookup::where('sn_id', $record->sn_id)->get();
 
-                // Kiểm tra và cập nhật các bản ghi có sn_id giống với bản ghi hiện tại
+            // Kiểm tra nếu có bất kỳ bản ghi nào hết hạn bảo hành
+            $expired = false;
+            $warranties = []; // Mảng để lưu các tên bảo hành hết hạn
+
+            // Duyệt qua các bản ghi có cùng sn_id
+            foreach ($snIdRecords as $snIdRecord) {
+                if ($today->greaterThanOrEqualTo($snIdRecord->warranty_expire_date)) {
+                    // Nếu bảo hành hết hạn, thêm tên bảo hành vào mảng và đánh dấu hết hạn
+                    $expired = true;
+                    $warranties[] = $snIdRecord->name_warranty;
+                }
+            }
+
+            // Nối tên bảo hành hết hạn
+            $status = implode(', ', $warranties) . ' hết bảo hành';
+
+            // Nếu có bảo hành hết hạn, cập nhật trạng thái của tất cả bản ghi có cùng sn_id
+            if ($expired) {
                 WarrantyLookup::where('sn_id', $record->sn_id)
-                    ->where('id', '!=', $record->id)  // Đảm bảo không cập nhật chính nó
                     ->update(['status' => $status]);
             } else {
+                // Nếu không có bảo hành hết hạn, thì cập nhật trạng thái là "Còn bảo hành"
                 $record->update(['status' => "Còn bảo hành"]);
             }
         }
