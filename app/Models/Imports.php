@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Helpers\GlobalHelper;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Imports extends Model
@@ -21,8 +23,12 @@ class Imports extends Model
         'contact_person',
         'address',
         'note',
+        'warehouse_id',
     ];
-
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -40,14 +46,19 @@ class Imports extends Model
 
     public function getAllImports()
     {
-        return Imports::leftJoin("providers", "providers.id", "imports.provider_id")
+        $warehouse_id = GlobalHelper::getWarehouseId();
+        $imports = Imports::leftJoin("providers", "providers.id", "imports.provider_id")
             ->leftJoin("users", "users.id", "imports.user_id")
-            ->select("providers.provider_name", "users.name", "imports.*")
-            ->get();
+            ->select("providers.provider_name", "users.name", "imports.*");
+        if ($warehouse_id) {
+            $imports = $imports->where('imports.warehouse_id', $warehouse_id);
+        }
+        return $imports->get();
     }
 
     public function addImport($data)
     {
+        $warehouse_id = GlobalHelper::getWarehouseId();
         $arrImport = [
             'import_code' => $data['import_code'],
             'user_id' => $data['user_id'],
@@ -57,7 +68,8 @@ class Imports extends Model
             'contact_person' => $data['contact_person'],
             'address' => $data['address'],
             'note' => $data['note'],
-            'created_at' => now()
+            'created_at' => now(),
+            'warehouse_id' => $warehouse_id ?? 1,
         ];
         $import = DB::table($this->table)->insertGetId($arrImport);
         return $import;

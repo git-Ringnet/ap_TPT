@@ -78,6 +78,18 @@
                                                 <div class="icon" id="icon-provide_name"></div>
                                             </span>
                                         </th>
+                                        @can('admin')
+                                        <th class="height-40 py-0 border-right-0" scope="col">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit" data-sort-by="username" data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Kho</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-username"></div>
+                                            </span>
+                                        </th>
+                                        @endcan
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="username"
@@ -121,6 +133,11 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->provider_name }}
                                             </td>
+                                            @can('admin')
+                                            <td class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                {{ $item->warehouse->warehouse_name }}
+                                            </td>
+                                            @endcan
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->name }}

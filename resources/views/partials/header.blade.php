@@ -225,11 +225,10 @@
                     @endhasanyrole
                 </div>
                 <div class="@if (!empty($activeGroup) && $activeGroup == 'manageProfess') d-flex @else d-none @endif">
-                    @unlessrole('Bảo hành')
                         <a href="{{ route('imports.index') }}" class="height-36">
                             <button type="button"
                                 class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'imports') active @endif ">
-                                Phiếu nhập hàng
+                                 Phiếu nhập hàng
                             </button>
                         </a>
                         <a href="{{ route('exports.index') }}" class="height-36">
@@ -244,7 +243,6 @@
                                 Tra cứu tồn kho
                             </button>
                         </a>
-                    @endunlessrole
                     @unlessrole('Quản lý kho')
                         <a href="{{ route('warrantyLookup.index') }}" class="height-36">
                             <button type="button"

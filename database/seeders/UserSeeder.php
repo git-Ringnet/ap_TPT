@@ -30,8 +30,8 @@ class UserSeeder extends Seeder
         $warehouseManager->assignRole('Quản lý kho');
 
         $serviceUser = User::create([
-            'name' => 'Dịch vụ',
-            'email' => 'dichvu@ringnet.vn',
+            'name' => 'Bảo hành',
+            'email' => 'baohanh@ringnet.vn',
             'password' => Hash::make('Ringnet@123'),
         ]);
         $serviceUser->assignRole('Bảo hành');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GlobalHelper;
 use App\Models\Exports;
 use App\Models\Imports;
 use App\Models\InventoryHistory;
@@ -17,6 +18,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ImportsController extends Controller
@@ -80,6 +82,11 @@ class ImportsController extends Controller
 
         // $import = Imports::create($validatedData);
         // dd($request->all());
+
+        // Phân biệt kho hàng mới và bảo hành qua role
+        $roleUser = Auth::user()->roles()->first()->id;
+        $warehouse_id = $roleUser == 2 ? 1 : ($roleUser == 3 ? 2 : null);
+
         $import_id = $this->imports->addImport($request->all());
         $dataTest = $request->input('data-test');
 
@@ -109,6 +116,7 @@ class ImportsController extends Controller
                     'import_date' => $request->date_create,
                     'storage_duration' => 0,
                     'status' => 0,
+                    'warehouse_id' => $warehouse_id ?? 1,
                 ]);
 
                 $records = InventoryLookup::all();
@@ -186,6 +194,7 @@ class ImportsController extends Controller
      */
     public function update(Request $request, String $id)
     {
+        $warehouse_id = GlobalHelper::getWarehouseId();
         // Validate dữ liệu đầu vào
         $validatedData = $request->validate([
             'import_code' => 'required|string|max:255|unique:imports,import_code,' . $id,
@@ -201,7 +210,7 @@ class ImportsController extends Controller
             'user_id.required'     => 'Người nhập là bắt buộc.',
             'date_create.required' => 'Ngày tạo là bắt buộc.',
         ]);
-
+        $validatedData['warehouse_id'] = $warehouse_id;
         // Tìm import theo ID
         $import = Imports::findOrFail($id);
 
@@ -256,6 +265,7 @@ class ImportsController extends Controller
                     'import_date' => $request->date_create,
                     'storage_duration' => 0,
                     'status' => 0,
+                    'warehouse_id' => $warehouse_id ?? 1,
                 ]);
             }
         }

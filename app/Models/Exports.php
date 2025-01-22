@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\GlobalHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -22,8 +23,12 @@ class Exports extends Model
         'contact_person',
         'address',
         'note',
+        'warehouse_id',
     ];
-
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
@@ -60,6 +65,7 @@ class Exports extends Model
 
     public function addExport($data)
     {
+        $warehouse_id = GlobalHelper::getWarehouseId();
         $arrExport = [
             'export_code' => $data['export_code'],
             'user_id' => $data['user_id'],
@@ -69,7 +75,8 @@ class Exports extends Model
             'address' => $data['address'],
             'contact_person' => $data['contact_person'],
             'note' => $data['note'],
-            'created_at' => now()
+            'created_at' => now(),
+            'warehouse_id' => $warehouse_id ?? 1,
         ];
         $import = DB::table($this->table)->insertGetId($arrExport);
         return $import;

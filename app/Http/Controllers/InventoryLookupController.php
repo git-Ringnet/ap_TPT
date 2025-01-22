@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GlobalHelper;
 use App\Models\InventoryHistory;
 use App\Models\InventoryLookup;
 use App\Models\Product;
@@ -21,11 +22,15 @@ class InventoryLookupController extends Controller
     public function index()
     {
         $title = "Tra cứu tồn kho";
+        $warehouse_id = GlobalHelper::getWarehouseId();
         $inventory = InventoryLookup::with(['product', 'serialNumber', 'provider'])
             ->whereHas('serialNumber', function ($query) {
                 $query->where('status', 1);
-            })
-            ->get();
+            });
+        if ($warehouse_id) {
+            $inventory = $inventory->where('warehouse_id', $warehouse_id);
+        }
+        $inventory = $inventory->get();
         $providers = Providers::all();
         return view('expertise.inventoryLookup.index', compact('title', 'inventory', 'providers'));
     }
