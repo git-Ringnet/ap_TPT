@@ -11,6 +11,7 @@ use App\Models\SerialNumber;
 use App\Models\User;
 use App\Notifications\ReceiNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReceivingController extends Controller
 {
@@ -38,7 +39,8 @@ class ReceivingController extends Controller
         $products = Product::all();
         $quoteNumber = (new Receiving)->getQuoteCount('PTN', Receiving::class, 'form_code_receiving');
         $customers = Customers::all();
-        return view('expertise.receivings.create', compact('title', 'products', 'quoteNumber', 'customers'));
+        $products = Product::all();
+        return view('expertise.receivings.create', compact('title', 'products', 'quoteNumber', 'customers', 'products'));
     }
 
     // Store a newly created receiving record in storage
@@ -385,5 +387,31 @@ class ReceivingController extends Controller
         }
 
         return redirect()->route('receivings.index')->with('success', 'Trạng thái đã được cập nhật và thông báo đã được gửi.');
+    }
+
+    // Tìm warranty theo product_id và serial
+    public function warrantyLookup(Request $request)
+    {
+        $productId = $request->input('product');
+        $serial = $request->input('serial');
+
+        $sn_id = SerialNumber::where('serial_code', $serial)->first();
+        if ($sn_id) {
+            // Truy vấn dữ liệu từ bảng warranty_lookup
+            $warranty = DB::table('warranty_lookup')
+                ->where('product_id', $productId)
+                ->where('sn_id', $sn_id->id)
+                ->get();
+
+            if ($warranty) {
+                return response()->json([
+                    'warranty' => $warranty,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'Không tìm thấy thông tin bảo hành',
+                ], 404);
+            }
+        }
     }
 }

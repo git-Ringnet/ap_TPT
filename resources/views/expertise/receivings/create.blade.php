@@ -116,9 +116,11 @@
                                                 <a href="#" title="{{ $item->customer_name }}" style="flex:2;"
                                                     id="{{ $item->id }}" data-name="{{ $item->customer_name }}"
                                                     data-phone="{{ $item->phone }}"
-                                                    data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}"  name="search-info"
+                                                    data-address="{{ $item->address }}"
+                                                    data-contact="{{ $item->contact_person }}" name="search-info"
                                                     class="search-info">
-                                                    <span class="text-13-black-black">{{ $item->customer_name }}</span>
+                                                    <span
+                                                        class="text-13-black-black">{{ $item->customer_name }}</span>
                                                 </a>
                                             </li>
                                         @endforeach
@@ -225,31 +227,117 @@
                         <table class="table" id="inputcontent">
                             <thead>
                                 <tr style="height:44px;">
-                                    <th class="border-right px-2 p-0 pl-4" style="width:10%;">
+                                    <th class="border-right px-2 p-0 pl-4">
                                         <span class="text-table text-secondary">Mã hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:20%;">
+                                    <th class="border-right px-2 p-0 text-left">
                                         <span class="text-table text-secondary">Tên hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width:10%;">
+                                    <th class="border-right px-2 p-0 text-left">
                                         <span class="text-table text-secondary">Hãng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:10%;">
-                                        <span class="text-table text-secondary">Số lượng</span>
+                                    <th class="border-right px-2 p-0 text-center" style="width: 3%">
+                                        <span class="text-table text-secondary">SL</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:15%;">
+                                    <th class="border-right px-2 p-0 text-right">
                                         <span class="text-table text-secondary">Serial Number</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-right" style="width:20%;">
+                                    <th class="border-right px-2 p-0 text-right">
+                                        <span class="text-table text-secondary">Thông tin</span>
+                                    </th>
+                                    <th class="border-right px-2 p-0 text-right">
                                         <span class="text-table text-secondary">Tình trạng tiếp nhận</span>
                                     </th>
-                                    <th class="border-right note px-2 p-0 text-left" style="width:10%;">
+                                    <th class="border-right note px-2 p-0 text-right">
                                         <span class="text-table text-secondary">Ghi chú</span>
                                     </th>
-                                    <th class="" style="width:10%;"></th>
+                                    <th class="" style="width: 3%"></th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-product-data">
+                                <tr class="row-product bg-white" id="serials-data" data-index="0"
+                                    data-product-code="" data-product-id="">
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly=""
+                                            name="product_id[]" value="">
+                                    </td>
+                                    <td
+                                        class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4 bg-input-guest-blue">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                            placeholder="Tìm mã hàng" value="">
+                                        <ul class='list_product bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
+                                            style='z-index: 99;top: 75%;left: 1.5rem;display: none;'>
+                                            @foreach ($products as $product_value)
+                                                <li data-id='{{ $product_value->id }}'>
+                                                    <a href='javascript:void(0);'
+                                                        class='text-dark d-flex justify-content-between p-2 idProduct w-100'
+                                                        data-name="{{ $product_value->product_name }}"
+                                                        data-brand="{{ $product_value->brand }}"
+                                                        data-id='{{ $product_value->id }}' name='idProduct'>
+                                                        <span class='w-50 text-13-black'
+                                                            style='flex:2'>{{ $product_value->product_name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+                                            readonly="" value="">
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly=""
+                                            value="">
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 text-center py-1 w-100 height-32" readonly=""
+                                            value="1">
+                                    </td>
+                                    <td
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 bg-input-guest-blue">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" name="serial[]"
+                                            value="">
+                                    </td>
+                                    <td
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
+                                            name="name_warranty[]" value="">
+                                        <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
+                                            style='z-index: 99;top: 75%;display: none;'>
+                                        </ul>
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <input type="text" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                                            name="warranty[]" value="">
+                                    </td>
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <input type="text" autocomplete="off" name="note_seri[]"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                            value="">
+                                    </td>
+                                    <td class="p-2 align-top border-bottom border-top-0 border-right">
+
+                                    </td>
+                                </tr>
+                                <tr id="row-add-warranty" data-index="0" class="bg-white row-warranty" style="display: none" data-product-code="" data-product-id="">
+                                    <td colspan="5"
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                        <button type="button" class="btn-add-warranty btn">
+                                            +
+                                        </button>
+                                    </td>
+                                    <td colspan="3"
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+                                </tr>
                             </tbody>
                         </table>
                         <input type="hidden" name="data-test" id="data-test">
@@ -258,7 +346,7 @@
                                 <div class="d-flex ml-4">
                                     <button type="button" data-modal-id="modal-id" data-toggle="modal"
                                         data-target="#modal-id"
-                                        class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
+                                        class="btn-add-item d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                         style="margin-right:10px">
                                         <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
                                             height="12" viewBox="0 0 18 18" fill="none">
@@ -274,50 +362,102 @@
                                 </div>
                             </div>
                         </section>
-                        <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
-                            name="TN" />
+                        {{-- <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
+                            name="TN" /> --}}
                     </section>
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script src="{{ asset('js/addproduct.js') }}"></script>
 <script>
+    var products = @json($products);
+</script>
+
+<script src="{{ asset('js/addproduct.js') }}"></script>
+<script src="{{ asset('js/receiving.js') }}"></script>
+<script>
+    let responseData = [];
+    $(document).on("change", ".product_code, .serial", function() {
+        const $row = $(this).closest(".row-product");
+        const index = $row.data("index");
+        const productCode = $row.find(".product_code").val().trim();
+        const serial = $row.find(".serial").val().trim();
+        const product = $row.find(".product_id").val().trim();
+        const $rowWarranty = $(`.row-warranty[data-index="${index}"]`);
+        $rowWarranty.show();
+        if (productCode && serial) {
+            $.ajax({
+                url: "/warranty-lookup",
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: {
+                    product: product,
+                    serial: serial,
+                },
+                success: function(response) {
+                    responseData = response;
+                    const $inputField = $row.find(".warranty-input");
+                    const $dropdownList = $row.find(".warranty-dropdown");
+                    $inputField.val(""); 
+                    $dropdownList.empty();
+                    if (response.warranty && response.warranty.length > 0) {
+                      populateWarrantyDropdown(response,$dropdownList);
+                    } else {
+                        alert("Không tìm thấy thông tin bảo hành.");
+                    }
+                    $dropdownList.find(".dropdown-link").on("click", function() {
+                        const nameWarranty = $(this).data("name_warranty");
+                        const warranty = $(this).data("warranty");
+                        $inputField.val(nameWarranty);
+                        $dropdownList.hide();
+                    });
+                },
+                error: function() {
+                    alert("Không thể lấy thông tin bảo hành. Vui lòng thử lại.");
+                },
+            });
+        }
+    });
+
+
+
     $(document).ready(function() {
         // Xử lý sự kiện thay đổi radio button
         $('input[type="radio"]').on('change', function() {
             let branchId = $('input[name="branch_id"]:checked').val();
             let formType = $('input[name="form_type"]:checked').val();
-            let serialData = collectSerialData();
+            // let serialData = collectSerialData();
             let contentWrapper = $('#content-wrapper');
 
             if (branchId && formType) {
                 contentWrapper.removeClass('blur-wrapper');
-                if (serialData.length > 0) {
-                    checkSerials(branchId, formType, serialData, function(response) {
-                        if (response.status === 'success') {
-                            serialData.forEach((item) => {
-                                let serialResult = response.serials.find(
-                                    (serial) => serial.serial === item.serial
-                                );
-                                let listRecei = item.inputElement
-                                    .closest('td')
-                                    .find('.list-recei');
+                // if (serialData.length > 0) {
+                //     checkSerials(branchId, formType, serialData, function(response) {
+                //         if (response.status === 'success') {
+                //             serialData.forEach((item) => {
+                //                 let serialResult = response.serials.find(
+                //                     (serial) => serial.serial === item.serial
+                //                 );
+                //                 let listRecei = item.inputElement
+                //                     .closest('td')
+                //                     .find('.list-recei');
 
-                                if (serialResult && serialResult.valid) {
-                                    listRecei.html(
-                                        '<span class="text-success">✔</span>');
-                                } else {
-                                    listRecei.html(
-                                        '<span class="text-danger">✖</span>');
-                                }
-                            });
-                        } else {
-                            console.error('Lỗi:', response.message);
-                        }
-                    });
-                }
+                //                 if (serialResult && serialResult.valid) {
+                //                     listRecei.html(
+                //                         '<span class="text-success">✔</span>');
+                //                 } else {
+                //                     listRecei.html(
+                //                         '<span class="text-danger">✖</span>');
+                //                 }
+                //             });
+                //         } else {
+                //             console.error('Lỗi:', response.message);
+                //         }
+                //     });
+                // }
             } else {
                 contentWrapper.addClass('blur-wrapper');
             }
@@ -326,7 +466,7 @@
             event.preventDefault();
             let branchId = $('input[name="branch_id"]:checked').val();
             let formType = $('input[name="form_type"]:checked').val();
-            let serialData = collectSerialData();
+            // let serialData = collectSerialData();
             let hasInvalidSerial = false;
             let invalidMessages = [];
             const idcus = $('#customer_id').val();
@@ -375,64 +515,5 @@
             }
         });
 
-    });
-
-
-    $(document).ready(function() {
-        function toggleListGuest(input, list, filterInput) {
-            input.on("click", function() {
-                list.show();
-            });
-            $(document).click(function(event) {
-                if (
-                    !$(event.target).closest(input).length &&
-                    !$(event.target).closest(filterInput).length
-                ) {
-                    list.hide();
-                }
-            });
-            var applyFilter = function() {
-                var value = filterInput.val().toUpperCase();
-                list.find("li").each(function() {
-                    var text = $(this).find("a").text().toUpperCase();
-                    $(this).toggle(text.indexOf(value) > -1);
-                });
-            };
-            input.on("keyup", applyFilter);
-            filterInput.on("keyup", applyFilter);
-        }
-        toggleListGuest(
-            $("#customer_name"),
-            $("#listCustomer"),
-            $("#searchCustomer")
-        );
-        $('a[name="search-info"]').on('click', function() {
-            const dataId = $(this).attr('id');
-            const dataName = $(this).data('name');
-            const phone = $(this).data('phone');
-            const address = $(this).data('address');
-            const contact = $(this).data('contact');
-            $("#customer_id").val(dataId);
-            $("#customer_name").val(dataName);
-            $('[name="phone"]').val(phone);
-            $('[name="contact_person"]').val(contact);
-            $('[name="address"]').val(address);
-        });
-    });
-    flatpickr("#dateCreate", {
-        locale: "vn",
-        dateFormat: "d/m/Y",
-        defaultDate: "today",
-        onChange: function(selectedDates) {
-            // Lấy giá trị ngày đã chọn
-            if (selectedDates.length > 0) {
-                const formattedDate = flatpickr.formatDate(
-                    selectedDates[0],
-                    "Y-m-d"
-                );
-                document.getElementById("hiddenDateCreate").value =
-                    formattedDate;
-            }
-        },
     });
 </script>

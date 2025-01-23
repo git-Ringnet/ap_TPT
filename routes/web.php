@@ -78,8 +78,10 @@ Route::get('/filter-reports-export-import', [ReportController::class, 'filterExp
 Route::get('/filter-reports-receipt-return', [ReportController::class, 'filterReceiptReturn'])->name('reports.receipt_return');
 Route::get('/filter-reports-quotation', [ReportController::class, 'filterQuotation'])->name('reports.quotation');
 
-
 Route::post('/update-status', [ReceivingController::class, 'updateStatus'])->name('update.status');
+
+Route::post('/warranty-lookup', [ReceivingController::class, 'warrantyLookup']);
+
 
 Route::get('/', function () {
     return view('welcome');

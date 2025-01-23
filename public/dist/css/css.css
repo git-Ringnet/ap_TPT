@@ -1726,7 +1726,7 @@ input[type="number"] {
     border-radius: 5px;
 }
 
-.btn-save-print {
+.btn-save-print,.btn-add-item {
     border: 1px solid #C6CFFC;
     color: #42526e;
     background-color: #ffffff;
@@ -2586,11 +2586,11 @@ input[type="checkbox"]:checked {
     border-bottom-width: 0 !important;
 }
 
-.content-wrapper .content .list_product li:hover {
+.content-wrapper .content .list_product li:hover,.warranty-dropdown li:hover {
     background-color: #ececec;
 }
 
-.content-wrapper .content .list_code li:hover {
+.content-wrapper .content .list_code li:hover,.warranty-dropdown li:hover {
     background-color: #ececec;
 }
 

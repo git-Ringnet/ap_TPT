@@ -374,8 +374,6 @@ class ExportsController extends Controller
                 // Nếu không có bảo hành hết hạn, thì cập nhật trạng thái là "Còn bảo hành"
                 $record->update(['name_status' => "Còn bảo hành"]);
             }
-
-            
         }
 
         return redirect()->route('exports.index')->with('msg', 'Cập nhật thành công phiếu xuất hàng!');
