@@ -447,7 +447,7 @@
 
             // Lấy bảo hành từ hàng .row-product
             const warranties = [];
-            const productWarrantyName = $row.find('.name_warranty').val();
+            const productWarrantyName = $row.find('.name_warranty').val() || "Trọn bộ";
             const productWarrantyMonth = $row.find('.warranty').val();
 
             if (productWarrantyName && productWarrantyMonth) {
@@ -458,7 +458,7 @@
             let $nextRow = $row.next();
 
             while ($nextRow.hasClass('row-warranty')) {
-                const name_warranty = $nextRow.find('.name_warranty').val();
+                const name_warranty = $nextRow.find('.name_warranty').val() || "Trọn bộ";
                 const warranty_month = $nextRow.find('.warranty').val();
 
                 if (name_warranty && warranty_month) {

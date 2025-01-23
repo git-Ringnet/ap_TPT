@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('warranty_lookup', function (Blueprint $table) {
-            $table->string('name_status');
+            $table->string('name_status')->nullable()->after('name');
         });
     }
 

@@ -94,7 +94,7 @@ class ExportsController extends Controller
                                 'customer_id' => $request->customer_id,
                                 'export_return_date' => $request->date_create,
                                 'warranty' => $warrantyMonth,
-                                'name_warranty' => $warrantyName,
+                                'name_warranty' => $warrantyName ?? "Trọn bộ",
                                 'status' => 0,
                                 'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyMonth . ' months')),
                             ]);

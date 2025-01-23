@@ -1,4 +1,18 @@
 let productArr = [];
+$("#tbody-product-data tr.row-product").each(function () {
+    const productId = parseInt($(this).data("product-id"), 10); // Lấy giá trị data-product-id và chuyển thành số
+    if (!productArr.includes(productId)) {
+        productArr.push(productId);
+    }
+});
+$("#listProducts ul li").each(function () {
+    const itemId = parseInt($(this).data("id"), 10); // Lấy giá trị data-id và chuyển thành số
+    if (productArr.includes(itemId)) {
+        $(this).hide(); // Ẩn sản phẩm nếu ID đã tồn tại trong productArr
+    } else {
+        $(this).show(); // Hiện sản phẩm nếu ID không có trong productArr
+    }
+});
 function showAutoToast(type, message) {
     let color;
     switch (type) {
@@ -72,6 +86,7 @@ $(document).ready(function () {
         const currentRow = $(this).closest("tr");
         const productId = currentRow.data("product-id");
         const productCode = currentRow.data("product-code");
+        
         // Lưu tất cả các hàng liên quan trước khi xóa
         const rowsToDelete = [currentRow]; // Gồm hàng hiện tại
         currentRow.nextAll("tr").each(function () {
@@ -98,7 +113,7 @@ $(document).ready(function () {
                 `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
             ).remove();
             $(
-                `#tbody-product-data tr#add-row-product[data-product-code="${productCode}"]`
+                `#tbody-product-data tr#add-row-product[data-product-id="${productId}"]`
             ).remove();
             // Xóa khỏi mảng
             const index = productArr.indexOf(productId);
@@ -123,7 +138,6 @@ $(document).ready(function () {
         updateRowNumbers();
         updateSerialCount();
         calculateTotalSerialCount();
-        console.log("Updated productArr:", productArr);
     });
 
     // Hàm cập nhật số thứ tự

@@ -125,7 +125,7 @@
                                         class="font-weight-bold text-uppercase info-chung--heading bg-white text-purble">
                                         <span class="ml-4 pl-2">Danh sách trong nhóm</span>
                                     </p>
-                                    <div class="overflow-content-quote">
+                                    <div class="">
                                         <table id="example2" class="table table-hover bg-white rounded">
                                             <thead>
                                                 <tr>

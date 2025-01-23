@@ -194,7 +194,7 @@ class ImportsController extends Controller
      */
     public function update(Request $request, String $id)
     {
-        $warehouse_id = GlobalHelper::getWarehouseId();
+        $warehouse_id = GlobalHelper::getWarehouseId() ?? 1;
         // Validate dữ liệu đầu vào
         $validatedData = $request->validate([
             'import_code' => 'required|string|max:255|unique:imports,import_code,' . $id,
