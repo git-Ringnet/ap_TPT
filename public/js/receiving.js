@@ -60,13 +60,21 @@ $(document).ready(function () {
     $(document).on("click", ".dropdown-link", function (e) {
         e.preventDefault();
         const $clickedItem = $(this);
-        const nameWarranty = $clickedItem.data("name_warranty"); // Lấy dữ liệu từ mục được chọn
         const $row = $clickedItem.closest("tr");
+        const nameWarranty = $clickedItem.data("name_warranty");
         const $input = $row.find(".warranty-input");
+        const idWarranty = $clickedItem.data("id_warranty");
+        const $inputIdWarranty = $row.find(".id_warranty");
+        const id_seri = $clickedItem.data("seri");
+        const $inputIdSeri = $row.find(".id_seri");
         const $dropdown = $row.find(".warranty-dropdown");
 
-        $input.val(nameWarranty); // Gán giá trị vào ô nhập
-        $dropdown.hide(); // Ẩn dropdown sau khi chọn
+        $input.val(nameWarranty);
+        $inputIdWarranty.val(idWarranty);
+        $inputIdSeri.val(id_seri);
+        console.log(id_seri);
+
+        $dropdown.hide();
     });
 
     // Ẩn dropdown khi click ngoài
@@ -139,6 +147,11 @@ $(document).on("click", ".btn-add-item", function () {
             </td>
              <td
                 class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                <input type="hidden" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32" name="id_seri[]"
+                    value="">
+                <input type="hidden" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32 bg-input-guest-blue"
+                    name="id_warranty[]" value="">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
                     name="name_warranty[]" value="">
@@ -200,18 +213,23 @@ $(document).on("click", ".btn-add-item", function () {
 $(document).on("click", ".btn-add-warranty", function () {
     // Lấy hàng hiện tại của nút vừa bấm
     const currentRow = $(this).closest("tr");
-
+    const index = currentRow.data("index"); // Lấy data-index
     // Lấy thông tin data-product-code và data-product-id nếu cần
     const productCode = currentRow.attr("data-product-code");
     const productId = currentRow.attr("data-product-id");
-
     // Tạo hàng mới
     const newRow = $(`
-        <tr class="row-warranty bg-white" data-product-code="${productCode}" data-product-id="${productId}">
+        <tr class="row-warranty bg-white" data-index="${index}" data-product-code="${productCode}" data-product-id="${productId}">
             <td colspan="5" class="border-right p-2 text-13 align-top border-bottom border-top-0">
             </td>
             <td
                 class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                <input type="hidden" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
+                    name="id_seri[]" value="">
+                <input type="hidden" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
+                    name="id_warranty[]" value="">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
                     name="name_warranty[]" value="">
@@ -222,13 +240,16 @@ $(document).on("click", ".btn-add-warranty", function () {
             <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0">
             </td>
             <td class="p-2 align-top border-bottom border-top-0 border-right">
-           
             </td>
         </tr>`);
-    // Chèn hàng mới sau hàng hiện tại
     currentRow.before(newRow);
     const $dropdownList = newRow.find(".warranty-dropdown");
-    populateWarrantyDropdown(responseData, $dropdownList);
+
+    if (responseData[index]) {
+        populateWarrantyDropdown(responseData[index], $dropdownList);
+    } else {
+        console.log(`Không có dữ liệu trong responseData cho index ${index}`);
+    }
 });
 
 $(document).ready(function () {
@@ -301,8 +322,10 @@ function populateWarrantyDropdown(response, dropdownElement) {
                     <a href="javascript:void(0);" 
                         class="dropdown-link text-dark d-flex justify-content-between p-2 w-100" 
                         data-name_warranty="${item.name_warranty}" 
-                        data-warranty="${item.warranty}" 
-                        data-status="${item.status}">
+                        data-warranty="${item.warranty}"
+                        data-id_warranty="${item.id}"
+                        data-status="${item.status}"
+                        data-seri="${item.sn_id}">
                         <span class="warranty-name text-13-black w-50" style="flex:2">${item.name_warranty}</span>
                     </a>
                 </li>`;

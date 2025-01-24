@@ -306,6 +306,11 @@
                                     </td>
                                     <td
                                         class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                                        <input type="hidden" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32" name="id_seri[]"
+                                            value="">
+                                        <input type="hidden" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
+                                            name="id_warranty[]" value="">
                                         <input type="text" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
                                             name="name_warranty[]" value="">
@@ -362,8 +367,6 @@
                                 </div>
                             </div>
                         </section>
-                        {{-- <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products"
-                            name="TN" /> --}}
                     </section>
                 </div>
             </div>
@@ -377,7 +380,7 @@
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script src="{{ asset('js/receiving.js') }}"></script>
 <script>
-    let responseData = [];
+    let responseData = {};
     $(document).on("change", ".product_code, .serial", function() {
         const $row = $(this).closest(".row-product");
         const index = $row.data("index");
@@ -398,7 +401,7 @@
                     serial: serial,
                 },
                 success: function(response) {
-                    responseData = response;
+                    responseData[index] = response;
                     const $inputField = $row.find(".warranty-input");
                     const $dropdownList = $row.find(".warranty-dropdown");
                     $inputField.val(""); 
@@ -462,58 +465,58 @@
                 contentWrapper.addClass('blur-wrapper');
             }
         });
-        $('#btn-get-unique-products').on('click', function(event) {
-            event.preventDefault();
-            let branchId = $('input[name="branch_id"]:checked').val();
-            let formType = $('input[name="form_type"]:checked').val();
-            // let serialData = collectSerialData();
-            let hasInvalidSerial = false;
-            let invalidMessages = [];
-            const idcus = $('#customer_id').val();
-            if (!idcus) {
-                showAutoToast("warning",
-                    `Vui lòng chọn khách hàng!`);
-                $("#customer_name").click();
-                return false;
-            } else {}
-            if (branchId && formType && serialData.length > 0) {
-                checkSerials(branchId, formType, serialData, function(response) {
-                    if (response.status === 'success') {
-                        serialData.forEach((item) => {
-                            let serialResult = response.serials.find(
-                                (serial) => serial.serial === item.serial
-                            );
+        // $('#btn-get-unique-products').on('click', function(event) {
+        //     event.preventDefault();
+        //     let branchId = $('input[name="branch_id"]:checked').val();
+        //     let formType = $('input[name="form_type"]:checked').val();
+        //     // let serialData = collectSerialData();
+        //     let hasInvalidSerial = false;
+        //     let invalidMessages = [];
+        //     const idcus = $('#customer_id').val();
+        //     if (!idcus) {
+        //         showAutoToast("warning",
+        //             `Vui lòng chọn khách hàng!`);
+        //         $("#customer_name").click();
+        //         return false;
+        //     } else {}
+        //     if (branchId && formType && serialData.length > 0) {
+        //         checkSerials(branchId, formType, serialData, function(response) {
+        //             if (response.status === 'success') {
+        //                 serialData.forEach((item) => {
+        //                     let serialResult = response.serials.find(
+        //                         (serial) => serial.serial === item.serial
+        //                     );
 
-                            if (serialResult && !serialResult.valid) {
-                                hasInvalidSerial = true;
-                                invalidMessages.push(
-                                    `Serial: ${item.serial} - ${serialResult.message}`
-                                );
-                                item.rowElement.css('border',
-                                    '2px solid red'); // Tô viền đỏ
-                            } else {
-                                item.rowElement.css('border',
-                                    ''); // Xóa viền đỏ nếu hợp lệ
-                            }
-                        });
+        //                     if (serialResult && !serialResult.valid) {
+        //                         hasInvalidSerial = true;
+        //                         invalidMessages.push(
+        //                             `Serial: ${item.serial} - ${serialResult.message}`
+        //                         );
+        //                         item.rowElement.css('border',
+        //                             '2px solid red'); // Tô viền đỏ
+        //                     } else {
+        //                         item.rowElement.css('border',
+        //                             ''); // Xóa viền đỏ nếu hợp lệ
+        //                     }
+        //                 });
 
-                        if (hasInvalidSerial) {
-                            showAutoToast("warning",
-                                `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
-                            return false;
-                        } else {
-                            showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');
-                            $('#form-submit').submit();
+        //                 if (hasInvalidSerial) {
+        //                     showAutoToast("warning",
+        //                         `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+        //                     return false;
+        //                 } else {
+        //                     showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');
+        //                     $('#form-submit').submit();
 
-                        }
-                    } else {
-                        console.error('Lỗi:', response.message);
-                    }
-                });
-            } else {
-                showAutoToast("warning", 'Vui lòng chọn Hãng tiếp nhận, Loại phiếu và nhập Serial.');
-            }
-        });
+        //                 }
+        //             } else {
+        //                 console.error('Lỗi:', response.message);
+        //             }
+        //         });
+        //     } else {
+        //         showAutoToast("warning", 'Vui lòng chọn Hãng tiếp nhận, Loại phiếu và nhập Serial.');
+        //     }
+        // });
 
     });
 </script>
