@@ -129,11 +129,11 @@
                                         class="font-weight-bold text-uppercase info-chung--heading bg-white text-purble">
                                         <span class="ml-4 pl-2">Danh sách trong nhóm</span>
                                     </p>
-                                    <div class="overflow-content-quote">
+                                    <div class="">
                                         <table id="example2" class="table table-hover bg-white rounded">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col" class="height-52" style="width: 15%;">
+                                                    <th scope="col" class="height-52">
                                                         <span class="d-flex justify-content-start ml-4">
                                                             <a href="#" class="sort-link btn-submit"
                                                                 data-sort-by="quotation_number" data-sort-type="DESC">
@@ -144,7 +144,7 @@
                                                             <div class="icon" id="icon-quotation_number"></div>
                                                         </span>
                                                     </th>
-                                                    <th scope="col" class="height-52" style="width: 20%;">
+                                                    <th scope="col" class="height-52">
                                                         <span class="d-flex justify-content-start">
                                                             <a href="#" class="sort-link btn-submit"
                                                                 data-sort-by="quotation_number" data-sort-type="DESC">
@@ -201,7 +201,7 @@
                                         </table>
                                     </div>
                                     <button type="button" data-toggle="modal" data-target="#listModal"
-                                        class="btn-save-print d-flex align-items-center h-100 py-1 px-2 ml-4 rounded addGuestNew"
+                                        class="btn-save-print d-flex align-items-center h-100 py-1 px-2 ml-4 rounded addGuestNew mb-5"
                                         style="margin-right:10px">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             class="mr-2" viewBox="0 0 16 16" fill="none">

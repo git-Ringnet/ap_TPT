@@ -4,7 +4,7 @@
     @csrf
     @method('PUT')
     <div class="content-wrapper--2Column m-0 min-height--none">
-        <div class="content-header-fixed-report-1 p-0 border-bottom-0">
+        <div class="content-header-fixed-report-1 pt-2">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
@@ -120,7 +120,7 @@
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
             <div id="main">
                 {{-- Thông tin khách hàng --}}
-                <div class="border">
+                <div class="border border-top-0">
                     <div class="info-form">
                         <div class="bg-filter-search border-0 text-center">
                             <p class="font-weight-bold text-uppercase info-chung--heading text-center">
@@ -168,7 +168,8 @@
                                                         style="flex:2;" id="{{ $item->id }}"
                                                         data-name="{{ $item->customer_name }}"
                                                         data-phone="{{ $item->phone }}"
-                                                        data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}" name="search-info"
+                                                        data-address="{{ $item->address }}"
+                                                        data-contact="{{ $item->contact_person }}" name="search-info"
                                                         class="search-info">
                                                         <span
                                                             class="text-13-black-black">{{ $item->customer_name }}</span>
@@ -252,7 +253,7 @@
                         </p>
                     </div>
                     <div class="container-fluided">
-                        <section class="content overflow-content-quote">
+                        <section class="content">
                             <table class="table" id="inputcontent">
                                 <thead>
                                     <tr style="height:44px;">
@@ -285,11 +286,11 @@
                                 <tbody id="tbody-product-data">
                                     @foreach ($receivedProducts as $productId => $products)
                                         @php
-    $productCode = $products->first()->product->product_code ?? '';
-    $productId = $products->first()->product->id ?? '';
-    $productName = $products->first()->product->name ?? '';
-    $productBrand = $products->first()->product->brand ?? '';
-    $serialCount = $products->count();
+                                            $productCode = $products->first()->product->product_code ?? '';
+                                            $productId = $products->first()->product->id ?? '';
+                                            $productName = $products->first()->product->name ?? '';
+                                            $productBrand = $products->first()->product->brand ?? '';
+                                            $serialCount = $products->count();
                                         @endphp
                                         @foreach ($products as $item)
                                             <tr id="serials-data" class="row-product bg-white" data-index="1"
@@ -501,7 +502,8 @@
                         });
 
                         if (hasInvalidSerial) {
-                            showAutoToast("warning", `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
+                            showAutoToast("warning",
+                                `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
                             event.preventDefault();
                             return false; // Chặn tiếp tục xử lý
                         } else {

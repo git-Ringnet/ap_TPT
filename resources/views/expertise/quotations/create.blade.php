@@ -2,7 +2,7 @@
 <form id="form-submit" action="{{ route('quotations.store') }}" method="POST">
     @csrf
     <div class="content-wrapper--2Column m-0 min-height--none">
-        <div class="content-header-fixed-report-1 p-0 border-bottom-0">
+        <div class="content-header-fixed-report-1 pt-2">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="d-flex content__heading--right">
                     <div class="row m-0">
-                        <a href="#">
+                        <a href="{{ route('quotations.index') }}">
                             <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                                 <svg class="mx-1" width="16" height="16" viewBox="0 0 16 16" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -54,7 +54,7 @@
                 <a class="dropdown-item text-13-black" href="#" data-option="donhang">Tạo phiếu xuất kho</a>
             </div>
             {{-- Thông tin khách hàng --}}
-            <div class="border">
+            <div class="border border-top-0">
                 <div class="info-form">
                     <div class="bg-filter-search border-0 text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <div class="d-flex w-100">
-                        <div 
+                        <div
                             class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black text-nowrap mr-3 required-label" style="flex: 1.5;">Ngày lập
                                 phiếu</span>
@@ -175,7 +175,7 @@
                     </p>
                 </div>
                 <div class="container-fluided">
-                    <section class="content overflow-content-quote">
+                    <section class="content">
                         <table class="table" id="inputcontent">
                             <thead>
                                 <tr style="height:44px;">

@@ -4,7 +4,7 @@
     @csrf
     @method('PUT')
     <div class="content-wrapper--2Column m-0 min-height--none pr-2">
-        <div class="content-header-fixed-report-1 p-0 border-bottom-0">
+        <div class="content-header-fixed-report-1 pt-2">
             <div class="content__header--inner">
                 <div class="content__heading--left opacity-0"></div>
                 <div class="d-flex content__heading--right">
@@ -39,7 +39,7 @@
         </div>
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
             {{-- Thông tin khách hàng --}}
-            <div class="border">
+            <div class="border border-top-0">
                 <div>
                     <div class="bg-filter-search border-0 text-center">
                         <p class="font-weight-bold text-uppercase info-chung--heading text-center">
@@ -47,7 +47,7 @@
                         </p>
                     </div>
                     <div class="container-fluided">
-                        <section class="content overflow-content-quote">
+                        <section class="content">
                             <table class="table mb-0" id="inputcontent">
                                 <thead>
                                     <tr style="height:44px;">
@@ -123,7 +123,7 @@
                     </p>
                 </div>
                 <div class="container-fluided">
-                    <section class="content overflow-content-quote">
+                    <section class="content">
                         <table class="table" id="inputcontent">
                             <thead>
                                 <tr style="height:44px;">
