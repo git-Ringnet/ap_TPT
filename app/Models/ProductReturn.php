@@ -75,4 +75,17 @@ class ProductReturn extends Model
     {
         return $this->belongsTo(SerialNumber::class, 'replacement_serial_number_id');
     }
+    public static function createProductReturn(array $data)
+    {
+        return self::create([
+            'return_form_id' => $data['return_form_id'],
+            'product_id' => $data['product_id'],
+            'quantity' => $data['quantity'],
+            'serial_number_id' => $data['serial_number_id'],
+            'replacement_code' => $data['replacement_code'] ?? null,
+            'replacement_serial_number_id' => $data['replacement_serial_number_id'] ?? null,
+            'extra_warranty' => $data['extra_warranty'] ?? null,
+            'notes' => $data['notes'] ?? null,
+        ]);
+    }
 }

@@ -1,10 +1,10 @@
 <!-- resources/views/partials/header.blade.php -->
 @if (Auth::guest())
-    <?php header('Location: ' . route('login'));
+    <?php    header('Location: ' . route('login'));
     exit(); ?>
 @endif
 @if (!Auth::user())
-    <?php header('Location: ' . route('login'));
+    <?php    header('Location: ' . route('login'));
     exit(); ?>
 @endif
 <!DOCTYPE html>
@@ -76,14 +76,18 @@
                                 THIẾT LẬP
                             </a>
                             <div class="dropdown-menu" style="">
+                                @can('admin')
                                 <a class="dropdown-item text-13" href="{{ route('groups.index') }}">Nhóm
                                     đối tượng</a>
+                                @endcan
                                 <a class="dropdown-item text-13" href="{{ route('customers.index') }}">Khách hàng</a>
                                 <a class="dropdown-item text-13" href="{{ route('providers.index') }}">Nhà cung
                                     cấp</a>
                                 <a class="dropdown-item text-13" href="{{ route('products.index') }}">Hàng hoá</a>
+                                @can('admin')
                                 <a class="dropdown-item text-13" href="{{ route('users.index') }}">Nhân viên</a>
                                 <a class="dropdown-item text-13" href="{{ route('warehouses.index') }}">Kho</a>
+                                @endcan
                             </div>
                         </div>
                     @endunlessrole
@@ -93,6 +97,7 @@
                             NGHIỆP VỤ
                         </a>
                         <div class="dropdown-menu" style="">
+                             @unlessrole('Bảo hành')
                             <a class="dropdown-item text-13" href="{{ route('imports.index') }}">Phiếu nhập hàng
                             </a>
                             <a class="dropdown-item text-13" href="{{ route('exports.index') }}">Phiếu xuất hàng
@@ -100,6 +105,8 @@
                             <a class="dropdown-item text-13" href="{{ route('inventoryLookup.index') }}">
                                 Tra cứu tồn kho
                             </a>
+                            @endunlessrole
+                              @unlessrole('Quản lý kho')
                             <a class="dropdown-item text-13" href="{{ route('warrantyLookup.index') }}">Tra cứu
                                 bảo hành
                             </a>
@@ -111,6 +118,7 @@
                             <a class="dropdown-item text-13" href="{{ route('returnforms.index') }}">Phiếu trả
                                 hàng
                             </a>
+                                @endunlessrole
                         </div>
                     </div>
                     @can('admin')
@@ -172,10 +180,11 @@
             </div>
             <div
                 class="px-3 py-2 border-bottom border-top bg-grey @if (
-                    (!empty($activeGroup) && $activeGroup == 'systemFirst') ||
-                        (!empty($activeGroup) && $activeGroup == 'manageProfess') ||
-                        (!empty($activeGroup) && $activeGroup == 'statistic') ||
-                        (!empty($activeGroup) && $activeGroup == 'reports')) d-block @else d-none @endif">
+    (!empty($activeGroup) && $activeGroup == 'systemFirst') ||
+    (!empty($activeGroup) && $activeGroup == 'manageProfess') ||
+    (!empty($activeGroup) && $activeGroup == 'statistic') ||
+    (!empty($activeGroup) && $activeGroup == 'reports')
+) d-block @else d-none @endif">
                 <div class="@if (!empty($activeGroup) && $activeGroup == 'systemFirst') d-flex @else d-none @endif">
                     @can('admin')
                         <a href="{{ route('groups.index') }}" class="height-36">
