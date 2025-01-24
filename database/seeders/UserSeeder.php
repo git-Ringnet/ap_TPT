@@ -17,22 +17,22 @@ class UserSeeder extends Seeder
         // Tạo người dùng mặc định
         $admin = User::create([
             'name' => 'Admin User',
-            'email' => 'admin@ringnet.vn',
-            'password' => Hash::make('Ringnet@123'),
+            'email' => 'admin@tpt.vn',
+            'password' => Hash::make('TPT@123'),
         ]);
         $admin->assignRole('Admin');
 
         $warehouseManager = User::create([
             'name' => 'Quản lý kho',
-            'email' => 'quankho@ringnet.vn',
-            'password' => Hash::make('Ringnet@123'),
+            'email' => 'quankho@tpt.vn',
+            'password' => Hash::make('TPT@123'),
         ]);
         $warehouseManager->assignRole('Quản lý kho');
 
         $serviceUser = User::create([
-            'name' => 'Dịch vụ',
-            'email' => 'dichvu@ringnet.vn',
-            'password' => Hash::make('Ringnet@123'),
+            'name' => 'Bảo hành',
+            'email' => 'baohanh@tpt.vn',
+            'password' => Hash::make('TPT@123'),
         ]);
         $serviceUser->assignRole('Bảo hành');
     }
