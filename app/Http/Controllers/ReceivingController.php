@@ -44,7 +44,7 @@ class ReceivingController extends Controller
     // Store a newly created receiving record in storage
     public function store(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         $validated = $request->validate([
             'branch_id' => 'required|min:1',
             'branch_id.*' => 'in:1,2',
