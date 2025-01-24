@@ -84,56 +84,62 @@ $(document).ready(function () {
     $(document).on("click", ".delete-row", function (event) {
         event.preventDefault();
         const currentRow = $(this).closest("tr");
-        const productId = currentRow.data("product-id");
-        const productCode = currentRow.data("product-code");
-        
-        // Lưu tất cả các hàng liên quan trước khi xóa
-        const rowsToDelete = [currentRow]; // Gồm hàng hiện tại
-        currentRow.nextAll("tr").each(function () {
-            const $nextRow = $(this);
+        if (currentRow.hasClass("row-product")) {
+            const productId = currentRow.data("product-id");
+            const productCode = currentRow.data("product-code");
 
-            // Dừng nếu gặp hàng `row-product` mới
-            if ($nextRow.hasClass("row-product")) {
-                return false;
-            }
+            // Lưu tất cả các hàng liên quan trước khi xóa
+            const rowsToDelete = [currentRow]; // Gồm hàng hiện tại
+            currentRow.nextAll("tr").each(function () {
+                const $nextRow = $(this);
 
-            // Thêm các hàng `row-warranty` vào danh sách cần xóa
-            if ($nextRow.hasClass("row-warranty")) {
-                rowsToDelete.push($nextRow);
-            }
-        });
+                // Dừng nếu gặp hàng `row-product` mới
+                if ($nextRow.hasClass("row-product")) {
+                    return false;
+                }
 
-        // Xóa tất cả các hàng trong danh sách
-        rowsToDelete.forEach((row) => row.remove());
-        const remainingRows = $(
-            `#tbody-product-data tr[data-product-id="${productId}"]`
-        ).not("#serials-count, #add-row-product");
-        if (remainingRows.length === 0) {
-            $(
-                `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
-            ).remove();
-            $(
-                `#tbody-product-data tr#add-row-product[data-product-id="${productId}"]`
-            ).remove();
-            // Xóa khỏi mảng
-            const index = productArr.indexOf(productId);
-            if (index > -1) {
-                productArr.splice(index, 1);
-            }
-
-            // Hiển thị lại mục trong danh sách mã sản phẩm
-            $("#listProducts ul li").each(function () {
-                const item_id = parseInt($(this).data("id"), 10); // Chuyển thành số nguyên
-                if (!productArr.includes(item_id)) {
-                    $(this).show(); // Hiển thị lại nếu không có trong mảng
+                // Thêm các hàng `row-warranty` vào danh sách cần xóa
+                if ($nextRow.hasClass("row-warranty")) {
+                    rowsToDelete.push($nextRow);
                 }
             });
-        } else {
-            const serialCount = remainingRows.length;
-            const serialCountRow = $(
-                `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
-            );
-            serialCountRow.find('input[name="serial_count"]').val(serialCount);
+
+            // Xóa tất cả các hàng trong danh sách
+            rowsToDelete.forEach((row) => row.remove());
+            const remainingRows = $(
+                `#tbody-product-data tr[data-product-id="${productId}"]`
+            ).not("#serials-count, #add-row-product");
+            if (remainingRows.length === 0) {
+                $(
+                    `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
+                ).remove();
+                $(
+                    `#tbody-product-data tr#add-row-product[data-product-id="${productId}"]`
+                ).remove();
+                // Xóa khỏi mảng
+                const index = productArr.indexOf(productId);
+                if (index > -1) {
+                    productArr.splice(index, 1);
+                }
+
+                // Hiển thị lại mục trong danh sách mã sản phẩm
+                $("#listProducts ul li").each(function () {
+                    const item_id = parseInt($(this).data("id"), 10); // Chuyển thành số nguyên
+                    if (!productArr.includes(item_id)) {
+                        $(this).show(); // Hiển thị lại nếu không có trong mảng
+                    }
+                });
+            } else {
+                const serialCount = remainingRows.length;
+                const serialCountRow = $(
+                    `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
+                );
+                serialCountRow
+                    .find('input[name="serial_count"]')
+                    .val(serialCount);
+            }
+        } else if (currentRow.hasClass("row-warranty")) {
+            currentRow.remove();
         }
         updateRowNumbers();
         updateSerialCount();
@@ -415,7 +421,7 @@ function createSerialRow(index, product, serial, name, warranties) {
                     }">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastWarranty}">
-                <input type="text" autocomplete="off"
+                <input type="number" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
                     name="warranty[]" value="${product.warranty || ""}">
             </td>
@@ -450,14 +456,18 @@ function createSerialRow(index, product, serial, name, warranties) {
                         }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                    <input type="text" autocomplete="off"
+                    <input type="number" autocomplete="off"
                         class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
                         name="warranty[]" value="${
                             warrantyItem.product_warranty_input || ""
                         }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
-                <td class="p-2 align-top activity border-bottom border-top-0 border-right"></td>
+                <td class="p-2 align-top activity border-bottom border-top-0 border-right">
+                    <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z" fill="#6B6F76"></path>
+                    </svg>
+                </td>
             </tr>
         `);
     });
