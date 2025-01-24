@@ -82,15 +82,19 @@
                                                 tượng
                                             </p>
                                         </div>
-                                        <select name="group_type_id" id="grouptypeSelect" disabled required
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100">
-                                            <option value="">Chọn loại nhóm</option>
-                                            @foreach ($grouptypes as $grouptype)
-                                                <option
-                                                    {{ isset($group) && $group->group_type_id == $grouptype->id ? 'selected' : '' }}
-                                                    value="{{ $grouptype->id }}">{{ $grouptype->group_name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div
+                                            class="border w-100 border-left-0 border-right-0 border-top-0 px-3 text-13-black" style="background: #E8ECEF;">
+                                            <select name="group_type_id" id="grouptypeSelect" disabled required
+                                                class="form-control text-13-black border-0 p-0">
+                                                <option value="">Chọn loại nhóm</option>
+                                                @foreach ($grouptypes as $grouptype)
+                                                    <option
+                                                        {{ isset($group) && $group->group_type_id == $grouptype->id ? 'selected' : '' }}
+                                                        value="{{ $grouptype->id }}">{{ $grouptype->group_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-left-0 height-100 border-top-0">
@@ -100,7 +104,7 @@
                                         </div>
                                         <input type="text" required placeholder="Nhập thông tin" name="group_code"
                                             value="{{ $group->group_code }}" required autocomplete="off"
-                                            class="border w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                            class="border-0 w-100 py-2 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-left-0 height-100 border-top-0">
@@ -112,7 +116,7 @@
                                             name="group_name_display" value="{{ $group->group_name }}" required
                                             class="border w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
-                                    <div class="d-flex  align-items-center height-60-mobile ">
+                                    <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
                                             <p class="p-0 m-0 margin-left32 text-14">Mô tả</p>
                                         </div>

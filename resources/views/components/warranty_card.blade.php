@@ -58,9 +58,11 @@
                 @endforeach
             </tbody>
         </table>
-        <p class="info font-italic font-weight-bold">
-            Ghi chú:
-            <span class="dotted-line"></span>
+        <p class="info">
+            <span class="font-italic font-weight-bold">Ghi chú:</span>
+            @php
+                echo $export->note == null ? '<span class="dotted-line"></span>' : $export->note;
+            @endphp
         </p>
         <div class="footer d-flex justify-content-between">
             <div class="sign text-center">

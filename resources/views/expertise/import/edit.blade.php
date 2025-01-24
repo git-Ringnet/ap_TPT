@@ -102,7 +102,7 @@ $placeholder = $isCheck ? 'Nhập thông tin' : ''; ?>
                             <div class="col-md-4 m-0 p-0">
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                    <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
+                                    <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                         style="flex: 1.5;">Người lập phiếu</span>
                                     <input autocomplete="off" placeholder="{{ $placeholder }}" required id="user_name"
                                         value="{{ $import->name }}" readonly

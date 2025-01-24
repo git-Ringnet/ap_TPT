@@ -118,7 +118,7 @@
                                                     data-phone="{{ $item->phone }}"
                                                     data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}"  name="search-info"
                                                     class="search-info">
-                                                    <span class="text-13-black-black">{{ $item->customer_name }}</span>
+                                                    <span class="text-13-black">{{ $item->customer_name }}</span>
                                                 </a>
                                             </li>
                                         @endforeach

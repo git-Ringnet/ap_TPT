@@ -90,7 +90,7 @@
                                 </div>
                                 <input type="text" required placeholder="Nhập thông tin" name="provider_name"
                                     autocomplete="off"
-                                    class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                    class="border w-100 py-2 border-left-0 border-right-0 border-top-0 border-bottom-0 px-3 text-13-black height-100 bg-input-guest-blue">
                             </div>
 
                             <div class="d-flex align-items-center height-60-mobile">
