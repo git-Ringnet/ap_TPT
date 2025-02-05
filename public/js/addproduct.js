@@ -84,38 +84,69 @@ $(document).ready(function () {
     $(document).on("click", ".delete-row", function (event) {
         event.preventDefault();
         const currentRow = $(this).closest("tr");
+
         if (currentRow.hasClass("row-product")) {
             const productId = currentRow.data("product-id");
-            const productCode = currentRow.data("product-code");
+            const serial = currentRow.data("serial");
 
-            // Lưu tất cả các hàng liên quan trước khi xóa
-            const rowsToDelete = [currentRow]; // Gồm hàng hiện tại
+            // Lưu danh sách các hàng cần xóa
+            const rowsToDelete = [currentRow];
+
+            // Duyệt qua các hàng tiếp theo, xóa hàng bảo hành cùng serial
             currentRow.nextAll("tr").each(function () {
                 const $nextRow = $(this);
 
-                // Dừng nếu gặp hàng `row-product` mới
                 if ($nextRow.hasClass("row-product")) {
-                    return false;
+                    return false; // Dừng nếu gặp hàng sản phẩm khác
                 }
 
-                // Thêm các hàng `row-warranty` vào danh sách cần xóa
-                if ($nextRow.hasClass("row-warranty")) {
+                if (
+                    $nextRow.hasClass("row-warranty") &&
+                    $nextRow.data("serial") === serial
+                ) {
                     rowsToDelete.push($nextRow);
                 }
             });
 
-            // Xóa tất cả các hàng trong danh sách
+            // Xóa tất cả hàng liên quan đến serial này
             rowsToDelete.forEach((row) => row.remove());
+
+            // Kiểm tra xem có còn hàng bảo hành cho serial này hay không
+            const hasWarranties =
+                $(
+                    `#tbody-product-data tr.row-warranty[data-product-id="${productId}"][data-serial="${serial}"]`
+                ).length > 0;
+
+            // Kiểm tra xem có còn hàng sản phẩm cho serial này hay không
+            const hasProduct =
+                $(
+                    `#tbody-product-data tr.row-product[data-product-id="${productId}"][data-serial="${serial}"]`
+                ).length > 0;
+
+            // Nếu không còn sản phẩm và bảo hành cho serial này, xóa hàng "+"
+            if (!hasWarranties && !hasProduct) {
+                $(
+                    `#tbody-product-data tr.add-warranty-row[data-product-id="${productId}"][data-serial="${serial}"]`
+                ).remove();
+            }
+
+            // Xóa khỏi mảng productArr nếu không còn hàng nào cho productId
             const remainingRows = $(
                 `#tbody-product-data tr[data-product-id="${productId}"]`
             ).not("#serials-count, #add-row-product");
             if (remainingRows.length === 0) {
+                // Xóa hàng serials-count và add-row-product
                 $(
-                    `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
+                    "#tbody-product-data tr#serials-count[data-product-id='" +
+                        productId +
+                        "']"
                 ).remove();
                 $(
-                    `#tbody-product-data tr#add-row-product[data-product-id="${productId}"]`
+                    "#tbody-product-data tr#add-row-product[data-product-id='" +
+                        productId +
+                        "']"
                 ).remove();
+
                 // Xóa khỏi mảng
                 const index = productArr.indexOf(productId);
                 if (index > -1) {
@@ -130,17 +161,53 @@ $(document).ready(function () {
                     }
                 });
             } else {
-                const serialCount = remainingRows.length;
+                // Tính số lượng serial
+                const serialCount = remainingRows.filter(function () {
+                    // Lọc các hàng có productId và serial hợp lệ
+                    const $row = $(this);
+                    return (
+                        $row.hasClass("row-product") ||
+                        ($row.hasClass("row-warranty") &&
+                            $row.data("serial") === serial)
+                    );
+                }).length;
+
+                // Cập nhật lại số lượng serial
                 const serialCountRow = $(
                     `#tbody-product-data tr#serials-count[data-product-id="${productId}"]`
                 );
-                serialCountRow
-                    .find('input[name="serial_count"]')
-                    .val(serialCount);
+                if (serialCountRow.length > 0) {
+                    serialCountRow
+                        .find('input[name="serial_count"]')
+                        .val(serialCount);
+                }
             }
         } else if (currentRow.hasClass("row-warranty")) {
+            const productId = currentRow.data("product-id");
+            const serial = currentRow.data("serial");
+            currentRow.remove();
+
+            // Kiểm tra nếu không còn bảo hành cho serial này thì xóa hàng "+"
+            setTimeout(() => {
+                const hasWarranties =
+                    $(
+                        `#tbody-product-data tr.row-warranty[data-product-id="${productId}"][data-serial="${serial}"]`
+                    ).length > 0;
+                const hasProduct =
+                    $(
+                        `#tbody-product-data tr.row-product[data-product-id="${productId}"][data-serial="${serial}"]`
+                    ).length > 0;
+
+                if (!hasWarranties && !hasProduct) {
+                    $(
+                        `#tbody-product-data tr.add-warranty-row[data-product-id="${productId}"][data-serial="${serial}"]`
+                    ).remove();
+                }
+            }, 0);
+        } else {
             currentRow.remove();
         }
+
         updateRowNumbers();
         updateSerialCount();
         calculateTotalSerialCount();
@@ -370,13 +437,14 @@ $(document).on("click", ".submit-button", function (event) {
 function createSerialRow(index, product, serial, name, warranties) {
     const hideLastColumn = name === "TN" ? "d-block" : "d-none";
     const hideLastWarranty = name === "XH" || name === "CXH" ? "" : "d-none";
+    let name_modal = $("#name_modal").val();
     let rows = [];
     rows.push(`
         <tr id="serials-data" class="row-product bg-white" data-index="${
             index + 1
-        }" data-product-code="${product.product_code}"  data-product-id="${
-        product.id
-    }">
+        }" data-serial="${serial}" data-product-code="${
+        product.product_code
+    }"  data-product-id="${product.id}">
          <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly
@@ -442,7 +510,9 @@ function createSerialRow(index, product, serial, name, warranties) {
     // Chỉ thêm thông tin bảo hành nếu có từ hàng thứ 2 trở đi
     warranties.slice(1).forEach((warrantyItem) => {
         rows.push(`
-            <tr id="serials-data-${product.id}" class="row-warranty bg-white">
+            <tr id="serials-data-${
+                product.id
+            }" data-serial="${serial}" class="row-warranty bg-white">
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
@@ -472,11 +542,28 @@ function createSerialRow(index, product, serial, name, warranties) {
         `);
     });
 
+    if (name_modal == "XH" || name_modal == "CXH") {
+        rows.push(`
+            <tr class="add-warranty-row" data-product-id="${product.id}" data-serial="${serial}">
+                <td colspan="5" class="text-right border-right p-2 text-13 align-top border-bottom border-top-0">
+                    <svg class="add-warranty" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
+                        1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
+                        12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
+                        6.34375H7.65625V2.625Z" fill="#151516"></path>
+                    </svg>
+                </td>
+                <td colspan="4" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            </tr>
+        `);
+    }
+
     return rows.join("");
 }
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
 function createCountRow(count, product, name, warranty) {
+    let dnone = (name === "XH" || name === "CXH") ? "d-none" : "";
     let colspanValue1, colspanValue2;
     if (name === "TN") {
         colspanValue1 = 4;
@@ -503,7 +590,7 @@ function createCountRow(count, product, name, warranty) {
             </td>
             <td colspan="${colspanValue1}" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
-        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
+        <tr id="add-row-product" class="bg-white ${dnone}" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product btn" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}" data-product-warranty='${warrantyData}'>
@@ -771,4 +858,34 @@ $("#add-warranty").click(function (e) {
         </td>
     </tr>
 `);
+});
+
+$(document).on("click", ".add-warranty-row", function () {
+    const productId = $(this).data("product-id");
+    const serial = $(this).data("serial");
+
+    // Tạo hàng mới cho bảo hành
+    const newRow = `
+        <tr class="row-warranty" data-product-id="${productId}" data-serial="${serial}">
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"><input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32 bg-input-guest-blue" name="name_warranty_product[]"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"><input type="number" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue" name="warranty[]"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z" fill="#6B6F76"></path>
+                </svg>
+            </td>
+        </tr>
+    `;
+
+    // Thêm hàng mới ngay trước hàng "+"
+    $(this).before(newRow);
+
+    // Cập nhật lại số serial
+    updateSerialCount();
 });
