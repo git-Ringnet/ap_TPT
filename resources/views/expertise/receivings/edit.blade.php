@@ -48,8 +48,12 @@
                                 </option>
                                 <option value="2"
                                     {{ isset($receiving) && $receiving->status == 2 ? 'selected' : '' }}>Xử lý</option>
-                                <option value="3" {{ isset($receiving) && $receiving->status == 3 ? 'selected' : '' }}>Hoàn thành</option>
-                                        <option value="4" {{ isset($receiving) && $receiving->status == 4 ? 'selected' : '' }}>Khách không đồng ý</option>
+                                <option value="3"
+                                    {{ isset($receiving) && $receiving->status == 3 ? 'selected' : '' }}>Hoàn thành
+                                </option>
+                                <option value="4"
+                                    {{ isset($receiving) && $receiving->status == 4 ? 'selected' : '' }}>Khách không
+                                    đồng ý</option>
                             </select>
                         </div>
                     </div>
@@ -94,8 +98,8 @@
                             <p class="m-0 p-0 text-dark">In phiếu</p>
                         </button>
                         @can('admin')
-                        @if($receiving->returnForms || $receiving->quotation)
-                        @else
+                            @if ($receiving->returnForms || $receiving->quotation)
+                                {{-- @else
                             <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
                                 id="btn-get-unique-products">
                                 <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -106,18 +110,18 @@
                                 </svg>
                                 <p class="m-0 p-0">Xác nhận</p>
                             </button>
-                        @endif
-                        @endcan
-                        <button id="sideGuest" type="button" class="btn-option border-0 mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M6.375 3C3.68262 3 1.5 5.18262 1.5 7.875V16.1248C1.5 18.8173 3.68262 20.9998 6.375 20.9998H17.625C20.3174 20.9998 22.5 18.8173 22.5 16.1248V7.875C22.5 5.18262 20.3174 3 17.625 3H6.375ZM3.75 15.7498C3.75 17.4067 5.09314 18.7498 6.75 18.7498H17.625C19.0748 18.7498 20.25 17.5746 20.25 16.1248V7.875C20.25 6.42527 19.0748 5.25 17.625 5.25H6.75C5.09314 5.25 3.75 6.59314 3.75 8.25V15.7498Z"
-                                    fill="#151516" />
-                                <path d="M15.75 4.5H13.5V19.5H15.75V4.5Z" fill="#151516" />
-                                <path d="M21 4.5H15V19.5H21V12.5V4.5Z" fill="#151516" />
-                            </svg>
-                        </button>
+                        @endif --}}
+                            @endcan
+                            <button id="sideGuest" type="button" class="btn-option border-0 mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M6.375 3C3.68262 3 1.5 5.18262 1.5 7.875V16.1248C1.5 18.8173 3.68262 20.9998 6.375 20.9998H17.625C20.3174 20.9998 22.5 18.8173 22.5 16.1248V7.875C22.5 5.18262 20.3174 3 17.625 3H6.375ZM3.75 15.7498C3.75 17.4067 5.09314 18.7498 6.75 18.7498H17.625C19.0748 18.7498 20.25 17.5746 20.25 16.1248V7.875C20.25 6.42527 19.0748 5.25 17.625 5.25H6.75C5.09314 5.25 3.75 6.59314 3.75 8.25V15.7498Z"
+                                        fill="#151516" />
+                                    <path d="M15.75 4.5H13.5V19.5H15.75V4.5Z" fill="#151516" />
+                                    <path d="M21 4.5H15V19.5H21V12.5V4.5Z" fill="#151516" />
+                                </svg>
+                            </button>
                     </div>
                 </div>
             </div>
@@ -291,11 +295,11 @@
                                 <tbody id="tbody-product-data">
                                     @foreach ($receivedProducts as $productId => $products)
                                         @php
-    $productCode = $products->first()->product->product_code ?? '';
-    $productId = $products->first()->product->id ?? '';
-    $productName = $products->first()->product->name ?? '';
-    $productBrand = $products->first()->product->brand ?? '';
-    $serialCount = $products->count();
+                                            $productCode = $products->first()->product->product_code ?? '';
+                                            $productId = $products->first()->product->id ?? '';
+                                            $productName = $products->first()->product->name ?? '';
+                                            $productBrand = $products->first()->product->brand ?? '';
+                                            $serialCount = $products->count();
                                         @endphp
                                         @foreach ($products as $item)
                                             <tr id="serials-data" class="row-product bg-white" data-index="1"
