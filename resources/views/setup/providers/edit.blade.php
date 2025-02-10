@@ -70,16 +70,20 @@
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
                                             <p class="p-0 m-0  margin-left32 text-13">Nhóm</p>
                                         </div>
-                                        <select name="category_id"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
-                                            <option value="0" @if ($provider->group_id == 0) selected @endif>
-                                                Chọn nhóm đối tượng</option>
-                                            @foreach ($category as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if ($item->id == $provider->group_id) selected @endif>
-                                                    {{ $item->group_name }}</option>
-                                            @endforeach
-                                        </select>
+                                        <div
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            <select name="category_id"
+                                                class="border border-top-0 w-100 border-left-0 border-right-0 text-13-black height-100 bg-input-guest-blue">
+                                                <option value="0" class="bg-white"
+                                                    @if ($provider->group_id == 0) selected @endif>
+                                                    Chọn nhóm đối tượng</option>
+                                                @foreach ($category as $item)
+                                                    <option value="{{ $item->id }}" class="bg-white"
+                                                        @if ($item->id == $provider->group_id) selected @endif>
+                                                        {{ $item->group_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
@@ -89,7 +93,7 @@
                                         <input type="text" placeholder="Nhập thông tin" name="provider_code"
                                             value="{{ old('provider_code') ?? $provider->provider_code }}" required
                                             autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
 
                                     <div class="d-flex align-items-center height-60-mobile">
@@ -100,7 +104,7 @@
                                         <input type="text" required placeholder="Nhập thông tin" name="provider_name"
                                             autocomplete="off"
                                             value="{{ old('provider_name') ?? $provider->provider_name }}"
-                                            class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue border-top-0">
+                                            class="border border-white w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue border-top-0">
                                     </div>
 
                                     <div class="d-flex align-items-center height-60-mobile">
@@ -109,15 +113,15 @@
                                         </div>
                                         <input type="text" placeholder="Nhập thông tin" name="address"
                                             autocomplete="off" value="{{ old('address') ?? $provider->address }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
                                             <p class="p-0 m-0 margin-left32 text-14">Người liên hệ</p>
                                         </div>
-                                        <input type="text" placeholder="Nhập thông tin" name="contact_person" value="{{ $provider->contact_person }}"
-                                            autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                        <input type="text" placeholder="Nhập thông tin" name="contact_person"
+                                            value="{{ $provider->contact_person }}" autocomplete="off"
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
@@ -125,7 +129,7 @@
                                         </div>
                                         <input type="number" placeholder="Nhập thông tin" name="phone"
                                             autocomplete="off" value="{{ old('phone') ?? $provider->phone }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
 
                                     <div class="d-flex align-items-center height-60-mobile">
@@ -134,7 +138,7 @@
                                         </div>
                                         <input type="email" placeholder="Nhập thông tin" name="email"
                                             autocomplete="off" value="{{ old('email') ?? $provider->email }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
 
                                     <div class="d-flex align-items-center height-60-mobile">
@@ -144,7 +148,7 @@
                                         <input type="text" placeholder="Nhập thông tin" name="tax_code"
                                             oninput="validateInput(this)" autocomplete="off"
                                             value="{{ old('tax_code') ?? $provider->tax_code }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
@@ -152,7 +156,7 @@
                                         </div>
                                         <input type="text" placeholder="Nhập thông tin" name="note"
                                             autocomplete="off" value="{{ old('note') ?? $provider->note }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                 </div>
                             </div>

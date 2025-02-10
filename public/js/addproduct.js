@@ -563,7 +563,7 @@ function createSerialRow(index, product, serial, name, warranties) {
 
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
 function createCountRow(count, product, name, warranty) {
-    let dnone = (name === "XH" || name === "CXH") ? "d-none" : "";
+    let dnone = name === "XH" || name === "CXH" ? "d-none" : "";
     let colspanValue1, colspanValue2;
     if (name === "TN") {
         colspanValue1 = 4;
@@ -594,11 +594,17 @@ function createCountRow(count, product, name, warranty) {
             <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product btn" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}" data-product-warranty='${warrantyData}'>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
-                    1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
-                    12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
-                    6.34375H7.65625V2.625Z" fill="#151516"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                    height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                        d="M4.75 2.00007C2.67893 2.00007 1 3.679 1 5.75007V11.25C1 13.3211 2.67893 15 4.75 15H10.2501C12.3212 15 14.0001 13.3211 14.0001 11.25V8.00007C14.0001 7.58586 13.6643 7.25007 13.2501 7.25007C12.8359 7.25007 12.5001 7.58586 12.5001 8.00007V11.25C12.5001 12.4927 11.4927 13.5 10.2501 13.5H4.75C3.50736 13.5 2.5 12.4927 2.5 11.25V5.75007C2.5 4.50743 3.50736 3.50007 4.75 3.50007H7C7.41421 3.50007 7.75 3.16428 7.75 2.75007C7.75 2.33586 7.41421 2.00007 7 2.00007H4.75Z"
+                        fill="#6D7075" />
+                    <path
+                    d="M12.1339 5.19461L10.7197 3.7804L6.52812 7.97196C5.77185 8.72823 5.25635 9.69144 5.0466 10.7402C5.03144 10.816 5.09828 10.8828 5.17409 10.8677C6.22285 10.6579 7.18606 10.1424 7.94233 9.38618L12.1339 5.19461Z"
+                    fill="#6D7075" />
+                    <path
+                        d="M13.4559 1.45679C13.2663 1.39356 13.0571 1.44293 12.9158 1.58431L11.7803 2.71974L13.1945 4.13395L14.33 2.99852C14.4714 2.85714 14.5207 2.64802 14.4575 2.45834C14.2999 1.98547 13.9288 1.61441 13.4559 1.45679Z"
+                    fill="#6D7075" />
                 </svg>
                 </button>
             </td>

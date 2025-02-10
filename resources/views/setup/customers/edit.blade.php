@@ -71,16 +71,19 @@
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
                                             <p class="p-0 m-0 margin-left32 text-14">Nhóm khách hàng</p>
                                         </div>
-                                        <select name="grouptype_id" id="grouptypeSelect"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
-                                            <option value="0">Chọn nhóm</option>
-                                            @foreach ($groups as $item)
-                                                <option
-                                                    {{ isset($customer) && $customer->group_id == $item->id ? 'selected' : '' }}
-                                                    value="{{ $item->id }}">{{ $item->group_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                        <div
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            <select name="grouptype_id" id="grouptypeSelect"
+                                                class="border border-top-0 w-100 border-left-0 border-right-0 text-13-black height-100 bg-input-guest-blue">
+                                                <option value="0" class="bg-white">Chọn nhóm</option>
+                                                @foreach ($groups as $item)
+                                                    <option class="bg-white"
+                                                        {{ isset($customer) && $customer->group_id == $item->id ? 'selected' : '' }}
+                                                        value="{{ $item->id }}">{{ $item->group_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-left-0 height-100 border-top-0">
@@ -90,7 +93,7 @@
                                         </div>
                                         <input type="text" required placeholder="Nhập thông tin" name="customer_code"
                                             value="{{ $customer->customer_code }}" required autocomplete="off"
-                                            class="border w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-left-0 height-100 border-top-0">
@@ -100,7 +103,7 @@
                                         </div>
                                         <input type="text" required placeholder="Nhập thông tin" autocomplete="off"
                                             name="customer_name" value="{{ $customer->customer_name }}" required
-                                            class="border w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
@@ -108,14 +111,15 @@
                                         </div>
                                         <input type="text" placeholder="Nhập thông tin" name="address"
                                             value="{{ $customer->address }}" autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info py-2 border border-top-0 border-left-0 height-100">
                                             <p class="p-0 m-0 margin-left32 text-14">Người liên hệ</p>
                                         </div>
-                                        <input type="text" placeholder="Nhập thông tin" name="contact_person" value="{{ $customer->contact_person }}" autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                        <input type="text" placeholder="Nhập thông tin" name="contact_person"
+                                            value="{{ $customer->contact_person }}" autocomplete="off"
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex  align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
@@ -123,7 +127,7 @@
                                         </div>
                                         <input type="text" placeholder="Nhập thông tin" name="phone"
                                             value="{{ $customer->phone }}" autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 height-100 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex  align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
@@ -131,7 +135,7 @@
                                         </div>
                                         <input type="email" name="email" value="{{ $customer->email }}"
                                             placeholder="Nhập thông tin" autocomplete="off"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
@@ -140,7 +144,7 @@
                                         <input type="text" placeholder="Nhập thông tin" name="tax_code"
                                             oninput="validateInput(this)" autocomplete="off"
                                             value="{{ $customer->tax_code }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                     <div class="d-flex align-items-center height-60-mobile">
                                         <div class="title-info height-100 py-2 border border-top-0 border-left-0">
@@ -148,7 +152,7 @@
                                         </div>
                                         <input type="text" placeholder="Nhập thông tin" name="note"
                                             autocomplete="off" value="{{ $customer->note }}"
-                                            class="border border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                            class="border border-white border-top-0 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
                                     </div>
                                 </div>
                             </div>

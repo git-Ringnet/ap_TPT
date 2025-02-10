@@ -42,12 +42,12 @@
                                     <p class="p-0 m-0 margin-left32 text-13">Nhóm</p>
                                 </div>
                                 <div
-                                    class="border w-100 border-left-0 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white border-top-0 w-100 border-left-0 border-right-0 px-3 text-13-black bg-input-guest-blue">
                                     <select name="group_id"
                                         class="form-control text-13-black bg-input-guest-blue border-0 p-0">
-                                        <option value="0">Chọn loại nhóm</option>
+                                        <option value="0" class="bg-white">Chọn loại nhóm</option>
                                         @foreach ($groups as $item)
-                                            <option value="{{ $item->id }}"
+                                            <option value="{{ $item->id }}" class="bg-white"
                                                 {{ $item->id == $user->group_id ? 'selected' : '' }}>
                                                 {{ $item->group_name }}</option>
                                         @endforeach
@@ -60,7 +60,7 @@
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="employee_code"
                                     autocomplete="off" value="{{ $user->employee_code }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
                                 <div class="title-info py-2 border border-left-0 border-top-0 height-100">
@@ -70,7 +70,7 @@
                                 </div>
                                 <input type="text" required placeholder="Nhập thông tin" name="name"
                                     autocomplete="off" value="{{ $user->name }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue"
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue"
                                     maxlength="255">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile option-radio">
@@ -79,26 +79,26 @@
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="email" autocomplete="off"
                                     value="{{ $user->email }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile option-radio">
                                 <div class="title-info py-2 border border-left-0 border-top-0 height-100">
                                     <p class="p-0 m-0 margin-left32 text-13">Mật khẩu</p>
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="password" autocomplete="off"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile option-radio">
                                 <div class="title-info py-2 border border-top-0 border-left-0 height-100">
                                     <p class="p-0 m-0 margin-left32 text-13">Chức vụ</p>
                                 </div>
                                 <div
-                                    class="border w-100 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white w-100 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                                     <select name="role"
                                         class="form-control text-13-black bg-input-guest-blue border-0 p-0">
-                                        <option value="0">Chọn chức vụ</option>
+                                        <option value="0" class="bg-white">Chọn chức vụ</option>
                                         @foreach ($roles as $item)
-                                            <option value="{{ $item->id }}"
+                                            <option value="{{ $item->id }}" class="bg-white"
                                                 {{ $item->id == $user->role ? 'selected' : '' }}>{{ $item->name }}
                                             </option>
                                         @endforeach
@@ -111,7 +111,7 @@
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="address" autocomplete="off"
                                     value="{{ $user->address }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile option-radio">
                                 <div class="title-info py-2 border border-left-0 border-top-0 height-100">

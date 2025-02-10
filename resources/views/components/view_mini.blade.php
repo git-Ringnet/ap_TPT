@@ -116,7 +116,7 @@
                                 <li class="p-2 align-items-center text-wrap border-top"
                                     data-id="{{ $user_value->id }}">
                                     <a href="#" title="{{ $user_value->name }}" style="flex:2;"
-                                        class="search-user" id="{{ $user_value->id }}"
+                                        class="search-user" data-id="{{ $user_value->id }}"
                                         data-name="{{ $user_value->name }}">
                                         <span class="text-13-black">{{ $user_value->name }}</span>
                                     </a>
@@ -198,13 +198,13 @@
                         @foreach ($data as $item)
                             <tr class="position-relative detail-info height-30 data-row" style="display:none"
                                 data-id="{{ $item->id }}" data-page="{{ $name }}">
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     {{ $item->import_code }}
                                 </td>
-                                <td class="text-13-black text-left border-bottom">
+                                <td class="text-13-black text-left border-bottom border-top-0">
                                     {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom max-width120">
+                                <td class="text-13-black border-bottom max-width120 border-top-0">
                                     {{ $item->provider_name }}
                                 </td>
                             </tr>
@@ -214,13 +214,13 @@
                         @foreach ($data as $item)
                             <tr class="position-relative detail-info height-30 data-row" style="display:none"
                                 data-id="{{ $item->id }}" data-page="{{ $name }}">
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     {{ $item->export_code }}
                                 </td>
-                                <td class="text-13-black text-left border-bottom">
+                                <td class="text-13-black text-left border-bottom border-top-0">
                                     {{ date_format(new DateTime($item->date_create), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom max-width120">
+                                <td class="text-13-black border-bottom max-width120 border-top-0">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -230,13 +230,13 @@
                         @foreach ($data as $item)
                             <tr class="position-relative detail-info height-30 data-row" style="display:none"
                                 data-id="{{ $item->id }}" data-page="{{ $name }}">
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     {{ $item->form_code_receiving }}
                                 </td>
-                                <td class="text-13-black text-left border-bottom">
+                                <td class="text-13-black text-left border-bottom border-top-0">
                                     {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     @if ($item->status == 1)
                                         Tiếp nhận
                                     @elseif($item->status == 2)
@@ -247,7 +247,7 @@
                                         Khách không đồng ý
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom max-width120">
+                                <td class="text-13-black border-bottom max-width120 border-top-0">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -257,13 +257,13 @@
                         @foreach ($data as $item)
                             <tr class="position-relative detail-info height-30 data-row" style="display:none"
                                 data-id="{{ $item->id }}" data-page="{{ $name }}">
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     {{ $item->quotation_code }}
                                 </td>
-                                <td class="text-13-black text-left border-bottom">
+                                <td class="text-13-black text-left border-bottom border-top-0">
                                     {{ date_format(new DateTime($item->quotation_date), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     @if ($item->reception->form_type == 1)
                                         Bảo hành
                                     @elseif($item->reception->form_type == 2)
@@ -272,7 +272,7 @@
                                         Dịch vụ bảo hành
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom max-width120">
+                                <td class="text-13-black border-bottom max-width120 border-top-0">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>
@@ -282,20 +282,20 @@
                         @foreach ($data as $item)
                             <tr class="position-relative detail-info height-30 data-row" style="display:none"
                                 data-id="{{ $item->id }}" data-page="{{ $name }}">
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     {{ $item->return_code }}
                                 </td>
-                                <td class="text-13-black text-left border-bottom">
+                                <td class="text-13-black text-left border-bottom border-top-0">
                                     {{ date_format(new DateTime($item->date_created), 'd/m/Y') }}
                                 </td>
-                                <td class="text-13-black border-bottom">
+                                <td class="text-13-black border-bottom border-top-0">
                                     @if ($item->status == 1)
                                         Hoàn thành
                                     @elseif($item->status == 2)
                                         Khách không đồng ý
                                     @endif
                                 </td>
-                                <td class="text-13-black border-bottom max-width120">
+                                <td class="text-13-black border-bottom max-width120 border-top-0">
                                     {{ $item->customer->customer_name }}
                                 </td>
                             </tr>

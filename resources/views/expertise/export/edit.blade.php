@@ -421,17 +421,23 @@
                                                     </tr>
                                                 @endforeach
                                                 {{-- Thêm bảo hành --}}
-                                                <tr class="add-warranty-row" data-product-id="{{ $product->id }}"
-                                                    data-serial="{{ $item->serialNumber->serial_code }}">
-                                                    <td colspan="5" class="text-right border-top-0 border">
-                                                        <svg class="add-warranty" width="14" height="14"
-                                                            viewBox="0 0 14 14" fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375 1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243 12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375 6.34375H7.65625V2.625Z" fill="#151516"></path>
-                                                        </svg>
-                                                    </td>
-                                                    <td colspan="4" class="border-top-0 border border-left-0"></td>
-                                                </tr>
+                                                @if ($isCheck)
+                                                    <tr class="add-warranty-row"
+                                                        data-product-id="{{ $product->id }}"
+                                                        data-serial="{{ $item->serialNumber->serial_code }}">
+                                                        <td colspan="5" class="text-right border-top-0 border">
+                                                            <svg class="add-warranty" width="14" height="14"
+                                                                viewBox="0 0 14 14" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375 1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243 12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375 6.34375H7.65625V2.625Z"
+                                                                    fill="#151516"></path>
+                                                            </svg>
+                                                        </td>
+                                                        <td colspan="4" class="border-top-0 border border-left-0">
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             @endif
                                         @endforeach
                                         {{-- Tổng số lượng --}}

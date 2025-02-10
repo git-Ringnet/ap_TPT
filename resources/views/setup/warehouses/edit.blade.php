@@ -67,7 +67,7 @@
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="warehouse_code"
                                     autocomplete="off" value="{{ $warehouse->warehouse_code }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black bg-input-guest-blue">
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
                                 <div class="title-info py-2 border border-left-0 border-top-0 height-100">
@@ -76,7 +76,7 @@
                                 </div>
                                 <input type="text" required placeholder="Nhập thông tin" name="warehouse_name"
                                     autocomplete="off" value="{{ $warehouse->warehouse_name }}"
-                                    class="border height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue"
+                                    class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue"
                                     maxlength="255">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile option-radio">
