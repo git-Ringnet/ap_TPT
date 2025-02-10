@@ -304,7 +304,8 @@
                                                     <tr class="{{ $index === 0 ? 'row-product' : 'row-warranty' }} bg-white"
                                                         id="serials-data" data-index="{{ $index }}"
                                                         data-product-code="{{ $item->product->product_code }}"
-                                                        data-product-id="{{ $item->product->id }}" data-serial="{{ $item->serialNumber->serial_code }}">
+                                                        data-product-id="{{ $item->product->id }}"
+                                                        data-serial="{{ $item->serialNumber->serial_code }}">
                                                         @if ($index === 0)
                                                             <td
                                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
@@ -409,7 +410,8 @@
                                                                         height="17" viewBox="0 0 17 17"
                                                                         fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
-                                                                        <path fill-rule="evenodd" clip-rbvule="evenodd"
+                                                                        <path fill-rule="evenodd"
+                                                                            clip-rbvule="evenodd"
                                                                             d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
                                                                             fill="#6B6F76"></path>
                                                                     </svg>
@@ -418,21 +420,20 @@
                                                         @endif
                                                     </tr>
                                                 @endforeach
+                                                {{-- Thêm bảo hành --}}
+                                                <tr class="add-warranty-row" data-product-id="{{ $product->id }}"
+                                                    data-serial="{{ $item->serialNumber->serial_code }}">
+                                                    <td colspan="5" class="text-right border-top-0 border">
+                                                        <svg class="add-warranty" width="14" height="14"
+                                                            viewBox="0 0 14 14" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375 1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243 12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375 6.34375H7.65625V2.625Z" fill="#151516"></path>
+                                                        </svg>
+                                                    </td>
+                                                    <td colspan="4" class="border-top-0 border border-left-0"></td>
+                                                </tr>
                                             @endif
                                         @endforeach
-                                        {{-- Thêm bảo hành --}}
-                                        <tr class="add-warranty-row" data-product-id="{{ $product->id }}" data-serial="{{ $item->serialNumber->serial_code }}">
-                                            <td colspan="5" class="text-right border-top-0 border">
-                                                <svg class="add-warranty" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
-                                                    1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
-                                                    12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
-                                                    6.34375H7.65625V2.625Z" fill="#151516"></path>
-                                                </svg>
-                                            </td>
-                                            <td colspan="4" class="border-top-0 border border-left-0"></td>
-                                        </tr>
-
                                         {{-- Tổng số lượng --}}
                                         <tr id="serials-count" class="bg-white"
                                             data-product-code="{{ $product->product_name }}"

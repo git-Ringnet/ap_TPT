@@ -67,16 +67,19 @@
                             <div class="title-info height-100 py-2 border border-top-0 border-left-0">
                                 <p class="p-0 m-0 margin-left32 text-14 required-label">Loại nhóm</p>
                             </div>
-                            <select name="group_type_id" id="grouptypeSelect" required
-                                class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue">
-                                <option value="">Chọn loại nhóm</option>
-                                @foreach ($grouptypes as $grouptype)
-                                    <option value="{{ $grouptype->id }}"
-                                        {{ old('grouptype_id') == $grouptype->id ? 'selected' : '' }}>
-                                        {{ $grouptype->group_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div
+                                class="border w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black height-100 bg-input-guest-blue">
+                                <select name="group_type_id" id="grouptypeSelect" required
+                                    class="border-0 w-100 text-13-black bg-input-guest-blue">
+                                    <option value="">Chọn loại nhóm</option>
+                                    @foreach ($grouptypes as $grouptype)
+                                        <option value="{{ $grouptype->id }}"
+                                            {{ old('grouptype_id') == $grouptype->id ? 'selected' : '' }}>
+                                            {{ $grouptype->group_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             @error('group_type_id')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -89,7 +92,7 @@
                             </div>
                             <input type="text" required placeholder="Nhập thông tin" name="group_code"
                                 value="{{ old('group_code') }}"
-                                class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue"
+                                class="border w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black height-100 bg-input-guest-blue"
                                 autocomplete="off">
                             @error('group_code')
                                 <div class="text-danger">{{ $message }}</div>
@@ -103,7 +106,7 @@
                             </div>
                             <input type="text" required placeholder="Nhập thông tin" name="group_name"
                                 value="{{ old('group_name') }}"
-                                class="border w-100 py-2 border-left-0 border-right-0 px-3 text-13-black height-100 bg-input-guest-blue"
+                                class="border w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black height-100 bg-input-guest-blue"
                                 autocomplete="off">
                             @error('group_name')
                                 <div class="text-danger">{{ $message }}</div>
