@@ -254,6 +254,9 @@
                                         <span class="text-table text-secondary">Serial Number đổi</span>
                                     </th>
                                     <th class="border-right note px-2 p-0 text-left col-extra-warranty">
+                                        <span class="text-table text-secondary">Thông tin</span>
+                                    </th>
+                                    <th class="border-right note px-2 p-0 text-left col-extra-warranty">
                                         <span class="text-table text-secondary">Bảo hành thêm</span>
                                     </th>
                                     <th class="border-right note px-2 p-0 text-left col-note">

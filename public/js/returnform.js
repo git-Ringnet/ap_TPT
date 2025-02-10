@@ -1,47 +1,182 @@
 function populateTableRows(products, tableSelector, dataProduct, type) {
-    // Clear existing rows
+    // Xóa tất cả các dòng hiện có trước khi thêm dữ liệu mới
     $(tableSelector).find(".row-product").remove();
+    console.log(type);
 
-    // Determine visibility classes for columns based on 'type'
+    // Xác định các class ẩn dựa trên 'type'
     const hideReplacement = type === 2 || type === 3 ? "d-none" : "";
     const hideExtraWarranty = type === 1 || type === 3 ? "d-none" : "";
     const hideAll = type === 3 ? "d-none" : "";
+    if (type === 2) {
+        // Lặp qua danh sách sản phẩm
+        products.forEach((product, index) => {
+            // Kiểm tra nếu sản phẩm có bảo hành
+            let hasWarranty =
+                product.warranty_received &&
+                product.warranty_received.length > 0;
 
-    // Loop through the product data and create rows dynamically
-    products.forEach((product, index) => {
-        // Construct the HTML row
-        let row = `
+            product.warranty_received.forEach((warranty, wIndex) => {
+                let isFirstRow = wIndex === 0; // Kiểm tra nếu là dòng đầu tiên của sản phẩm
+
+                let row = `
+                <tr class="row-product bg-white">
+                    ${
+                        isFirstRow
+                            ? `
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4" rowspan="${
+                        product.warranty_received.length
+                    }">
+                        <input type="hidden" name="return[${index}][product_id]" value="${
+                                  product.product_id || ""
+                              }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly 
+                        name="return[${index}][product_code]" value="${
+                                  product.product?.product_code || ""
+                              }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0" rowspan="${
+                        product.warranty_received.length
+                    }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly 
+                        name="return[${index}][product_name]" value="${
+                                  product.product?.product_name || ""
+                              }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0" rowspan="${
+                        product.warranty_received.length
+                    }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly 
+                        name="return[${index}][brand]" value="${
+                                  product.product?.brand || ""
+                              }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0" rowspan="${
+                        product.warranty_received.length
+                    }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly 
+                        name="return[${index}][quantity]" value="${
+                                  product.quantity || ""
+                              }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0" rowspan="${
+                        product.warranty_received.length
+                    }">
+                        <input type="hidden" name="return[${index}][serial_id]" value="${
+                                  product.serial?.id || ""
+                              }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" readonly 
+                        name="return[${index}][serial_code]" value="${
+                                  product.serial?.serial_code || ""
+                              }">
+                    </td>
+                    `
+                            : ""
+                    }
+
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32" readonly 
+                        name="return[${index}][warranty][${wIndex}][name_warranty]" value="${
+                    warranty.name_warranty || ""
+                }">
+                    </td>
+
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
+                        <input type="number" min="0" max="100" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue" 
+                        name="return[${index}][warranty][${wIndex}][extra_warranty]">
+                    </td>
+
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue" 
+                        name="return[${index}][warranty][${wIndex}][note]">
+                    </td>
+                </tr>
+            `;
+
+                // Thêm dòng vào bảng
+                $(tableSelector).append(row);
+            });
+
+            // Nếu không có bảo hành, vẫn cần tạo 1 dòng cho sản phẩm
+            if (!hasWarranty) {
+                let row = `
+                <tr class="row-product bg-white">
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                        <input type="hidden" name="return[${index}][product_id]" value="${
+                    product.product_id || ""
+                }">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly 
+                        name="return[${index}][product_code]" value="${
+                    product.product?.product_code || ""
+                }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly 
+                        name="return[${index}][product_name]" value="${
+                    product.product?.product_name || ""
+                }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly 
+                        name="return[${index}][brand]" value="${
+                    product.product?.brand || ""
+                }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly 
+                        name="return[${index}][quantity]" value="${
+                    product.quantity || ""
+                }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" readonly 
+                        name="return[${index}][serial_code]" value="${
+                    product.serial?.serial_code || ""
+                }">
+                    </td>
+                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                        <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue" 
+                        name="return[${index}][note]">
+                    </td>
+                </tr>
+            `;
+                $(tableSelector).append(row);
+            }
+        });
+    } else {
+        products.forEach((product, index) => {
+            // Construct the HTML row
+            let row = `
             <tr class="row-product bg-white">
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                     <input type="hidden" name="return[${index}][product_id]" value="${
-            product.product_id || ""
-        }">
+                product.product_id || ""
+            }">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly name="return[${index}][product_code]" value="${
-            product.product?.product_code || ""
-        }">
+                product.product?.product_code || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly name="return[${index}][product_name]" value="${
-            product.product?.product_name || ""
-        }">
+                product.product?.product_name || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly name="return[${index}][brand]" value="${
-            product.product?.brand || ""
-        }">
+                product.product?.brand || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32" readonly name="return[${index}][quantity]" value="${
-            product.quantity || ""
-        }">
+                product.quantity || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                  <input type="hidden" autocomplete="off"class="border-0 pl-1 pr-2 py-1 w-100 serial_id height-32" readonly name="return[${index}][serial_id]" value="${
-            product.serial?.id || ""
-        }">
+                product.serial?.id || ""
+            }">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" readonly name="return[${index}][serial_code]" value="${
-            product.serial?.serial_code || ""
-        }">
+                product.serial?.serial_code || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideReplacement}">
                     <input type="hidden" min="0" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue" id="replacement_code_${index}" name="return[${index}][replacement_code]" value="">
@@ -64,17 +199,26 @@ function populateTableRows(products, tableSelector, dataProduct, type) {
                     <input type="text" min="0" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue" name="return[${index}][replacement_serial_number_id]">
                     <span class="check-icon"></span>
                 </td>
+                       <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
+                    <input type="text" min="0" readonly max="100" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty
+                    height-32" name="return[${index}][extra_warranty]" value="${
+                product.warranty_received[0].name_warranty || ""
+            }">
+                </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
                     <input type="number" min="0" max="100" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue" name="return[${index}][extra_warranty]">
                 </td>
+            
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 note height-32 bg-input-guest-blue" name="return[${index}][note]">
                 </td>
             </tr>
+           products.forEach((product.warranty_received, index) => {
         `;
-        // Append the row to the table
-        $(tableSelector).append(row);
-    });
+            // Append the row to the table
+            $(tableSelector).append(row);
+        });
+    }
 }
 
 $(document).ready(function () {

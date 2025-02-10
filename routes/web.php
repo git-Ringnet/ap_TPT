@@ -60,6 +60,9 @@ Route::post('/check-serial', [SerialNumberController::class, 'checkSerial']);
 Route::get('/check-serial-replace', [SerialNumberController::class, 'checkSNReplace'])->name('checkSNReplace');
 Route::post('/check-serial-numbers', [SerialNumberController::class, 'checkSerialNumbers'])->name('check.serial.numbers');
 
+Route::post('/check-serials', [SerialNumberController::class, 'checkSerials'])->name('check.serials');
+Route::post('/check-brands', [SerialNumberController::class, 'checkbrands'])->name('check.brands');
+
 // Filter
 Route::get('/filter-group', [GroupsController::class, 'filterData'])->name('filter-groups');
 Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');

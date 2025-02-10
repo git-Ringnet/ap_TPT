@@ -266,4 +266,52 @@ class SerialNumberController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
         }
     }
+
+    public function checkSerials(Request $request)
+    {
+        $formType = $request->input('form_type');
+        $serialData = $request->input('serials');
+        $warranty = $request->input('warranty');
+
+        // dd($request->all());
+
+        $sericheck = SerialNumber::find($serialData);
+
+        if ($sericheck) {
+            $warranty = DB::table('warranty_lookup')->where('sn_id', $sericheck->id)->where('id', $warranty)->first();
+            if ($warranty) {
+                if ($formType == 1) {
+                    if ($warranty->status == 0) {
+                        return response()->json(['status' => 'success', 'message' => 'Số serial còn bảo hành.']);
+                    } else {
+                        return response()->json(['status' => 'error', 'message' => 'Số serial hết bảo hành.']);
+                    }
+                }
+                if ($formType == 2) {
+                    if ($warranty->status == 1) {
+                        return response()->json(['status' => 'success', 'message' => 'Số serial hết bảo hành.']);
+                    } else {
+                        return response()->json(['status' => 'error', 'message' => 'Số serial còn bảo hành.']);
+                    }
+                }
+                if ($formType == 3) {
+                }
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Không tìm thấy thông tin bảo hành.']);
+            }
+        } else {
+        }
+        return false;
+    }
+    public function checkbrands(Request $request)
+    {
+        $serialData = $request->input('serials');
+
+        $sericheck = SerialNumber::where('serial_code', $serialData)->first();
+        if ($sericheck) {
+            return response()->json(['status' => 'success', 'message' => 'Số serial nội bộ.']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Số serial bên ngoài.']);
+        }
+    }
 }

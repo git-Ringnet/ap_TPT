@@ -4,20 +4,8 @@
     <div class="content-wrapper--2Column m-0 min-height--none">
         <div class="content-header-fixed-report-1 pt-2">
             <div class="content__header--inner pl-4">
+                <input type="hidden" id="branch_id" name="branch_id" value="1">
                 <div class="content__heading--left d-flex opacity-1">
-                    <div class="d-flex mb-2 mr-2 p-1 border rounded box-shadow-border" style="order: 0;">
-                        <span class="text text-13-black m-0" style="flex: 2;">Hãng tiếp nhận :</span>
-                        <div class="form-check form-check-inline mr-1">
-                            <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="internal" name="branch_id"
-                                value="1">
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label text text-13-black mr-1" for="external">Bên ngoài</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="external" name="branch_id"
-                                value="2">
-                        </div>
-                    </div>
                     <div class="d-flex mb-2 mr-2 p-1 border rounded box-shadow-border" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
                         <div class="form-check form-check-inline mr-1">
@@ -91,8 +79,8 @@
                             class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                             <span class="text-13-black btn-click required-label font-weight-bold"
                                 style="flex: 1.6;">Khách hàng</span>
-                            <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;"
-                                required id="customer_name"
+                            <input placeholder="Nhập thông tin" autocomplete="off" onkeypress="return false;" required
+                                id="customer_name"
                                 class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                 style="flex:2;" />
                             <input type="hidden" name="customer_id" id="customer_id">
@@ -259,23 +247,23 @@
                                     data-product-code="" data-product-id="">
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
                                         <input type="text" autocomplete="off"
-                                            class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly=""
-                                            name="product_id[]" value="">
+                                            class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly
+                                            name="product_id[0][product_id]" value="">
                                     </td>
                                     <td
-                                        class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4 bg-input-guest-blue">
+                                        class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4">
                                         <input type="text" autocomplete="off"
-                                            class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32 bg-input-guest-blue"
                                             placeholder="Tìm mã hàng" value="">
                                         <ul class='list_product bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                                             style='z-index: 99;top: 75%;left: 1.5rem;display: none;'>
                                             @foreach ($products as $product_value)
-                                                <li data-id='{{ $product_value->id }}'>
+                                                <li data-id='{{ $product_value->id }}' class="product-item">
                                                     <a href='javascript:void(0);'
                                                         class='text-dark d-flex justify-content-between p-2 idProduct w-100'
                                                         data-name="{{ $product_value->product_name }}"
                                                         data-brand="{{ $product_value->brand }}"
-                                                        data-id='{{ $product_value->id }}' name='idProduct'>
+                                                        data-id='{{ $product_value->id }}'>
                                                         <span class='w-50 text-13-black'
                                                             style='flex:2'>{{ $product_value->product_name }}</span>
                                                     </a>
@@ -299,21 +287,24 @@
                                             value="1">
                                     </td>
                                     <td
-                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 bg-input-guest-blue">
+                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative">
                                         <input type="text" autocomplete="off"
-                                            class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" name="serial[]"
-                                            value="">
+                                            class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
+                                            name="product_id[0][serial]" data-index="0" value="">
+                                        <span class="check-icon-seri"></span>
                                     </td>
                                     <td
                                         class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
-                                        <input type="hidden" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32" name="id_seri[]"
-                                            value="">
+                                        <input type="hidden" autocomplete="off"
+                                            class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
+                                            name="product_id[0][id_seri][]" data-index="0" value="">
                                         <input type="hidden" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
-                                            name="id_warranty[]" value="">
+                                            name="product_id[0][id_warranty][]" data-index="0" value="">
                                         <input type="text" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
-                                            name="name_warranty[]" value="">
+                                            name="product_id[0][name_warranty][]" data-index="0" value="">
+                                        <span class="check-icon"></span>
                                         <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                                             style='z-index: 99;top: 75%;display: none;'>
                                         </ul>
@@ -321,18 +312,18 @@
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                         <input type="text" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
-                                            name="warranty[]" value="">
+                                            name="product_id[0][warranty][]" data-index="0" value="">
                                     </td>
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                        <input type="text" autocomplete="off" name="note_seri[]"
+                                        <input type="text" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
-                                            value="">
+                                            name="product_id[0][note_seri][]" data-index="0" value="">
                                     </td>
                                     <td class="p-2 align-top border-bottom border-top-0 border-right">
-
                                     </td>
                                 </tr>
-                                <tr id="row-add-warranty" data-index="0" class="bg-white row-warranty" style="display: none" data-product-code="" data-product-id="">
+                                <tr id="row-add-warranty" data-index="0" class="bg-white row-warranty"
+                                    style="display: none" data-product-code="" data-product-id="">
                                     <td colspan="5"
                                         class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
@@ -381,13 +372,13 @@
 <script src="{{ asset('js/receiving.js') }}"></script>
 <script>
     let responseData = {};
-    $(document).on("change", ".product_code, .serial", function() {
-        const $row = $(this).closest(".row-product");
+    $(document).on("click", ".warranty-input", function() {
+        const $row = $(this).closest("tr");
         const index = $row.data("index");
+        const $rowWarranty = $(`.row-warranty[data-index="${index}"]`);
         const productCode = $row.find(".product_code").val().trim();
         const serial = $row.find(".serial").val().trim();
         const product = $row.find(".product_id").val().trim();
-        const $rowWarranty = $(`.row-warranty[data-index="${index}"]`);
         $rowWarranty.show();
         if (productCode && serial) {
             $.ajax({
@@ -398,25 +389,20 @@
                 },
                 data: {
                     product: product,
-                    serial: serial,
+                    serial: serial
                 },
                 success: function(response) {
                     responseData[index] = response;
                     const $inputField = $row.find(".warranty-input");
                     const $dropdownList = $row.find(".warranty-dropdown");
-                    $inputField.val(""); 
+
                     $dropdownList.empty();
+
                     if (response.warranty && response.warranty.length > 0) {
-                      populateWarrantyDropdown(response,$dropdownList);
+                        populateWarrantyDropdown(response, $dropdownList);
                     } else {
-                        alert("Không tìm thấy thông tin bảo hành.");
+                        // alert("Không tìm thấy thông tin bảo hành.");
                     }
-                    $dropdownList.find(".dropdown-link").on("click", function() {
-                        const nameWarranty = $(this).data("name_warranty");
-                        const warranty = $(this).data("warranty");
-                        $inputField.val(nameWarranty);
-                        $dropdownList.hide();
-                    });
                 },
                 error: function() {
                     alert("Không thể lấy thông tin bảo hành. Vui lòng thử lại.");
@@ -424,99 +410,16 @@
             });
         }
     });
-
-
-
     $(document).ready(function() {
         // Xử lý sự kiện thay đổi radio button
         $('input[type="radio"]').on('change', function() {
-            let branchId = $('input[name="branch_id"]:checked').val();
             let formType = $('input[name="form_type"]:checked').val();
-            // let serialData = collectSerialData();
             let contentWrapper = $('#content-wrapper');
-
-            if (branchId && formType) {
+            if (formType) {
                 contentWrapper.removeClass('blur-wrapper');
-                // if (serialData.length > 0) {
-                //     checkSerials(branchId, formType, serialData, function(response) {
-                //         if (response.status === 'success') {
-                //             serialData.forEach((item) => {
-                //                 let serialResult = response.serials.find(
-                //                     (serial) => serial.serial === item.serial
-                //                 );
-                //                 let listRecei = item.inputElement
-                //                     .closest('td')
-                //                     .find('.list-recei');
-
-                //                 if (serialResult && serialResult.valid) {
-                //                     listRecei.html(
-                //                         '<span class="text-success">✔</span>');
-                //                 } else {
-                //                     listRecei.html(
-                //                         '<span class="text-danger">✖</span>');
-                //                 }
-                //             });
-                //         } else {
-                //             console.error('Lỗi:', response.message);
-                //         }
-                //     });
-                // }
             } else {
                 contentWrapper.addClass('blur-wrapper');
             }
         });
-        // $('#btn-get-unique-products').on('click', function(event) {
-        //     event.preventDefault();
-        //     let branchId = $('input[name="branch_id"]:checked').val();
-        //     let formType = $('input[name="form_type"]:checked').val();
-        //     // let serialData = collectSerialData();
-        //     let hasInvalidSerial = false;
-        //     let invalidMessages = [];
-        //     const idcus = $('#customer_id').val();
-        //     if (!idcus) {
-        //         showAutoToast("warning",
-        //             `Vui lòng chọn khách hàng!`);
-        //         $("#customer_name").click();
-        //         return false;
-        //     } else {}
-        //     if (branchId && formType && serialData.length > 0) {
-        //         checkSerials(branchId, formType, serialData, function(response) {
-        //             if (response.status === 'success') {
-        //                 serialData.forEach((item) => {
-        //                     let serialResult = response.serials.find(
-        //                         (serial) => serial.serial === item.serial
-        //                     );
-
-        //                     if (serialResult && !serialResult.valid) {
-        //                         hasInvalidSerial = true;
-        //                         invalidMessages.push(
-        //                             `Serial: ${item.serial} - ${serialResult.message}`
-        //                         );
-        //                         item.rowElement.css('border',
-        //                             '2px solid red'); // Tô viền đỏ
-        //                     } else {
-        //                         item.rowElement.css('border',
-        //                             ''); // Xóa viền đỏ nếu hợp lệ
-        //                     }
-        //                 });
-
-        //                 if (hasInvalidSerial) {
-        //                     showAutoToast("warning",
-        //                         `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
-        //                     return false;
-        //                 } else {
-        //                     showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');
-        //                     $('#form-submit').submit();
-
-        //                 }
-        //             } else {
-        //                 console.error('Lỗi:', response.message);
-        //             }
-        //         });
-        //     } else {
-        //         showAutoToast("warning", 'Vui lòng chọn Hãng tiếp nhận, Loại phiếu và nhập Serial.');
-        //     }
-        // });
-
     });
 </script>

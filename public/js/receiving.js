@@ -57,25 +57,24 @@ $(document).ready(function () {
     });
 
     // Chọn một mục trong dropdown
-    $(document).on("click", ".dropdown-link", function (e) {
-        e.preventDefault();
-        const $clickedItem = $(this);
-        const $row = $clickedItem.closest("tr");
-        const nameWarranty = $clickedItem.data("name_warranty");
-        const $input = $row.find(".warranty-input");
-        const idWarranty = $clickedItem.data("id_warranty");
-        const $inputIdWarranty = $row.find(".id_warranty");
-        const id_seri = $clickedItem.data("seri");
-        const $inputIdSeri = $row.find(".id_seri");
-        const $dropdown = $row.find(".warranty-dropdown");
+    // $(document).on("click", ".dropdown-link", function (e) {
+    //     e.preventDefault();
+    //     const $clickedItem = $(this);
+    //     const $row = $clickedItem.closest("tr");
+    //     const nameWarranty = $clickedItem.data("name_warranty");
+    //     const $input = $row.find(".warranty-input");
+    //     const idWarranty = $clickedItem.data("id_warranty");
+    //     const $inputIdWarranty = $row.find(".id_warranty");
+    //     const id_seri = $clickedItem.data("seri");
+    //     const $inputIdSeri = $row.find(".id_seri");
+    //     const $dropdown = $row.find(".warranty-dropdown");
 
-        $input.val(nameWarranty);
-        $inputIdWarranty.val(idWarranty);
-        $inputIdSeri.val(id_seri);
-        console.log(id_seri);
+    //     $input.val(nameWarranty);
+    //     $inputIdWarranty.val(idWarranty);
+    //     $inputIdSeri.val(id_seri);
 
-        $dropdown.hide();
-    });
+    //     $dropdown.hide();
+    // });
 
     // Ẩn dropdown khi click ngoài
     $(document).on("click", function () {
@@ -121,52 +120,62 @@ $(document).on("click", ".btn-add-item", function () {
         <tr class="row-product bg-white" data-index="${newIndex}" data-product-code="" data-product-id="">
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
                 <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly=""
-                    name="product_id[]" value="">
+                    name="product_id[${newIndex}][product_id]" value="">
             </td>
-            <td class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4 bg-input-guest-blue">
-                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" placeholder="Tìm mã hàng"
+            <td class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32 bg-input-guest-blue" placeholder="Tìm mã hàng"
                      value="">
                 <ul class="list_product bg-white position-absolute w-100 rounded shadow p-0 scroll-data"
                     style="z-index: 99;top: 75%;left: 1.5rem;display: none;">
                 </ul>
             </td>
-            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
+             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
                     readonly="" value="">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly=""
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly=""
                     value="">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 text-center py-1 w-100 height-32" readonly="" value="1">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 text-center py-1 w-100 height-32" readonly=""
+                    value="1">
             </td>
-            <td class="border-right p-2 text-13 align-top border-bottom border-top-0 bg-input-guest-blue">
-                <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
-                    name="serial[]" value="">
+            <td
+                class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
+                    name="product_id[${newIndex}][serial]" data-index="${newIndex}" value="">
+                <span class="check-icon-seri"></span>
             </td>
-             <td
+            <td
                 class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
-                <input type="hidden" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32" name="id_seri[]"
-                    value="">
                 <input type="hidden" autocomplete="off"
-                    class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32 bg-input-guest-blue"
-                    name="id_warranty[]" value="">
+                    class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
+                    name="product_id[${newIndex}][id_seri][]" data-index="${newIndex}" value="">
+                <input type="hidden" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
+                    name="product_id[${newIndex}][id_warranty][]" data-index="${newIndex}" value="">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
-                    name="name_warranty[]" value="">
+                    name="product_id[${newIndex}][name_warranty][]" data-index="${newIndex}" value="">
+                    <span class="check-icon"></span>
                 <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                     style='z-index: 99;top: 75%;display: none;'>
                 </ul>
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                 <input type="text" autocomplete="off"
-                    class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue" name="warranty[]"
-                    value="">
+                    class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                    name="product_id[${newIndex}][warranty][]" data-index="${newIndex}" value="">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" autocomplete="off" name="note_seri[]"
-                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue" value="">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                    name="product_id[${newIndex}][note_seri][]" data-index="${newIndex}" value="">
             </td>
             <td class="p-2 align-top border-bottom border-top-0 border-right">
              <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none"
@@ -177,16 +186,12 @@ $(document).on("click", ".btn-add-item", function () {
                 </svg>
             </td>
         </tr>
-         <tr id="row-add-warranty" data-index="${newIndex}" class="bg-white row-warranty" style="display: none" data-product-code="" data-product-id="">
-            <td colspan="5"
-                class="border-right p-2 text-13 align-top border-bottom border-top-0">
+        <tr class="bg-white row-warranty" data-index="${newIndex}" style="display: none" data-product-code="" data-product-id="">
+            <td colspan="5" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <button type="button" class="btn-add-warranty btn">
-                    +
-                </button>
+                <button type="button" class="btn-add-warranty btn">+</button>
             </td>
-            <td colspan="3"
-                class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
+            <td colspan="3" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
     `;
 
@@ -217,29 +222,56 @@ $(document).on("click", ".btn-add-warranty", function () {
     // Lấy thông tin data-product-code và data-product-id nếu cần
     const productCode = currentRow.attr("data-product-code");
     const productId = currentRow.attr("data-product-id");
+    const seri = currentRow.attr("data-seri");
     // Tạo hàng mới
     const newRow = $(`
         <tr class="row-warranty bg-white" data-index="${index}" data-product-code="${productCode}" data-product-id="${productId}">
             <td colspan="5" class="border-right p-2 text-13 align-top border-bottom border-top-0">
+              <input type="hidden" autocomplete="off"
+                class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                placeholder="Tìm mã hàng"
+                value="${productCode}"
+                readonly>
+            <input type="hidden" autocomplete="off"
+                class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                value="${seri}">
+            <input type="hidden" autocomplete="off"
+                class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                value="${productId}">
             </td>
             <td
                 class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
                 <input type="hidden" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
-                    name="id_seri[]" value="">
+                    name="product_id[${index}][id_seri][]" data-index="${index}" value="">
                 <input type="hidden" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
-                    name="id_warranty[]" value="">
+                    name="product_id[${index}][id_warranty][]" data-index="${index}" value="">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
-                    name="name_warranty[]" value="">
+                    name="product_id[${index}][name_warranty][]" data-index="${index}" value="">
+                    <span class="check-icon"></span>
                 <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                     style='z-index: 99;top: 75%;display: none;'>
                 </ul>
             </td>
-            <td colspan="2" class="border-right p-2 text-13 align-top border-bottom border-top-0">
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                    name="product_id[${index}][warranty][]" data-index="${index}" value="">
+            </td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                    name="product_id[${index}][note_seri][]" data-index="${index}" value="">
             </td>
             <td class="p-2 align-top border-bottom border-top-0 border-right">
+            <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                        fill="#6B6F76"></path>
+                </svg>
             </td>
         </tr>`);
     currentRow.before(newRow);
@@ -339,3 +371,161 @@ function showRowWarrantyByIndex(index) {
         $rowWarranty.show();
     }
 }
+
+// Xử lý chọn bảo hành từ danh sách dropdown
+$(document).on("click", ".dropdown-link", function (e) {
+    e.preventDefault();
+
+    const $this = $(this);
+    const $row = $this.closest("tr");
+
+    const nameWarranty = $this.data("name_warranty");
+    const idWarranty = $this.data("id_warranty");
+    const idSeri = $this.data("seri");
+
+    const $inputWarranty = $row.find(".warranty-input");
+    const $inputIdWarranty = $row.find(".id_warranty");
+    const $inputIdSeri = $row.find(".id_seri");
+    const $checkIcon = $inputWarranty.siblings(".check-icon");
+    const $dropdown = $row.find(".warranty-dropdown");
+
+    // Đổ dữ liệu vào các ô input tương ứng
+    $inputWarranty.val(nameWarranty);
+    $inputIdWarranty.val(idWarranty);
+    $inputIdSeri.val(idSeri);
+
+    // Ẩn dropdown sau khi chọn
+    $dropdown.hide();
+
+    // Lấy giá trị kiểm tra
+    const value_checked = getCheckedValue();
+    // Gọi hàm kiểm tra
+    checkSerials(value_checked.formType, idSeri, idWarranty, $checkIcon);
+});
+
+function getCheckedValue() {
+    const formType = $('input[name="form_type"]:checked').val();
+    return {
+        formType: formType,
+    };
+}
+
+function checkSerials(formType, serialData, warranty, checkIcon) {
+    $.ajax({
+        url: "/check-serials",
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: {
+            form_type: formType,
+            serials: serialData,
+            warranty: warranty,
+        },
+        success: function (response) {
+            if (response.status === "success") {
+                checkIcon.text("✔").css("color", "green");
+            } else if (response.status === "error") {
+                checkIcon.text("✖").css("color", "red");
+            }
+        },
+        error: function () {},
+    });
+}
+
+function checkbranchId(serials, product_id, className) {
+    $.ajax({
+        url: "/check-brands",
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: {
+            serials: serials,
+            product_id: product_id,
+        },
+        success: function (response) {
+            console.log(response.message);
+            // Xóa lớp màu cũ trước khi thêm lớp mới
+            className.removeClass("internal external bg-input-guest-blue");
+            if (response.status === "success") {
+                className
+                    .addClass("internal")
+                    .attr("title", "Sản phẩm này thuộc nội bộ");
+            } else if (response.status === "error") {
+                className
+                    .addClass("external")
+                    .attr("title", "Sản phẩm này thuộc bên ngoài");
+            }
+        },
+        error: function () {
+            console.error("Lỗi khi kiểm tra dữ liệu.");
+        },
+    });
+}
+
+// Check for duplicate serials when input changes
+$(document).on("input", ".serial", function () {
+    const currentInput = $(this);
+    const currentValue = currentInput.val().trim();
+    const product_id = currentInput.closest("tr").find(".product_id").val();
+
+    // Nếu input rỗng, xóa icon và dừng kiểm tra
+    if (!currentValue) {
+        currentInput.siblings(".check-icon-seri").text("");
+        currentInput.addClass("bg-input-guest");
+        currentInput.removeClass("internal external");
+        return;
+    }
+
+    let isDuplicate = false;
+
+    // Reset trạng thái trước khi kiểm tra
+    $(".serial").each(function () {
+        const $this = $(this);
+        const $checkIcon = $this.siblings(".check-icon-seri");
+
+        if ($this.val().trim()) {
+            if ($checkIcon.text() !== "✔") {
+                $checkIcon.text("✔").css("color", "green");
+            }
+            $this.css("background-color", ""); // Xóa nền đỏ nếu có
+        } else {
+            $checkIcon.text(""); // Xóa icon nếu trống
+        }
+    });
+
+    // Kiểm tra trùng lặp
+    $(".serial")
+        .not(currentInput)
+        .each(function () {
+            const $this = $(this);
+            const thisValue = $this.val().trim();
+
+            if (thisValue && thisValue === currentValue) {
+                const $thisCheckIcon = $this.siblings(".check-icon-seri");
+                const $currentCheckIcon =
+                    currentInput.siblings(".check-icon-seri");
+
+                $thisCheckIcon.text("✖").css("color", "red");
+                $currentCheckIcon.text("✖").css("color", "red");
+                $this.css("background-color", "#ffcccc");
+                currentInput.css("background-color", "#ffcccc");
+                isDuplicate = true;
+            }
+        });
+
+    // Nếu không còn trùng lặp, xóa dấu ✖ và giữ dấu ✔
+    if (!isDuplicate) {
+        const $currentCheckIcon = currentInput.siblings(".check-icon-seri");
+        if ($currentCheckIcon.text() !== "✔") {
+            $currentCheckIcon.text("✔").css("color", "green");
+        }
+        currentInput.css("background-color", "");
+    }
+
+    // Gọi checkbranchId nhưng đảm bảo không gây vòng lặp vô hạn
+    if (typeof checkbranchId === "function") {
+        checkbranchId(currentValue, product_id, $(this));
+    }
+});

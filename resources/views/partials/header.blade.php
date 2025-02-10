@@ -185,7 +185,7 @@
                             </button>
                         </a>
                     @endcan
-                    @hasanyrole('Admin')
+                    @hasanyrole('Admin|Quản lý kho')
                         <a href="{{ route('customers.index') }}" class="height-36">
                             <button type="button"
                                 class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'customers') active @endif ">
@@ -215,7 +215,7 @@
                             </button>
                         </a>
                     @endcan
-                    @hasanyrole('Admin|Quản lý kho')
+                    @hasanyrole('Admin')
                         <a href="{{ route('warehouses.index') }}" class="height-36">
                             <button type="button"
                                 class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'warehouses') active @endif">
@@ -225,24 +225,24 @@
                     @endhasanyrole
                 </div>
                 <div class="@if (!empty($activeGroup) && $activeGroup == 'manageProfess') d-flex @else d-none @endif">
-                        <a href="{{ route('imports.index') }}" class="height-36">
-                            <button type="button"
-                                class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'imports') active @endif ">
-                                 Phiếu nhập hàng
-                            </button>
-                        </a>
-                        <a href="{{ route('exports.index') }}" class="height-36">
-                            <button type="button"
-                                class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
-                                Phiếu xuất hàng
-                            </button>
-                        </a>
-                        <a href="{{ route('inventoryLookup.index') }}" class="height-36">
-                            <button type="button"
-                                class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'inventoryLookup') active @endif">
-                                Tra cứu tồn kho
-                            </button>
-                        </a>
+                    <a href="{{ route('imports.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2  @if (!empty($activeName) && $activeName == 'imports') active @endif ">
+                            Phiếu nhập hàng
+                        </button>
+                    </a>
+                    <a href="{{ route('exports.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
+                            Phiếu xuất hàng
+                        </button>
+                    </a>
+                    <a href="{{ route('inventoryLookup.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'inventoryLookup') active @endif">
+                            Tra cứu tồn kho
+                        </button>
+                    </a>
                     @unlessrole('Quản lý kho')
                         <a href="{{ route('warrantyLookup.index') }}" class="height-36">
                             <button type="button"

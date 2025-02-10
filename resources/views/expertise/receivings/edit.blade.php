@@ -7,19 +7,7 @@
         <div class="content-header-fixed-report-1 pt-2">
             <div class="content__header--inner pl-4">
                 <div class="content__heading--left d-flex opacity-1">
-                    <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
-                        <span class="text text-13-black m-0" style="flex: 2;">Hãng tiếp nhận :</span>
-                        <div class="form-check form-check-inline mr-1">
-                            <label class="text text-13-black form-check-label mr-1" for="internal">Nội bộ</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="internal" name="branch_id"
-                                value="1" {{ $receiving->branch_id == 1 ? 'checked' : '' }}>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label text text-13-black mr-1" for="external">Bên ngoài</label>
-                            <input type="radio" class="form-check-input hanguTiepNhan" id="external" name="branch_id"
-                                value="2" {{ $receiving->branch_id == 2 ? 'checked' : '' }}>
-                        </div>
-                    </div>
+                    <input type="hidden" id="branch_id" name="branch_id" value="1">
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Loại phiếu :</span>
                         <div class="form-check form-check-inline mr-1">
@@ -168,7 +156,8 @@
                                                         style="flex:2;" id="{{ $item->id }}"
                                                         data-name="{{ $item->customer_name }}"
                                                         data-phone="{{ $item->phone }}"
-                                                        data-address="{{ $item->address }}" data-contact="{{ $item->contact_person }}" name="search-info"
+                                                        data-address="{{ $item->address }}"
+                                                        data-contact="{{ $item->contact_person }}" name="search-info"
                                                         class="search-info">
                                                         <span
                                                             class="text-13-black-black">{{ $item->customer_name }}</span>
@@ -256,155 +245,250 @@
                             <table class="table" id="inputcontent">
                                 <thead>
                                     <tr style="height:44px;">
-                                        <th class="border-right px-2 p-0" style="width: 8%">
-                                            <span class="text-table text-13-black font-weight-bold pl-3">Mã hàng</span>
+                                        <th class="border-right px-2 p-0 pl-4">
+                                            <span class="text-table text-secondary">Mã hàng</span>
                                         </th>
-                                        <th class="border-right px-2 p-0 text-left" style="width: 15%; z-index:99;">
-                                            <span class="text-table text-13-black font-weight-bold">Tên hàng</span>
+                                        <th class="border-right px-2 p-0 text-left">
+                                            <span class="text-table text-secondary">Tên hàng</span>
                                         </th>
-                                        <th class="border-right px-2 p-0 text-left" style="width: 8%;">
-                                            <span class="text-table text-13-black font-weight-bold">Hãng</span>
+                                        <th class="border-right px-2 p-0 text-left">
+                                            <span class="text-table text-secondary">Hãng</span>
                                         </th>
-                                        <th class="border-right px-2 p-0" style="width: 8%;">
-                                            <span class="text-table text-13-black font-weight-bold">Số lượng</span>
+                                        <th class="border-right px-2 p-0 text-center" style="width: 3%">
+                                            <span class="text-table text-secondary">SL</span>
                                         </th>
-                                        <th class="border-right px-2 p-0" style="width: 10%;">
-                                            <span class="text-table text-13-black font-weight-bold">Serial
-                                                Number</span>
+                                        <th class="border-right px-2 p-0 text-right">
+                                            <span class="text-table text-secondary">Serial Number</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
-                                            <span class="text-table text-13-black font-weight-bold">Tình trạng tiếp
-                                                nhận</span>
+                                        <th class="border-right px-2 p-0 text-right">
+                                            <span class="text-table text-secondary">Thông tin</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
-                                            <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
+                                        <th class="border-right px-2 p-0 text-right">
+                                            <span class="text-table text-secondary">Tình trạng tiếp nhận</span>
                                         </th>
-                                        <th class="border-right note px-2 p-0" style="width: 5%;"></th>
+                                        <th class="border-right note px-2 p-0 text-right">
+                                            <span class="text-table text-secondary">Ghi chú</span>
+                                        </th>
+                                        <th class="" style="width: 3%"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-product-data">
-                                    @foreach ($receivedProducts as $productId => $products)
-                                        @php
-    $productCode = $products->first()->product->product_code ?? '';
-    $productId = $products->first()->product->id ?? '';
-    $productName = $products->first()->product->name ?? '';
-    $productBrand = $products->first()->product->brand ?? '';
-    $serialCount = $products->count();
-                                        @endphp
-                                        @foreach ($products as $item)
-                                            <tr id="serials-data" class="row-product bg-white" data-index="1"
-                                                data-product-code="{{ $productCode }}"
-                                                data-product-id="{{ $item->product_id }}">
+                                    @php
+                                        $indexRecei = 0;
+                                    @endphp
+                                    @foreach ($receivedProducts as $productId => $productGroup)
+                                        @foreach ($productGroup as $receivedProduct)
+                                            <tr class="row-product bg-white" id="serials-data"
+                                                data-index="{{ $indexRecei }}"
+                                                data-product-code="{{ $receivedProduct->product->product_code }}"
+                                                data-product-id="{{ $receivedProduct->product_id }}">
                                                 <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
+                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 d-none">
                                                     <input type="text" autocomplete="off"
                                                         class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                        readonly="" name="product_id[]"
-                                                        value="{{ $item->product_id }}">
+                                                        readonly name="product_id[{{ $indexRecei }}][product_id]"
+                                                        value="{{ $receivedProduct->product_id }}">
                                                 </td>
                                                 <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                    class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                                                    <input type="text" autocomplete="off"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32 bg-input-guest-blue"
+                                                        placeholder="Tìm mã hàng"
+                                                        value="{{ $receivedProduct->product->product_code }}"
+                                                        readonly>
+                                                    <ul class='list_product bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
+                                                        style='z-index: 99;top: 75%;left: 1.5rem;display: none;'>
+                                                        @foreach ($products_all as $product_value)
+                                                            <li data-id="{{ $product_value->id }}"
+                                                                class="product-item">
+                                                                <a href='javascript:void(0);'
+                                                                    class='text-dark d-flex justify-content-between p-2 idProduct w-100'
+                                                                    data-name="{{ $product_value->product_name }}"
+                                                                    data-brand="{{ $product_value->brand }}"
+                                                                    data-id="{{ $product_value->id }}">
+                                                                    <span class='w-50 text-13-black'
+                                                                        style='flex:2'>{{ $product_value->product_name }}</span>
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </td>
+                                                <td
+                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
                                                         class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32"
-                                                        readonly="" value="{{ $item->product->product_code }}">
+                                                        readonly
+                                                        value="{{ $receivedProduct->product->product_name }}">
                                                 </td>
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                        readonly="" value="{{ $item->product->product_name }}">
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly
+                                                        value="{{ $receivedProduct->product->brand }}">
                                                 </td>
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
-                                                        readonly="" value="{{ $item->product->brand }}">
+                                                        class="border-0 pl-1 pr-2 text-center py-1 w-100 height-32"
+                                                        readonly value="{{ $receivedProduct->quantity }}">
                                                 </td>
                                                 <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                                    <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32"
-                                                        readonly="" value="{{ $item->quantity }}">
-                                                </td>
-                                                <td
-                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                    class="border-right p-2 text-13 align-top border-bottom position-relative border-top-0">
                                                     <input type="text" autocomplete="off"
                                                         class="border-0 pl-1 pr-2 py-1 w-100 serial height-32 bg-input-guest-blue"
-                                                        readonly value="{{ $item->serial->serial_code }}">
+                                                        name="product_id[{{ $indexRecei }}][serial]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->serial->serial_code ?? '' }}">
+                                                    <span class="check-icon-seri"></span>
+                                                </td>
+                                                <td
+                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                                                    <input type="hidden" autocomplete="off"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
+                                                        name="product_id[{{ $indexRecei }}][id_seri][]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->serial_id }}">
+                                                    <input type="hidden" autocomplete="off"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
+                                                        name="product_id[{{ $indexRecei }}][id_warranty][]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->id }}">
+                                                    <input type="text" autocomplete="off"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
+                                                        name="product_id[{{ $indexRecei }}][name_warranty][]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->name_warranty }}">
+                                                    <span class="check-icon"></span>
+                                                    <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
+                                                        style='z-index: 99;top: 75%;display: none;'>
+                                                    </ul>
                                                 </td>
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 status height-32 bg-input-guest-blue"
-                                                        value="{{ $item->status }}">
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                                                        name="product_id[{{ $indexRecei }}][warranty][]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->state_recei }}">
                                                 </td>
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
                                                         class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
-                                                        value="{{ $item->note }}">
+                                                        name="product_id[{{ $indexRecei }}][note_seri][]"
+                                                        data-index="{{ $indexRecei }}"
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->note }}">
                                                 </td>
-                                                <td class="p-2 align-top border-bottom border-top-0 border-right">
-                                                    <svg class="delete-row" width="17" height="17"
+                                                <td class="p-2 align-top border-bottom border-top-0 border-right"><svg
+                                                        class="delete-row" width="17" height="17"
                                                         viewBox="0 0 17 17" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                                             d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
                                                             fill="#6B6F76"></path>
-                                                    </svg>
-                                                </td>
+                                                    </svg></td>
                                             </tr>
                                         @endforeach
-                                        <tr id="serials-count" class="bg-white"
-                                            data-product-code="{{ $productCode }}"
-                                            data-product-id="{{ $productId }}">
-                                            <td colspan="2"
-                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                            </td>
-                                            <td
-                                                class="border-right p-2 text-13 align-center border-bottom border-top-0 text-right">
-                                                Tổng số lượng:</td>
-                                            <td
-                                                class="border-right p-2 text-13 align-center border-bottom border-top-0">
-                                                <input type="text" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly=""
-                                                    name="serial_count" value="{{ $serialCount }}">
-                                            </td>
-                                            <td colspan="4"
-                                                class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                                            </td>
-                                        </tr>
-                                        <tr id="add-row-product" class="bg-white"
-                                            data-product-code="{{ $productCode }}"
-                                            data-product-id="{{ $productId }}">
-                                            <td colspan="8"
-                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
-                                                <button type="button" class="save-info-product btn"
-                                                    data-product-id="{{ $productId }}"
-                                                    data-product-code="{{ $productCode }}"
-                                                    data-product-name="{{ $productName }}"
-                                                    data-product-brand="{{ $productBrand }}">
-                                                    <svg width="14" height="14" viewBox="0 0 14 14"
-                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M7.65625 2.625C7.65625 2.26257 7.36243 1.96875 7 1.96875C6.63757 1.96875 6.34375 2.26257 6.34375 2.625V6.34375H2.625C2.26257 6.34375
-                                                    1.96875 6.63757 1.96875 7C1.96875 7.36243 2.26257 7.65625 2.625 7.65625H6.34375V11.375C6.34375 11.7374 6.63757 12.0312 7 12.0312C7.36243
-                                                    12.0312 7.65625 11.7374 7.65625 11.375V7.65625H11.375C11.7374 7.65625 12.0312 7.36243 12.0312 7C12.0312 6.63757 11.7374 6.34375 11.375
-                                                    6.34375H7.65625V2.625Z" fill="#151516">
-                                                        </path>
-                                                    </svg>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        @foreach ($receivedProduct->warrantyReceived as $index => $warrantyReceived)
+                                            @if ($index > 0)
+                                                <tr class="row-warranty bg-white" data-index="{{ $indexRecei }}"
+                                                    data-product-code=""
+                                                    data-product-id="{{ $receivedProduct->product_id }}"
+                                                    data-seri="{{ $receivedProduct->serial_id }}">
+                                                    <td colspan="5"
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                        <input type="hidden" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32"
+                                                            placeholder="Tìm mã hàng"
+                                                            value="{{ $receivedProduct->product->product_code }}"
+                                                            readonly>
+                                                        <input type="hidden" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 serial height-32"
+                                                            value="{{ $receivedProduct->serial->serial_code ?? '' }}">
+                                                        <input type="hidden" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32"
+                                                            value="{{ $receivedProduct->product_id }}">
+                                                    </td>
+                                                    <td
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0 product-cell position-relative">
+                                                        <input type="hidden" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 id_seri height-32"
+                                                            name="product_id[{{ $indexRecei }}][id_seri][]"
+                                                            data-index="{{ $indexRecei }}"
+                                                            value="{{ $receivedProduct->serial_id }}">
+                                                        <input type="hidden" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
+                                                            name="product_id[{{ $indexRecei }}][id_warranty][]"
+                                                            data-index="{{ $indexRecei }}"
+                                                            value="{{ $warrantyReceived->id }}">
+                                                        <input type="text" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
+                                                            name="product_id[{{ $indexRecei }}][name_warranty][]"
+                                                            data-index="{{ $indexRecei }}"
+                                                            value="{{ $warrantyReceived->name_warranty }}">
+                                                        <span class="check-icon"></span>
+                                                        <ul class="warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data"
+                                                            style="z-index: 99;top: 75%;display: none;">
+
+                                                        </ul>
+                                                    </td>
+                                                    <td
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                        <input type="text" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
+                                                            name="product_id[{{ $indexRecei }}][warranty][]"
+                                                            data-index="{{ $indexRecei }}"
+                                                            value="{{ $warrantyReceived->state_recei }}">
+                                                    </td>
+                                                    <td
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                        <input type="text" autocomplete="off"
+                                                            class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
+                                                            name="product_id[{{ $indexRecei }}][note_seri][]"
+                                                            data-index="{{ $indexRecei }}"
+                                                            value="{{ $warrantyReceived->note }}">
+                                                    </td>
+                                                    <td class="p-2 align-top border-bottom border-top-0 border-right">
+                                                        <svg class="delete-row" width="17" height="17"
+                                                            viewBox="0 0 17 17" fill="none"
+                                                            xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
+                                                                fill="#6B6F76"></path>
+                                                        </svg>
+                                                    </td>
+                                                </tr>
+                                                <tr id="row-add-warranty" data-index="{{ $indexRecei }}"
+                                                    class="bg-white row-warranty" style="display: none"
+                                                    data-product-code="{{ $receivedProduct->product->product_code }}"
+                                                    data-product-id="{{ $receivedProduct->product_id }}"
+                                                    data-seri="{{ $receivedProduct->serial->serial_code ?? '' }}">
+                                                    <td colspan="5"
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                    </td>
+                                                    <td
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                        <button type="button" class="btn-add-warranty btn">+</button>
+                                                    </td>
+                                                    <td colspan="3"
+                                                        class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                        @php
+                                            $indexRecei++;
+                                        @endphp
                                     @endforeach
                                 </tbody>
+
                             </table>
-                            <input type="hidden" name="data-test" id="data-test">
                             <section class="content mt-2">
                                 <div class="container-fluided">
                                     <div class="d-flex ml-4">
                                         <button type="button" data-modal-id="modal-id" data-toggle="modal"
                                             data-target="#modal-id"
-                                            class="btn-save-print d-flex align-items-center h-100 py-1 px-2 rounded activity"
+                                            class="btn-add-item d-flex align-items-center h-100 py-1 px-2 rounded activity"
                                             style="margin-right:10px">
                                             <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="12"
                                                 height="12" viewBox="0 0 18 18" fill="none">
@@ -415,13 +499,11 @@
                                                     d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
                                                     fill="#42526E" />
                                             </svg>
-                                            <span class="text-table font-weight-bold">Thêm sản phẩm</span>
+                                            <span class="text-table">Thêm sản phẩm</span>
                                         </button>
                                     </div>
                                 </div>
                             </section>
-                            <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$products_all"
-                                name="TN" />
                         </section>
                     </div>
                 </div>
@@ -433,90 +515,49 @@
 </form>
 <x-receive_card :receiving="$receiving" :receivedProducts="$receivedProducts"></x-receive_card>
 <script src="{{ asset('js/addproduct.js') }}"></script>
+<script src="{{ asset('js/receiving.js') }}"></script>
 <script>
-    $(document).ready(function() {
-        // Xử lý sự kiện thay đổi radio button
-        $('input[type="radio"]').on('change', function() {
-            let branchId = $('input[name="branch_id"]:checked').val();
-            let formType = $('input[name="form_type"]:checked').val();
-            let serialData = collectSerialData();
-            let contentWrapper = $('#content-wrapper');
+    var products = @json($products_all);
+</script>
+<script>
+    let responseData = {};
+    $(document).on("click", ".warranty-input", function() {
+        const $row = $(this).closest("tr");
+        const index = $row.data("index");
+        const $rowWarranty = $(`.row-warranty[data-index="${index}"]`);
+        const productCode = $row.find(".product_code").val().trim();
+        const serial = $row.find(".serial").val().trim();
+        const product = $row.find(".product_id").val().trim();
+        $rowWarranty.show();
+        if (productCode && serial) {
+            $.ajax({
+                url: "/warranty-lookup",
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                },
+                data: {
+                    product: product,
+                    serial: serial
+                },
+                success: function(response) {
+                    responseData[index] = response;
+                    const $inputField = $row.find(".warranty-input");
+                    const $dropdownList = $row.find(".warranty-dropdown");
 
-            if (branchId && formType) {
-                contentWrapper.removeClass('blur-wrapper');
-                if (serialData.length > 0) {
-                    checkSerials(branchId, formType, serialData, function(response) {
-                        if (response.status === 'success') {
-                            serialData.forEach((item) => {
-                                let serialResult = response.serials.find(
-                                    (serial) => serial.serial === item.serial
-                                );
-                                let listRecei = item.inputElement
-                                    .closest('td')
-                                    .find('.list-recei');
+                    $dropdownList.empty();
 
-                                if (serialResult && serialResult.valid) {
-                                    listRecei.html(
-                                        '<span class="text-success">✔</span>');
-                                } else {
-                                    listRecei.html(
-                                        '<span class="text-danger">✖</span>');
-                                }
-                            });
-                        } else {
-                            console.error('Lỗi:', response.message);
-                        }
-                    });
-                }
-            } else {
-                contentWrapper.addClass('blur-wrapper');
-            }
-        });
-        $('#btn-get-unique-products').on('click', function(event) {
-            let branchId = $('input[name="branch_id"]:checked').val();
-            let formType = $('input[name="form_type"]:checked').val();
-            let serialData = collectSerialData();
-            let hasInvalidSerial = false;
-            let invalidMessages = [];
-
-            if (branchId && formType && serialData.length > 0) {
-                checkSerials(branchId, formType, serialData, function(response) {
-                    if (response.status === 'success') {
-                        serialData.forEach((item) => {
-                            let serialResult = response.serials.find(
-                                (serial) => serial.serial === item.serial
-                            );
-
-                            if (serialResult && !serialResult.valid) {
-                                hasInvalidSerial = true;
-                                invalidMessages.push(
-                                    `Serial: ${item.serial} - ${serialResult.message}`
-                                );
-                                item.rowElement.css('border',
-                                    '2px solid red'); // Tô viền đỏ
-                            } else {
-                                item.rowElement.css('border',
-                                    ''); // Xóa viền đỏ nếu hợp lệ
-                            }
-                        });
-
-                        if (hasInvalidSerial) {
-                            showAutoToast("warning", `Có serial không hợp lệ:\n\n${invalidMessages.join('\n')}`);
-                            event.preventDefault();
-                            return false; // Chặn tiếp tục xử lý
-                        } else {
-                            showAutoToast("warning", 'Tất cả serial hợp lệ! Đang xử lý...');
-                            $('#form-submit').submit();
-                        }
+                    if (response.warranty && response.warranty.length > 0) {
+                        populateWarrantyDropdown(response, $dropdownList);
                     } else {
-                        console.error('Lỗi:', response.message);
+                        // alert("Không tìm thấy thông tin bảo hành.");
                     }
-                });
-            } else {
-                showAutoToast("warning", 'Vui lòng chọn Hãng tiếp nhận, Loại phiếu và nhập Serial.');
-            }
-        });
-
+                },
+                error: function() {
+                    showAutoToast("warning", "Seri bên ngoài không thuộc nội bộ.");
+                },
+            });
+        }
     });
     $(document).ready(function() {
         function toggleListGuest(input, list, filterInput) {

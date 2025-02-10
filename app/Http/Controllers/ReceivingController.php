@@ -9,6 +9,7 @@ use App\Models\Receiving;
 use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Models\WarrantyReceived;
 use App\Notifications\ReceiNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +47,6 @@ class ReceivingController extends Controller
     // Store a newly created receiving record in storage
     public function store(Request $request)
     {
-        dd($request->all());
         $validated = $request->validate([
             'branch_id' => 'required|min:1',
             'branch_id.*' => 'in:1,2',
@@ -67,38 +67,45 @@ class ReceivingController extends Controller
         // Tạo phiếu tiếp nhận
         $receiving = Receiving::create($validated);
 
-        // Lấy dữ liệu 'data-test' từ request và giải mã JSON
-        $dataTest = $request->input('data-test');
-        $data = json_decode($dataTest, true);
-        // Kiểm tra nếu dữ liệu không hợp lệ
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return back()->withErrors(['data-test' => 'Dữ liệu không hợp lệ']);
-        }
-        // Duyệt qua mảng và lưu vào bảng received_products
-        foreach ($data as $item) {
-            // Tìm hoặc tạo serial
-            $serial = SerialNumber::firstOrCreate(
-                ['serial_code' => $item['serial']],
-                [
-                    'product_id' => $item['product_id'],
-                    'status' => 3,
-                ]
-            );
-            // Đảm bảo status của serial luôn là 3
-            if ($serial->status !== 3) {
-                $serial->update(['status' => 3]);
+        DB::beginTransaction();
+        try {
+            foreach ($request->input('product_id') as $product) {
+                $serialId = null;
+                $existSeri = SerialNumber::where('serial_code', $product['serial'])->first();
+                // Nếu serial_id rỗng, tạo serial mới với status = 6
+                if (!$existSeri) {
+                    $newSerial = SerialNumber::create([
+                        'product_id' => $product['product_id'],
+                        'status'     => 6,
+                        'serial_code' => $product['serial'],
+                    ]);
+                    $serialId = $newSerial->id;
+                } else {
+                    $serialId = $existSeri->id;
+                }
+                $receivedProduct = ReceivedProduct::create([
+                    'reception_id' => $receiving->id,
+                    'product_id'   => $product['product_id'],
+                    'quantity'     => 1,
+                    'serial_id'    => $serialId,
+                    'status'       => 0,
+                    'note'         => '',
+                ]);
+
+                // Lưu thông tin bảo hành cho từng serial
+                foreach ($product['id_seri'] as $index => $serial) {
+                    WarrantyReceived::create([
+                        'product_received_id' => $receivedProduct->id,
+                        'name_warranty'       => $product['name_warranty'][$index] ?? null,
+                        'state_recei'         => $product['warranty'][$index] ?? null,
+                        'note'                => $product['note_seri'][$index] ?? null,
+                    ]);
+                }
             }
-            // Lưu vào bảng received_products
-            ReceivedProduct::create([
-                'reception_id' => $receiving->id, // Lấy ID của phiếu tiếp nhận vừa tạo
-                'product_id' => $item['product_id'], // ID hàng hóa
-                'quantity' => 1, // Số lượng (Giả sử mỗi serial là 1 sản phẩm)
-                'serial_id' => $serial->id, // Serial
-                'note' => $item['note_seri'] ?? '', // Ghi chú
-                'status' => $item['status_recept'] ?? '', // Tình trạng tiếp nhận
-            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
-        // Chuyển hướng về danh sách phiếu tiếp nhận với thông báo thành công
         return redirect()->route('receivings.index')->with('msg', 'Tạo phiếu tiếp nhận thành công.');
     }
 
@@ -115,7 +122,8 @@ class ReceivingController extends Controller
         $title = 'Chi tiết phiếu tiếp nhận';
         $products_all = Product::all();
         $customers = Customers::all();
-        $receivedProducts = ReceivedProduct::where('reception_id', $receiving->id)
+        $receivedProducts = ReceivedProduct::with('product')
+            ->where('reception_id', $receiving->id)
             ->get()
             ->groupBy('product_id');
         $users = User::all();
@@ -124,13 +132,15 @@ class ReceivingController extends Controller
     }
 
     // Update the specified receiving record in storage
-    public function update(Request $request, Receiving $receiving)
+    public function update(Request $request, $id)
     {
-        // Xác thực dữ liệu
+        // Validate the request data
         $validated = $request->validate([
-            'branch_id' => 'required|integer',
-            'form_type' => 'required|integer',
-            'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving,' . $receiving->id,
+            'branch_id' => 'required|min:1',
+            'branch_id.*' => 'in:1,2',
+            'form_type' => 'required|min:1',
+            'form_type.*' => 'in:1,2,3',
+            'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving,' . $id,
             'customer_id' => 'required|integer',
             'address' => 'nullable|string',
             'date_created' => 'required|date',
@@ -139,77 +149,72 @@ class ReceivingController extends Controller
             'user_id' => 'required|integer',
             'phone' => 'nullable|string',
             'closed_at' => 'nullable|date',
-            'status' => 'required|integer',
+            'status' => 'nullable|integer',
             'state' => 'nullable|integer',
         ]);
 
-        // Cập nhật phiếu tiếp nhận
+        // Find the receiving record to update
+        $receiving = Receiving::findOrFail($id);
+
+        // Update the receiving record
         $receiving->update($validated);
 
-        // Lấy dữ liệu 'data-test' từ request và giải mã JSON
-        $dataTest = $request->input('data-test');
-        $data = json_decode($dataTest, true);
-
-        // Kiểm tra nếu dữ liệu không hợp lệ
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return back()->withErrors(['data-test' => 'Dữ liệu không hợp lệ']);
-        }
-
-        // Lấy danh sách sản phẩm hiện tại trong bảng `received_products` liên quan đến `receiving`
-        $existingProducts = ReceivedProduct::where('reception_id', $receiving->id)->get();
-
-        // Mảng để theo dõi các serial đã xử lý
-        $processedSerials = [];
-
-        foreach ($data as $item) {
-            // Tìm hoặc tạo serial
-            $serial = SerialNumber::firstOrCreate(
-                ['serial_code' => $item['serial']],
-                [
-                    'product_id' => $item['product_id'],
-                    'status' => 3,
-                ]
-            );
-
-            // Đảm bảo status của serial luôn là 3
-            if ($serial->status !== 3) {
-                $serial->update(['status' => 3]);
+        DB::beginTransaction();
+        try {
+            // Xóa dữ liệu cũ trước khi cập nhật mới
+            $receivedProducts = $receiving->receivedProducts;
+            foreach ($receivedProducts as $receivedProduct) {
+                $receivedProduct->warrantyReceived()->delete();
+                $receivedProduct->delete();
             }
 
-            // Tìm sản phẩm đã tiếp nhận dựa trên serial_id
-            $existingProduct = $existingProducts->firstWhere('serial_id', $serial->id);
-            if ($existingProduct) {
-                $existingProduct->update([
-                    'product_id' => $item['product_id'],
-                    'quantity' => 1,
-                    'note' => $item['note_seri'] ?? '',
-                    'status' => $item['status_recept'] ?? '',
-                ]);
-            } else {
-                // Nếu sản phẩm không tồn tại, tạo mới
-                ReceivedProduct::create([
+            // Duyệt qua danh sách sản phẩm từ request
+            foreach ($request->input('product_id') as $product) {
+                $serialId = null;
+                $existSeri = SerialNumber::where('serial_code', $product['serial'])->first();
+                // Nếu serial_id rỗng, tạo serial mới với status = 6
+                if (!$existSeri) {
+                    $newSerial = SerialNumber::create([
+                        'product_id' => $product['product_id'],
+                        'status'     => 6, // Trạng thái mới
+                        'serial_code' => $product['serial'], // Tạo mã serial tạm thời
+                    ]);
+
+                    $serialId = $newSerial->id;
+                } else {
+                    $serialId = $existSeri->id;
+                }
+                // Tạo sản phẩm tiếp nhận
+                $receivedProduct = ReceivedProduct::create([
                     'reception_id' => $receiving->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => 1,
-                    'serial_id' => $serial->id,
-                    'note' => $item['note_seri'] ?? '',
-                    'status' => $item['status_recept'] ?? '',
+                    'product_id'   => $product['product_id'],
+                    'quantity'     => 1,
+                    'serial_id'    => $serialId,
+                    'status'       => 0,
+                    'note'         => '',
                 ]);
+
+                // Lưu thông tin bảo hành cho từng serial nếu tồn tại
+                if (!empty($product['id_seri'])) {
+                    foreach ($product['id_seri'] as $index => $serial) {
+                        WarrantyReceived::create([
+                            'product_received_id' => $receivedProduct->id,
+                            'name_warranty'       => $product['name_warranty'][$index] ?? null,
+                            'state_recei'         => $product['warranty'][$index] ?? null,
+                            'note'                => $product['note_seri'][$index] ?? null,
+                        ]);
+                    }
+                }
             }
 
-            // Đánh dấu serial đã xử lý
-            $processedSerials[] = $serial->id;
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('receivings.index')->with('warning', 'Có lỗi xảy ra khi cập nhật phiếu tiếp nhận.');
         }
 
-        // Xóa các sản phẩm không có trong dữ liệu mới
-        ReceivedProduct::where('reception_id', $receiving->id)
-            ->whereNotIn('serial_id', $processedSerials)
-            ->delete();
-
-        // Chuyển hướng về danh sách phiếu tiếp nhận với thông báo thành công
         return redirect()->route('receivings.index')->with('msg', 'Cập nhật phiếu tiếp nhận thành công.');
     }
-
 
 
 
@@ -235,7 +240,7 @@ class ReceivingController extends Controller
     {
         $receivingId = $request->selectedId;
         $receiving = Receiving::with('customer')->find($receivingId);
-        $receivedProduct = ReceivedProduct::with('product', 'serial')->where('reception_id', $receivingId)->get();
+        $receivedProduct = ReceivedProduct::with('product', 'serial', 'warrantyReceived')->where('reception_id', $receivingId)->get();
         $products = Product::all();
         if ($receiving) {
             return response()->json([
@@ -411,6 +416,20 @@ class ReceivingController extends Controller
                 return response()->json([
                     'message' => 'Không tìm thấy thông tin bảo hành',
                 ], 404);
+            }
+        }
+    }
+    public static function warrantyLookupById($productId, $serial)
+    {
+        $sn_id = SerialNumber::where('serial_code', $serial)->first();
+        if ($sn_id) {
+            // Truy vấn dữ liệu từ bảng warranty_lookup
+            $warranty = DB::table('warranty_lookup')
+                ->where('product_id', $productId)
+                ->where('sn_id', $sn_id->id)
+                ->get();
+            if ($warranty) {
+                return $warranty;
             }
         }
     }

@@ -40,4 +40,8 @@ class ReceivedProduct extends Model
     {
         return $this->belongsTo(SerialNumber::class, 'serial_id');
     }
+    public function warrantyReceived()
+    {
+        return $this->hasMany(WarrantyReceived::class, 'product_received_id');
+    }
 }

@@ -61,7 +61,7 @@
                             <td class="border border-dark">{{ $item->product->product_code }}</td>
                             <td class="border border-dark">{{ $item->product->brand }}</td>
                             <td class="border border-dark">1</td>
-                            <td class="border border-dark">{{ $item->serial->serial_code }}</td>
+                            <td class="border border-dark">{{ $item->serial->serial_code ?? '' }}</td>
                             <td class="border border-dark">{{ $item->status }}</td>
                             <td class="border border-dark">{{ $item->note }}</td>
                         </tr>
