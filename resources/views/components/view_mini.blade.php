@@ -8,12 +8,12 @@
         <div class="d-flex w-100 my-2">
             <div class="px-1">
                 <p class="m-0 p-0 text-13-black">Từ ngày</p>
-                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatFrom">
+                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatFrom" placeholder="Chọn ngày">
                 <input type="hidden" class="w-100 form-control mr-1" id="fromDate">
             </div>
             <div class="px-1">
                 <p class="m-0 p-0 text-13-black">Đến ngày</p>
-                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatTo">
+                <input type="text" class="w-100 form-control mr-1 bg-input-guest-blue" id="formatTo" placeholder="Chọn ngày">
                 <input type="hidden" class="w-100 form-control ml-1" id="toDate">
             </div>
         </div>

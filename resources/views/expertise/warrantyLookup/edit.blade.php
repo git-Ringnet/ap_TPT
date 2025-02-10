@@ -44,7 +44,7 @@
                                     <th class="border-right px-2 p-0 text-left" style="width: 15%; z-index:99;">
                                         <span class="text-table text-13-black font-weight-bold">Tên hàng</span>
                                     </th>
-                                    <th class="border-right px-2 p-0 text-left" style="width: 8%;">
+                                    <th class="px-2 p-0 text-left" style="width: 8%;">
                                         <span class="text-table text-13-black font-weight-bold">Hãng</span>
                                     </th>
                                 </tr>
@@ -57,7 +57,7 @@
                                     <td class="text-13-black border-right border-bottom-0 border-top-0">
                                         {{ $warrantyLookup->product->product_name }}
                                     </td>
-                                    <td class="text-13-black border-right border-bottom-0 border-top-0">
+                                    <td class="text-13-black border-bottom-0 border-top-0">
                                         {{ $warrantyLookup->product->brand }}
                                     </td>
                                 </tr>

@@ -146,7 +146,7 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->note }}
                                             </td>
-                                            <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
+                                            <td class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
                                                 <div class="d-flex w-100">
                                                     <a href="#">
                                                         <div class="rounded">
