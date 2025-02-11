@@ -59,44 +59,27 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate dữ liệu đầu vào
-        $validatedData = $request->validate(
-            [
-                'group_type_id' => 'required|integer|exists:group_types,id',
-                'group_code'    => 'required|string|max:255|unique:groups,group_code',
-                'group_name'    => 'required|string|max:255',
-                'description'   => 'nullable|string|max:500',
-            ],
-            [
-                'group_type_id.required' => 'Loại nhóm là bắt buộc.',
-                'group_code.required'    => 'Mã nhóm là bắt buộc.',
-                'group_name.required'    => 'Tên nhóm là bắt buộc.',
-            ]
-        );
-
         // Kiểm tra tồn tại
-        $existingGroup = Groups::where('group_name', $validatedData['group_name'])
-            ->where('group_type_id', $validatedData['group_type_id'])
+        $existingGroup = Groups::where('group_code', $request->group_code)
+            ->where('group_type_id', $request->group_type_id)
             ->first();
 
         if ($existingGroup) {
-            return redirect()->back()->withErrors([
-                'group_name' => 'Tên nhóm đã tồn tại trong loại nhóm được chọn.'
-            ])->withInput();
+            return redirect()->back()->with('warning', 'Mã đối tượng đã tồn tại trong loại nhóm được chọn');
+        } else {
+            // Thêm mới nếu chưa tồn tại
+            $datagroup = [
+                'group_code'    => $request->group_code,
+                'group_name'    => $request->group_name,
+                'group_type_id' => $request->group_type_id,
+                'description'   => $request->description,
+                'created_at'    => now(),
+            ];
+
+            DB::table('groups')->insertGetId($datagroup);
+
+            return redirect()->route('groups.index')->with('msg', 'Thêm mới nhóm thành công!');
         }
-
-        // Thêm mới nếu chưa tồn tại
-        $datagroup = [
-            'group_code'    => $validatedData['group_code'],
-            'group_name'    => $validatedData['group_name'],
-            'group_type_id' => $validatedData['group_type_id'],
-            'description'   => $validatedData['description'],
-            'created_at'    => now(),
-        ];
-
-        DB::table('groups')->insertGetId($datagroup);   
-
-        return redirect()->route('groups.index')->with('msg', 'Thêm mới nhóm thành công!');
     }
 
     /**
@@ -152,9 +135,17 @@ class GroupsController extends Controller
         } else {
             $data['group_type_id'] = $currentGroup->group_type_id;
         }
-        $this->groups->updateGroup($data, $id);
-        session()->forget('idGr');
-        return redirect(route('groups.index'))->with('msg', 'Sửa nhóm đối tượng thành công');
+        $existingGroup = Groups::where('group_code', $request->group_code)
+            ->where('group_type_id', $data['group_type_id'])
+            ->where('id', '!=', $id)
+            ->first();
+        if ($existingGroup) {
+            return redirect()->back()->with('warning', 'Mã đối tượng đã tồn tại trong loại nhóm được chọn');
+        } else {
+            $this->groups->updateGroup($data, $id);
+            session()->forget('idGr');
+            return redirect(route('groups.index'))->with('msg', 'Sửa nhóm đối tượng thành công');
+        }
     }
 
 

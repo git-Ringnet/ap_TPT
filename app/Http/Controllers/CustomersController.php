@@ -44,7 +44,7 @@ class CustomersController extends Controller
     {
         $result = $this->customers->addGuest($request->all());
         if ($result == true) {
-            $msg = redirect()->back()->with('msg', 'Khách hàng đã tồn tại');
+            $msg = redirect()->back()->with('warning', 'Mã khách hàng hoặc tên khách hàng đã tồn tại!');
         } else {
             $msg = redirect()->route('customers.index')->with('msg', 'Thêm mới khách hàng thành công');
         }
@@ -86,20 +86,30 @@ class CustomersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = [
-            'customer_code' => $request->customer_code,
-            'customer_name' => $request->customer_name,
-            'address' => $request->address,
-            'contact_person' => $request->contact_person,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'tax_code' => $request->tax_code,
-            'note' => $request->note,
-            'group_id' => $request->grouptype_id,
-            'updated_at' => now(),
-        ];
-        $this->customers->updateCustomer($data, $id);
-        return redirect(route('customers.index'))->with('msg', 'Sửa khách hàng thành công');
+        $guests = Customers::where('id', '!=', $id)
+            ->where(function ($query) use ($request) {
+                $query->where('customer_code', $request->customer_code)
+                    ->orWhere('customer_name', $request->customer_name);
+            })
+            ->first();
+        if ($guests) {
+            return back()->with('warning', 'Mã khách hàng hoặc tên khách hàng đã tồn tại!');
+        } else {
+            $data = [
+                'customer_code' => $request->customer_code,
+                'customer_name' => $request->customer_name,
+                'address' => $request->address,
+                'contact_person' => $request->contact_person,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'tax_code' => $request->tax_code,
+                'note' => $request->note,
+                'group_id' => $request->grouptype_id,
+                'updated_at' => now(),
+            ];
+            $this->customers->updateCustomer($data, $id);
+            return redirect(route('customers.index'))->with('msg', 'Sửa khách hàng thành công');
+        }
     }
 
     /**

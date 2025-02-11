@@ -44,7 +44,7 @@ class ProvidersController extends Controller
     {
         $result = $this->providers->addProvide($request->all());
         if ($result['status'] == true) {
-            $msg = redirect()->back()->with('warning', 'Mã số thuế hoặc tên hiển thị đã tồn tại');
+            $msg = redirect()->back()->with('warning', 'Mã nhà cung cấp hoặc tên nhà cung cấp đã tồn tại!');
         } else {
             $msg = redirect()->route('providers.index')->with('msg', 'Thêm mới nhà cung cấp thành công');
         }
@@ -78,7 +78,7 @@ class ProvidersController extends Controller
     {
         $status =  $this->providers->updateProvide($request->all(), $id);
         if ($status) {
-            return redirect(route('providers.index'))->with('warning', 'Mã số thuế đã tồn tại');
+            return redirect()->back()->with('warning', 'Mã nhà cung cấp hoặc tên nhà cung cấp đã tồn tại!');
         } else {
             return redirect(route('providers.index'))->with('msg', 'Sửa nhà cung cấp thành công');
         }
