@@ -16,6 +16,7 @@ class CreateSerialNumbersTable extends Migration
                 ->default(1)
                 ->comment('1: Nhập hàng, 2: Xuất hàng, 3: Tiếp nhận, 4: Trả hàng');
             $table->string('note')->nullable();
+            $table->integer('warehouse_id')->default(1);
             $table->timestamps();
         });
     }

@@ -17,9 +17,6 @@ return new class extends Migration
         });
 
         // Update table inventory_lookup
-        Schema::table('inventory_lookup', function (Blueprint $table) {
-            $table->integer('warehouse_id')->default(1);
-        });
 
         Schema::table('exports', function (Blueprint $table) {
             $table->integer('warehouse_id')->default(1);
@@ -35,9 +32,6 @@ return new class extends Migration
             $table->dropColumn('warehouse_id'); // Xóa cột warehouse_id
         });
         // Revert changes to inventory_lookup table
-        Schema::table('inventory_lookup', function (Blueprint $table) {
-            $table->dropColumn('warehouse_id'); // Xóa cột warehouse_id
-        });
         Schema::table('exports', function (Blueprint $table) {
             $table->dropColumn('warehouse_id'); // Xóa cột warehouse_id
         });

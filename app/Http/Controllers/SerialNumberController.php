@@ -295,6 +295,11 @@ class SerialNumberController extends Controller
                     }
                 }
                 if ($formType == 3) {
+                    if ($warranty->status == 2) {
+                        return response()->json(['status' => 'success', 'message' => 'Số serial bảo hành dịch vụ.']);
+                    } else {
+                        return response()->json(['status' => 'error', 'message' => 'Số serial không bảo hành dịch vụ.']);
+                    }
                 }
             } else {
                 return response()->json(['status' => 'error', 'message' => 'Không tìm thấy thông tin bảo hành.']);

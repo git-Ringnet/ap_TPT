@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name_warranty')->nullable();
             $table->dateTime('export_return_date');
             $table->integer('warranty');
-            $table->integer('status');
+            $table->integer('status')->comment("0: Bảo hành, 1: Dịch vụ, 2: Bảo hành dịch vụ");
             $table->dateTime('warranty_expire_date')->comment("Ngày hết hạn bảo hành")->nullable();
             $table->timestamps();
         });

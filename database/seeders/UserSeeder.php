@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customers;
+use App\Models\Product;
+use App\Models\Providers;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -35,5 +38,24 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Ringnet@123'),
         ]);
         $serviceUser->assignRole('Bảo hành');
+
+        Customers::create([
+            'customer_code' => 'kh1',
+            'customer_name' => 'kh1',
+        ]);
+        Providers::create([
+            'provider_code' => 'ncc1',
+            'provider_name' => 'ncc1',
+        ]);
+        Product::insert([
+            [
+                'product_code' => 'sp1',
+                'product_name' => 'sp1',
+            ],
+            [
+                'product_code' => 'sp2',
+                'product_name' => 'sp2',
+            ],
+        ]);
     }
 }

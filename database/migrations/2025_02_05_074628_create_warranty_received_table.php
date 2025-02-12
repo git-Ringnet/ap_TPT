@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('warranty_received', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_received_id');
+            $table->unsignedBigInteger('product_received_id')->nullable();
             $table->unsignedBigInteger('product_return_id')->nullable();
             $table->string('name_warranty');
             $table->string('state_recei')->nullable();

@@ -8,6 +8,7 @@ use App\Models\InventoryLookup;
 use App\Models\Product;
 use App\Models\Providers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InventoryLookupController extends Controller
 {
@@ -22,14 +23,17 @@ class InventoryLookupController extends Controller
     public function index()
     {
         $title = "Tra cứu tồn kho";
-        $warehouse_id = GlobalHelper::getWarehouseId();
+        // $warehouse_id = GlobalHelper::getWarehouseId();
         $inventory = InventoryLookup::with(['product', 'serialNumber', 'provider'])
             ->whereHas('serialNumber', function ($query) {
                 $query->where('status', 1);
             });
-        if ($warehouse_id) {
-            $inventory = $inventory->where('warehouse_id', $warehouse_id);
-        }
+        // if (Auth::user()->roles()->first()->id != 1) {
+        //     if ($warehouse_id) {
+        //         $inventory = $inventory->where('warehouse_id', $warehouse_id);
+        //     }
+        // }
+
         $inventory = $inventory->get();
         $providers = Providers::all();
         return view('expertise.inventoryLookup.index', compact('title', 'inventory', 'providers'));

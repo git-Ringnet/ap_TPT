@@ -4,15 +4,15 @@
     <div class="content-header-fixed px-1">
         <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="[
-        'Mã hàng',
-        'Tên hàng',
-        'Hãng',
-        'Serial',
-        'Nhà cung cấp',
-        'Ngày nhập hàng',
-        'Thời gian tồn kho',
-        'Trạng thái',
-    ]">
+                'Mã hàng',
+                'Tên hàng',
+                'Hãng',
+                'Serial',
+                'Nhà cung cấp',
+                'Ngày nhập hàng',
+                'Thời gian tồn kho',
+                'Trạng thái',
+            ]">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
                 <x-filter-text name="ten-hang" title="Tên hàng" />
                 <x-filter-text name="serial" title="Serial" />
@@ -21,9 +21,9 @@
                     namedisplay="provider_name" />
                 <x-filter-date name="ngay-nhap-hang" title="Ngày nhập hàng" />
                 <x-filter-status name="trang-thai" title="Trạng thái" :filters="[
-        ['key' => '1', 'value' => 'Tới hạn bào trì', 'color' => '#858585'],
-        ['key' => '0', 'value' => 'Blank', 'color' => '#08AA36BF'],
-    ]" />
+                    ['key' => '1', 'value' => 'Tới hạn bào trì', 'color' => '#858585'],
+                    ['key' => '0', 'value' => 'Blank', 'color' => '#08AA36BF'],
+                ]" />
                 <x-filter-compare name="thoi-gian-ton-kho" title="Thời gian tồn kho" />
             </x-search-filter>
         </div>
@@ -109,7 +109,8 @@
                                         @can('admin')
                                             <th class="height-40 py-0 border-right-0" scope="col">
                                                 <span class="d-flex justify-content-start">
-                                                    <a href="#" class="sort-link btn-submit" data-sort-by="username" data-sort-type="DESC">
+                                                    <a href="#" class="sort-link btn-submit"
+                                                        data-sort-by="username" data-sort-type="DESC">
                                                         <button class="btn-sort" type="submit">
                                                             <span class="text-14">Kho</span>
                                                         </button>
@@ -173,11 +174,12 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->import_date), 'd/m/Y') }}
                                             </td>
-                                                @can('admin')
-                                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                        {{ $item->warehouse->warehouse_name }}
-                                                    </td>
-                                                @endcan
+                                            @can('admin')
+                                                <td
+                                                    class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                    {{ $item->serialNumber->warehouse->warehouse_name }}
+                                                </td>
+                                            @endcan
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->storage_duration }} ngày

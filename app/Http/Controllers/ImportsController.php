@@ -100,6 +100,7 @@ class ImportsController extends Controller
                     'serial_code' => str_replace(' ', '', $serial['serial']),
                     'product_id' => $serial['product_id'],
                     'note' => $serial['note_seri'],
+                    'warehouse_id' => $warehouse_id ?? 1,
                 ]);
                 ProductImport::create([
                     'import_id' => $import_id,
@@ -116,7 +117,6 @@ class ImportsController extends Controller
                     'import_date' => $request->date_create,
                     'storage_duration' => 0,
                     'status' => 0,
-                    'warehouse_id' => $warehouse_id ?? 1,
                 ]);
 
                 $records = InventoryLookup::all();

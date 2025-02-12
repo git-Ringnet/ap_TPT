@@ -104,6 +104,9 @@
                                     <span class="text-table text-13-black font-weight-bold">Serial Number đổi</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
+                                    <span class="text-table text-13-black font-weight-bold">Thông tin</span>
+                                </th>
+                                <th class="border-right px-2 p-0">
                                     <span class="text-table text-13-black font-weight-bold">Bảo hành thêm (tháng)</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
@@ -149,6 +152,9 @@
                                     </td>
                                     <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
                                         {{ $item->productReturn->replacementSerialNumber->serial_code ?? '' }}
+                                    </td>
+                                    <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
+                                        {{ $item->productReturn->warranties->name_warranty ?? null }}
                                     </td>
                                     <td class="text-13-black border border-left-0 border-bottom border-top-0 py-0">
                                         {{ $item->productReturn->extra_warranty ?? '' }}

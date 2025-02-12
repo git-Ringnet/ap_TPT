@@ -25,6 +25,7 @@ class SerialNumber extends Model
         'serial_code',
         'product_id',
         'status',
+        'warehouse_id',
         'note'
     ];
 
@@ -50,5 +51,9 @@ class SerialNumber extends Model
     public function productImports()
     {
         return $this->hasMany(ProductImport::class, 'sn_id', 'id');
+    }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
 }

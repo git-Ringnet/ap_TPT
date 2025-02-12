@@ -15,6 +15,7 @@ class WarrantyReceived extends Model
         'product_received_id',
         'name_warranty',
         'state_recei',
+        'product_return_id',
         'note',
     ];
 
@@ -22,5 +23,9 @@ class WarrantyReceived extends Model
     public function productReceived()
     {
         return $this->belongsTo(ReceivedProduct::class, 'product_received_id');
+    }
+    public function productReturn()
+    {
+        return $this->belongsTo(ProductReturn::class, 'product_return_id');
     }
 }

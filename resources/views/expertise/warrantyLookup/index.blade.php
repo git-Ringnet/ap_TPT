@@ -149,7 +149,7 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                <a href="{{ route('warrantyLookup.edit', $item->id) }}">
+                                                <a href="{{ route('warrantyLookup.edit', $item->serialNumber->id) }}">
                                                     {{ $item->serialNumber->serial_code }}
                                                 </a>
                                             </td>

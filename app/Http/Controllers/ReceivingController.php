@@ -94,12 +94,14 @@ class ReceivingController extends Controller
 
                 // Lưu thông tin bảo hành cho từng serial
                 foreach ($product['id_seri'] as $index => $serial) {
-                    WarrantyReceived::create([
-                        'product_received_id' => $receivedProduct->id,
-                        'name_warranty'       => $product['name_warranty'][$index] ?? null,
-                        'state_recei'         => $product['warranty'][$index] ?? null,
-                        'note'                => $product['note_seri'][$index] ?? null,
-                    ]);
+                    if ($product['name_warranty'][$index] != null) {
+                        WarrantyReceived::create([
+                            'product_received_id' => $receivedProduct->id,
+                            'name_warranty'       => $product['name_warranty'][$index] ?? null,
+                            'state_recei'         => $product['warranty'][$index] ?? null,
+                            'note'                => $product['note_seri'][$index] ?? null,
+                        ]);
+                    }
                 }
             }
             DB::commit();

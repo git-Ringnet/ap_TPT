@@ -10,7 +10,7 @@
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Chọn phiếu tiếp nhận :</span>
                         <div class="form-check form-check-inline mr-1">
-                            <input type="hidden" name="reception_id" value="{{$returnForm->reception_id}}">
+                            <input type="hidden" name="reception_id" value="{{ $returnForm->reception_id }}">
                             <select class="form-check-input border-0 text text-13-black" name="reception" required
                                 disabled id="reception">
                                 <option value="">Chưa chọn phiếu</option>
@@ -265,14 +265,14 @@
                         <section class="content" style="overflow-x:visible">
                             <table class="table" id="inputcontent">
                                 @php
-$hideReplacement =
-    $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
-    ? 'd-none'
-    : '';
-$hideExtraWarranty =
-    $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
-    ? 'd-none'
-    : '';
+                                    $hideReplacement =
+                                        $returnForm->reception->form_type == 2 || $returnForm->reception->form_type == 3
+                                            ? 'd-none'
+                                            : '';
+                                    $hideExtraWarranty =
+                                        $returnForm->reception->form_type == 1 || $returnForm->reception->form_type == 3
+                                            ? 'd-none'
+                                            : '';
                                 @endphp
                                 <thead>
                                     <tr style="height:44px;">
@@ -298,6 +298,10 @@ $hideExtraWarranty =
                                         <th class="border-right note px-2 p-0 text-left col-replacement-serial {{ $hideReplacement }}"
                                             style="width:10%;">
                                             <span class="text-table text-secondary">Serial Number đổi</span>
+                                        </th>
+                                        <th class="border-right note px-2 p-0 text-left col-extra-warranty {{ $hideExtraWarranty }}"
+                                            style="width:8%;">
+                                            <span class="text-table text-secondary">Thông tin</span>
                                         </th>
                                         <th class="border-right note px-2 p-0 text-left col-extra-warranty {{ $hideExtraWarranty }}"
                                             style="width:8%;">
@@ -378,6 +382,14 @@ $hideExtraWarranty =
                                                     class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue"
                                                     name="return[{{ $id }}][replacement_serial_number_id]"
                                                     value="{{ $item->replacementSerialNumber->serial_code ?? '' }}">
+                                            </td>
+                                            <td
+                                                class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
+                                                <input type="text" min="0" max="100"
+                                                    autocomplete="off"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32"
+                                                    readonly name="return[{{ $id }}][extra_warranty]"
+                                                    value="{{ $item->warranties->name_warranty ?? '' }}">
                                             </td>
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">

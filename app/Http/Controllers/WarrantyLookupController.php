@@ -69,10 +69,18 @@ class WarrantyLookupController extends Controller
     public function edit(String $id)
     {
         $title = "Tra cứu bảo hành";
-        $warrantyLookup = warrantyLookup::with(['product'])
-            ->where("id", $id)->first();
+        $warrantyLookup = warrantyLookup::with(['product', 'warrantyHistories'])
+            ->where("sn_id", $id)->first();
+        // dd($grouped);
         $warrantyHistory = warrantyHistory::with(['warrantyLookup', 'receiving', 'returnForm', 'productReturn'])
-            ->where('warranty_lookup_id', $id)->orderBy('id', 'desc')->get();
+            ->whereHas('warrantyLookup', function ($query) use ($id) {
+                $query->where('sn_id', $id);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // dd($warrantyHistory);
+        // $warrantyHistory = $grouped->warrantyHistories;
         return view('expertise.warrantyLookup.edit', compact('title', 'warrantyLookup', 'warrantyHistory'));
     }
 
