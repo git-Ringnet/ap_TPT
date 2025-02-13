@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', $title ?? 'Trang chủ')</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon/favicontpt.ico') }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <script src="https://kit.fontawesome.com/774b78ff1e.js" crossorigin="anonymous"></script>
