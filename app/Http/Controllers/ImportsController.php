@@ -15,6 +15,7 @@ use App\Models\Receiving;
 use App\Models\ReturnForm;
 use App\Models\SerialNumber;
 use App\Models\User;
+use App\Notifications\InventoryLookupNotification;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -118,36 +119,65 @@ class ImportsController extends Controller
                     'storage_duration' => 0,
                     'status' => 0,
                 ]);
+            }
+        }
 
-                $records = InventoryLookup::all();
-                foreach ($records as $record) {
-                    // Tính thời gian tồn kho
-                    $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
-                    $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
+        // Lấy tất cả các bản ghi trong InventoryLookup
+        $records = InventoryLookup::all();
 
-                    // Cập nhật thời gian tồn kho
-                    $record->update(['storage_duration' => $storageDuration]);
+        foreach ($records as $record) {
+            // Tính thời gian tồn kho
+            $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
+            $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
 
-                    // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
-                    if ($storageDuration >= 90 && !$record->warranty_date) {
-                        // Lần bảo trì đầu tiên
-                        $record->status = 1;
-                        $record->save();
-                    } else if ($record->warranty_date) {
-                        // Các lần bảo trì tiếp theo
-                        $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
+            // Cập nhật thời gian tồn kho
+            $record->update(['storage_duration' => $storageDuration]);
 
-                        if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
-                            // Nếu đã tới thời gian bảo trì tiếp theo
-                            $record->status = 1;
-                            $record->save();
-                        }
-                    }
+            // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
+            if ($storageDuration >= 90 && !$record->warranty_date) {
+                // Lần bảo trì đầu tiên
+                $record->status = 1;
+                $record->save();
+                // Gửi thông báo lần bảo trì đầu tiên
+                $message = "tới hạn bảo trì";
+                $this->notifyStatusChange($record, $message);
+            } else if ($record->warranty_date) {
+                // Các lần bảo trì tiếp theo
+                $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
+
+                if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
+                    // Nếu đã tới thời gian bảo trì tiếp theo
+                    $record->status = 1;
+                    $record->save();
+                    // Gửi thông báo lần bảo trì tiếp theo
+                    $message = "tới hạn bảo trì";
+                    $this->notifyStatusChange($record, $message);
                 }
+            } else {
+                $record->status = 0;
+                $record->save();
             }
         }
 
         return redirect()->route('imports.index')->with('msg', 'Tạo phiếu nhập hàng thành công!');
+    }
+
+    private function notifyStatusChange($record, $message)
+    {
+        $users = User::all(); // Lọc user cần thiết nếu muốn
+        foreach ($users as $user) {
+            // Gửi thông báo nếu chưa tồn tại thông báo tương tự cho user
+            $existingNotification = $user->notifications()
+                ->where('type', InventoryLookupNotification::class)
+                ->where('data->inventoryLookup_id', $record->id)
+                ->where('data->message', $message)
+                ->where('data->warranty_date', $record->warranty_date)
+                ->exists();
+
+            if (!$existingNotification) {
+                $user->notify(new InventoryLookupNotification($record, $message));
+            }
+        }
     }
 
     /**
@@ -248,13 +278,14 @@ class ImportsController extends Controller
         // Thêm mới các serial
         foreach ($newSerials as $serialData) {
             if (isset($serialData['serial']) && !empty($serialData['serial'])) {
-                $normalizedSerial = strtolower(trim(str_replace(' ', '', $serialData['serial'])));
+                $normalizedSerial = trim(str_replace(' ', '', $serialData['serial']));
 
                 $newSerial = SerialNumber::create([
                     'serial_code' => $normalizedSerial,
                     'product_id' => $serialData['product_id'],
                 ]);
 
+                $normalizedSerial = strtolower(trim(str_replace(' ', '', $serialData['serial'])));
                 $serialIds[$normalizedSerial] = $newSerial->id;
 
                 // Thêm vào InventoryLookup
@@ -310,6 +341,43 @@ class ImportsController extends Controller
         if ($removedSnIds->isNotEmpty()) {
             SerialNumber::whereIn('id', $removedSnIds)->delete();
             InventoryLookup::whereIn('sn_id', $removedSnIds)->delete();
+        }
+
+        // Lấy tất cả các bản ghi trong InventoryLookup
+        $records = InventoryLookup::all();
+
+        foreach ($records as $record) {
+            // Tính thời gian tồn kho
+            $receivedDate = Carbon::parse($record->import_date); // Ngày nhập kho
+            $storageDuration = $receivedDate->diffInDays(Carbon::now()); // Tính số ngày tồn kho
+
+            // Cập nhật thời gian tồn kho
+            $record->update(['storage_duration' => $storageDuration]);
+
+            // Kiểm tra lần bảo trì đầu tiên hoặc các lần sau
+            if ($storageDuration >= 90 && !$record->warranty_date) {
+                // Lần bảo trì đầu tiên
+                $record->status = 1;
+                $record->save();
+                // Gửi thông báo lần bảo trì đầu tiên
+                $message = "tới hạn bảo trì";
+                $this->notifyStatusChange($record, $message);
+            } else if ($record->warranty_date) {
+                // Các lần bảo trì tiếp theo
+                $nextMaintenanceDate = Carbon::parse($record->warranty_date)->addDays(90);
+
+                if (Carbon::now()->greaterThanOrEqualTo($nextMaintenanceDate)) {
+                    // Nếu đã tới thời gian bảo trì tiếp theo
+                    $record->status = 1;
+                    $record->save();
+                    // Gửi thông báo lần bảo trì tiếp theo
+                    $message = "tới hạn bảo trì";
+                    $this->notifyStatusChange($record, $message);
+                }
+            } else {
+                $record->status = 0;
+                $record->save();
+            }
         }
 
         return redirect()->route('imports.index')->with('msg', 'Cập nhật thành công phiếu nhập hàng!');

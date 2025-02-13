@@ -22,7 +22,7 @@
                 <div class="position-relative">
                     <p class="m-0 p-0 text-13-black">Nhà cung cấp</p>
                     <input type="text" placeholder="Chọn thông tin" readonly
-                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-white"
+                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-input-guest-blue"
                         autocomplete="off" id="inputProvider">
                     <input type="hidden" class="idProviderMiniView">
                     <div id="listGuestMiniView"
@@ -59,7 +59,7 @@
                 <div class="position-relative">
                     <p class="m-0 p-0 text-13-black">Khách hàng</p>
                     <input type="text" placeholder="Chọn thông tin" readonly
-                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-white"
+                        class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameProviderMiniView bg-input-guest-blue"
                         autocomplete="off" id="inputProvider">
                     <input type="hidden" class="idProviderMiniView">
                     <div id="listGuestMiniView"
@@ -95,7 +95,7 @@
             <div class="mt-2 position-relative">
                 <p class="m-0 p-0 text-13-black">Người lập</p>
                 <input type="text" placeholder="Chọn thông tin" readonly
-                    class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameUserMiniView bg-white"
+                    class="w-100 bg-input-guest py-2 px-2 form-control text-13-black nameUserMiniView bg-input-guest-blue"
                     autocomplete="off" id="inputUser">
                 <input type="hidden" class="idUserMiniView">
                 <div id="listUserMiniView"
@@ -403,7 +403,7 @@
                     <td class="text-13-black text-left border-top-0 border-bottom">${detail.date_create}</td>
                     <td class="text-13-black text-left border-top-0 border-bottom ${hienThiTinhTrang}">${detail.status}</td>
                     <td class="text-13-black text-left border-top-0 border-bottom ${hienThiLoaiPhieu}">${detail.form_type}</td>
-                    <td class="text-13-black text-left border-top-0 border-bottom">${ten}</td>
+                    <td class="text-13-black text-left border-top-0 border-bottom max-width120">${ten}</td>
                 </tr>
             `;
             }).join('');
