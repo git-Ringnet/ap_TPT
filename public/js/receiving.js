@@ -559,18 +559,14 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             success: function (response) {
-                let values = Object.values(response);
-                console.log(values);
-
+                let valuesr = Object.values(response);
+                let values = valuesr.map((item) => item.status);
                 let allInternal = values.every(
                     (status) => status === "success"
                 );
                 let allExternal = values.every(
                     (status) => status === "external"
                 );
-
-                console.log(allInternal);
-                console.log(allExternal);
 
                 if (allInternal || allExternal) {
                     showAutoToast("success", "Đang tạo đơn tiếp nhận");
