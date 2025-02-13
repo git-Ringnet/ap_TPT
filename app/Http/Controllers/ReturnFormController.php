@@ -95,12 +95,13 @@ class ReturnFormController extends Controller
                 $note = $returnItem['note'] ?? null;
                 $replacement_serial_number_id = $returnItem['replacement_serial_number_id'] ?? null;
                 $replacement_code = $returnItem['replacement_code'] ?? null;
-
-                $replacementSerialId = SerialNumber::where('serial_code', $replacement_serial_number_id)
-                    ->where('product_id', $replacement_code)
-                    ->where('status', 1)
-                    ->first();
-
+                $replacementSerialId = null;
+                if ($replacement_serial_number_id != null) {
+                    $replacementSerialId = SerialNumber::where('serial_code', $replacement_serial_number_id)
+                        ->where('product_id', $replacement_code)
+                        ->where('status', 1)
+                        ->first();
+                }
                 $stateRecei = $validated['status'] == 1 ? 3 : 4;
                 Receiving::find($validated['reception_id'])->update([
                     'status' => $stateRecei,
