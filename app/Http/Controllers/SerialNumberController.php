@@ -308,6 +308,48 @@ class SerialNumberController extends Controller
         }
         return false;
     }
+
+    public function checkAllWarranty(Request $request)
+    {
+        $formType = $request->input('form_type');
+        $serialData = $request->input('serials'); // Nhận mảng serials
+        $warrantyId = $request->input('warranty');
+
+        if (!is_array($serialData) || empty($serialData)) {
+            return response()->json(['status' => 'error', 'message' => 'Danh sách serials không hợp lệ.']);
+        }
+
+        $results = [];
+        foreach ($serialData as $serial) {
+            $serialCheck = SerialNumber::where('serial', $serial)->first(); // Giả sử có cột serial
+
+            if ($serialCheck) {
+                $warranty = DB::table('warranty_lookup')
+                    ->where('sn_id', $serialCheck->id)
+                    ->where('id', $warrantyId)
+                    ->first();
+
+                if ($warranty) {
+                    if ($formType == 1 && $warranty->status == 0) {
+                        $results[] = ['serial' => $serial, 'status' => 'success', 'message' => 'Còn bảo hành'];
+                    } elseif ($formType == 2 && $warranty->status == 1) {
+                        $results[] = ['serial' => $serial, 'status' => 'success', 'message' => 'Hết bảo hành'];
+                    } elseif ($formType == 3 && $warranty->status == 2) {
+                        $results[] = ['serial' => $serial, 'status' => 'success', 'message' => 'Bảo hành dịch vụ'];
+                    } else {
+                        $results[] = ['serial' => $serial, 'status' => 'error', 'message' => 'Trạng thái không phù hợp'];
+                    }
+                } else {
+                    $results[] = ['serial' => $serial, 'status' => 'error', 'message' => 'Không tìm thấy thông tin bảo hành'];
+                }
+            } else {
+                $results[] = ['serial' => $serial, 'status' => 'error', 'message' => 'Serial không tồn tại'];
+            }
+        }
+
+        return response()->json($results);
+    }
+
     public function checkbrands(Request $request)
     {
         $serialData = $request->input('serials');

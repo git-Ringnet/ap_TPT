@@ -423,11 +423,27 @@
         $('input[type="radio"]').on('change', function() {
             let formType = $('input[name="form_type"]:checked').val();
             let contentWrapper = $('#content-wrapper');
+
             if (formType) {
                 contentWrapper.removeClass('blur-wrapper');
+                // Gọi hàm kiểm tra bảo hành
+                checkWarrantyStatus(formType);
             } else {
                 contentWrapper.addClass('blur-wrapper');
             }
         });
+
+        // Hàm kiểm tra trạng thái bảo hành
+        function checkWarrantyStatus(formType) {
+            $('.name_warranty').each(function() {
+                let warrantyInput = $(this);
+                let serialData = warrantyInput.siblings('.id_seri').val(); // Lấy giá trị serial
+                let warrantyId = warrantyInput.siblings('.id_warranty')
+                    .val(); // Lấy giá trị warranty ID
+                let checkIcon = warrantyInput.next('.check-icon'); // Lấy biểu tượng check
+                // Gọi hàm kiểm tra bảo hành
+                checkSerials(formType, serialData, warrantyId, checkIcon);
+            });
+        }
     });
 </script>

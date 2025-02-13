@@ -61,6 +61,7 @@ Route::get('/check-serial-replace', [SerialNumberController::class, 'checkSNRepl
 Route::post('/check-serial-numbers', [SerialNumberController::class, 'checkSerialNumbers'])->name('check.serial.numbers');
 
 Route::post('/check-serials', [SerialNumberController::class, 'checkSerials'])->name('check.serials');
+Route::post('/check-all-warranty', [SerialNumberController::class, 'checkAllWarranty'])->name('check.warranty');
 Route::post('/check-brands', [SerialNumberController::class, 'checkbrands'])->name('check.brands');
 
 // Filter

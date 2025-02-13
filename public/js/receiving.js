@@ -39,7 +39,7 @@ $(document).ready(function () {
             const keyword = $(this).val().toLowerCase(); // Từ khóa tìm kiếm
             const $row = $(this).closest("tr");
             const $dropdown = $row.find(".warranty-dropdown");
-
+            $(this).next(".check-icon").text("");
             $dropdown.find("li").each(function () {
                 const warrantyName = $(this)
                     .find(".warranty-name")
