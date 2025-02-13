@@ -307,7 +307,7 @@
                                                                     data-brand="{{ $product_value->brand }}"
                                                                     data-id="{{ $product_value->id }}">
                                                                     <span class='w-50 text-13-black'
-                                                                        style='flex:2'>{{ $product_value->product_name }}</span>
+                                                                        style='flex:2'>{{ $product_value->product_code }}</span>
                                                                 </a>
                                                             </li>
                                                         @endforeach

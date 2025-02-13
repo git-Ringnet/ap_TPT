@@ -91,7 +91,7 @@ $(document).ready(function () {
         var productId = $(this).data("id");
         var clickedRow = $(this).closest("tr");
         // Gán giá trị vào input
-        clickedRow.find(".product_code").val(productName);
+        clickedRow.find(".product_code").val(productCode);
         clickedRow.find(".product_name").val(productName);
         clickedRow.find(".brand").val(productBrand);
         clickedRow.find(".product_id").val(productId);

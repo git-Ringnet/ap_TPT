@@ -536,7 +536,7 @@ class ReturnFormController extends Controller
 
                 $returnForm->reception->update([
                     'status' => 2,
-                    'state' => 1,
+                    'state' => 0,
                     'closed_at' => null
                 ]);
             }
