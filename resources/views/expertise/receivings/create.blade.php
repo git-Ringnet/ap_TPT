@@ -303,7 +303,8 @@
                                             name="product_id[0][id_warranty][]" data-index="0" value="">
                                         <input type="text" autocomplete="off"
                                             class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
-                                            name="product_id[0][name_warranty][]" data-index="0" value="">
+                                            name="product_id[0][name_warranty][]" data-index="0" value=""
+                                            required>
                                         <span class="check-icon"></span>
                                         <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                                             style='z-index: 99;top: 75%;display: none;'>

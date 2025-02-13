@@ -352,12 +352,12 @@
                                                         class="border-0 pl-1 pr-2 py-1 w-100 id_warranty height-32"
                                                         name="product_id[{{ $indexRecei }}][id_warranty][]"
                                                         data-index="{{ $indexRecei }}"
-                                                        value="{{ $receivedProduct->warrantyReceived[0]->id }}">
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->id ?? '' }}">
                                                     <input type="text" autocomplete="off"
                                                         class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
                                                         name="product_id[{{ $indexRecei }}][name_warranty][]"
                                                         data-index="{{ $indexRecei }}"
-                                                        value="{{ $receivedProduct->warrantyReceived[0]->name_warranty }}">
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->name_warranty ?? '' }}">
                                                     <span class="check-icon"></span>
                                                     <ul class='warranty-dropdown bg-white position-absolute w-100 rounded shadow p-0 scroll-data'
                                                         style='z-index: 99;top: 75%;display: none;'>
@@ -369,7 +369,7 @@
                                                         class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
                                                         name="product_id[{{ $indexRecei }}][warranty][]"
                                                         data-index="{{ $indexRecei }}"
-                                                        value="{{ $receivedProduct->warrantyReceived[0]->state_recei }}">
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->state_recei ?? '' }}">
                                                 </td>
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
@@ -377,7 +377,7 @@
                                                         class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
                                                         name="product_id[{{ $indexRecei }}][note_seri][]"
                                                         data-index="{{ $indexRecei }}"
-                                                        value="{{ $receivedProduct->warrantyReceived[0]->note }}">
+                                                        value="{{ $receivedProduct->warrantyReceived[0]->note ?? '' }}">
                                                 </td>
                                                 <td class="p-2 align-top border-bottom border-top-0 border-right"><svg
                                                         class="delete-row" width="17" height="17"
