@@ -1580,7 +1580,7 @@ input[type="number"] {
     border: 1px solid rgba(40, 167, 69, 0.5);
 }
 
-.external {
+.errorinput {
     background-color: rgba(220, 53, 69, 0.2) !important;
     /* Màu đỏ nhạt */
     color: #721c24;

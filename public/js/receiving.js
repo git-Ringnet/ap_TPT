@@ -433,7 +433,7 @@ function checkSerials(formType, serialData, warranty, checkIcon) {
     });
 }
 
-function checkbranchId(serials, product_id, className) {
+function checkbranchId(serials, product_id, className, checkIcon) {
     $.ajax({
         url: "/check-brands",
         method: "POST",
@@ -447,15 +447,20 @@ function checkbranchId(serials, product_id, className) {
         success: function (response) {
             console.log(response.message);
             // Xóa lớp màu cũ trước khi thêm lớp mới
-            className.removeClass("internal external bg-input-guest-blue");
+            className.removeClass("internal errorinput bg-input-guest-blue");
             if (response.status === "success") {
                 className
                     .addClass("internal")
                     .attr("title", "Sản phẩm này thuộc nội bộ");
-            } else if (response.status === "error") {
+            } else if (response.status === "external") {
                 className
-                    .addClass("external")
+                    .addClass("bg-input-guest-blue")
                     .attr("title", "Sản phẩm này thuộc bên ngoài");
+            } else {
+                className
+                    .addClass("errorinput")
+                    .attr("title", response.message);
+                checkIcon.text("✖").css("color", "red");
             }
         },
         error: function () {
@@ -465,67 +470,121 @@ function checkbranchId(serials, product_id, className) {
 }
 
 // Check for duplicate serials when input changes
-$(document).on("input", ".serial", function () {
+let enteredSerials = [];
+
+$(document).on("blur", ".serial", function () {
     const currentInput = $(this);
     const currentValue = currentInput.val().trim();
     const product_id = currentInput.closest("tr").find(".product_id").val();
+    const checkIcon = currentInput.siblings(".check-icon-seri");
 
-    // Nếu input rỗng, xóa icon và dừng kiểm tra
+    // Xóa icon nếu input rỗng
+    checkIcon.text("");
     if (!currentValue) {
-        currentInput.siblings(".check-icon-seri").text("");
-        currentInput.addClass("bg-input-guest");
         currentInput.removeClass("internal external");
+        currentInput.addClass("bg-input-guest-blue");
         return;
     }
 
-    let isDuplicate = false;
-
-    // Reset trạng thái trước khi kiểm tra
+    // Lấy danh sách tất cả serials hiện tại trong bảng
+    let currentSerials = [];
     $(".serial").each(function () {
-        const $this = $(this);
-        const $checkIcon = $this.siblings(".check-icon-seri");
-
-        if ($this.val().trim()) {
-            if ($checkIcon.text() !== "✔") {
-                $checkIcon.text("✔").css("color", "green");
-            }
-            $this.css("background-color", ""); // Xóa nền đỏ nếu có
-        } else {
-            $checkIcon.text(""); // Xóa icon nếu trống
+        let value = $(this).val().trim();
+        if (value) {
+            currentSerials.push(value);
         }
     });
 
-    // Kiểm tra trùng lặp
-    $(".serial")
-        .not(currentInput)
-        .each(function () {
-            const $this = $(this);
-            const thisValue = $this.val().trim();
+    // Kiểm tra serial bị trùng trong danh sách
+    let duplicateCount = currentSerials.filter(
+        (value) => value === currentValue
+    ).length;
 
-            if (thisValue && thisValue === currentValue) {
-                const $thisCheckIcon = $this.siblings(".check-icon-seri");
-                const $currentCheckIcon =
-                    currentInput.siblings(".check-icon-seri");
+    if (duplicateCount > 1) {
+        checkIcon
+            .text("✖")
+            .css("color", "red")
+            .attr("title", "Serial đã tồn tại trong danh sách!");
+        return;
+    }
 
-                $thisCheckIcon.text("✖").css("color", "red");
-                $currentCheckIcon.text("✖").css("color", "red");
-                $this.css("background-color", "#ffcccc");
-                currentInput.css("background-color", "#ffcccc");
-                isDuplicate = true;
+    // Gửi request AJAX để kiểm tra serial nội bộ hoặc bên ngoài
+    if (typeof checkbranchId === "function") {
+        checkbranchId(currentValue, product_id, currentInput, checkIcon);
+    }
+});
+
+$(document).ready(function () {
+    $("#btn-get-unique-products").on("click", function (e) {
+        e.preventDefault(); // Ngăn chặn form submit ngay lập tức
+
+        const idcus = $("#customer_id").val();
+        if (!idcus) {
+            showAutoToast("warning", "Vui lòng chọn khách hàng!");
+            $("#customer_name").click();
+            return false;
+        }
+
+        if (
+            $(".check-icon-seri, .check-icon").filter(function () {
+                return $(this).text().trim() === "✖";
+            }).length > 0
+        ) {
+            showAutoToast(
+                "warning",
+                "Dữ liệu không hợp lệ vui lòng kiểm tra lại"
+            );
+            return;
+        }
+
+        let serials = [];
+        $(".serial").each(function () {
+            let serial = $(this).val().trim();
+            if (serial !== "") {
+                serials.push(serial);
             }
         });
 
-    // Nếu không còn trùng lặp, xóa dấu ✖ và giữ dấu ✔
-    if (!isDuplicate) {
-        const $currentCheckIcon = currentInput.siblings(".check-icon-seri");
-        if ($currentCheckIcon.text() !== "✔") {
-            $currentCheckIcon.text("✔").css("color", "green");
+        if (serials.length === 0) {
+            showAutoToast("warning", "Vui lòng nhập ít nhất một số serial.");
+            return;
         }
-        currentInput.css("background-color", "");
-    }
 
-    // Gọi checkbranchId nhưng đảm bảo không gây vòng lặp vô hạn
-    if (typeof checkbranchId === "function") {
-        checkbranchId(currentValue, product_id, $(this));
-    }
+        $.ajax({
+            url: "/check-brands",
+            type: "POST",
+            data: { serials: serials },
+            dataType: "json",
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            success: function (response) {
+                let values = Object.values(response);
+                console.log(values);
+
+                let allInternal = values.every(
+                    (status) => status === "success"
+                );
+                let allExternal = values.every(
+                    (status) => status === "external"
+                );
+
+                console.log(allInternal);
+                console.log(allExternal);
+
+                if (allInternal || allExternal) {
+                    showAutoToast("success", "Đang tạo đơn tiếp nhận");
+                    $("#form-submit").submit();
+                } else {
+                    showAutoToast(
+                        "warning",
+                        "Tất cả serials phải là hàng nội bộ hoặc hàng bên ngoài. Vui lòng kiểm tra lại!"
+                    );
+                }
+            },
+            error: function () {
+                showAutoToast("warning", "Có lỗi, vui lòng thử lại");
+            },
+        });
+    });
 });

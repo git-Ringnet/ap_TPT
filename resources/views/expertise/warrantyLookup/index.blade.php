@@ -167,7 +167,7 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->name_status }}
+                                                {{ $item->status_string }}
                                             </td>
                                         </tr>
                                     @endforeach

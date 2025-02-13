@@ -22,13 +22,19 @@ class WarrantyLookupController extends Controller
         $title = "Tra cứu bảo hành";
         $warranty = warrantyLookup::with(['product', 'serialNumber', 'customer'])->get();
         $grouped = $warranty->groupBy('sn_id')->map(function ($items) {
-            // Lấy phần tử đầu tiên
-            $first = $items->first();
+            // Sao chép dữ liệu để tránh ảnh hưởng đến bản gốc
+            $first = $items->first()->replicate();
 
             // Nối name_warranty và warranty theo định dạng yêu cầu
             $first->name_warranty = $items->map(function ($item) {
-                return $item->name_warranty . ": " . $item->warranty;  // Nối name_warranty và warranty
-            })->join('; ');  // Nối các giá trị với dấu phân cách "; "
+                return $item->name_warranty . ": " . $item->warranty;
+            })->join('; ');
+
+            // Nối status với điều kiện chuyển đổi
+            $first->status_string = $items->map(function ($item) {
+                $statusText = $item->status == 1 ? 'Hết bảo hành' : 'Còn bảo hành';
+                return $item->name_warranty . ": " . $statusText;
+            })->join('| ');
 
             return $first;
         });

@@ -311,12 +311,33 @@ class SerialNumberController extends Controller
     public function checkbrands(Request $request)
     {
         $serialData = $request->input('serials');
+        $product_id = $request->input('product_id');
 
+        if (is_array($serialData)) {
+            $result = [];
+            foreach ($serialData as $serial) {
+                $sericheck = SerialNumber::where('serial_code', $serial)->first();
+                if ($sericheck) {
+                    if ($sericheck->product_id == $product_id) {
+                        $result[$serial] = ['status' => 'success', 'message' => 'Số serial nội bộ.'];
+                    }
+                } else {
+                    $result[$serial] = ['status' => 'external', 'message' => 'Số serial bên ngoài.'];
+                }
+            }
+
+            return response()->json($result);
+        }
+        // Kiểm tra với một serial duy nhất
         $sericheck = SerialNumber::where('serial_code', $serialData)->first();
         if ($sericheck) {
-            return response()->json(['status' => 'success', 'message' => 'Số serial nội bộ.']);
+            if ($sericheck->product_id == $product_id) {
+                return response()->json(['status' => 'success', 'message' => 'Số serial nội bộ.']);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Serial không thuộc sản phẩm này.']);
+            }
         } else {
-            return response()->json(['status' => 'error', 'message' => 'Số serial bên ngoài.']);
+            return response()->json(['status' => 'external', 'message' => 'Số serial bên ngoài.']);
         }
     }
 }

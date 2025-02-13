@@ -28,7 +28,7 @@ function showAutoToast(type, message) {
 
     Toastify({
         text: message, // Nội dung thông báo
-        duration: 3000, // Thời gian hiển thị (ms)
+        duration: 4000, // Thời gian hiển thị (ms)
         close: true, // Cho phép đóng thông báo
         gravity: "top", // Vị trí hiển thị (top, bottom, left, right)
         position: "center",

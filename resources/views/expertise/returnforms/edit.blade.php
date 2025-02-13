@@ -387,8 +387,8 @@
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
                                                 <input type="text" min="0" max="100"
                                                     autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32"
-                                                    readonly name="return[{{ $id }}][extra_warranty]"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32"
+                                                    readonly name="return[{{ $id }}][name_warranty]"
                                                     value="{{ $item->warranties->name_warranty ?? '' }}">
                                             </td>
                                             <td

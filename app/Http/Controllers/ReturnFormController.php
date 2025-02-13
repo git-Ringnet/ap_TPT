@@ -267,14 +267,12 @@ class ReturnFormController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        // Tìm bản ghi return form
-        $returnForm = ReturnForm::findOrFail($id);
-        // Xác thực dữ liệu đầu vào
+        // Validate input data with unique rule exceptions for the current record
         $validated = $request->validate([
-            'reception_id' => 'required|integer|unique:quotations,reception_id,' . $returnForm->id,
-            'return_code' => 'required|unique:return_form,return_code,' . $returnForm->id,
+            'reception_id' => 'required|unique:return_form,reception_id,' . $id,
+            'return_code' => 'required|unique:return_form,return_code,' . $id,
             'customer_id' => 'required|exists:customers,id',
             'address' => 'nullable|string',
             'date_created' => 'required|date',
@@ -284,151 +282,175 @@ class ReturnFormController extends Controller
             'phone_number' => 'nullable|string',
             'notes' => 'nullable|string',
             'status' => 'required|in:1,2',
-            'return' => 'required|array', // Đảm bảo mảng "return" tồn tại
+            'return' => 'required|array',
             'return.*.product_id' => 'required|exists:products,id',
             'return.*.quantity' => 'required|integer|min:1',
             'return.*.serial_code' => 'nullable|string',
             'return.*.serial_id' => 'required',
             'return.*.replacement_code' => 'nullable|integer',
             'return.*.replacement_serial_number_id' => 'nullable|string',
-            'return.*.extra_warranty' => 'nullable|integer|min:0',
+            'return.*.name_warranty' => 'nullable|string',
+            'return.*.extra_warranty' => 'nullable|integer',
             'return.*.note' => 'nullable|string',
         ]);
+
         DB::beginTransaction();
         try {
-            // Cập nhật bản ghi return_form
+            // Find the return form
+            $returnForm = ReturnForm::findOrFail($id);
+
+            // Update the return form
             $returnForm->update($validated);
-            // Lấy tất cả bản ghi ProductReturn liên quan đến return_form_id
-            $productReturns = ProductReturn::where(
-                'return_form_id',
-                $returnForm->id
-            )->get();
 
-            foreach ($productReturns as $productReturn) {
-                // Tìm replacementSerial dựa trên serial_number_id
-                $replacementSerial = SerialNumber::find($productReturn->serial_number_id);
-                if ($replacementSerial) {
-                    // Cập nhật trạng thái của serial thay thế thành 1
-                    $replacementSerial->update(['status' => 1]);
-                } else {
-                    // Nếu không tìm thấy replacementSerial, ghi log hoặc xử lý lỗi tùy ý
-                    Log::warning("Không tìm thấy replacementSerial với serial_code: {$productReturn->serial_number_id}");
-                }
-            }
-            // Xóa các bản ghi product_return cũ liên quan
-            $productReturn =  ProductReturn::where('return_form_id', $returnForm->id)->delete();
-            // Lặp qua danh sách "return" để xử lý từng sản phẩm
+            // Delete existing product returns to avoid duplicates
+            ProductReturn::where('return_form_id', $id)->delete();
+
             foreach ($validated['return'] as $returnItem) {
+                $product_id = $returnItem['product_id'];
+                $quantity = $returnItem['quantity'];
+                $serial_number_id = $returnItem['serial_id'];
+                $name_warranty = $returnItem['name_warranty'];
+                $extra_warranty = (int) $returnItem['extra_warranty'] ?? null;
+                $note = $returnItem['note'] ?? null;
+                $replacement_serial_number_id = $returnItem['replacement_serial_number_id'] ?? null;
+                $replacement_code = $returnItem['replacement_code'] ?? null;
+
                 $replacementSerialId = null;
-
-                // Xử lý serial thay thế nếu tồn tại
-                if (!empty($returnItem['replacement_serial_number_id'])) {
-
-                    // Cập nhật trạng thái của serial cũ thành 1 vào kho nếu có seri thay thế
-                    $serial = SerialNumber::find($returnItem['serial_id']);
-                    if ($serial) {
-                        $serial->update(['status' => 1]);
-                    }
-
-                    $seriRecord = SerialNumber::where('serial_code', $returnItem['replacement_serial_number_id'])
-                        ->where('product_id', $returnItem['replacement_code'])
+                if ($replacement_serial_number_id) {
+                    $replacementSerialId = SerialNumber::where('serial_code', $replacement_serial_number_id)
+                        ->where('product_id', $replacement_code)
                         ->where('status', 1)
                         ->first();
-
-                    if (!$seriRecord) {
-                        DB::rollBack();
-                        return back()->withErrors([
-                            'error' => "Không tìm thấy serial_code '{$returnItem['replacement_serial_number_id']}' trong bảng seri."
-                        ])->withInput();
-                    }
-
-                    // Cập nhật trạng thái của serial thay thế thành 5
-                    $seriRecord->update(['status' => 5]);
-                    $replacementSerialId = $seriRecord->id;
-
-                    // Cập nhật/Thêm bản ghi vào warranty_lookup
-                    $oldWarrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
-                    if ($oldWarrantyLookup) {
-                        $WarrantyLookup = WarrantyLookup::create([
-                            'product_id' => $returnItem['product_id'],
-                            'sn_id' => $replacementSerialId,
-                            'customer_id' => $validated['customer_id'],
-                            'export_return_date' => $oldWarrantyLookup->export_return_date,
-                            'warranty' => $oldWarrantyLookup->warranty + ($returnItem['extra_warranty'] ?? 0),
-                            'warranty_expire_date' => Carbon::parse($oldWarrantyLookup->warranty_expire_date)
-                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)),
-                            'status' => 0,
-                        ]);
-                        $today = Carbon::now();
-                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
-                            $WarrantyLookup->update(['status' => 1]);
-                        }
-                    }
-                } else {
-                    // Nếu không có serial thay thế, cập nhật warranty cho serial hiện tại
-                    $WarrantyLookup = WarrantyLookup::where('sn_id', $returnItem['serial_id'])->first();
-                    if ($WarrantyLookup) {
-                        $WarrantyLookup->update([
-                            'warranty' => $returnItem['extra_warranty'] ?? 0, // Gán số tháng bảo hành
-                            'export_return_date' => Carbon::parse($validated['date_created']), // Ngày tạo phiếu trả
-                            'warranty_expire_date' => Carbon::parse($validated['date_created'])
-                                ->addMonths((int) ($returnItem['extra_warranty'] ?? 0)), // Ngày hết hạn bảo hành
-                            'status' => 0,
-                        ]);
-                        $today = Carbon::now();
-                        if ($today->greaterThanOrEqualTo($WarrantyLookup->warranty_expire_date)) {
-                            $WarrantyLookup->update(['status' => 1]);
-                        }
-                    }
                 }
 
-                // Tạo mới bản ghi product_return
-                $productReturnData = [
-                    'return_form_id' => $returnForm->id,
-                    'product_id' => $returnItem['product_id'],
-                    'quantity' => $returnItem['quantity'],
-                    'serial_number_id' => $returnItem['serial_id'],
-                    'extra_warranty' => $returnItem['extra_warranty'],
-                    'notes' => $returnItem['note'],
-                ];
-
-                // Kiểm tra xem replacement_code và replacementSerialId có tồn tại hay không
-                if (!empty($returnItem['replacement_code']) && !empty($replacementSerialId)) {
-                    $productReturnData['replacement_code'] = $returnItem['replacement_code'];
-                    $productReturnData['replacement_serial_number_id'] = $replacementSerialId;
-                }
-                // Tạo ProductReturn
-                $product_return = ProductReturn::create($productReturnData);
-
-
-                // Tạo bản ghi warrantyHistory
-                warrantyHistory::create([
-                    'warranty_lookup_id' => $oldWarrantyLookup->id ?? $WarrantyLookup->id,
-                    'receiving_id' => $validated['reception_id'],
-                    'return_id' => $returnForm->id,
-                    'product_return_id' => $product_return->id,
-                    'note' => $returnItem['note'],
-                ]);
-
-                // Cập nhật trạng thái của receiving
+                // Update receiving status
                 $stateRecei = $validated['status'] == 1 ? 3 : 4;
                 Receiving::find($validated['reception_id'])->update([
                     'status' => $stateRecei,
                     'state' => 0,
                     'closed_at' => $validated['return'] ? now() : null,
                 ]);
+
+                $data = [
+                    'return_form_id' => $id,
+                    'product_id' => $product_id,
+                    'quantity' => $quantity,
+                    'serial_number_id' => $serial_number_id,
+                    'replacement_code' => $replacement_code,
+                    'replacement_serial_number_id' => $replacementSerialId->id ?? null,
+                    'extra_warranty' => $extra_warranty,
+                    'notes' => $note,
+                ];
+
+                // Handle replacement serial number updates
+                if ($replacementSerialId) {
+                    // Delete existing warranty lookups for the replacement
+                    warrantyLookup::where('sn_id', $replacementSerialId->id)->delete();
+
+                    $warranty_lookup = warrantyLookup::where('sn_id', $serial_number_id)->get();
+                    foreach ($warranty_lookup as $warranty) {
+                        warrantyLookup::create([
+                            'product_id' => $product_id,
+                            'sn_id' => $replacementSerialId->id,
+                            'customer_id' => $validated['customer_id'],
+                            'name_warranty' => $warranty->name_warranty,
+                            'name_status' => $warranty->name_status,
+                            'export_return_date' => $warranty->export_return_date,
+                            'warranty' => $warranty->warranty,
+                            'warranty_expire_date' => Carbon::parse($warranty->warranty_expire_date),
+                            'status' => 0,
+                        ]);
+                    }
+
+                    SerialNumber::find($serial_number_id)->update(['status' => 1, 'warehouse_id' => 2]);
+                    SerialNumber::find($replacementSerialId->id)->update(['status' => 2]);
+                }
+
+                if ($returnForm->reception->form_type != 2) {
+                    $productReturn = ProductReturn::createProductReturn($data);
+                    $oldWarrantyLookup = warrantyLookup::where('sn_id', $serial_number_id)->first();
+
+                    // Update or create warranty history
+                    warrantyHistory::updateOrCreate(
+                        [
+                            'warranty_lookup_id' => $oldWarrantyLookup->id,
+                            'return_id' => $id,
+                        ],
+                        [
+                            'receiving_id' => $validated['reception_id'],
+                            'product_return_id' => $productReturn->id,
+                            'note' => $note,
+                        ]
+                    );
+                }
+
+                if ($returnForm->reception->form_type == 2) {
+                    $productReturn = ProductReturn::createProductReturn($data);
+
+                    // Update warranty lookup using name_warranty from input
+                    $warrantyRecordOld = warrantyLookup::updateOrCreate(
+                        [
+                            'sn_id' => $serial_number_id,
+                            'name_warranty' => $name_warranty
+                        ],
+                        [
+                            'product_id' => $product_id,
+                            'customer_id' => $validated['customer_id'],
+                            'warranty' => $extra_warranty,
+                            'export_return_date' => $validated['date_created'],
+                            'name_status' => 'Còn bảo hành',
+                            'warranty_expire_date' => Carbon::parse($validated['date_created'])->addMonths($extra_warranty),
+                            'status' => 0,
+                        ]
+                    );
+
+                    // Update warranty status
+                    $today = Carbon::now();
+                    if ($today->greaterThanOrEqualTo($warrantyRecordOld->warranty_expire_date) || $warrantyRecordOld->warranty == 0) {
+                        $warrantyRecordOld->update(['status' => 1]);
+                    } else {
+                        $warrantyRecordOld->update(['status' => 2]);
+                    }
+
+                    // Update warranty received
+                    $wa = WarrantyReceived::with('productReceived')
+                        ->whereHas('productReceived', function ($query) use ($validated) {
+                            $query->where('reception_id', $validated['reception_id']);
+                        })
+                        ->where('name_warranty', $name_warranty) // Added name_warranty condition
+                        ->first();
+
+                    if ($wa) {
+                        $wa->update(['product_return_id' => $productReturn->id]);
+                    }
+
+                    // Update or create warranty history
+                    warrantyHistory::updateOrCreate(
+                        [
+                            'warranty_lookup_id' => $warrantyRecordOld->id,
+                            'return_id' => $id,
+                        ],
+                        [
+                            'receiving_id' => $validated['reception_id'],
+                            'product_return_id' => $productReturn->id,
+                            'note' => $note,
+                        ]
+                    );
+
+                    // Update serial number status
+                    SerialNumber::find($serial_number_id)->update(['status' => 5]);
+                }
             }
 
             DB::commit();
             return redirect()->route('returnforms.index')->with('msg', 'Cập nhật phiếu trả hàng thành công');
         } catch (\Exception $e) {
             DB::rollBack();
-            // Ghi lỗi vào log
             Log::error('Error updating return form: ' . $e->getMessage());
-            // Gửi thông báo lỗi về view
             return back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
