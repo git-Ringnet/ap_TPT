@@ -590,7 +590,7 @@ function createCountRow(count, product, name, warranty) {
             </td>
             <td colspan="${colspanValue1}" class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
         </tr>
-        <tr id="add-row-product" class="bg-white ${dnone}" data-product-code="${product.product_code}" data-product-id="${product.id}">
+        <tr id="add-row-product" class="bg-white" data-product-code="${product.product_code}" data-product-id="${product.id}">
             <td colspan="${colspanValue2}" class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                 <button type="button" class="save-info-product btn" data-product-id="${product.id}" data-product-code="${product.product_code}"
                  data-product-name="${product.product_name}" data-product-brand="${product.product_brand}" data-product-warranty='${warrantyData}'>
