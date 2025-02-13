@@ -27,7 +27,7 @@ class WarrantyLookupController extends Controller
 
             // Nối name_warranty và warranty theo định dạng yêu cầu
             $first->name_warranty = $items->map(function ($item) {
-                return $item->name_warranty . ": " . $item->warranty;
+                return $item->name_warranty . ": " . $item->warranty . " tháng";
             })->join('; ');
 
             // Nối status với điều kiện chuyển đổi

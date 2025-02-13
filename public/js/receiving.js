@@ -561,22 +561,27 @@ $(document).ready(function () {
             success: function (response) {
                 let valuesr = Object.values(response);
                 let values = valuesr.map((item) => item.status);
+
                 let allInternal = values.every(
                     (status) => status === "success"
-                );
+                ); // Tất cả là nội bộ
                 let allExternal = values.every(
                     (status) => status === "external"
-                );
+                ); // Tất cả là bên ngoài
 
-                if (allInternal || allExternal) {
-                    showAutoToast("success", "Đang tạo đơn tiếp nhận");
-                    $("#form-submit").submit();
+                if (allInternal) {
+                    $("#branch_id").val(1); // Set branch_id = 1 (Nội bộ)
+                } else if (allExternal) {
+                    $("#branch_id").val(2); // Set branch_id = 2 (Bên ngoài)
                 } else {
                     showAutoToast(
                         "warning",
                         "Tất cả serials phải là hàng nội bộ hoặc hàng bên ngoài. Vui lòng kiểm tra lại!"
                     );
+                    return; // Dừng lại, không submit form
                 }
+                showAutoToast("success", "Đang tạo đơn tiếp nhận");
+                $("#form-submit").submit();
             },
             error: function () {
                 showAutoToast("warning", "Có lỗi, vui lòng thử lại");

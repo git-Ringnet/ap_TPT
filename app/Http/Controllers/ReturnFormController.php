@@ -455,42 +455,110 @@ class ReturnFormController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        // Tìm phiếu trả hàng và liên kết của nó
-        $returnForm = ReturnForm::findOrFail($id);
-        $recei = Receiving::find($returnForm->reception_id);
-        if ($recei) {
-            $recei->status = 2;
-            $recei->save();
-        }
-        // Trước khi xóa phiếu trả hàng, cần phải giảm giá trị warranty của các sản phẩm trong phiếu trả hàng
-        $returnForm->productReturns->each(function ($returnItem) {
-            // Tìm WarrantyLookup tương ứng với serial_id của sản phẩm
-            $WarrantyLookup = WarrantyLookup::where('sn_id', $returnItem->serial_number_id)->first();
-            if ($WarrantyLookup) {
-                // Trừ đi thời gian bảo hành (warranty) và ngày hết hạn bảo hành (warranty_expire_date)
-                $newWarranty = $WarrantyLookup->warranty - ($returnItem->extra_warranty ?? 0);
-                $newWarrantyExpireDate = Carbon::parse($WarrantyLookup->warranty_expire_date)
-                    ->subMonths((int) ($returnItem->extra_warranty ?? 0));
-                // Kiểm tra nếu newWarranty <= 0 thì xoá WarrantyLookup
-                if ($newWarranty <= 0) {
-                    $WarrantyLookup->delete();
-                } else {
-                    // Cập nhật WarrantyLookup với giá trị mới
-                    $WarrantyLookup->update([
-                        'warranty' => $newWarranty,
-                        'warranty_expire_date' => $newWarrantyExpireDate,
+        DB::beginTransaction();
+        try {
+            // Load return form with correct relations
+            $returnForm = ReturnForm::with([
+                'reception',
+                'productReturns',
+                'productReturns.serialNumber',
+                'productReturns.replacementSerialNumber'
+            ])->findOrFail($id);
+
+            // Log data for debugging
+            Log::info('Deleting return form with ID: ' . $id, [
+                'return_form' => $returnForm->toArray()
+            ]);
+
+            foreach ($returnForm->productReturns as $productReturn) {
+                // Log each product return being processed
+                Log::info('Processing product return', [
+                    'product_return_id' => $productReturn->id,
+                    'serial_number_id' => $productReturn->serial_number_id,
+                    'replacement_serial_number_id' => $productReturn->replacement_serial_number_id
+                ]);
+
+                // Handle warranty histories separately since it's not a direct relation
+                $warrantyHistories = warrantyHistory::where('product_return_id', $productReturn->id)->get();
+                foreach ($warrantyHistories as $warrantyHistory) {
+                    $warrantyLookup = warrantyLookup::find($warrantyHistory->warranty_lookup_id);
+                    if ($warrantyLookup) {
+                        Log::info('Resetting warranty lookup', [
+                            'warranty_lookup_id' => $warrantyLookup->id
+                        ]);
+                        $warrantyLookup->update(['status' => 0]);
+                    }
+                    $warrantyHistory->delete();
+                }
+
+                // Handle replacement serial number
+                if ($productReturn->replacementSerialNumber) {
+                    Log::info('Handling replacement serial', [
+                        'replacement_serial_id' => $productReturn->replacement_serial_number_id
+                    ]);
+
+                    // Delete warranty lookups for replacement serial
+                    warrantyLookup::where('sn_id', $productReturn->replacement_serial_number_id)
+                        ->delete();
+
+                    // Reset replacement serial status
+                    $productReturn->replacementSerialNumber->update([
+                        'status' => 1
                     ]);
                 }
-            }
-        });
 
-        // Xóa phiếu trả hàng và các sản phẩm liên quan
-        $returnForm->delete();
-        $returnForm->productReturns()->delete();
-        // Trả về thông báo và chuyển hướng
-        return redirect()->route('returnforms.index')->with('msg', 'Xoá phiếu trả hàng thành công!');
+                // Reset original serial number
+                if ($productReturn->serialNumber) {
+                    Log::info('Resetting original serial', [
+                        'serial_id' => $productReturn->serial_number_id
+                    ]);
+
+                    $productReturn->serialNumber->update([
+                        'status' => 2,
+                    ]);
+                }
+
+                // Handle warranty received
+                WarrantyReceived::where('product_return_id', $productReturn->id)
+                    ->update(['product_return_id' => null]);
+
+                // Delete the product return
+                $productReturn->delete();
+            }
+
+            // Reset receiving status
+            if ($returnForm->reception) {
+                Log::info('Resetting reception', [
+                    'reception_id' => $returnForm->reception_id
+                ]);
+
+                $returnForm->reception->update([
+                    'status' => 2,
+                    'state' => 1,
+                    'closed_at' => null
+                ]);
+            }
+
+            // Delete return form
+            $returnForm->delete();
+
+            DB::commit();
+            return redirect()->route('returnforms.index')
+                ->with('msg', 'Xóa phiếu trả hàng thành công');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            // Log detailed error information
+            Log::error('Error deleting return form: ' . $e->getMessage(), [
+                'return_form_id' => $id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()->with('msg', 'Xóa phiếu trả hàng thành công' . $e->getMessage());
+        }
     }
 
     public function filterData(Request $request)

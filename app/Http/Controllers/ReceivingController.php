@@ -76,7 +76,7 @@ class ReceivingController extends Controller
                 if (!$existSeri) {
                     $newSerial = SerialNumber::create([
                         'product_id' => $product['product_id'],
-                        'status'     => 6,
+                        'status'     => 2,
                         'serial_code' => $product['serial'],
                     ]);
                     $serialId = $newSerial->id;
@@ -178,7 +178,7 @@ class ReceivingController extends Controller
                 if (!$existSeri) {
                     $newSerial = SerialNumber::create([
                         'product_id' => $product['product_id'],
-                        'status'     => 6, // Trạng thái mới
+                        'status'     => 2, // Trạng thái mới
                         'serial_code' => $product['serial'], // Tạo mã serial tạm thời
                     ]);
 
@@ -219,25 +219,53 @@ class ReceivingController extends Controller
     }
 
 
+    public function destroy($id)
+    {
+        DB::beginTransaction();
+        try {
+            // Tìm phiếu tiếp nhận
+            $receiving = Receiving::findOrFail($id);
+
+
+            // Xóa tất cả sản phẩm tiếp nhận và bảo hành liên quan
+            foreach ($receiving->receivedProducts as $receivedProduct) {
+                if ($receiving->branch_id == 2) {
+                    SerialNumber::find($receivedProduct->serial_id)->delete();
+                }
+                $receivedProduct->warrantyReceived()->delete();
+                $receivedProduct->delete();
+            }
+
+            // Xóa phiếu tiếp nhận
+            $receiving->delete();
+
+            DB::commit();
+            return redirect()->route('receivings.index')->with('msg', 'Xóa phiếu tiếp nhận thành công.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('receivings.index')->with('warning', 'Có lỗi xảy ra khi xóa phiếu tiếp nhận.');
+        }
+    }
+
 
     // Remove the specified receiving record from storage
-    public function destroy(Receiving $receiving)
-    {
-        $receivedProducts = $receiving->receivedProducts;
+    // public function destroy(Receiving $receiving)
+    // {
+    //     $receivedProducts = $receiving->receivedProducts;
 
-        // Duyệt qua từng sản phẩm và cập nhật trạng thái của serial number
-        foreach ($receivedProducts as $product) {
-            $serialNumber = $product->serial;
-            if ($serialNumber) {
-                $serialNumber->update(['status' => 2]);
-            }
-        }
+    //     // Duyệt qua từng sản phẩm và cập nhật trạng thái của serial number
+    //     foreach ($receivedProducts as $product) {
+    //         $serialNumber = $product->serial;
+    //         if ($serialNumber) {
+    //             $serialNumber->update(['status' => 2]);
+    //         }
+    //     }
 
-        // Xóa bản ghi receiving
-        $receiving->delete();
+    //     // Xóa bản ghi receiving
+    //     $receiving->delete();
 
-        return redirect()->route('receivings.index')->with('success', 'Receiving record deleted successfully.');
-    }
+    //     return redirect()->route('receivings.index')->with('success', 'Receiving record deleted successfully.');
+    // }
     public function getReceiving(Request $request)
     {
         $receivingId = $request->selectedId;
