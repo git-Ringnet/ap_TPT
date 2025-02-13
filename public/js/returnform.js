@@ -199,12 +199,6 @@ function populateTableRows(products, tableSelector, dataProduct, type) {
                     <input type="text" min="0" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue" name="return[${index}][replacement_serial_number_id]">
                     <span class="check-icon"></span>
                 </td>
-                       <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
-                    <input type="text" min="0" readonly max="100" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty
-                    height-32" name="return[${index}][extra_warranty]" value="${
-                product.warranty_received[0].name_warranty || ""
-            }">
-                </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideExtraWarranty}">
                     <input type="number" min="0" max="100" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue" name="return[${index}][extra_warranty]">
                 </td>

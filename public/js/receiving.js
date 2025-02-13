@@ -205,7 +205,7 @@ $(document).on("click", ".btn-add-item", function () {
             <li data-id="${product.id}">
                 <a href="javascript:void(0);" class="text-dark d-flex justify-content-between p-2 idProduct w-100"
                     data-name="${product.product_name}" data-brand="${product.brand}" data-id="${product.id}">
-                    <span class="w-50 text-13-black" style="flex:2">${product.product_name}</span>
+                    <span class="w-50 text-13-black" style="flex:2">${product.product_code}</span>
                 </a>
             </li>
         `;
@@ -534,6 +534,20 @@ $(document).ready(function () {
                 "warning",
                 "Dữ liệu không hợp lệ vui lòng kiểm tra lại"
             );
+            return;
+        }
+
+        // Kiểm tra name_warranty
+        let hasEmptyWarranty = false;
+        $(".name_warranty").each(function () {
+            if ($(this).val().trim() === "") {
+                hasEmptyWarranty = true;
+                return false; // break loop
+            }
+        });
+
+        if (hasEmptyWarranty) {
+            showAutoToast("warning", "Vui lòng nhập thông tin bảo hành");
             return;
         }
 
