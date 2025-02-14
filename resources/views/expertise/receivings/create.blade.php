@@ -378,6 +378,7 @@
 
 <script src="{{ asset('js/addproduct.js') }}"></script>
 <script src="{{ asset('js/receiving.js') }}"></script>
+<script src="{{ asset('js/barcode.js') }}"></script>
 <script>
     let responseData = {};
     $(document).on("click", ".warranty-input", function() {

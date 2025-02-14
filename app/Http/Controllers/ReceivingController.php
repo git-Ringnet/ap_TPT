@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\WarrantyReceived;
 use App\Notifications\ReceiNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class ReceivingController extends Controller
@@ -66,7 +67,7 @@ class ReceivingController extends Controller
         ]);
         // Tạo phiếu tiếp nhận
         $receiving = Receiving::create($validated);
-
+        Artisan::call('receiving:update-status');
         DB::beginTransaction();
         try {
             foreach ($request->input('product_id') as $product) {
