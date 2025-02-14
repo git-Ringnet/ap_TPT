@@ -76,14 +76,18 @@
                                 THIẾT LẬP
                             </a>
                             <div class="dropdown-menu" style="">
-                                <a class="dropdown-item text-13" href="{{ route('groups.index') }}">Nhóm
-                                    đối tượng</a>
+                                @can('admin')
+                                    <a class="dropdown-item text-13" href="{{ route('groups.index') }}">Nhóm
+                                        đối tượng</a>
+                                @endcan
                                 <a class="dropdown-item text-13" href="{{ route('customers.index') }}">Khách hàng</a>
                                 <a class="dropdown-item text-13" href="{{ route('providers.index') }}">Nhà cung
                                     cấp</a>
                                 <a class="dropdown-item text-13" href="{{ route('products.index') }}">Hàng hoá</a>
-                                <a class="dropdown-item text-13" href="{{ route('users.index') }}">Nhân viên</a>
-                                <a class="dropdown-item text-13" href="{{ route('warehouses.index') }}">Kho</a>
+                                @can('admin')
+                                    <a class="dropdown-item text-13" href="{{ route('users.index') }}">Nhân viên</a>
+                                    <a class="dropdown-item text-13" href="{{ route('warehouses.index') }}">Kho</a>
+                                @endcan
                             </div>
                         </div>
                     @endunlessrole
@@ -100,17 +104,19 @@
                             <a class="dropdown-item text-13" href="{{ route('inventoryLookup.index') }}">
                                 Tra cứu tồn kho
                             </a>
-                            <a class="dropdown-item text-13" href="{{ route('warrantyLookup.index') }}">Tra cứu
-                                bảo hành
-                            </a>
-                            <a class="dropdown-item text-13" href="{{ route('receivings.index') }}">Phiếu tiếp
-                                nhận
-                            </a>
-                            <a class="dropdown-item text-13" href="{{ route('quotations.index') }}">Phiếu báo giá
-                            </a>
-                            <a class="dropdown-item text-13" href="{{ route('returnforms.index') }}">Phiếu trả
-                                hàng
-                            </a>
+                            @unlessrole('Quản lý kho')
+                                <a class="dropdown-item text-13" href="{{ route('warrantyLookup.index') }}">Tra cứu
+                                    bảo hành
+                                </a>
+                                <a class="dropdown-item text-13" href="{{ route('receivings.index') }}">Phiếu tiếp
+                                    nhận
+                                </a>
+                                <a class="dropdown-item text-13" href="{{ route('quotations.index') }}">Phiếu báo giá
+                                </a>
+                                <a class="dropdown-item text-13" href="{{ route('returnforms.index') }}">Phiếu trả
+                                    hàng
+                                </a>
+                            @endunlessrole
                         </div>
                     </div>
                     @can('admin')

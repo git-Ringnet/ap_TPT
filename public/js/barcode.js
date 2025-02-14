@@ -80,25 +80,25 @@ function fillBarcodeAndMoveNext(barcode) {
 
 // Hàm di chuyển con trỏ đến ô input tiếp theo
 function moveToNextInput() {
-    // Tìm tất cả các input có class `.seri-input-check`
     const inputs = $(".seri-input-check");
-
-    // Tìm input đang focus hiện tại
     const currentInput = $("input:focus");
-
-    // Lấy chỉ số của input hiện tại
     const currentIndex = inputs.index(currentInput);
 
     if (currentIndex !== -1) {
-        // Tìm ô input tiếp theo
         const nextInput = inputs[currentIndex + 1];
 
         if (nextInput) {
-            // Focus vào ô input tiếp theo
             $(nextInput).focus();
         } else {
-            // Nếu không có ô input tiếp theo, tự động thêm dòng mới
+            // Nếu không có ô input tiếp theo, thêm dòng mới
             $("#add-rows").click();
+            setTimeout(() => {
+                const updatedInputs = $(".seri-input-check");
+                const newIndex = currentIndex + 1;
+                if (updatedInputs[newIndex]) {
+                    $(updatedInputs[newIndex]).focus();
+                }
+            }, 100);
         }
     }
 }
