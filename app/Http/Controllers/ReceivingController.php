@@ -358,8 +358,8 @@ class ReceivingController extends Controller
         }
         // Trạng thái
         $stateMapping = [
-            1 => ['label' => 'Quá hạn', 'color' => '#858585'],
-            2 => ['label' => 'Chưa xử lý', 'color' => '#08AA36BF'],
+            2 => ['label' => 'Quá hạn', 'color' => '#858585'],
+            1 => ['label' => 'Chưa xử lý', 'color' => '#08AA36BF'],
             0 => ['label' => 'Blank', 'color' => '#08AA36BF'],
         ];
         $stateFilter = generateStatusFilter($data, 'state', $stateMapping, 'Trạng thái', 'trang-thai');

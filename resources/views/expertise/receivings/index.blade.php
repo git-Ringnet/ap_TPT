@@ -31,8 +31,8 @@
                     ['key' => '4', 'value' => 'Khách không đồng ý', 'color' => '#08AA36BF'],
                 ]" />
                 <x-filter-status name="trang-thai" title="Trạng thái" :filters="[
-                    ['key' => '1', 'value' => 'Quá hạn', 'color' => '#858585'],
-                    ['key' => '2', 'value' => 'Chưa xử lý', 'color' => '#08AA36BF'],
+                    ['key' => '2', 'value' => 'Quá hạn', 'color' => '#858585'],
+                    ['key' => '1', 'value' => 'Chưa xử lý', 'color' => '#08AA36BF'],
                     ['key' => '0', 'value' => 'Blank', 'color' => '#08AA36BF'],
                 ]" />
                 <x-filter-checkbox :dataa='$customers' name="khach-hang" title="Khách hàng" button="khach-hang"

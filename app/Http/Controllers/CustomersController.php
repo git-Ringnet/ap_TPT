@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\CustomersImport;
 use App\Models\Customers;
 use App\Models\Groups;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomersController extends Controller
 {
@@ -159,4 +161,56 @@ class CustomersController extends Controller
         }
         return false;
     }
+
+    // Import 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $import = new CustomersImport();
+        Excel::import($import, $request->file('file'));
+
+        // If there are duplicates, return them to the view
+        if (!empty($import->duplicates)) {
+            return view('setup.customers.duplicates', [
+                'duplicates' => $import->duplicates,
+                'title' => 'Dữ liệu trùng lặp',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Import thành công!');
+    }
+    public function bulkConfirm(Request $request)
+    {
+        // Validate dữ liệu đã chọn
+        $request->validate([
+            'customers' => 'required|array|min:1', 
+        ]);
+
+        $customers = $request->input('customers');
+    
+        foreach ($customers as $customerData) {
+            $customerData = json_decode($customerData, true);
+            $customerId = $customerData['customer_id'];
+            $rowData = $customerData['row_data'];
+            $customer = Customers::find($customerId);
+
+            if ($customer) {
+                $customer->update([
+                    'customer_code'  => $rowData[0],  // Mã khách hàng
+                    'customer_name'  => $rowData[1],  // Tên khách hàng
+                    'address'        => $rowData[2],  // Địa chỉ
+                    'contact_person' => $rowData[3],  // Người liên hệ
+                    'phone'          => $rowData[4],  // Số điện thoại
+                    'email'          => $rowData[5],  // Email
+                    'tax_code'       => $rowData[6],  // Mã số thuế
+                    'note'           => $rowData[7],  // Ghi chú
+                ]);
+            }
+        }
+    
+        return redirect()->route('customers.index')->with('success', 'Cập nhật hàng loạt thành công!');
+    } 
 }

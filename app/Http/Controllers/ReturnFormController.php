@@ -140,8 +140,23 @@ class ReturnFormController extends Controller
                 if ($returnForm->reception->form_type != 2) {
                     $productReturn = ProductReturn::createProductReturn($data);
                     $oldWarrantyLookup = warrantyLookup::where('sn_id', $serial_number_id)->first();
+                    
+                    if(empty($oldWarrantyLookup)) {
+                        $newWarranty = warrantyLookup::create([
+                            'product_id' => $product_id,
+                            'sn_id' => $serial_number_id,
+                            'customer_id' => $validated['customer_id'],
+                            'name_warranty' => 'Bên ngoài',
+                            'name_status' => null,
+                            'export_return_date' => $validated['date_created'],
+                            'warranty' => 0,
+                            'warranty_expire_date' => $validated['date_created'],
+                            'status' => 0,
+                        ]);
+                    }
+
                     $warranty = warrantyHistory::create([
-                        'warranty_lookup_id' => $oldWarrantyLookup->id,
+                        'warranty_lookup_id' => $oldWarrantyLookup->id ?? $newWarranty->id,
                         'receiving_id' => $validated['reception_id'],
                         'return_id' => $return_form_id,
                         'product_return_id' => $productReturn->id,

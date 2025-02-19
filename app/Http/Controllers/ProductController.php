@@ -6,6 +6,8 @@ use App\Models\Groups;
 use App\Models\Product;
 use App\Models\SerialNumber;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 
 class ProductController extends Controller
 {
@@ -118,4 +120,51 @@ class ProductController extends Controller
         }
         return false;
     }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $import = new ProductsImport();
+        Excel::import($import, $request->file('file'));
+
+        // Nếu có dữ liệu trùng lặp, chuyển đến view hiển thị danh sách trùng
+        if (!empty($import->duplicates)) {
+            return view('setup.products.duplicates', [
+                'duplicates' => $import->duplicates,
+                'title' => 'Dữ liệu sản phẩm trùng lặp',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Import sản phẩm thành công!');
+    }
+    public function bulkConfirm(Request $request)
+{
+    // Validate dữ liệu đã chọn
+    $request->validate([
+        'products' => 'required|array|min:1', 
+    ]);
+
+    $products = $request->input('products');
+
+    foreach ($products as $productData) {
+        $productData = json_decode($productData, true);
+        $productId = $productData['product_id'];
+        $rowData = $productData['row_data'];
+        $product = Product::find($productId);
+
+        if ($product) {
+            $product->update([
+                'product_code' => $rowData[0], // Mã sản phẩm
+                'product_name' => $rowData[1], // Tên sản phẩm
+                'brand'        => $rowData[2], // Thương hiệu
+                'warranty'     => $rowData[3], // Bảo hành
+            ]);
+        }
+    }
+
+    return redirect()->route('products.index')->with('success', 'Cập nhật hàng loạt sản phẩm thành công!');
+}
+
 }

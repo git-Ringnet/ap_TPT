@@ -67,6 +67,15 @@ Route::post('/check-brands', [SerialNumberController::class, 'checkbrands'])->na
 // Filter
 Route::get('/filter-group', [GroupsController::class, 'filterData'])->name('filter-groups');
 Route::get('/filter-customer', [CustomersController::class, 'filterData'])->name('filter-customer');
+Route::post('/customers/import', [CustomersController::class, 'import'])->name('customers.import');
+Route::post('/customers/bulk-confirm', [CustomersController::class, 'bulkConfirm'])->name('customers.bulkConfirm');
+
+Route::post('/providers/import', [ProvidersController::class, 'import'])->name('providers.import');
+Route::post('/providers/bulk-confirm', [ProvidersController::class, 'bulkConfirm'])->name('providers.bulkConfirm');
+
+Route::post('/products/import', [ProductController::class, 'import'])->name('products.import');
+Route::post('/products/bulk-confirm', [ProductController::class, 'bulkConfirm'])->name('products.bulkConfirm');
+
 Route::get('/filter-provides', [ProvidersController::class, 'filterData'])->name('filter-provides');
 Route::get('/filter-products', [ProductController::class, 'filterData'])->name('filter-products');
 Route::get('/filter-users', [UserController::class, 'filterData'])->name('filter-users');

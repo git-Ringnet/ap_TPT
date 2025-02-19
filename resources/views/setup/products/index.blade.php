@@ -20,6 +20,14 @@
             <span class="last-span">Nhóm đối tượng</span>
         </div>
         <div class="d-flex content__heading--right">
+            <form action="{{ route('products.import') }}" method="POST" enctype="multipart/form-data"
+                class="mx-1 d-flex align-items-center">
+                @csrf
+                <label class="m-0 btn-outline-primary" style="cursor: pointer;">
+                    Nhập Excel
+                    <input type="file" name="file" style="display: none;" onchange="this.form.submit()">
+                </label>
+            </form>
             <div class="row m-0">
                 <a href="{{ route('products.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                     <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
@@ -303,4 +311,8 @@
         var nametable = 'product'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    $(document).on('change', '#file_restore', function(e) {
+        e.preventDefault();
+        $('#restore_data')[0].submit();
+    })
 </script>

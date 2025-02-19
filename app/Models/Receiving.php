@@ -106,7 +106,7 @@ class Receiving extends Model
                 $receivings = $receivings->whereIn('branch_id', $data['brand_type']);
             }
             if (isset($data['status'])) {
-                $receivings = $receivings->whereIn('status', $data['status']);
+                $receivings = $receivings->whereIn('receiving.status', $data['status']);
             }
             if (isset($data['state'])) {
                 $receivings = $receivings->whereIn('state', $data['state']);

@@ -485,6 +485,21 @@ nav.main-header.navbar.navbar-expand.navbar-white.navbar-light {
 .main-sidebar::before {
     transition: margin-left 0.5s ease-in-out;
 }
+.btn-outline-primary {
+    padding: 4px 8px;
+    border: 1px solid #217346;
+    border-radius: 5px;
+    background: transparent;
+    color: #217346;
+    transition: all 0.3s;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+    background: #217346;
+    color: white;
+}
 
 @media (min-width: 992px) {
     .sidebar-mini.sidebar-collapse .content-wrapper,

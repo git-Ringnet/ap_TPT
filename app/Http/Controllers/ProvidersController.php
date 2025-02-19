@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProvidersImport;
 use App\Models\Groups;
 use App\Models\Providers;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProvidersController extends Controller
 {
@@ -131,4 +133,54 @@ class ProvidersController extends Controller
         }
         return false;
     }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $import = new ProvidersImport();
+        Excel::import($import, $request->file('file'));
+
+        // If there are duplicates, return them to the view
+        if (!empty($import->duplicates)) {
+            return view('setup.providers.duplicates', [
+                'duplicates' => $import->duplicates,
+                'title' => 'Dữ liệu trùng lặp',
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Import thành công!');
+    }
+    public function bulkConfirm(Request $request)
+    {
+        // Validate dữ liệu đã chọn
+        $request->validate([
+            'providers' => 'required|array|min:1', 
+        ]);
+
+        $providers = $request->input('providers');
+    
+        foreach ($providers as $providersData) {
+            $providersData = json_decode($providersData, true);
+            $providersId = $providersData['provider_id'];
+            $rowData = $providersData['row_data'];
+            $customer = Providers::find($providersId);
+
+            if ($customer) {
+                $customer->update([
+                    'provider_code'  => $rowData[0],
+                    'provider_name'  => $rowData[1],
+                    'contact_person' => $rowData[2],
+                    'address'        => $rowData[3],
+                    'phone'          => $rowData[4],
+                    'email'          => $rowData[5],
+                    'tax_code'       => $rowData[6],
+                    'note'           => $rowData[7],
+                ]);
+            }
+        }
+    
+        return redirect()->route('customers.index')->with('success', 'Cập nhật hàng loạt thành công!');
+    } 
 }
