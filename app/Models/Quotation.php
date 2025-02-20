@@ -55,13 +55,13 @@ class Quotation extends Model
         if (!empty($data['search'])) {
             $quotations->where(function ($query) use ($data) {
                 $query->where('quotation_code', 'like', '%' . $data['search'] . '%')
-                    ->orWhere('notes', 'like', '%' . $data['search'] . '%');
+                    ->orWhere('quotations.notes', 'like', '%' . $data['search'] . '%');
             });
         }
         // Lọc theo các trường cụ thể
         $filterableFields = [
             'ma' => 'quotation_code',
-            'note' => 'notes',
+            'note' => 'quotations.notes',
         ];
         foreach ($filterableFields as $key => $field) {
             if (!empty($data[$key])) {

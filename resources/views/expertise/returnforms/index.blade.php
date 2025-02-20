@@ -29,6 +29,7 @@
                 <x-filter-text name="ghi-chu" title="Ghi chú" />
             </x-search-filter>
             <div class="d-flex content__heading--right">
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
                 <div class="row m-0">
                     <a href="{{ route('returnforms.create') }}" class="activity mr-3" data-name1="KH"
                         data-des="Tạo mới">
@@ -235,6 +236,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script type="text/javascript">
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -261,4 +264,6 @@
         var nametable = 'returnform'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    exportTableToExcel("#exportBtn", "#example2", "phieu_tra_hang.xlsx");
+
 </script>

@@ -9,7 +9,7 @@
                 'Hãng',
                 'Serial',
                 'Khách hàng',
-                'Ngày xuất trả hàng',
+                'Ngày xuất hàng',
                 'Bảo hành',
                 'Tình trạng',
             ]">
@@ -19,13 +19,14 @@
                 <x-filter-text name="hang" title="Hãng" />
                 <x-filter-checkbox :dataa='$customers' name="khach-hang" title="Khách hàng" button="khach-hang"
                     namedisplay="customer_name" />
-                <x-filter-date name="ngay-xuat-tra-hang" title="Ngày xuất trả hàng" />
+                <x-filter-date name="ngay-xuat-hang" title="Ngày xuất hàng" />
                 <x-filter-status name="tinh-trang" title="Tình trạng" :filters="[
                     ['key' => '0', 'value' => 'Còn bảo hành', 'color' => '#858585'],
                     ['key' => '1', 'value' => 'Hết bảo hành', 'color' => '#08AA36BF'],
                 ]" />
                 <x-filter-compare name="bao-hanh" title="Bảo hành" />
             </x-search-filter>
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
     </div>
     <div class="content margin-top-127">
@@ -134,7 +135,7 @@
                                     @foreach ($grouped as $item)
                                         <tr class="position-relative warran-lookup-info height-40">
                                             <input type="hidden" name="id-warran-lookup" class="id-warran-lookup"
-                                                id="id-warran-lookup" value="{{ $item->id }}">
+                                                id="id-warran-lookup" value="{{ $item->sn_id }}">
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->product->product_code }}
@@ -181,6 +182,7 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -192,7 +194,7 @@
             ten: getData('#ten-hang', this),
             brand: getData('#hang', this),
             sn: getData('#serial', this),
-            date: retrieveDateData(this, 'ngay-xuat-tra-hang'),
+            date: retrieveDateData(this, 'ngay-xuat-hang'),
             customer: getStatusData(this, 'khach-hang'),
             status: getStatusData(this, 'tinh-trang'),
             bao_hanh: retrieveComparisonData(this, 'bao-hanh'),
@@ -207,4 +209,5 @@
         var nametable = 'warran-lookup'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    exportTableToExcel("#exportBtn", "#example2", "bao_hanh.xlsx");
 </script>

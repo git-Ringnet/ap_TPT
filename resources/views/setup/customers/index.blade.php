@@ -11,6 +11,7 @@
             <x-filter-text name="ghi-chu" title="Ghi chú" />
         </x-search-filter>
         <div class="d-flex content__heading--right">
+            {{-- <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button> --}}
             <form action="{{ route('customers.import') }}" method="POST" enctype="multipart/form-data"
                 class="mx-1 d-flex align-items-center">
                 @csrf
@@ -308,6 +309,8 @@
     </section>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script type="text/javascript">
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -338,4 +341,6 @@
         e.preventDefault();
         $('#restore_data')[0].submit();
     })
+    exportTableToExcel("#exportBtn", "#example2", "khach_hang.xlsx");
+
 </script>

@@ -36,7 +36,7 @@ class warrantyLookup extends Model
     {
         return $this->hasMany(warrantyHistory::class, 'warranty_lookup_id');
     }
-    public function  getWarranAjax($data = null)
+    public function getWarranAjax($data = null)
     {
         $warrantyLookup = warrantyLookup::join('products', 'products.id', '=', 'warranty_lookup.product_id')
             ->join('serial_numbers', 'serial_numbers.id', '=', 'warranty_lookup.sn_id')
@@ -51,6 +51,7 @@ class warrantyLookup extends Model
                 'warranty_lookup.id as id',
                 'warranty_lookup.warranty as warrantyLookup',
             );
+    
         if (!empty($data['search'])) {
             $warrantyLookup->where(function ($query) use ($data) {
                 $query->where('products.product_code', 'like', '%' . $data['search'] . '%')
@@ -60,37 +61,65 @@ class warrantyLookup extends Model
                     ->orWhere('serial_numbers.serial_code', 'like', '%' . $data['search'] . '%');
             });
         }
+    
         $filterableFields = [
             'ma' => 'products.product_code',
             'ten' => 'products.product_name',
             'brand' => 'products.brand',
             'sn' => 'serial_numbers.serial_code',
-
         ];
+    
         foreach ($filterableFields as $key => $field) {
             if (!empty($data[$key])) {
                 $warrantyLookup->where($field, 'like', '%' . $data[$key] . '%');
             }
         }
+    
         if (!empty($data['customer'])) {
             $warrantyLookup->whereHas('customer', function ($query) use ($data) {
                 $query->whereIn('id', $data['customer']);
             });
         }
+    
         if (isset($data['status'])) {
-            $warrantyLookup = $warrantyLookup->whereIn('warranty_lookup.status', $data['status']);
+            $warrantyLookup->whereIn('warranty_lookup.status', $data['status']);
         }
+    
         if (!empty($data['date'][0]) && !empty($data['date'][1])) {
             $dateStart = Carbon::parse($data['date'][0]);
             $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
             $warrantyLookup->whereBetween('export_return_date', [$dateStart, $dateEnd]);
         }
+    
         if (isset($data['bao_hanh'][0]) && isset($data['bao_hanh'][1])) {
-            $warrantyLookup = $warrantyLookup->where('warranty_lookup.warranty', $data['bao_hanh'][0], $data['bao_hanh'][1]);
+            $warrantyLookup->whereBetween('warranty_lookup.warranty', [$data['bao_hanh'][0], $data['bao_hanh'][1]]);
         }
+    
         if (isset($data['sort']) && isset($data['sort'][0])) {
-            $warrantyLookup = $warrantyLookup->orderBy($data['sort'][0], $data['sort'][1]);
+            $warrantyLookup->orderBy($data['sort'][0], $data['sort'][1]);
         }
-        return $warrantyLookup->get();
-    }
+    
+        $warranties = $warrantyLookup->get();
+    
+        // Nhóm dữ liệu theo `sn_id`
+        $grouped = $warranties->groupBy('sn_id')->map(function ($items) {
+            // Sao chép dữ liệu để tránh ảnh hưởng đến bản gốc
+            $first = $items->first()->replicate();
+            $first->id = $items->first()->sn_id;
+            // Gộp name_warranty và warranty thành chuỗi
+            $first->name_warranty = $items->map(function ($item) {
+                return $item->name_warranty . ": " . $item->warranty . " tháng";
+            })->join('; ');
+    
+            // Gộp status thành chuỗi theo định dạng yêu cầu
+            $first->status_string = $items->map(function ($item) {
+                $statusText = $item->status == 1 ? 'Hết bảo hành' : 'Còn bảo hành';
+                return $item->name_warranty . ": " . $statusText;
+            })->join('| ');
+    
+            return $first;
+        });
+    
+        return $grouped->values();
+    }    
 }

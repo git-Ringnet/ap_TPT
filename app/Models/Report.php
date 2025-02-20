@@ -134,8 +134,13 @@ class Report extends Model
             ->leftJoin('imports', 'product_import.import_id', '=', 'imports.id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'imports.date_create');
-            })
-            ->select(
+            });
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $imports->whereBetween('imports.date_create', [$dateStart, $dateEnd]);
+            }
+            $imports = $imports->select(
                 'products.id',
                 'products.product_code',
                 'products.product_name',
@@ -150,8 +155,13 @@ class Report extends Model
             ->leftJoin('exports', 'product_export.export_id', '=', 'exports.id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'exports.date_create');
-            })
-            ->select(
+            });
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $exports->whereBetween('exports.date_create', [$dateStart, $dateEnd]);
+            }
+            $exports=$exports->select(
                 'products.id',
                 'products.product_code',
                 'products.product_name',
@@ -189,8 +199,13 @@ class Report extends Model
             ->leftJoin('receiving', 'received_products.reception_id', '=', 'receiving.id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'receiving.date_created');
-            })
-            ->select(
+            });
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $imports->whereBetween('receiving.date_created', [$dateStart, $dateEnd]);
+            }
+            $imports= $imports->select(
                 'products.id',
                 'products.product_code',
                 'products.product_name',
@@ -205,8 +220,13 @@ class Report extends Model
             ->leftJoin('return_form', 'product_returns.return_form_id', '=', 'return_form.id')
             ->where(function ($query) use ($applyFilters, $data) {
                 $applyFilters($query, $data, 'return_form.date_created');
-            })
-            ->select(
+            });
+            if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+                $dateStart = Carbon::parse($data['date'][0]);
+                $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+                $exports->whereBetween('return_form.date_created', [$dateStart, $dateEnd]);
+            }
+            $exports=$exports->select(
                 'products.id',
                 'products.product_code',
                 'products.product_name',

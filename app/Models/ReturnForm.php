@@ -57,13 +57,13 @@ class ReturnForm extends Model
         if (!empty($data['search'])) {
             $returnForms->where(function ($query) use ($data) {
                 $query->where('return_code', 'like', '%' . $data['search'] . '%')
-                    ->orWhere('notes', 'like', '%' . $data['search'] . '%');
+                    ->orWhere('return_form.notes', 'like', '%' . $data['search'] . '%');
             });
         }
         // Lọc theo các trường cụ thể
         $filterableFields = [
             'ma' => 'return_code',
-            'note' => 'notes',
+            'note' => 'return_form.notes',
         ];
         foreach ($filterableFields as $key => $field) {
             if (!empty($data[$key])) {

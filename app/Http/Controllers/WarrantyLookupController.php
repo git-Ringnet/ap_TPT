@@ -41,6 +41,7 @@ class WarrantyLookupController extends Controller
 
         // Kết quả
         $grouped = $grouped->values();
+        // dd($grouped);
         $customers = Customers::all();
         return view('expertise.warrantyLookup.index', compact('title', 'warranty', 'customers', 'grouped'));
     }
@@ -127,7 +128,7 @@ class WarrantyLookupController extends Controller
         if (isset($data['date']) && $data['date'][1] !== null) {
             $date_start = date("d/m/Y", strtotime($data['date'][0]));
             $date_end = date("d/m/Y", strtotime($data['date'][1]));
-            $filters[] = ['value' => 'Ngày xuất/trả hàng: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-xuat-tra-hang', 'icon' => 'date'];
+            $filters[] = ['value' => 'Ngày xuất hàng: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-xuat-hang', 'icon' => 'date'];
         }
         if (isset($data['status']) && $data['status'] !== null) {
             $statusValues = [];

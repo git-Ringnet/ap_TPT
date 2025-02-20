@@ -52,6 +52,9 @@
     <script src="https://cdn.jsdelivr.net/npm/n2words@1.21.0/dist/n2words.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <!-- Thêm các CSS chung cho toàn bộ trang -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Thêm Alpinejs -->

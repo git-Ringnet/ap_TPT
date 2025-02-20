@@ -26,6 +26,7 @@
                 <x-filter-compare name="tong-tien" title="Tổng tiền" />
             </x-search-filter>
             <div class="d-flex content__heading--right">
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
                 <div class="row m-0">
                     <a href="{{ route('quotations.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
@@ -228,6 +229,7 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
 <script type="text/javascript">
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -254,4 +256,6 @@
         var nametable = 'quotation'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    exportTableToExcel("#exportBtn", "#example2", "phieu_bao_gia.xlsx");
+
 </script>

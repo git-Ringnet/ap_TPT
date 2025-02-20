@@ -13,6 +13,7 @@
                 <x-filter-text name="ghi-chu" title="Ghi chú" />
             </x-search-filter>
             <div class="d-flex content__heading--right">
+                <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
                 <div class="row m-0">
                     <a href="{{ route('imports.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
@@ -79,21 +80,22 @@
                                             </span>
                                         </th>
                                         @can('admin')
-                                        <th class="height-40 py-0 border-right-0" scope="col">
-                                            <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="username" data-sort-type="DESC">
-                                                    <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Kho</span>
-                                                    </button>
-                                                </a>
-                                                <div class="icon" id="icon-username"></div>
-                                            </span>
-                                        </th>
+                                            <th class="height-40 py-0 border-right-0" scope="col">
+                                                <span class="d-flex justify-content-start">
+                                                    <a href="#" class="sort-link btn-submit" data-sort-by="username"
+                                                        data-sort-type="DESC">
+                                                        <button class="btn-sort" type="submit">
+                                                            <span class="text-14">Kho</span>
+                                                        </button>
+                                                    </a>
+                                                    <div class="icon" id="icon-username"></div>
+                                                </span>
+                                            </th>
                                         @endcan
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="username"
-                                                    data-sort-type="DESC">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="username" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Người lập phiếu</span>
                                                     </button>
@@ -134,9 +136,10 @@
                                                 {{ $item->provider_name }}
                                             </td>
                                             @can('admin')
-                                            <td class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->warehouse->warehouse_name }}
-                                            </td>
+                                                <td
+                                                    class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                    {{ $item->warehouse->warehouse_name }}
+                                                </td>
                                             @endcan
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -146,7 +149,8 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->note }}
                                             </td>
-                                            <td class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
+                                            <td
+                                                class="position-absolute m-0 p-0 bg-hover-icon icon-center border-top-0">
                                                 <div class="d-flex w-100">
                                                     <a href="#">
                                                         <div class="rounded">
@@ -194,7 +198,9 @@
         </section>
     </div>
 </div>
+
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -218,4 +224,6 @@
         var nametable = 'import'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    exportTableToExcel("#exportBtn", "#example2", "phieu_nhap_hang.xlsx");
+
 </script>

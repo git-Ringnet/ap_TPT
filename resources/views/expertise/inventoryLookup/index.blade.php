@@ -26,6 +26,7 @@
                 ]" />
                 <x-filter-compare name="thoi-gian-ton-kho" title="Thời gian tồn kho" />
             </x-search-filter>
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
     </div>
     <div class="content margin-top-127">
@@ -202,6 +203,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -228,4 +231,5 @@
         var nametable = 'inven-lookup'; // Thay tên bảng phù hợp
         handleAjaxRequest(formData, route, nametable);
     });
+    exportTableToExcel("#exportBtn", "#example2", "ton_kho.xlsx");
 </script>

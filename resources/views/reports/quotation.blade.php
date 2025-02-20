@@ -11,7 +11,7 @@
                 'Phiếu tiếp nhận',
                 'Tình trạng',
                 'Ghi chú',
-            ]" :filtersTime="['Tháng', 'Quý', 'Năm']">
+            ]" :filtersTime="['Tháng', 'Quý', 'Năm', 'Ngày lập phiếu']">
                 <x-filter-text name="ma-phieu" title="Mã phiếu" />
                 <x-filter-status name="tinh-trang" title="Tình trạng" :filters="[
                     ['key' => '3', 'value' => 'Hoàn thành', 'color' => '#08AA36BF'],
@@ -19,16 +19,18 @@
                 ]" />
                 <x-filter-checkbox :dataa='$customers' name="khach-hang" title="Khách hàng" button="khach-hang"
                     namedisplay="customer_name" />
-                <x-filter-date name="ngay-lap-phieu" title="Ngày lập phiếu" />
+
                 <x-filter-text name="phieu-tiep-nhan" title="Phiếu tiếp nhận" />
                 <x-filter-text name="ghi-chu" title="Ghi chú" />
                 <x-filter-compare name="tong-tien" title="Tổng tiền" />
                 @slot('slot1')
+                    <x-filter-date name="ngay-lap-phieu" title="Ngày lập phiếu" />
                     <x-filter-month name="thang" title="Tháng" />
                     <x-filter-month name="quy" title="Quý" />
                     <x-filter-month name="nam" title="Năm" />
                 @endslot
             </x-search-filter>
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
     </div>
     <div class="content margin-top-86">
@@ -50,8 +52,8 @@
                                     <tr>
                                         <th class="height-40 py-0 border" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="quotation_code"
-                                                    data-sort-type="DESC">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="quotation_code" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Mã phiếu</span>
                                                     </button>
@@ -196,6 +198,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -276,4 +280,5 @@
             $('#' + $(this).data('button-name') + '-options').hide();
         }
     });
+    exportTableToExcel("#exportBtn", "#example2", "bao_cao_hang_xuat_nhap.xlsx");
 </script>

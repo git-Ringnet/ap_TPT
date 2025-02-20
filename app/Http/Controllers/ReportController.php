@@ -720,6 +720,10 @@ class ReportController extends Controller
                 $currentYear = $data['year'];
             }
             $filters[] = ['value' => $value];
+        }else if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Khoảng thời gian: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay', 'icon' => 'date'];
         }
         if ($request->ajax()) {
             $reports = $this->reports->getProductsAjax($data);
@@ -766,6 +770,10 @@ class ReportController extends Controller
                 $currentYear = $data['year'];
             }
             $filters[] = ['value' => $value];
+        } else if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Khoảng thời gian: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay', 'icon' => 'date'];
         }
         if ($request->ajax()) {
             $reports = $this->reports->getAjaxReceiptReturn($data);
@@ -794,11 +802,6 @@ class ReportController extends Controller
         }
         if (isset($data['customer']) && $data['customer'] !== null) {
             $filters[] = ['value' => 'Khách hàng: ' . count($data['customer']) . ' đã chọn', 'name' => 'khách hàng', 'icon' => 'user'];
-        }
-        if (isset($data['date']) && $data['date'][1] !== null) {
-            $date_start = date("d/m/Y", strtotime($data['date'][0]));
-            $date_end = date("d/m/Y", strtotime($data['date'][1]));
-            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
         }
         if (isset($data['tong_tien']) && $data['tong_tien'][1] !== null) {
             $filters[] = ['value' => 'Bảo hành: ' . $data['tong_tien'][0] . ' ' . $data['tong_tien'][1], 'name' => 'tong-tien', 'icon' => 'money'];
@@ -830,6 +833,10 @@ class ReportController extends Controller
                 $currentYear = $data['year'];
             }
             $filters[] = ['value' => $value];
+        }else if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Khoảng thời gian: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay', 'icon' => 'date'];
         }
         if ($request->ajax()) {
             $result = $this->reports->getAjaxRPQuotation($data);

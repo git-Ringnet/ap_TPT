@@ -3,17 +3,19 @@
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed px-1">
         <div class="content__header--inner">
-            <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Hàng tiếp nhận', 'Hàng đã trả']" :filtersTime="['Tháng', 'Quý', 'Năm']">
+            <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Hàng tiếp nhận', 'Hàng đã trả']" :filtersTime="['Ngày','Tháng', 'Quý', 'Năm']">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
                 <x-filter-text name="ten-hang" title="Tên hàng" />
                 <x-filter-compare name="hang-tiep-nhan" title="Hàng tiếp nhận" />
                 <x-filter-compare name="hang-da-tra" title="Hàng đã trả" />
                 @slot('slot1')
+                    <x-filter-date name="ngay" title="Ngày" />
                     <x-filter-month name="thang" title="Tháng" />
                     <x-filter-month name="quy" title="Quý" />
                     <x-filter-month name="nam" title="Năm" />
                 @endslot
             </x-search-filter>
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
     </div>
     <div class="content margin-top-86">
@@ -133,6 +135,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -151,6 +155,7 @@
             month: month,
             quarter: quarter,
             year: year,
+            date: retrieveDateData(this, 'ngay'),
             type_filter: $('#type-filter').val(),
             ma: getData('#ma-hang', this),
             ten: getData('#ten-hang', this),
@@ -206,4 +211,5 @@
             $('#' + $(this).data('button-name') + '-options').hide();
         }
     });
+    exportTableToExcel("#exportBtn", "#example2", "bao_cao_hang_xuat_nhap.xlsx");
 </script>

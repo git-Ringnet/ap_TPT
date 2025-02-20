@@ -42,6 +42,7 @@
                 <x-filter-text name="ghi-chu" title="Ghi chú" />
             </x-search-filter>
             <div class="d-flex content__heading--right">
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
                 <div class="row m-0">
                     <a href="{{ route('receivings.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
@@ -310,6 +311,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -483,4 +486,6 @@
             }
         }
     });
+    exportTableToExcel("#exportBtn", "#example2", "phieu_tiep_nhan.xlsx");
+
 </script>

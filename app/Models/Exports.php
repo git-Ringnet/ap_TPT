@@ -91,14 +91,14 @@ class Exports extends Model
             if (!empty($data['search'])) {
                 $exports->where(function ($query) use ($data) {
                     $query->where('export_code', 'like', '%' . $data['search'] . '%')
-                        ->orWhere('note', 'like', '%' . $data['search'] . '%');
+                        ->orWhere('exports.note', 'like', '%' . $data['search'] . '%');
                 });
             }
             if (!empty($data['ma'])) {
                 $exports->where('export_code', 'like', '%' . $data['ma'] . '%');
             }
             if (!empty($data['note'])) {
-                $exports->where('note', 'like', '%' . $data['note'] . '%');
+                $exports->where('exports.note', 'like', '%' . $data['note'] . '%');
             }
             if (!empty($data['date'][0]) && !empty($data['date'][1])) {
                 $dateStart = Carbon::parse($data['date'][0]);

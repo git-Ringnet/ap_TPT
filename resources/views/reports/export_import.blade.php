@@ -14,9 +14,9 @@
                     <x-filter-month name="nam" title="Năm" />
                 @endslot
             </x-search-filter>
+            <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
     </div>
-
     <div class="content margin-top-86">
         <section class="content report-content">
             <div class="row result-filter-rp_export_import margin-left20">
@@ -132,6 +132,8 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+
 <script>
     $(document).on('click', '.btn-submit', function(e) {
         if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
@@ -157,7 +159,6 @@
             so_luong_xuat: retrieveComparisonData(this, 'so-luong-xuat'),
             sort: getSortData(buttonElement),
         };
-        console.log(formData);
         var nametable = "rp_export_import";
         // Ẩn tùy chọn nếu cần
         if (!$(e.target).closest('li, input[type="checkbox"]').length) {
@@ -174,7 +175,6 @@
                 url: "{{ route('reports.export_import') }}",
                 data: formData,
                 success: function(data) {
-                    console.log(data);
                     updateFilters(
                         data,
                         filters,
@@ -205,4 +205,6 @@
             $('#' + $(this).data('button-name') + '-options').hide();
         }
     });
+    exportTableToExcel("#exportBtn", "#example2", "bao_cao_hang_xuat_nhap.xlsx");
+
 </script>

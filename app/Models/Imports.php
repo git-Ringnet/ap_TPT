@@ -117,14 +117,14 @@ class Imports extends Model
             if (!empty($data['search'])) {
                 $imports->where(function ($query) use ($data) {
                     $query->where('import_code', 'like', '%' . $data['search'] . '%')
-                        ->orWhere('note', 'like', '%' . $data['search'] . '%');
+                        ->orWhere('imports.note', 'like', '%' . $data['search'] . '%');
                 });
             }
             if (!empty($data['ma'])) {
                 $imports->where('import_code', 'like', '%' . $data['ma'] . '%');
             }
             if (!empty($data['note'])) {
-                $imports->where('note', 'like', '%' . $data['note'] . '%');
+                $imports->where('imports.note', 'like', '%' . $data['note'] . '%');
             }
             if (!empty($data['date'][0]) && !empty($data['date'][1])) {
                 $dateStart = Carbon::parse($data['date'][0]);
