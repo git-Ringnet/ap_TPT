@@ -43,6 +43,13 @@ $(document).ready(function () {
         let rowCount = $("#table-body tr").length;
         event.preventDefault(); // Ngăn nút submit form
         const numRows = parseInt($("#row-count").val(), 10); // Lấy số lượng dòng cần thêm từ input
+        const warehouse_id = $("#warehouse_id").val();
+        if (warehouse_id == 2) {
+            $("#warehouse_receive").show();
+        } else {
+            $("#warehouse_receive").hide();
+        }
+        const hideColumnReceive = warehouse_id == 2 ? "" : "d-none";
 
         if (isNaN(numRows) || numRows <= 0) {
             showAutoToast(
@@ -63,6 +70,12 @@ $(document).ready(function () {
                             autocomplete="off" placeholder="Nhập thông tin"
                             class="text-13-black w-100 border-0 seri-input-check">
                         <span class="check-icon"></span>
+                    </td>
+                    <td class="text-13-black border py-0 pl-3 position-relative ${hideColumnReceive}">
+                        <input type="text" id="serial_borrow" name="serial_borrow" style="flex:2;"
+                            autocomplete="off" placeholder="Nhập thông tin"
+                            class="text-13-black w-100 border-0">
+                        <span class="check-icon-borrow"></span>
                     </td>
                     <td class="text-13-black border py-0 text-center">
                         <button class="btn btn-sm delete-row">
@@ -237,6 +250,17 @@ function getSerialNumbers() {
     return serialNumbers; // Trả về mảng serial numbers
 }
 
+function getSerialNumbersBorrow() {
+    let serialNumbersBorrow = [];
+    $("#table-body tr").each(function () {
+        let serialInput = $(this).find('input[name="serial_borrow"]').val();
+        if (serialInput && serialInput.trim() !== "") {
+            serialNumbersBorrow.push(serialInput.trim());
+        }
+    });
+    return serialNumbersBorrow;
+}
+
 function getWarranty() {
     let warrantyArr = [];
 
@@ -348,8 +372,56 @@ $(document).on("click", ".submit-button", function (event) {
         console.log("Tất cả serial đều hợp lệ.");
     }
 
+    $("[name='serial_borrow']").each(function () {
+        const $checkIcon = $(this).siblings(".check-icon-borrow");
+        if ($checkIcon.text() === "✖") {
+            hasError = true;
+            return false;
+        }
+    });
+    if (hasError) {
+        showAutoToast(
+            "warning",
+            "Có số serial không hợp lệ, vui lòng kiểm tra lại."
+        );
+        return;
+    } else {
+        console.log("Tất cả serial đều hợp lệ.");
+    }
+
     let name_modal = $("#name_modal").val();
     let serialNumbers = getSerialNumbers(); // Lấy mảng serial numbers
+    const warehouse_id = $("#warehouse_id").val();
+    let serialNumbersBorrow = [];
+    if (warehouse_id == 2) {
+        $("#title-borrow").show();
+        serialNumbersBorrow = getSerialNumbersBorrow();
+        if (serialNumbersBorrow.length === 0) {
+            showAutoToast("warning", "Vui lòng nhập serial number mượn");
+            return;
+        }
+        let hasError = false;
+
+        $("#table-body tr").each(function () {
+            let formCode =
+                $(this).find("[name='form_code']").val()?.trim() || "";
+            let serialBorrow =
+                $(this).find("[name='serial_borrow']").val()?.trim() || "";
+
+            if (formCode && serialBorrow && formCode === serialBorrow) {
+                showAutoToast(
+                    "warning",
+                    "Serial number mượn không được trùng với serial number"
+                );
+                hasError = true;
+                return false; // Dừng vòng lặp
+            }
+        });
+
+        if (hasError) return;
+    } else {
+        $("#title-borrow").hide();
+    }
     let product = getProduct(); // Lấy thông tin sản phẩm
     let warranty = getWarranty();
 
@@ -399,10 +471,14 @@ $(document).on("click", ".submit-button", function (event) {
     }
     // Thêm các hàng mới từ serialNumbers
     serialNumbers.forEach(function (serial, index) {
+        let serialBorrow =
+            warehouse_id == 2 ? serialNumbersBorrow[index] || "" : "";
+
         let newRow = createSerialRow(
             index,
             product,
             serial,
+            serialBorrow,
             name_modal,
             warranty
         ); // Hàm tạo dòng mới
@@ -434,9 +510,17 @@ $(document).on("click", ".submit-button", function (event) {
 });
 
 // Hàm tạo hàng dữ liệu với serial
-function createSerialRow(index, product, serial, name, warranties) {
+function createSerialRow(
+    index,
+    product,
+    serial,
+    serialBorrow,
+    name,
+    warranties
+) {
     const hideLastColumn = name === "TN" ? "d-block" : "d-none";
     const hideLastWarranty = name === "XH" || name === "CXH" ? "" : "d-none";
+    const hideSerialBorrow = $("#warehouse_id").val() == 2 ? "" : "d-none";
     let name_modal = $("#name_modal").val();
     let rows = [];
     rows.push(`
@@ -475,6 +559,11 @@ function createSerialRow(index, product, serial, name, warranties) {
                     class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly
                     name="serial[]" value="${serial}">
                     <span class="list-recei"></span>
+            </td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative ${hideSerialBorrow}">
+                <input type="text" autocomplete="off"
+                    class="border-0 pl-1 pr-2 py-1 w-100 serial_borrow height-32" readonly
+                    name="serial_borrow_input[]" value="${serialBorrow}">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastColumn}">
                 <input type="text" autocomplete="off"
@@ -568,7 +657,12 @@ function createCountRow(count, product, name, warranty) {
     if (name === "TN") {
         colspanValue1 = 4;
         colspanValue2 = 8;
-    } else if (name === "NH" || name === "CNH") {
+    } else if (
+        name === "NH" ||
+        name === "CNH" ||
+        name === "PCK" ||
+        name === "CPCK"
+    ) {
         colspanValue1 = 3;
         colspanValue2 = 7;
     } else if (name === "XH" || name === "CXH") {
@@ -675,6 +769,13 @@ $(document).on("click", ".save-info-product", function (e) {
     const productCode = $(this).data("product-code");
     const productBrand = $(this).data("product-brand");
     const productWarranty = $(this).data("product-warranty");
+    const warehouse_id = $("#warehouse_id").val();
+
+    if (warehouse_id == 2) {
+        $("#warehouse_receive").show();
+    } else {
+        $("#warehouse_receive").hide();
+    }
 
     // Khai báo mảng để lưu thông tin sản phẩm
     const products = [];

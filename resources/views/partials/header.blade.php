@@ -120,6 +120,9 @@
                                     hàng
                                 </a>
                             @endunlessrole
+                            <a class="dropdown-item text-13" href="{{ route('warehouseTransfer.index') }}">
+                                Phiếu chuyển kho
+                            </a>
                         </div>
                     </div>
                     @can('admin')
@@ -279,6 +282,12 @@
                             </button>
                         </a>
                     @endunlessrole
+                    <a href="{{ route('warehouseTransfer.index') }}" class="height-36">
+                        <button type="button"
+                            class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'warehouseTransfer') active @endif">
+                            Phiếu chuyển kho
+                        </button>
+                    </a>
                 </div>
                 <div class="@if (!empty($activeGroup) && $activeGroup == 'reports') d-flex @else d-none @endif">
                     <a href="{{ route('reportOverview') }}" class="height-36">

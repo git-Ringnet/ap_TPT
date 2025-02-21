@@ -91,4 +91,9 @@ class User extends Authenticatable
         }
         return $users->get();
     }
+    //relationship warehouseTransfer
+    public function warehouseTransfer()
+    {
+        return $this->hasMany(WarehouseTransfer::class);
+    }
 }

@@ -64,6 +64,12 @@ class Product extends Model
     //     return $this->belongsTo(Group::class, 'group_id');
     // }
 
+    //relation warwhouse_transfer_item
+    public function warehouseTransferItems()
+    {
+        return $this->hasMany(WarehouseTransferItem::class, 'product_id');
+    }
+
     public function getAllProducts($data = null)
     {
         $products = DB::table($this->table);

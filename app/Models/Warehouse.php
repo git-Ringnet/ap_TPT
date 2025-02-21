@@ -13,6 +13,11 @@ class Warehouse extends Model
         'warehouse_name',
         'address',
     ];
+    //relationship warehouseTransfer
+    public function warehouseTransfer()
+    {
+        return $this->hasMany(WarehouseTransfer::class);
+    }
     public function getAllWarehouse($data = null)
     {
         $warehouse = DB::table('warehouses');

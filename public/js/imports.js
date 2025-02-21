@@ -31,6 +31,18 @@ $(document).ready(function () {
         $("#listProvider"),
         $("#searchProvider")
     );
+    //Kho chuyển
+    toggleListGuest(
+        $("#warehouse_name"),
+        $("#listWarehouse"),
+        $("#searchWarehouse")
+    );
+    //Kho nhận
+    toggleListGuest(
+        $("#warehouse_receive_name"),
+        $("#listWarehouseReceive"),
+        $("#searchWarehouseReceive")
+    );
     //Người lập
     toggleListGuest($("#user_name"), $("#listUser"), $("#searchUser"));
     //lấy tên nhà cung cấp và id
@@ -52,6 +64,22 @@ $(document).ready(function () {
         const dataName = $(this).data("name");
         $("#user_id").val(dataId);
         $("#user_name").val(dataName);
+    });
+    //lấy kho chuyển
+    $('a[name="warehouse-info"]').on("click", function () {
+        const dataId = $(this).attr("id");
+        const dataName = $(this).data("name");
+        $("#warehouse_id").val(dataId);
+        $("#warehouse_name").val(dataName);
+        $('.delete-row').click();
+    });
+    //lấy kho nhận
+    $('a[name="warehouse-receive-info"]').on("click", function () {
+        const dataId = $(this).attr("id");
+        const dataName = $(this).data("name");
+        $("#warehouse_receive_id").val(dataId);
+        $("#warehouse_receive_name").val(dataName);
+        $('.delete-row').click();
     });
 });
 function formatDate(dateString) {

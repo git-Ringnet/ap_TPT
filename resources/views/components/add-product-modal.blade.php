@@ -151,9 +151,11 @@
                         <table class="info-serial w-100">
                             <thead class="border-custom border-bottom">
                                 <tr class="">
-                                    <th class="height-40 py-0 border text-center" style="width:15%">STT</th>
-                                    <th class="height-40 py-0 border pl-3" style="width:70%">Serial Number</th>
-                                    <th class="height-40 py-0 border pl-3" style="width:15%"></th>
+                                    <th class="height-40 py-0 border text-center" style="width:10%">STT</th>
+                                    <th class="height-40 py-0 border pl-3" style="width:40%">Serial Number</th>
+                                    <th class="height-40 py-0 border pl-3" style="width:40%" id="warehouse_receive">
+                                        Serial Number mượn</th>
+                                    <th class="height-40 py-0 border pl-3" style="width:10%"></th>
                                 </tr>
                             </thead>
                             <tbody id="table-body">
@@ -289,6 +291,8 @@
             const product_id = $('#product_id_input').val(); // Giá trị nhập vào
             const branch_id = $('input[name="branch_id"]:checked').val();
             const form_type = $('input[name="form_type"]:checked').val();
+            const warehouse = $('#warehouse_id').val();
+            const warehouseTransferId = $('#warehouseTransferId').val();
 
             // Kiểm tra trùng lặp trong các ô nhập liệu khác
             let isDuplicate = false;
@@ -318,10 +322,76 @@
                         serial_number: serialNumber,
                         product_id: product_id,
                         nameModal: nameModal,
+                        warehouse: warehouse,
+                        warehouseTransferId: warehouseTransferId,
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
                         console.log(response.message);
+                        if (response.status === 'success' && serialNumber !== "") {
+                            console.log(serialNumber);
+                            $checkIcon.text('✔').css('color', 'green').attr('title',
+                                response.message);
+                        } else if (response.status === 'error') {
+                            $checkIcon.text('✖').css('color', 'red').attr('title', response
+                                .message);
+                        }
+                    },
+                    error: function() {
+                        $checkIcon.text('?').css('color', 'orange');
+                        console.error('Có lỗi xảy ra khi kiểm tra số serial.');
+                    }
+                });
+            } else {
+                // Nếu ô trống, giữ biểu tượng mặc định hoặc không làm gì cả
+                $checkIcon.text('').css('color', 'transparent');
+                console.log(serialNumber);
+            }
+            updateSerialCount();
+        });
+        $(document).on('change', "[name='serial_borrow']", function() {
+            const $input = $(this);
+            const $checkIcon = $input.siblings('.check-icon-borrow');
+            const serialNumber = $input.val().trim(); // Giá trị nhập vào
+            const product_id = $('#product_id_input').val(); // Giá trị nhập vào
+            const branch_id = $('input[name="branch_id"]:checked').val();
+            const form_type = $('input[name="form_type"]:checked').val();
+            const warehouse = $('#warehouse_id').val();
+            const warehouseTransferId = $('#warehouseTransferId').val();
+
+            // Kiểm tra trùng lặp trong các ô nhập liệu khác
+            let isDuplicate = false;
+            $('.seri-input-check').each(function() {
+                const otherValue = $(this).val().trim();
+                if ($(this)[0] !== $input[0] && otherValue === serialNumber && serialNumber !==
+                    '') {
+                    isDuplicate = true;
+                    return false; // Thoát khỏi vòng lặp nếu tìm thấy trùng lặp
+                }
+            });
+
+            if (isDuplicate) {
+                $checkIcon.text('✖').css('color', 'red');
+                console.error('Serial bị trùng lặp.');
+                return; // Không thực hiện kiểm tra AJAX nếu trùng lặp
+            }
+
+            // Kiểm tra nếu ô nhập liệu không trống và thực hiện AJAX ngay lập tức
+            if (serialNumber !== "") {
+                $.ajax({
+                    url: '{{ route('checkSNImportBorrow') }}',
+                    type: 'GET',
+                    data: {
+                        form_type: form_type,
+                        branch_id: branch_id,
+                        serial_number: serialNumber,
+                        product_id: product_id,
+                        nameModal: nameModal,
+                        warehouse: warehouse,
+                        warehouseTransferId: warehouseTransferId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
                         if (response.status === 'success' && serialNumber !== "") {
                             console.log(serialNumber);
                             $checkIcon.text('✔').css('color', 'green').attr('title',
@@ -352,6 +422,20 @@
             e.preventDefault();
         }
 
+        if (nameModal === "PCK") {
+            let warehouse = $("#warehouse_id").val();
+            let warehousereceive = $("#warehouse_receive_id").val();
+            if (warehouse === "" || warehousereceive === "") {
+                showAutoToast("warning", "Vui lòng chọn kho xuất và kho nhận");
+                e.preventDefault();
+            } else {
+                if (warehouse === warehousereceive) {
+                    showAutoToast("warning", "Kho xuất và kho nhận không được trùng nhau");
+                    e.preventDefault();
+                }
+            }
+        }
+
         // Kiểm tra nhập S/N trùng
         let duplicates = [];
         let seen = new Set();
@@ -378,7 +462,7 @@
         let isDuplicate = false; // Cờ kiểm tra xem có serial nào bị trùng không
         const rows = $(
             '#tbody-product-data .row-product[data-product-id]'); // Lấy tất cả các hàng có product_id
-
+        const warehouse_id = $("#warehouse_id").val();
         rows.each(function() {
             const $row = $(this); // Lấy dòng hiện tại
             const product_id = $row.find('.product_id').val();
@@ -396,6 +480,7 @@
                     serial: serial,
                     nameModal: nameModal,
                     import_id: import_id,
+                    warehouse_id: warehouse_id,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
@@ -415,6 +500,10 @@
                         SNExist.push(serial);
                         isDuplicate = true; // Đánh dấu lỗi không tồn tại
                     }
+                    if (nameModal === "PCK" && !response.exists) {
+                        SNExist.push(serial);
+                        isDuplicate = true; // Đánh dấu lỗi không tồn tại
+                    }
                 }
             });
         });
@@ -426,6 +515,8 @@
             if (nameModal === "NH" || nameModal === "CNH") {
                 message = `Serial này đã có trong hệ thống: ${SNExist.join(", ")}`;
             } else if (nameModal === "XH" || nameModal === "CXH") {
+                message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
+            } else if (nameModal === "PCK") {
                 message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
             }
 
@@ -442,6 +533,7 @@
             const $row = $(this); // Dòng hiện tại
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val();
+            const serialBorrow = $row.find('.serial_borrow').val();
             const note_seri = $row.find('.note_seri').val();
             const status_recept = $row.find('.status_recept').val();
 
@@ -478,6 +570,10 @@
 
             if (nameModal === "XH" || nameModal === "CXH") {
                 productData.warranty = warranties;
+            }
+
+            if (nameModal === "PCK" || nameModal === "CPCK") {
+                productData.serialBorrow = serialBorrow;
             }
 
             // Tạo khóa duy nhất bao gồm cả note_seri

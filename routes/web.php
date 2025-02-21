@@ -19,6 +19,7 @@ use App\Http\Controllers\ProvidersController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnFormController;
 use App\Http\Controllers\SerialNumberController;
+use App\Http\Controllers\WarehouseTransferController;
 use App\Http\Controllers\WarrantyLookupController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,7 @@ Route::resource('quotations', QuotationController::class);
 Route::get('/get-info-receiving', [ReceivingController::class, 'getReceiving'])->name('getReceiving');
 // Check SN
 Route::get('/checkSNImport', [SerialNumberController::class, 'checkSNImport'])->name('checkSNImport');
+Route::get('/checkSNImportBorrow', [SerialNumberController::class, 'checkSNImportBorrow'])->name('checkSNImportBorrow');
 Route::post('/check-serial', [SerialNumberController::class, 'checkSerial']);
 Route::get('/check-serial-replace', [SerialNumberController::class, 'checkSNReplace'])->name('checkSNReplace');
 Route::post('/check-serial-numbers', [SerialNumberController::class, 'checkSerialNumbers'])->name('check.serial.numbers');
@@ -142,5 +144,8 @@ Route::get('/reportQuotation', [ReportController::class, 'reportQuotation'])->na
 //
 Route::get('/filterReportOverview', [ReportController::class, 'filterReportOverview'])->name('filterReportOverview');
 Route::get('/filterReportPeriodTime', [ReportController::class, 'filterReportPeriodTime'])->name('filterReportPeriodTime');
+
+//Warehouse transfer
+Route::resource('/warehouseTransfer', WarehouseTransferController::class);
 
 require __DIR__ . '/auth.php';

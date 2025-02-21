@@ -3330,6 +3330,19 @@ tbody .bg-input-guest-blue {
     /* Hiệu ứng chuyển màu mượt mà */
 }
 
+.check-icon-borrow {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: green;
+    pointer-events: none;
+    /* Không cho phép click vào biểu tượng */
+    transition: color 0.3s ease-in-out;
+    /* Hiệu ứng chuyển màu mượt mà */
+}
+
 .list-recei {
     position: absolute;
     right: 10px;

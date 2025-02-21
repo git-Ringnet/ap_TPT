@@ -14,7 +14,7 @@ class CreateSerialNumbersTable extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->integer('status')
                 ->default(1)
-                ->comment('1: Nhập hàng, 2: Xuất hàng, 3: Tiếp nhận, 4: Trả hàng');
+                ->comment('1: Nhập hàng, 2: Xuất hàng, 3: Tiếp nhận, 4: Trả hàng, 5: Đang mượn');
             $table->string('note')->nullable();
             $table->integer('warehouse_id')->default(1);
             $table->timestamps();
