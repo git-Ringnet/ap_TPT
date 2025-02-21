@@ -385,6 +385,8 @@
             });
 
             $(this).closest('.status-list').hide();
+            const optionButton = $(this).closest('.option-button');
+            optionButton.hide()
         });
 
         // Ẩn danh sách khi click ra ngoài
