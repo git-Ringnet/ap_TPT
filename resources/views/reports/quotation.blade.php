@@ -124,6 +124,7 @@
                                         $cancel = 0;
                                         $totalCompoleted = 0;
                                         $totalCancel = 0;
+                                        $totalAmount = 0;
                                     @endphp
                                     @foreach ($quotations as $item)
                                         @if ($item->status == 1)
@@ -137,6 +138,9 @@
                                                 $totalCancel += $item->total_amount;
                                             @endphp
                                         @endif
+                                        @php
+                                            $totalAmount += $item->total_amount;
+                                        @endphp
                                         <tr class="position-relative rp_quotation-info height-40">
                                             <input type="hidden" name="id-rp_quotation" class="id-rp_quotation"
                                                 id="id-rp_quotation" value="{{ $item->id }}">
@@ -174,7 +178,10 @@
                             <div class="footer-summary">
                                 <table class="table-footer" style="table-layout: auto;">
                                     <tr>
-                                        <td class="text-right" colspan="2"></td>
+                                        <td class="text-right" colspan="1"></td>
+                                        <td class="text-danger">Phiếu báo giá:
+                                            <span class="statusCounts-3">{{ count($quotations) }}</span>
+                                        </td>
                                         <td class="text-danger">Phiếu hoàn thành:
                                             <span class="statusCounts-3">{{ $completed }}</span>
                                         </td>
@@ -184,8 +191,8 @@
                                         <td class="text-danger">Phiếu khách từ chối:
                                             <span class="statusCounts-4">{{ $cancel }}</span>
                                         </td>
-                                        <td class="text-danger">Tổng tiền khách từ chối:
-                                            <span class="totalAmounts-4">{{ number_format($totalCancel) }}</span>
+                                        <td class="text-danger">Tổng tiền toàn bộ phiếu báo giá:
+                                            <span class="totalAmounts-4">{{ number_format($totalAmount) }}</span>
                                         </td>
                                     </tr>
                                 </table>

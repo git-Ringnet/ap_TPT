@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('warranty');
             $table->integer('status')->comment("0: Bảo hành, 1: Dịch vụ, 2: Bảo hành dịch vụ");
             $table->dateTime('warranty_expire_date')->comment("Ngày hết hạn bảo hành")->nullable();
+            $table->integer('service_warranty')->comment("Ngày bảo hành dịch vụ")->nullable();
+            $table->dateTime('service_warranty_expired')->comment("Ngày hết hạn bảo hành dịch vụ")->nullable();
             $table->timestamps();
         });
     }

@@ -129,6 +129,17 @@
                                                 <div class="icon" id="icon-status"></div>
                                             </span>
                                         </th>
+                                        <th class="height-40 py-0 border-right-0" scope="col">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit" data-sort-by=""
+                                                    data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Bảo hành dịch vụ</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-status"></div>
+                                            </span>
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-warran-lookup">
@@ -169,6 +180,10 @@
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->status_string }}
+                                            </td>
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                {{ $item->service_warranty }}
                                             </td>
                                         </tr>
                                     @endforeach

@@ -66,24 +66,24 @@ class Groups extends Model
             $data = [
                 'obj' => 'customers',
                 'results' => Customers::where('group_id', $id)
-                    ->select('customers.id as id', 'customers.customer_name as name')->get()
+                    ->select('customers.id as id', 'customers.customer_name as name', 'customers.customer_code as code')->get()
             ];
         } elseif ($grouptype == 2) {
             $data = [
                 'obj' => 'providers',
                 'results' => Providers::where('group_id', $id)
-                    ->select('providers.id as id', 'providers.provider_name as name')->get()
+                    ->select('providers.id as id', 'providers.provider_name as name', 'providers.provider_code as code')->get()
             ];
         } elseif ($grouptype == 3) {
             $data = [
                 'obj' => 'products',
-                'results' => Product::where('group_id', $id)->select('products.id as id', 'products.product_name as name')->get()
+                'results' => Product::where('group_id', $id)->select('products.id as id', 'products.product_name as name', 'products.product_code as code')->get()
             ];
         } elseif ($grouptype == 4) {
             $data = [
                 'obj' => 'users',
                 'results' => User::where('group_id', $id)
-                    ->select('users.id as id', 'users.name as name')->get()
+                    ->select('users.id as id', 'users.name as name', 'users.employee_code as code')->get()
             ];
         }
         return $data;

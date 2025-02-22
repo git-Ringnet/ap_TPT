@@ -49,7 +49,7 @@ class Imports extends Model
         $warehouse_id = GlobalHelper::getWarehouseId();
         $imports = Imports::leftJoin("providers", "providers.id", "imports.provider_id")
             ->leftJoin("users", "users.id", "imports.user_id")
-            ->select("providers.provider_name", "users.name", "imports.*");
+            ->select("providers.provider_name", "users.name", "imports.*")->orderBy('id', 'desc');
         if ($warehouse_id) {
             $imports = $imports->where('imports.warehouse_id', $warehouse_id);
         }

@@ -30,7 +30,7 @@ class ExportsController extends Controller
     {
         $title = "Phiếu xuất hàng";
         $warehouse_id = GlobalHelper::getWarehouseId();
-        $exports = Exports::with(['user', 'customer']);
+        $exports = Exports::with(['user', 'customer'])->orderBy('id', 'desc');
         if ($warehouse_id) {
             $exports = $exports->where('warehouse_id', $warehouse_id);
         }

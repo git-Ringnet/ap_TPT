@@ -163,7 +163,7 @@
                                                     <tr class="position-relative height-52">
                                                         <td
                                                             class="text-13-black max-width180 text-left border-top-0 border-bottom pl-4">
-                                                            {{ $item->id }}
+                                                            {{ $item->code }}
                                                         </td>
                                                         <td
                                                             class="text-13-black max-width180 text-left border-top-0 border-bottom">

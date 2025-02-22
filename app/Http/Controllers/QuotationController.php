@@ -20,7 +20,7 @@ class QuotationController extends Controller
     // Hiển thị danh sách báo giá
     public function index()
     {
-        $quotations = Quotation::get();
+        $quotations = Quotation::orderBy('id', 'desc')->get();
         $title = 'Danh sách báo giá';
         $customers = Customers::all();
         return view('expertise.quotations.index', compact('quotations', 'title', 'customers'));

@@ -28,7 +28,7 @@ class ReceivingController extends Controller
 
     public function index()
     {
-        $receivings = Receiving::all();
+        $receivings = Receiving::orderBy('id', 'desc')->get();
         $title = 'Phiếu tiếp nhận';
         $customers = Customers::all();
         return view('expertise.receivings.index', compact('receivings', 'title', 'customers'));

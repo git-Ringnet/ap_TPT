@@ -23,7 +23,7 @@ class WarehouseTransferController extends Controller
     public function index()
     {
         $title = 'Phiếu chuyển kho';
-        $warehouseTransfer = $this->warehouseTransfer->all();
+        $warehouseTransfer = $this->warehouseTransfer->orderBy('id', 'desc')->get();
         return view('expertise.warehouseTransfer.index', compact('title', 'warehouseTransfer'));
     }
 

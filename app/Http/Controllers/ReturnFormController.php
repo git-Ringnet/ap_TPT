@@ -32,7 +32,7 @@ class ReturnFormController extends Controller
     }
     public function index()
     {
-        $returnforms = ReturnForm::with(['reception', 'customer', 'productReturns'])->get();
+        $returnforms = ReturnForm::with(['reception', 'customer', 'productReturns'])->orderBy('id', 'desc')->get();
         $title = 'Phiếu trả hàng';
         $customers = Customers::all();
         return view('expertise.returnforms.index', compact('returnforms', 'title', 'customers'));
