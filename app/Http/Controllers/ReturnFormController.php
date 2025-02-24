@@ -94,12 +94,13 @@ class ReturnFormController extends Controller
                 $extra_warranty = $returnItem['extra_warranty'] ?? null;
                 $note = $returnItem['note'] ?? null;
                 $replacement_serial_number_id = $returnItem['replacement_serial_number_id'] ?? null;
-                $replacement_code = $returnItem['replacement_code'] ?? null;
+                $replacement_code = $replacement_serial_number_id ? ($returnItem['replacement_code'] ?? null) : null;                
                 $replacementSerialId = null;
                 if ($replacement_serial_number_id != null) {
                     $replacementSerialId = SerialNumber::where('serial_code', $replacement_serial_number_id)
                         ->where('product_id', $replacement_code)
-                        ->where('status', 1)
+                        ->whereIn('status', [1, 5])
+                        ->where('warehouse_id', 2)
                         ->first();
                 }
                 $stateRecei = $validated['status'] == 1 ? 3 : 4;
@@ -140,13 +141,13 @@ class ReturnFormController extends Controller
                 if ($returnForm->reception->form_type != 2) {
                     $productReturn = ProductReturn::createProductReturn($data);
                     $oldWarrantyLookup = warrantyLookup::where('sn_id', $serial_number_id)->first();
-                    
-                    if(empty($oldWarrantyLookup)) {
+
+                    if (empty($oldWarrantyLookup)) {
                         $newWarranty = warrantyLookup::create([
                             'product_id' => $product_id,
                             'sn_id' => $serial_number_id,
                             'customer_id' => $validated['customer_id'],
-                            'name_warranty' => 'Bên ngoài',
+                            'name_warranty' => 'Hàng bên ngoài',
                             'name_status' => null,
                             'export_return_date' => $validated['date_created'],
                             'warranty' => 0,
@@ -195,31 +196,33 @@ class ReturnFormController extends Controller
                             if ($warrantyRecordOld) {
                                 // Cập nhật bản ghi cũ
                                 $warrantyRecordOld->update([
-                                    'warranty' => $extra_warranty,
-                                    'export_return_date' => $validated['date_created'],
-                                    'warranty_expire_date' => Carbon::parse($validated['date_created'])->addMonths($extra_warranty),
+                                    'return_date' => $validated['date_created'],
+                                    'warranty_extra' => $extra_warranty,
+                                    'name_expire_date' =>$warrantyItem['name_warranty'],
+                                    'service_warranty_expired' => Carbon::parse($validated['date_created'])->addMonths($extra_warranty),
                                     'status' => 0,
                                 ]);
                             } else {
                                 // Tạo mới nếu không tìm thấy bản ghi cũ
                                 $warrantyRecordOld = warrantyLookup::create([
                                     'sn_id' => $serial_number_id,
-                                    'name_warranty' => $warrantyItem['name_warranty'],
+                                    'name_expire_date' => $warrantyItem['name_warranty'],
                                     'product_id' => $product_id,
                                     'customer_id' => $validated['customer_id'],
-                                    'warranty' => $extra_warranty,
-                                    'export_return_date' => $validated['date_created'],
+                                    'warranty_extra' => $extra_warranty,
+                                    'return_date' => $validated['date_created'],
+                                    'service_warranty_expired' => Carbon::parse($validated['date_created'])->addMonths($extra_warranty),
                                     'name_status' => 'Còn bảo hành',
-                                    'warranty_expire_date' => Carbon::parse($validated['date_created'])->addMonths($extra_warranty),
                                     'status' => 0,
                                 ]);
                             }
-                            $today = Carbon::now();
-                            if ($today->greaterThanOrEqualTo($warrantyRecordOld->warranty_expire_date) || $warrantyRecordOld->warranty == 0) {
-                                $warrantyRecordOld->update(['status' => 1]);
-                            } else {
-                                $warrantyRecordOld->update(['status' => 2]);
-                            }
+                                $today = Carbon::now();
+                                // dd($today->greaterThanOrEqualTo($warrantyRecordOld->service_warranty_expired));
+                                if ($today->greaterThanOrEqualTo($warrantyRecordOld->service_warranty_expired) || $warrantyRecordOld->warranty_extra == 0) {
+                                    $warrantyRecordOld->update(['status' => 1]);
+                                } else {
+                                    $warrantyRecordOld->update(['status' => 2]);
+                                }
 
                             $warranty = warrantyHistory::create([
                                 'warranty_lookup_id' => $warrantyRecordOld->id,
@@ -229,7 +232,7 @@ class ReturnFormController extends Controller
                                 'note' => $note,
                             ]);
                             // Cập nhật trạng thái SerialNumber
-                            SerialNumber::find($serial_number_id)->update(['status' => 5]);
+                            SerialNumber::find($serial_number_id)->update(['status' => 6]);
                         }
                     }
                 }
@@ -319,8 +322,6 @@ class ReturnFormController extends Controller
             $returnForm->update($validated);
 
             // Delete existing product returns to avoid duplicates
-            ProductReturn::where('return_form_id', $id)->delete();
-
             foreach ($validated['return'] as $returnItem) {
                 $product_id = $returnItem['product_id'];
                 $quantity = $returnItem['quantity'];
@@ -329,14 +330,19 @@ class ReturnFormController extends Controller
                 $extra_warranty = (int) $returnItem['extra_warranty'] ?? null;
                 $note = $returnItem['note'] ?? null;
                 $replacement_serial_number_id = $returnItem['replacement_serial_number_id'] ?? null;
-                $replacement_code = $returnItem['replacement_code'] ?? null;
-
+                $replacement_code = $replacement_serial_number_id ? ($returnItem['replacement_code'] ?? null) : null;
+                
                 $replacementSerialId = null;
+                $oldReplacementSerialId = ProductReturn::where('return_form_id', $id)->value('replacement_serial_number_id') ?? 0;
                 if ($replacement_serial_number_id) {
-                    $replacementSerialId = SerialNumber::where('serial_code', $replacement_serial_number_id)
+                    $replacementSerial = SerialNumber::where('serial_code', $replacement_serial_number_id)
                         ->where('product_id', $replacement_code)
-                        ->where('status', 1)
+                        ->whereIn('status', [1, 5])
+                        ->where('warehouse_id', 2)
                         ->first();
+                    if ($replacementSerial && $replacementSerial->id !== $oldReplacementSerialId) {
+                        $replacementSerialId = $replacementSerial;
+                    }
                 }
 
                 // Update receiving status
@@ -351,18 +357,19 @@ class ReturnFormController extends Controller
                     'return_form_id' => $id,
                     'product_id' => $product_id,
                     'quantity' => $quantity,
-                    'serial_number_id' => $serial_number_id,
+                    'serial_number_id' => (int)$serial_number_id,
                     'replacement_code' => $replacement_code,
-                    'replacement_serial_number_id' => $replacementSerialId->id ?? null,
+                    'replacement_serial_number_id' => $replacementSerialId->id ?? 0,
                     'extra_warranty' => $extra_warranty,
                     'notes' => $note,
                 ];
+                ProductReturn::where('return_form_id', $id)->delete();
+
 
                 // Handle replacement serial number updates
                 if ($replacementSerialId) {
                     // Delete existing warranty lookups for the replacement
                     warrantyLookup::where('sn_id', $replacementSerialId->id)->delete();
-
                     $warranty_lookup = warrantyLookup::where('sn_id', $serial_number_id)->get();
                     foreach ($warranty_lookup as $warranty) {
                         warrantyLookup::create([
@@ -378,6 +385,9 @@ class ReturnFormController extends Controller
                         ]);
                     }
 
+                    if ($oldReplacementSerialId) {
+                        SerialNumber::find($oldReplacementSerialId)->update(['status' => 1, 'warehouse_id' => 2]);
+                    }
                     SerialNumber::find($serial_number_id)->update(['status' => 1, 'warehouse_id' => 2]);
                     SerialNumber::find($replacementSerialId->id)->update(['status' => 2]);
                 }
@@ -422,7 +432,7 @@ class ReturnFormController extends Controller
 
                     // Update warranty status
                     $today = Carbon::now();
-                    if ($today->greaterThanOrEqualTo($warrantyRecordOld->warranty_expire_date) || $warrantyRecordOld->warranty == 0) {
+                    if ($today->greaterThanOrEqualTo($warrantyRecordOld->service_warranty_expired) || $warrantyRecordOld->warranty == 0) {
                         $warrantyRecordOld->update(['status' => 1]);
                     } else {
                         $warrantyRecordOld->update(['status' => 2]);

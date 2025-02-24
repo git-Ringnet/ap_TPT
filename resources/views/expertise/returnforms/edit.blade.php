@@ -93,7 +93,7 @@
                             <p class="m-0 p-0 text-dark">In phiếu</p>
                         </button>
                         @can('admin')
-                            {{-- <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
+                            <button type="submit" class="custom-btn d-flex align-items-center h-100 mx-1 mr-4"
                                 id="btn-get-unique-products">
                                 <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     viewBox="0 0 16 16" fill="none">
@@ -102,7 +102,7 @@
                                         fill="white" />
                                 </svg>
                                 <p class="m-0 p-0">Xác nhận</p>
-                            </button> --}}
+                            </button>
                         @endcan
                         <button id="sideGuest" type="button" class="btn-option border-0 mx-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

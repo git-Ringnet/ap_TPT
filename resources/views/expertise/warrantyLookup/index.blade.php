@@ -54,17 +54,6 @@
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="product_name" data-sort-type="DESC">
-                                                    <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Tên hàng</span>
-                                                    </button>
-                                                </a>
-                                                <div class="icon" id="icon-product_name"></div>
-                                            </span>
-                                        </th>
-                                        <th class="height-40 py-0 border-right-0" scope="col">
-                                            <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="brand"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
@@ -101,7 +90,7 @@
                                                 <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="export_return_date" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Ngày xuất</span>
+                                                        <span class="text-14">Ngày bán</span>
                                                     </button>
                                                 </a>
                                                 <div class="icon" id="icon-export_return_date"></div>
@@ -120,6 +109,28 @@
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="export_return_date" data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Ngày kích hoạt BH dịch vụ</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-export_return_date"></div>
+                                            </span>
+                                        </th>
+                                        <th class="height-40 py-0 border-right-0" scope="col">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="warrantyLookup" data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Bảo hành dịch vụ</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-warrantyLookup"></div>
+                                            </span>
+                                        </th>
+                                        <th class="height-40 py-0 border-right-0" scope="col">
+                                            <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="status"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
@@ -129,31 +140,21 @@
                                                 <div class="icon" id="icon-status"></div>
                                             </span>
                                         </th>
-                                        <th class="height-40 py-0 border-right-0" scope="col">
-                                            <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by=""
-                                                    data-sort-type="DESC">
-                                                    <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Bảo hành dịch vụ</span>
-                                                    </button>
-                                                </a>
-                                                <div class="icon" id="icon-status"></div>
-                                            </span>
-                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-warran-lookup">
                                     @foreach ($grouped as $item)
+                                        @php
+                                            $firstHistory = $item->warrantyHistories->first();
+                                            $branchId = $firstHistory?->receiving?->branch_id ?? 0;
+                                            $formType = $firstHistory?->receiving?->form_type ?? 0;
+                                        @endphp
                                         <tr class="position-relative warran-lookup-info height-40">
                                             <input type="hidden" name="id-warran-lookup" class="id-warran-lookup"
                                                 id="id-warran-lookup" value="{{ $item->sn_id }}">
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->product->product_code }}
-                                            </td>
-                                            <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
-                                                {{ $item->product->product_name }}
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -171,7 +172,7 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ date_format(new DateTime($item->export_return_date), 'd/m/Y') }}
+                                                {{ $item->export_return_date ? date_format(new DateTime($item->export_return_date), 'd/m/Y') : '' }}    
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -179,11 +180,18 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->status_string }}
+                                                {{ $item->return_date ? date_format(new DateTime($item->return_date), 'd/m/Y') : '' }}   
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->service_warranty }}
+                                                {{ $item->name_expire_date }}
+                                            </td>
+                                            <td
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                @if($branchId == 2 && $formType ==3)
+                                                @else
+                                                {{ $item->status_string }}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

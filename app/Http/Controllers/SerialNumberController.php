@@ -384,7 +384,7 @@ class SerialNumberController extends Controller
     {
         $seriRecord = SerialNumber::where('serial_code', $request->serialNumber)
             ->where('product_id', $request->product_id)
-            ->where('status', 1)
+            ->whereIn('status', [1,5])->where('warehouse_id',2)
             ->first();
 
         if ($seriRecord) {
@@ -500,7 +500,7 @@ class SerialNumberController extends Controller
         // Kiểm tra với một serial duy nhất
         $sericheck = SerialNumber::where('serial_code', $serialData)->first();
         if ($sericheck) {
-            if ($sericheck->status == 1) {
+            if ($sericheck->status == 1 || $sericheck->status == 5) {
                 return response()->json(['status' => 'error', 'message' => 'Serial tồn tại trong kho.']);
             } elseif ($sericheck->product_id == $product_id) {
                 return response()->json(['status' => 'success', 'message' => 'Số serial nội bộ.']);

@@ -17,11 +17,13 @@ return new class extends Migration
             $table->integer('sn_id');
             $table->integer('customer_id')->nullable();
             $table->string('name_warranty')->nullable();
-            $table->dateTime('export_return_date');
-            $table->integer('warranty');
+            $table->dateTime('export_return_date')->nullable();
+            $table->integer('warranty')->nullable();
             $table->integer('status')->comment("0: Bảo hành, 1: Dịch vụ, 2: Bảo hành dịch vụ");
+            $table->string('name_expire_date')->comment("Thông tin bảo hành thêm")->nullable();
             $table->dateTime('warranty_expire_date')->comment("Ngày hết hạn bảo hành")->nullable();
-            $table->integer('service_warranty')->comment("Ngày bảo hành dịch vụ")->nullable();
+            $table->integer('warranty_extra')->nullable();
+            $table->dateTime('return_date')->comment("Ngày trả hàng")->nullable();
             $table->dateTime('service_warranty_expired')->comment("Ngày hết hạn bảo hành dịch vụ")->nullable();
             $table->timestamps();
         });
