@@ -54,11 +54,28 @@ class SerialNumberController extends Controller
                 ->exists();
         }
         if ($request->nameModal == "PCK") {
-            if ($request->warehouse == 1) {
+            if ($request->warehouse_id == 1) {
                 $exists = SerialNumber::where('product_id', $productId)
                     ->where('serial_code', $serial)
                     ->where('status', 1)
                     ->exists();
+            }
+            if ($request->warehouse_id == 2) {
+                $serial_borrow = $request->input('serial_borrow');
+                $existsSerial = SerialNumber::where('product_id', $productId)
+                    ->where('serial_code', $serial)
+                    ->exists();
+
+                $existsSerialBorrow = SerialNumber::where('product_id', $request->product_id)
+                    ->where('serial_code', $serial_borrow)
+                    ->where('status', '!=', 5)
+                    ->exists();
+
+                return response()->json([
+                    'status' => 'success',
+                    'existsSerial' => $existsSerial,
+                    'existsSerialBorrow' => $existsSerialBorrow
+                ]);
             }
         }
 

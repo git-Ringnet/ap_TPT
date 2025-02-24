@@ -467,6 +467,7 @@
             const $row = $(this); // Lấy dòng hiện tại
             const product_id = $row.find('.product_id').val();
             const serial = $row.find('.serial').val().trim();
+            const serial_borrow = $row.find('.serial_borrow').val()?.trim() || "";
 
             // Nếu serial rỗng, bỏ qua
             if (!serial) return;
@@ -481,6 +482,7 @@
                     nameModal: nameModal,
                     import_id: import_id,
                     warehouse_id: warehouse_id,
+                    serial_borrow: serial_borrow,
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response) {
@@ -501,8 +503,19 @@
                         isDuplicate = true; // Đánh dấu lỗi không tồn tại
                     }
                     if (nameModal === "PCK" && !response.exists) {
-                        SNExist.push(serial);
-                        isDuplicate = true; // Đánh dấu lỗi không tồn tại
+                        if (warehouse_id == 1) {
+                            SNExist.push(serial);
+                            isDuplicate = true; // Đánh dấu lỗi không tồn tại
+                        } else {
+                            if (!response.existsSerial) {
+                                SNExist.push(serial);
+                                isDuplicate = true;
+                            }
+                            if (!response.existsSerialBorrow) {
+                                SNExist.push(serial_borrow);
+                                isDuplicate = true;
+                            }
+                        }
                     }
                 }
             });

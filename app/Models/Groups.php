@@ -28,7 +28,7 @@ class Groups extends Model
 
     public function getAllGroupedByType()
     {
-        $groups = Groups::with('grouptype')->get();
+        $groups = Groups::with('grouptype')->orderByDesc('id')->get();
 
         $groupedGroups = $groups->groupBy(function ($item) {
             return $item->groupType->group_name;

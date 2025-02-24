@@ -7,6 +7,7 @@ use App\Models\Exports;
 use App\Models\Imports;
 use App\Models\InventoryHistory;
 use App\Models\InventoryLookup;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\ProductImport;
 use App\Models\Providers;
@@ -19,6 +20,7 @@ use App\Notifications\InventoryLookupNotification;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -340,7 +342,9 @@ class ImportsController extends Controller
 
         if ($removedSnIds->isNotEmpty()) {
             SerialNumber::whereIn('id', $removedSnIds)->delete();
+            $deletedInventoryLookupIds = InventoryLookup::whereIn('sn_id', $removedSnIds)->pluck('id')->toArray();
             InventoryLookup::whereIn('sn_id', $removedSnIds)->delete();
+            Notification::whereIn('data->inventoryLookup_id', $deletedInventoryLookupIds)->delete();
         }
 
         // Lấy tất cả các bản ghi trong InventoryLookup
@@ -405,6 +409,7 @@ class ImportsController extends Controller
         foreach ($productImports as $productImport) {
             $inventoryLookups = InventoryLookup::where('sn_id', $productImport->sn_id)->get();
             foreach ($inventoryLookups as $inventoryLookup) {
+                Notification::whereJsonContains('data->inventoryLookup_id', $inventoryLookup->id)->delete();
                 InventoryHistory::where('inventory_lookup_id', $inventoryLookup->id)->delete();
             }
             InventoryLookup::where('sn_id', $productImport->sn_id)->delete();

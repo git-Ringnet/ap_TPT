@@ -21,7 +21,7 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $products = Product::all();
+        $products = Product::orderByDesc('id')->get();
         $title = 'Hàng hoá';
         $groups = Groups::where('group_type_id', 3)->get();
         return view('setup.products.index', compact('products', 'title', 'groups'));

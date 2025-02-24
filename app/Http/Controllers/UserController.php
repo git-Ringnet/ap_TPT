@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::all();
+        $users = User::orderByDesc('id')->get();
         $title = 'Nhân viên';
         $groups = Groups::where('group_type_id', 4)->get();
         $roles = Role::all();

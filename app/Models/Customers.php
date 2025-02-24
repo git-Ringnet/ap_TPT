@@ -23,7 +23,9 @@ class Customers extends Model
     protected $table = 'customers';
     public function getAllGuest($data = null)
     {
-        $guests = DB::table($this->table);
+        $guests = DB::table($this->table)
+            ->orderByDesc('id');
+
         if (!empty($data)) { // Kiểm tra $data có dữ liệu
             $guests->where(function ($query) use ($data) {
                 $query->where('customer_code', 'like', '%' . $data['search'] . '%')

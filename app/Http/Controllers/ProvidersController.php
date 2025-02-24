@@ -25,7 +25,7 @@ class ProvidersController extends Controller
 
         $groups = Groups::where('group_type_id', 2)->get();
 
-        $providers = Providers::where('group_id', 0)->get();
+        $providers = Providers::where('group_id', 0)->orderByDesc('id')->get();
         return view('setup.providers.index', compact('title', 'providers', 'dataa', 'groups'));
     }
 
@@ -156,11 +156,11 @@ class ProvidersController extends Controller
     {
         // Validate dữ liệu đã chọn
         $request->validate([
-            'providers' => 'required|array|min:1', 
+            'providers' => 'required|array|min:1',
         ]);
 
         $providers = $request->input('providers');
-    
+
         foreach ($providers as $providersData) {
             $providersData = json_decode($providersData, true);
             $providersId = $providersData['provider_id'];
@@ -180,7 +180,7 @@ class ProvidersController extends Controller
                 ]);
             }
         }
-    
+
         return redirect()->route('customers.index')->with('success', 'Cập nhật hàng loạt thành công!');
-    } 
+    }
 }
