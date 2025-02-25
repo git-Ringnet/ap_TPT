@@ -13,6 +13,7 @@ class CustomersImport implements ToCollection
 
     public function collection(Collection $rows)
     {
+        $rows = $rows->skip(1);
         foreach ($rows as $row) {
             $customer_name = $row[1] ?? null;
             $tax_code = $row[6] ?? null;

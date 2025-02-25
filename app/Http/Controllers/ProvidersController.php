@@ -154,21 +154,22 @@ class ProvidersController extends Controller
     }
     public function bulkConfirm(Request $request)
     {
-        // Validate dữ liệu đã chọn
-        $request->validate([
-            'providers' => 'required|array|min:1',
-        ]);
-
-        $providers = $request->input('providers');
-
-        foreach ($providers as $providersData) {
-            $providersData = json_decode($providersData, true);
-            $providersId = $providersData['provider_id'];
-            $rowData = $providersData['row_data'];
-            $customer = Providers::find($providersId);
-
-            if ($customer) {
-                $customer->update([
+        // Lấy danh sách nhà cung cấp được chọn
+        $providers = $request->input('providers', []);
+    
+        // Nếu không có nhà cung cấp nào được chọn, quay lại mà không làm gì
+        if (empty($providers)) {
+            return redirect()->route('providers.index')->with('info', 'Không có nhà cung cấp nào được chọn.');
+        }
+    
+        foreach ($providers as $providerData) {
+            $providerData = json_decode($providerData, true);
+            $providerId = $providerData['provider_id'];
+            $rowData = $providerData['row_data'];
+            $provider = Providers::find($providerId);
+    
+            if ($provider) {
+                $provider->update([
                     'provider_code'  => $rowData[0],
                     'provider_name'  => $rowData[1],
                     'contact_person' => $rowData[2],
@@ -180,7 +181,7 @@ class ProvidersController extends Controller
                 ]);
             }
         }
-
-        return redirect()->route('customers.index')->with('success', 'Cập nhật hàng loạt thành công!');
-    }
+    
+        return redirect()->route('providers.index')->with('success', 'Cập nhật hàng loạt thành công!');
+    }    
 }

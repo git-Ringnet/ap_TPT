@@ -140,31 +140,30 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Import sản phẩm thành công!');
     }
     public function bulkConfirm(Request $request)
-{
-    // Validate dữ liệu đã chọn
-    $request->validate([
-        'products' => 'required|array|min:1', 
-    ]);
-
-    $products = $request->input('products');
-
-    foreach ($products as $productData) {
-        $productData = json_decode($productData, true);
-        $productId = $productData['product_id'];
-        $rowData = $productData['row_data'];
-        $product = Product::find($productId);
-
-        if ($product) {
-            $product->update([
-                'product_code' => $rowData[0], // Mã sản phẩm
-                'product_name' => $rowData[1], // Tên sản phẩm
-                'brand'        => $rowData[2], // Thương hiệu
-                'warranty'     => $rowData[3], // Bảo hành
-            ]);
+    {
+        // Kiểm tra nếu không có sản phẩm nào được chọn thì bỏ qua
+        if (!$request->has('products') || empty($request->input('products'))) {
+            return redirect()->route('products.index')->with('warning', 'Không có sản phẩm nào được chọn để cập nhật!');
         }
+    
+        $products = $request->input('products');
+    
+        foreach ($products as $productData) {
+            $productData = json_decode($productData, true);
+            $productId = $productData['product_id'];
+            $rowData = $productData['row_data'];
+            $product = Product::find($productId);
+    
+            if ($product) {
+                $product->update([
+                    'product_code' => $rowData[0], // Mã sản phẩm
+                    'product_name' => $rowData[1], // Tên sản phẩm
+                    'brand'        => $rowData[2], // Thương hiệu
+                    'warranty'     => $rowData[3], // Bảo hành
+                ]);
+            }
+        }
+        return redirect()->route('products.index')->with('success', 'Cập nhật hàng loạt sản phẩm thành công!');
     }
-
-    return redirect()->route('products.index')->with('success', 'Cập nhật hàng loạt sản phẩm thành công!');
-}
-
+    
 }

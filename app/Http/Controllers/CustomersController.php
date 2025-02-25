@@ -184,19 +184,19 @@ class CustomersController extends Controller
     }
     public function bulkConfirm(Request $request)
     {
-        // Validate dữ liệu đã chọn
-        $request->validate([
-            'customers' => 'required|array|min:1', 
-        ]);
-
-        $customers = $request->input('customers');
+        // Lấy danh sách khách hàng được chọn
+        $customers = $request->input('customers', []);
+        // Nếu không có khách hàng nào được chọn, quay lại mà không làm gì
+        if (empty($customers)) {
+            return redirect()->route('customers.index')->with('info', 'Không có khách hàng nào được chọn.');
+        }
     
         foreach ($customers as $customerData) {
             $customerData = json_decode($customerData, true);
             $customerId = $customerData['customer_id'];
             $rowData = $customerData['row_data'];
             $customer = Customers::find($customerId);
-
+    
             if ($customer) {
                 $customer->update([
                     'customer_code'  => $rowData[0],  // Mã khách hàng
@@ -212,5 +212,6 @@ class CustomersController extends Controller
         }
     
         return redirect()->route('customers.index')->with('success', 'Cập nhật hàng loạt thành công!');
-    } 
+    }
+    
 }

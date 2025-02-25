@@ -11,6 +11,7 @@ class ProductsImport implements ToCollection
 
     public function collection(Collection $rows)
     {
+        $rows = $rows->skip(1);
         foreach ($rows as $row) {
             $product_code = $row[0] ?? null;
             if (empty($product_code)) {
