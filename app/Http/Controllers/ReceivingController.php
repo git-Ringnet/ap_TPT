@@ -226,12 +226,17 @@ class ReceivingController extends Controller
         try {
             // Tìm phiếu tiếp nhận
             $receiving = Receiving::findOrFail($id);
-
-
+    
+            // Kiểm tra nếu có returnForms hoặc quotation thì không được xoá
+            if ($receiving->returnForms || $receiving->quotation) {
+                DB::rollBack();
+                return redirect()->route('receivings.index')->with('msg', 'Không thể xóa phiếu tiếp nhận vì đã có đơn trả hàng hoặc báo giá liên quan.');
+            }
+    
             // Xóa tất cả sản phẩm tiếp nhận và bảo hành liên quan
             foreach ($receiving->receivedProducts as $receivedProduct) {
                 if ($receiving->branch_id == 2) {
-                    SerialNumber::find($receivedProduct->serial_id)->delete();
+                    SerialNumber::find($receivedProduct->serial_id)?->delete();
                 }
                 $receivedProduct->warrantyReceived()->delete();
                 $receivedProduct->delete();
@@ -239,7 +244,7 @@ class ReceivingController extends Controller
 
             // Xóa phiếu tiếp nhận
             $receiving->delete();
-
+    
             DB::commit();
             return redirect()->route('receivings.index')->with('msg', 'Xóa phiếu tiếp nhận thành công.');
         } catch (\Exception $e) {

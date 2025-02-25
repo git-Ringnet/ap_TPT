@@ -388,7 +388,7 @@
         const productCode = $row.find(".product_code").val().trim();
         const serial = $row.find(".serial").val().trim();
         const product = $row.find(".product_id").val().trim();
-        $rowWarranty.show();
+        $rowWarranty.last().show();
         if (productCode && serial) {
             $.ajax({
                 url: "/warranty-lookup",

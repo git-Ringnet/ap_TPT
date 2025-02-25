@@ -33,7 +33,7 @@ $(document).ready(function () {
         const $clickedRow = $(this).closest("tr");
         const $dropdown = $clickedRow.find(".warranty-dropdown");
         $dropdown.toggle(); // Hiển thị hoặc ẩn dropdown hiện tại
-
+        
         // Lọc danh sách khi nhập vào name_warranty
         $(document).on("input", ".warranty-input", function () {
             const keyword = $(this).val().toLowerCase(); // Từ khóa tìm kiếm
@@ -375,7 +375,6 @@ function showRowWarrantyByIndex(index) {
 // Xử lý chọn bảo hành từ danh sách dropdown
 $(document).on("click", ".dropdown-link", function (e) {
     e.preventDefault();
-
     const $this = $(this);
     const $row = $this.closest("tr");
 

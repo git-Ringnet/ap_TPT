@@ -356,14 +356,14 @@
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 position-relative {{ $hideReplacement }}">
                                                 <input type="hidden" min="0" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32"
                                                     id="replacement_code_{{ $id }}"
                                                     name="return[{{ $id }}][replacement_code]"
-                                                    value="{{ $item->product_replace->id ?? null }}">
+                                                    value="{{ $item->product_replace->id ?? null }}" readonly>
                                                 <div class="search-container">
                                                     <input type="text"
-                                                        class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
-                                                        value="{{ $item->product_replace->product_code ?? '' }}"
+                                                        class="search border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
+                                                        value="{{ $item->product_replace->product_code ?? '' }}" readonly
                                                         placeholder="Search..." />
                                                     <ul class="search-list border rounded">
                                                         @foreach ($dataProduct as $product)
@@ -379,9 +379,9 @@
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideReplacement }}">
                                                 <input type="text" min="0" autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32 bg-input-guest-blue"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 replacement_serial_number_id height-32"
                                                     name="return[{{ $id }}][replacement_serial_number_id]"
-                                                    value="{{ $item->replacementSerialNumber->serial_code ?? '' }}">
+                                                    value="{{ $item->replacementSerialNumber->serial_code ?? '' }}" readonly>
                                             </td>
                                             <td
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
@@ -395,9 +395,9 @@
                                                 class="border-right p-2 text-13 align-top border-bottom border-top-0 {{ $hideExtraWarranty }}">
                                                 <input type="number" min="0" max="100"
                                                     autocomplete="off"
-                                                    class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32 bg-input-guest-blue"
+                                                    class="border-0 pl-1 pr-2 py-1 w-100 extra_warranty height-32"
                                                     name="return[{{ $id }}][extra_warranty]"
-                                                    value="{{ $item->extra_warranty ?? '' }}">
+                                                    value="{{ $item->extra_warranty ?? '' }}" readonly>
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
