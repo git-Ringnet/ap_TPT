@@ -63,8 +63,8 @@ $(document).ready(function () {
             const newRow = `
                 <tr class="height-40">
                     <td class="text-13-black border py-0 text-center">${rowCount
-                        .toString()
-                        .padStart(2, "0")}</td>
+                    .toString()
+                    .padStart(2, "0")}</td>
                     <td class="text-13-black border py-0 pl-3 position-relative">
                         <input type="text" id="form_code" name="form_code" style="flex:2;"
                             autocomplete="off" placeholder="Nhập thông tin"
@@ -151,13 +151,13 @@ $(document).ready(function () {
                 // Xóa hàng serials-count và add-row-product
                 $(
                     "#tbody-product-data tr#serials-count[data-product-id='" +
-                        productId +
-                        "']"
+                    productId +
+                    "']"
                 ).remove();
                 $(
                     "#tbody-product-data tr#add-row-product[data-product-id='" +
-                        productId +
-                        "']"
+                    productId +
+                    "']"
                 ).remove();
 
                 // Xóa khỏi mảng
@@ -524,11 +524,9 @@ function createSerialRow(
     let name_modal = $("#name_modal").val();
     let rows = [];
     rows.push(`
-        <tr id="serials-data" class="row-product bg-white" data-index="${
-            index + 1
-        }" data-serial="${serial}" data-product-code="${
-        product.product_code
-    }"  data-product-id="${product.id}">
+        <tr id="serials-data" class="row-product bg-white" data-index="${index + 1
+        }" data-serial="${serial}" data-product-code="${product.product_code
+        }"  data-product-id="${product.id}">
          <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4 d-none">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 product_id height-32" readonly
@@ -573,9 +571,8 @@ function createSerialRow(
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastWarranty}">
                 <input type="text" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32 bg-input-guest-blue"
-                    name="name_warranty_product[]" value="${
-                        product.name_warranty || ""
-                    }">
+                    name="name_warranty_product[]" value="${product.name_warranty || ""
+        }">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideLastWarranty}">
                 <input type="number" autocomplete="off"
@@ -599,8 +596,7 @@ function createSerialRow(
     // Chỉ thêm thông tin bảo hành nếu có từ hàng thứ 2 trở đi
     warranties.slice(1).forEach((warrantyItem) => {
         rows.push(`
-            <tr id="serials-data-${
-                product.id
+            <tr id="serials-data-${product.id
             }" data-serial="${serial}" class="row-warranty bg-white">
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
@@ -610,16 +606,14 @@ function createSerialRow(
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="text" autocomplete="off"
                         class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32 bg-input-guest-blue"
-                        name="name_warranty_product[]" value="${
-                            warrantyItem.name_warranty || ""
-                        }">
+                        name="name_warranty_product[]" value="${warrantyItem.name_warranty || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                     <input type="number" autocomplete="off"
                         class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
-                        name="warranty[]" value="${
-                            warrantyItem.product_warranty_input || ""
-                        }">
+                        name="warranty[]" value="${warrantyItem.product_warranty_input || ""
+            }">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                 <td class="p-2 align-top activity border-bottom border-top-0 border-right">
@@ -805,13 +799,11 @@ $(document).on("click", ".save-info-product", function (e) {
     products.forEach((product, index) => {
         const row = `
             <tr class="height-40">
-                <td class="text-13-black border py-0 text-center">0${
-                    index + 1
-                }</td>
+                <td class="text-13-black border py-0 text-center">0${index + 1
+            }</td>
                 <td class="text-13-black border py-0 pl-3 position-relative">
-                    <input type="text" name="form_code" value="${
-                        product.serial
-                    }" class="text-13-black w-100 border-0 serial-input seri-input-check" placeholder="Nhập thông tin">
+                    <input type="text" name="form_code" value="${product.serial
+            }" class="text-13-black w-100 border-0 serial-input seri-input-check" placeholder="Nhập thông tin">
                      <span class="check-icon"></span>
                 </td>
                 <td class="text-13-black border py-0 text-center">
@@ -996,3 +988,15 @@ $(document).on("click", ".add-warranty-row", function () {
     // Cập nhật lại số serial
     updateSerialCount();
 });
+
+function validateInput(selector, message, focusSelector = null) {
+    const value = $(selector).val();
+    if (!value) {
+        showAutoToast("warning", message);
+        if (focusSelector) {
+            $(focusSelector).click();
+        }
+        return false;
+    }
+    return true;
+}

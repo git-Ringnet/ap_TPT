@@ -417,6 +417,17 @@
 
     $('#btn-get-unique-products').click(function(e) {
         // e.preventDefault();
+        if (nameModal == "NH") {
+            if (!validateInput("#provider_id", "Vui lòng chọn nhà cung cấp!", "#provider_name")) {
+                return false;
+            }
+        }
+        if (nameModal == "XH") {
+            if (!validateInput("#provider_id", "Vui lòng chọn khách hàng!", "#provider_name")) {
+                return false;
+            }
+        }
+
         if ($('#tbody-product-data tr#serials-data').length === 0) {
             showAutoToast("warning", "Vui lòng thêm sản phẩm.");
             e.preventDefault();

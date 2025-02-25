@@ -55,6 +55,9 @@ class ReturnFormController extends Controller
      */
     public function store(Request $request)
     {
+        if (ReturnForm::where('return_code', $request->form_code_receiving)->exists()) {
+            return back()->with('warning', 'Mã phiếu trả hàng đã tồn tại.');
+        }
         // Validate dữ liệu đầu vào
         $validated = $request->validate([
             'reception_id' => 'required|unique:return_form,reception_id',

@@ -59,21 +59,33 @@ class Imports extends Model
     public function addImport($data)
     {
         $warehouse_id = GlobalHelper::getWarehouseId();
+
+        // Nếu không có import_code, tự động tạo mới
+        $importCode = $data['import_code'] ?? self::generateImportCode();
+
+        // Kiểm tra nếu mã nhập hàng đã tồn tại
+        while (DB::table($this->table)->where('import_code', $importCode)->exists()) {
+            $importCode = self::generateImportCode(); // Tạo mã mới
+        }
+
         $arrImport = [
-            'import_code' => $data['import_code'],
-            'user_id' => $data['user_id'],
-            'phone' => $data['phone'],
-            'date_create' => $data['date_create'],
-            'provider_id' => $data['provider_id'],
+            'import_code'    => $importCode,
+            'user_id'        => $data['user_id'],
+            'phone'          => $data['phone'],
+            'date_create'    => $data['date_create'],
+            'provider_id'    => $data['provider_id'],
             'contact_person' => $data['contact_person'],
-            'address' => $data['address'],
-            'note' => $data['note'],
-            'created_at' => now(),
-            'warehouse_id' => $warehouse_id ?? 1,
+            'address'        => $data['address'],
+            'note'           => $data['note'],
+            'warehouse_id'   => $warehouse_id ?? 1,
+            'created_at'     => now(),
+            'updated_at'     => now(),
         ];
-        $import = DB::table($this->table)->insertGetId($arrImport);
-        return $import;
+
+        return DB::table($this->table)->insertGetId($arrImport);
     }
+
+
     public static function generateImportCode()
     {
         $prefix = 'PNH';

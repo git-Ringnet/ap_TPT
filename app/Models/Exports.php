@@ -66,21 +66,33 @@ class Exports extends Model
     public function addExport($data)
     {
         $warehouse_id = GlobalHelper::getWarehouseId();
+
+        // Nếu không có export_code, tự động tạo mới
+        $exportCode = $data['export_code'] ?? self::generateExportCode();
+        $originalCode = $exportCode;
+
+        // Kiểm tra nếu mã xuất hàng đã tồn tại
+        while (DB::table($this->table)->where('export_code', $exportCode)->exists()) {
+            $exportCode = self::generateExportCode(); // Tạo mã mới
+        }
+
         $arrExport = [
-            'export_code' => $data['export_code'],
-            'user_id' => $data['user_id'],
-            'phone' => $data['phone'],
-            'date_create' => $data['date_create'],
-            'customer_id' => $data['customer_id'],
-            'address' => $data['address'],
+            'export_code'    => $exportCode,
+            'user_id'        => $data['user_id'],
+            'phone'          => $data['phone'],
+            'date_create'    => $data['date_create'],
+            'customer_id'    => $data['customer_id'],
+            'address'        => $data['address'],
             'contact_person' => $data['contact_person'],
-            'note' => $data['note'],
-            'created_at' => now(),
-            'warehouse_id' => $warehouse_id ?? 1,
+            'note'           => $data['note'],
+            'warehouse_id'   => $warehouse_id ?? 1,
+            'created_at'     => now(),
+            'updated_at'     => now(),
         ];
-        $import = DB::table($this->table)->insertGetId($arrExport);
-        return $import;
+
+        return DB::table($this->table)->insertGetId($arrExport);
     }
+
     public function getExportAjax($data = null)
     {
         $exports = Exports::with(['user', 'customer'])

@@ -40,6 +40,10 @@ class QuotationController extends Controller
     // Lưu báo giá mới vào cơ sở dữ liệu
     public function store(Request $request)
     {
+        // Kiểm tra nếu form_code_receiving đã tồn tại
+        if (Quotation::where('quotation_code', $request->form_code_receiving)->exists()) {
+            return back()->with('warning', 'Mã phiếu báo giá đã tồn tại.');
+        }
         $validated = $request->validate([
             'reception_id' => 'required|integer|unique:quotations,reception_id',
             'quotation_code' => 'required|string|unique:quotations,quotation_code',
