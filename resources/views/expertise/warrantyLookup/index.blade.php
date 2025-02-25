@@ -172,7 +172,7 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->export_return_date ? date_format(new DateTime($item->export_return_date), 'd/m/Y') : '' }}    
+                                                {{ $item->export_return_date ? date_format(new DateTime($item->export_return_date), 'd/m/Y') : '' }}
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -180,7 +180,7 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                {{ $item->return_date ? date_format(new DateTime($item->return_date), 'd/m/Y') : '' }}   
+                                                {{ $item->name_expire_date ? ($item->return_date ? date('d/m/Y', strtotime($item->return_date)) : '') : '' }}
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
@@ -188,9 +188,9 @@
                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
-                                                @if($branchId == 2 && $formType ==3)
+                                                @if ($branchId == 2 && $formType == 3)
                                                 @else
-                                                {{ $item->status_string }}
+                                                    {{ $item->status_string }}
                                                 @endif
                                             </td>
                                         </tr>

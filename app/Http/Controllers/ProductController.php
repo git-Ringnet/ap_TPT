@@ -157,6 +157,6 @@ class ProductController extends Controller
                 ]);
             }
         }
-        return redirect()->route('products.index')->with('success', 'Cập nhật hàng loạt sản phẩm thành công!');
+        return redirect()->route('products.index')->with('msg', 'Cập nhật hàng loạt sản phẩm thành công!');
     }
 }
