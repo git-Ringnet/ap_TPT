@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\SerialNumber;
 use App\Models\Warehouse;
 use App\Models\WarehouseTransfer;
 use App\Models\WarehouseTransferItem;
@@ -92,6 +93,31 @@ class WarehouseTransferController extends Controller
      */
     public function destroy(WarehouseTransfer $warehouseTransfer)
     {
-        //
+        //Xóa phiếu chuyển kho
+        $warehouseTransfer = WarehouseTransfer::findorFail($warehouseTransfer->id);
+        if ($warehouseTransfer) {
+            $warehouseTransferItem = WarehouseTransferItem::where('transfer_id', $warehouseTransfer->id)->get();
+            foreach ($warehouseTransferItem as $item) {
+                if ($warehouseTransfer->from_warehouse_id == 1) {
+                    $serial = SerialNumber::where('id', $item->serial_number_id)->first();
+                    $serial->status = 1;
+                    $serial->warehouse_id = $warehouseTransfer->from_warehouse_id;
+                    $serial->save();
+                    $item->delete();
+                } else {
+                    $serial = SerialNumber::where('id', $item->serial_number_id)->first();
+                    $serial->delete();
+                    $borrow = SerialNumber::where('id', $item->sn_id_borrow)->first();
+                    $borrow->status = 5;
+                    $borrow->warehouse_id = $warehouseTransfer->from_warehouse_id;
+                    $borrow->save();
+                    $item->delete();
+                }
+            }
+            $warehouseTransfer->delete();
+            return redirect()->route('warehouseTransfer.index')->with('msg', 'Xóa phiếu chuyển kho thành công!');
+        } else {
+            return redirect()->route('warehouseTransfer.index')->with('warning', 'Xóa phiếu chuyển kho thất bại!');
+        }
     }
 }

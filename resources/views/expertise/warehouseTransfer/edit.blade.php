@@ -203,7 +203,7 @@
                                     <th class="border-right px-2 p-0" style="width: 10%;">
                                         <span class="text-table text-13-black font-weight-bold">Serial Number</span>
                                     </th>
-                                    <th class="border-right px-2 p-0" style="width: 10%;"
+                                    <th class="border-right px-2 p-0" style="width: 10%; display: none;"
                                         id="title-borrow">
                                         <span class="text-table text-13-black font-weight-bold">Serial
                                             Number mượn</span>
@@ -264,8 +264,8 @@
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly
-                                                        name="serial_borrow_input[]"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 serial_borrow height-32"
+                                                        readonly name="serial_borrow_input[]"
                                                         value="{{ $item->serialNumberBorrow->serial_code }}">
                                                 </td>
                                             @endif
@@ -286,9 +286,9 @@
                                         </tr>
                                     @endforeach
                                     {{-- Nút thêm --}}
-                                    {{-- <tr id="add-row-product" class="bg-white" data-product-code="SP1"
+                                    <tr id="add-row-product" class="bg-white" data-product-code="SP1"
                                         data-product-id="{{ $item->product->id }}">
-                                        <td colspan="7"
+                                        <td colspan="{{ $warehouseTransfer->from_warehouse_id == 2 ? 8 : 7 }}"
                                             class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
                                             <button type="button" class="save-info-product btn"
                                                 data-product-id="{{ $item->product->id }}"
@@ -309,7 +309,7 @@
                                                 </svg>
                                             </button>
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -345,10 +345,7 @@
 </form>
 <script>
     $(document).ready(function() {
-        if ($("#warehouse_id").val() === "1") {
-            $("#title-borrow").hide();
-        }
-        else{
+        if ($("#warehouse_id").val() !== "1") {
             $("#title-borrow").show();
         }
     });

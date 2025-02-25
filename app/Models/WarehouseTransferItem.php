@@ -129,22 +129,25 @@ class WarehouseTransferItem extends Model
         foreach ($uniqueProductsArray as $serial) {
             if (isset($serial['serial']) && !empty($serial['serial'])) {
                 if ($data['from_warehouse_id'] == 2) {
-                    // Nếu xuất từ kho bảo hành -> Tạo SN mới
-                    $sn = SerialNumber::create([
-                        'serial_code' => str_replace(' ', '', $serial['serial']),
-                        'product_id' => $serial['product_id'],
-                        'note' => $serial['note_seri'],
-                        'warehouse_id' => $data['to_warehouse_id'],
-                    ]);
-                    //Tra cứu tồn kho
-                    InventoryLookup::create([
-                        'product_id' => $serial['product_id'],
-                        'sn_id' => $sn->id,
-                        'provider_id' => 0,
-                        'import_date' => $data['transfer_date'],
-                        'storage_duration' => 0,
-                        'status' => 0,
-                    ]);
+                    $exist = SerialNumber::where('serial_code', $serial['serial'])->first();
+                    if (!$exist) {
+                        // Nếu xuất từ kho bảo hành -> Tạo SN mới
+                        $sn = SerialNumber::create([
+                            'serial_code' => str_replace(' ', '', $serial['serial']),
+                            'product_id' => $serial['product_id'],
+                            'note' => $serial['note_seri'],
+                            'warehouse_id' => $data['to_warehouse_id'],
+                        ]);
+                        //Tra cứu tồn kho
+                        InventoryLookup::create([
+                            'product_id' => $serial['product_id'],
+                            'sn_id' => $sn->id,
+                            'provider_id' => 0,
+                            'import_date' => $data['transfer_date'],
+                            'storage_duration' => 0,
+                            'status' => 0,
+                        ]);
+                    }
                     $snBr = SerialNumber::where("serial_code", $serial['serialBorrow'])->first();
                     if ($snBr) {
                         $snBr->update([

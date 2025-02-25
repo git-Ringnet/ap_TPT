@@ -64,11 +64,11 @@ class SerialNumberController extends Controller
                 $serial_borrow = $request->input('serial_borrow');
                 $existsSerial = SerialNumber::where('product_id', $productId)
                     ->where('serial_code', $serial)
-                    ->exists();
+                    ->doesntExist();
 
                 $existsSerialBorrow = SerialNumber::where('product_id', $request->product_id)
                     ->where('serial_code', $serial_borrow)
-                    ->where('status', '!=', 5)
+                    ->where('status', 5)
                     ->exists();
 
                 return response()->json([
@@ -184,11 +184,22 @@ class SerialNumberController extends Controller
                     return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);
                 }
             } else if ($request->warehouse == 2) {
-                // Kiểm tra trong bảng serial_numbers
-                $exists = SerialNumber::where('product_id', $request->product_id)
+                // Lấy ID của serial cần kiểm tra
+                $serial = SerialNumber::where('product_id', $request->product_id)
                     ->where('serial_code', $serialNumber)
-                    ->exists();
-                if ($exists) {
+                    ->first();
+
+                if (!$serial) {
+                    return response()->json(['status' => 'error', 'message' => 'Số serial không tồn tại.']);
+                }
+
+                // Kiểm tra nếu serial có status = 1
+                $existsInSerials = $serial->status == 1;
+
+                // Kiểm tra nếu serial đã có trong WarehouseTransferItem
+                $existsInTransfer = WarehouseTransferItem::where('serial_number_id', $serial->id)->exists();
+
+                if (!$existsInSerials && !$existsInTransfer) {
                     return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
                 } else {
                     return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);

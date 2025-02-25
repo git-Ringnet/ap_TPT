@@ -91,7 +91,7 @@
                                             <div class="icon" id="icon-brand"></div>
                                         </span>
                                     </th>
-                                    <th class="height-40 py-0 border-right" scope="col" style="">
+                                    {{-- <th class="height-40 py-0 border-right" scope="col" style="">
                                         <span class="d-flex justify-content-start">
                                             <a href="#" class="sort-link btn-submit" data-sort-by="warranty"
                                                 data-sort-type="DESC">
@@ -101,7 +101,7 @@
                                             </a>
                                             <div class="icon" id="icon-warranty"></div>
                                         </span>
-                                    </th>
+                                    </th> --}}
                                 </tr>
                             </thead>
                             <tbody class="tbody-product">
@@ -132,10 +132,10 @@
                                                 class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                 {{ $item->brand }}
                                             </td>
-                                            <td
+                                            {{-- <td
                                                 class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                 {{ $item->warranty }} tháng
-                                            </td>
+                                            </td> --}}
                                             <td class="position-absolute m-0 p-0 border-0 bg-hover-icon icon-center">
                                                 <div class="d-flex w-100">
                                                     <a href="#">
@@ -220,10 +220,10 @@
                                                     class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
                                                     {{ $item->brand }}
                                                 </td>
-                                                <td
+                                                {{-- <td
                                                     class="text-13-black border-bottom border text-left py-0 border-top-0 border-left-0">
                                                     {{ $item->warranty }} tháng
-                                                </td>
+                                                </td> --}}
                                                 <td
                                                     class="position-absolute m-0 p-0 border-0 bg-hover-icon icon-center">
                                                     <div class="d-flex w-100">

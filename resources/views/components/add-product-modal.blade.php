@@ -541,7 +541,7 @@
             } else if (nameModal === "XH" || nameModal === "CXH") {
                 message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
             } else if (nameModal === "PCK") {
-                message = `Serial này không tồn tại hoặc đã được xuất: ${SNExist.join(", ")}`;
+                message = `Serial này không tồn tại: ${SNExist.join(", ")}`;
             }
 
             showAutoToast("warning", message);

@@ -298,7 +298,6 @@ class ImportsController extends Controller
                     'import_date' => $request->date_create,
                     'storage_duration' => 0,
                     'status' => 0,
-                    'warehouse_id' => $warehouse_id ?? 1,
                 ]);
             }
         }

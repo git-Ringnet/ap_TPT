@@ -8,6 +8,8 @@ use App\Models\SerialNumber;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
+use App\Models\ProductWarranties;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -15,9 +17,11 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     private $products;
+    private $productWarranty;
     public function __construct()
     {
         $this->products = new Product();
+        $this->productWarranty = new ProductWarranties();
     }
     public function index()
     {
@@ -38,20 +42,16 @@ class ProductController extends Controller
     // Store a newly created product in storage
     public function store(Request $request)
     {
-        $request->validate([
-            'product_code' => 'required|string|unique:products',
-            'product_name' => 'nullable|string',
-            'brand' => 'nullable|string',
-            'warranty' => 'nullable|integer',
-        ]);
-
-        Product::create([
+        // dd($request->all());
+        $product = Product::create([
             'group_id' => $request->input('group_id'),
             'product_code' => $request->input('product_code'),
             'product_name' => $request->input('product_name'),
             'brand' => $request->input('brand'),
-            'warranty' => $request->input('warranty'),
+            'warranty' => 12,
         ]);
+
+        $this->productWarranty->addProductWarranty($request->all(), $product->id);
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
@@ -64,27 +64,21 @@ class ProductController extends Controller
         $serialNumbers = SerialNumber::where('product_id', $product->id)
             ->with(['productImports.import'])
             ->get();
-        return view('setup.products.edit', compact('product', 'title', 'groups', 'serialNumbers'));
+        $productWarranty = ProductWarranties::where('product_id', $product->id)->get();
+        return view('setup.products.edit', compact('product', 'title', 'groups', 'serialNumbers', 'productWarranty'));
     }
 
     // Update the specified product in storage
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'product_code' => 'required|string|unique:products,product_code,' . $product->id,
-            'product_name' => 'nullable|string',
-            'brand' => 'nullable|string',
-            'warranty' => 'nullable|integer',
-        ]);
-
         $product->update([
             'group_id' => $request->input('group_id'),
             'product_code' => $request->input('product_code'),
             'product_name' => $request->input('product_name'),
             'brand' => $request->input('brand'),
-            'warranty' => $request->input('warranty'),
+            'warranty' => 12,
         ]);
-
+        $this->productWarranty->updateProductWarranty($request->all(), $product->id);
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
@@ -165,5 +159,4 @@ class ProductController extends Controller
         }
         return redirect()->route('products.index')->with('success', 'Cập nhật hàng loạt sản phẩm thành công!');
     }
-    
 }

@@ -371,6 +371,11 @@
                                             </tr>
                                         @endif
                                     @endforeach
+                                    @if (!$isCheck)
+                                        <tr class="pb-5">
+                                            <td class="border-0"></td>
+                                        </tr>
+                                    @endif
                                 </tbody>
                             </table>
                             <input type="hidden" name="data-test" id="data-test">

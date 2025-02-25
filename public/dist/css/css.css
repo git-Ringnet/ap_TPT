@@ -1761,7 +1761,7 @@ input[type="number"] {
     border-radius: 5px;
 }
 
-.btn-save-print,.btn-add-item {
+.btn-save-print,.btn-add-item, .btn-add-warranty {
     border: 1px solid #C6CFFC;
     color: #42526e;
     background-color: #ffffff;

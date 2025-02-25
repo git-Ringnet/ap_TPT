@@ -647,21 +647,25 @@ function createSerialRow(
 // Hàm tạo hàng cuối cùng để đếm số lượng serial
 function createCountRow(count, product, name, warranty) {
     let dnone = name === "XH" || name === "CXH" ? "d-none" : "";
+    let warehouse_id = $("#warehouse_id").val();
     let colspanValue1, colspanValue2;
     if (name === "TN") {
         colspanValue1 = 4;
         colspanValue2 = 8;
-    } else if (
-        name === "NH" ||
-        name === "CNH" ||
-        name === "PCK" ||
-        name === "CPCK"
-    ) {
+    } else if (name === "NH" || name === "CNH") {
         colspanValue1 = 3;
         colspanValue2 = 7;
     } else if (name === "XH" || name === "CXH") {
         colspanValue1 = 5;
         colspanValue2 = 9;
+    } else if (name === "PCK" || name === "CPCK") {
+        if (warehouse_id == 1) {
+            colspanValue1 = 3;
+            colspanValue2 = 7;
+        } else {
+            colspanValue1 = 4;
+            colspanValue2 = 8;
+        }
     }
     // Convert warranty thành chuỗi JSON nếu có
     const warrantyData = warranty
@@ -757,6 +761,7 @@ $(document).ready(function () {
 });
 $(document).on("click", ".save-info-product", function (e) {
     e.preventDefault();
+    let name_modal = $("#name_modal").val();
     // Lấy giá trị của data-product-id từ phần tử được click
     const productId = $(this).data("product-id");
     const productName = $(this).data("product-name");
@@ -764,6 +769,10 @@ $(document).on("click", ".save-info-product", function (e) {
     const productBrand = $(this).data("product-brand");
     const productWarranty = $(this).data("product-warranty");
     const warehouse_id = $("#warehouse_id").val();
+    let dnone = "d-none";
+    if ((name_modal == "PCK" || name_modal == "CPCK") && warehouse_id == 2) {
+        dnone = "";
+    }
 
     if (warehouse_id == 2) {
         $("#warehouse_receive").show();
@@ -781,6 +790,7 @@ $(document).on("click", ".save-info-product", function (e) {
         // Lấy tất cả thông tin sản phẩm trong dòng này
         const productInfo = {
             serial: $row.find(".serial").val(), // Chỉ lấy thông tin serial
+            serial_borrow: $row.find(".serial_borrow").val(),
         };
         // Thêm thông tin sản phẩm vào mảng
         products.push(productInfo);
@@ -805,6 +815,12 @@ $(document).on("click", ".save-info-product", function (e) {
                     <input type="text" name="form_code" value="${product.serial
             }" class="text-13-black w-100 border-0 serial-input seri-input-check" placeholder="Nhập thông tin">
                      <span class="check-icon"></span>
+                </td>
+                <td class="text-13-black border py-0 pl-3 position-relative ${dnone}">
+                    <input type="text" name="serial_borrow" id="serial_borrow" value="${
+                        product.serial_borrow
+                    }" class="border-0 pl-1 pr-2 py-1 w-100 serial_borrow height-32" placeholder="Nhập thông tin">
+                     <span class="check-icon-borrow"></span>
                 </td>
                 <td class="text-13-black border py-0 text-center">
                     <button class="btn btn-sm delete-row">
