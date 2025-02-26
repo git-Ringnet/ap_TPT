@@ -62,7 +62,9 @@ class warrantyLookup extends Model
                     ->orWhere('products.product_name', 'like', '%' . $data['search'] . '%')
                     ->orWhere('products.brand', 'like', '%' . $data['search'] . '%')
                     ->orWhere('customers.customer_name', 'like', '%' . $data['search'] . '%')
-                    ->orWhere('serial_numbers.serial_code', 'like', '%' . $data['search'] . '%');
+                    ->orWhere('serial_numbers.serial_code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('warranty_lookup.name_warranty', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('warranty_lookup.name_expire_date', 'like', '%' . $data['search'] . '%');
             });
         }
     
@@ -94,9 +96,17 @@ class warrantyLookup extends Model
             $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
             $warrantyLookup->whereBetween('export_return_date', [$dateStart, $dateEnd]);
         }
+        if (!empty($data['date_expired'][0]) && !empty($data['date_expired'][1])) {
+            $dateStart = Carbon::parse($data['date_expired'][0]);
+            $dateEnd = Carbon::parse($data['date_expired'][1])->endOfDay();
+            $warrantyLookup->whereBetween('return_date', [$dateStart, $dateEnd]);
+        }
     
         if (isset($data['bao_hanh'][0]) && isset($data['bao_hanh'][1])) {
             $warrantyLookup->whereBetween('warranty_lookup.warranty', [$data['bao_hanh'][0], $data['bao_hanh'][1]]);
+        }
+        if (isset($data['bao_hanh_dich_vu'][0]) && isset($data['bao_hanh_dich_vu'][1])) {
+            $warrantyLookup->whereBetween('warranty_lookup.warranty_extra', [$data['bao_hanh_dich_vu'][0], $data['bao_hanh_dich_vu'][1]]);
         }
     
         if (isset($data['sort']) && isset($data['sort'][0])) {

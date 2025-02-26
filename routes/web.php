@@ -82,6 +82,7 @@ Route::get('/filter-provides', [ProvidersController::class, 'filterData'])->name
 Route::get('/filter-products', [ProductController::class, 'filterData'])->name('filter-products');
 Route::get('/filter-users', [UserController::class, 'filterData'])->name('filter-users');
 Route::get('/filter-warehouse', [WarehouseController::class, 'filterData'])->name('filter-warehouse');
+Route::get('/filter-warehouse', [WarehouseTransferController::class, 'filterData'])->name('filter-warehouseTranfer');
 Route::get('/filter-imports', [ImportsController::class, 'filterData'])->name('filter-imports');
 Route::get('/filter-exports', [ExportsController::class, 'filterData'])->name('filter-exports');
 Route::get('/filter-receivings', [ReceivingController::class, 'filterData'])->name('filter-receivings');

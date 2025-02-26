@@ -33,8 +33,7 @@ class Providers extends Model
     }
     public function getAllProvide($data = null)
     {
-        $provides = DB::table($this->table)->orderByDesc('id');
-
+        $provides = DB::table($this->table);
         // Tìm kiếm chung
         if (!empty($data['search'])) {
             $provides->where(function ($query) use ($data) {
@@ -62,6 +61,8 @@ class Providers extends Model
         }
         if (isset($data['sort']) && isset($data['sort'][0])) {
             $provides = $provides->orderBy($data['sort'][0], $data['sort'][1]);
+        }else{
+            $provides = $provides->orderBy('id','desc');
         }
 
         return $provides->get();

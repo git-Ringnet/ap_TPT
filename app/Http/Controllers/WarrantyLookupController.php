@@ -29,9 +29,9 @@ class WarrantyLookupController extends Controller
             $first->name_warranty = $items->filter(function ($item) {
                 return !empty($item->name_warranty);
             })->map(function ($item) {
-                return $item->name_warranty . ": " . $item->warranty . " tháng";
-            })->join('| ');
-            
+                $warrantyText = $item->warranty == 0 ? 'không bảo hành' : $item->warranty . ' tháng';
+                return $item->name_warranty . ": " . $warrantyText;
+            })->join('| ');        
 
             // Nối status với điều kiện chuyển đổi
             $first->status_string = $items->map(function ($item) {
@@ -160,6 +160,11 @@ class WarrantyLookupController extends Controller
             $date_end = date("d/m/Y", strtotime($data['date'][1]));
             $filters[] = ['value' => 'Ngày xuất hàng: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-xuat-hang', 'icon' => 'date'];
         }
+        if (isset($data['date_expired']) && $data['date_expired'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date_expired'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date_expired'][1]));
+            $filters[] = ['value' => 'Ngày kích hoạt BHDV: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-kich-hoat-bhdv', 'icon' => 'date'];
+        }
         if (isset($data['status']) && $data['status'] !== null) {
             $statusValues = [];
             if (in_array(0, $data['status'])) {
@@ -172,6 +177,9 @@ class WarrantyLookupController extends Controller
         }
         if (isset($data['bao_hanh']) && $data['bao_hanh'][1] !== null) {
             $filters[] = ['value' => 'Bảo hành: ' . $data['bao_hanh'][0] . ' ' . $data['bao_hanh'][1], 'name' => 'bao-hanh', 'icon' => 'money'];
+        }
+        if (isset($data['bao_hanh_dich_vu']) && $data['bao_hanh_dich_vu'][1] !== null) {
+            $filters[] = ['value' => 'Bảo hành dịch vụ: ' . $data['bao_hanh_dich_vu'][0] . ' ' . $data['bao_hanh_dich_vu'][1], 'name' => 'bao-hanh-dich-vu', 'icon' => 'money'];
         }
 
         if ($request->ajax()) {

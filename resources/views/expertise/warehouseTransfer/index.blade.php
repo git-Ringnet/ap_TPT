@@ -3,12 +3,23 @@
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed px-1">
         <div class="content__header--inner">
-            <x-search-filter :keywords="request('keywords')" :filters="['Mã phiếu', 'Ngày lập phiếu', 'Kho chuyển', 'Kho nhận', 'Trạng thái', 'Ghi chú']">
+            <x-search-filter :keywords="request('keywords')" :filters="['Mã phiếu', 'Ngày lập phiếu', 'Kho chuyển', 'kho nhận', 'Trạng thái','Ghi chú']">
+                <x-filter-text name="ma-phieu" title="Mã phiếu" />
+                <x-filter-checkbox :dataa='$warehouse' name="kho-chuyen" title="Khách hàng" button="kho-chuyen"
+                namedisplay="warehouse_name" />
+                <x-filter-checkbox :dataa='$warehouse' name="kho-nhan" title="Khách hàng" button="kho-nhan"
+                namedisplay="warehouse_name" />
+                <x-filter-status name="trang-thai" title="Trạng thái" :filters="[
+                    ['key' => '1', 'value' => 'Hoàn thành', 'color' => '#08AA36BF'],
+                    ['key' => '0', 'value' => 'Huỷ', 'color' => '#858585'],
+                ]" />
+                <x-filter-date name="ngay-lap-phieu" title="Ngày lập phiếu" />
+                <x-filter-text name="ghi-chu" title="Ghi chú" />
             </x-search-filter>
             <div class="d-flex content__heading--right">
+                <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
                 <div class="row m-0">
-                    <a href="{{ route('warehouseTransfer.create') }}" class="activity mr-3" data-name1="KH"
-                        data-des="Tạo mới">
+                    <a href="{{ route('warehouseTransfer.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
                             <svg class="mr-1" width="12" height="12" viewBox="0 0 18 18" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -22,6 +33,7 @@
                             <p class="m-0 ml-1">Tạo mới</p>
                         </button>
                     </a>
+
                 </div>
             </div>
         </div>
@@ -29,7 +41,7 @@
     <div class="content margin-top-127">
         <section class="content">
             <div class="container-fluided">
-                <div class="row result-filter-warran-lookup margin-left20 my-1">
+                <div class="row result-filter-warehouse margin-left20 my-1">
                 </div>
                 <div class="col-12 p-0 m-0">
                     <div class="card">
@@ -106,9 +118,11 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody class="">
+                                <tbody class="tbody-warehouse">
                                     @foreach ($warehouseTransfer as $item)
-                                        <tr class="position-relative export-info height-40">
+                                        <tr class="position-relative warehouse-info height-40">
+                                            <input type="hidden" name="id-warehouse" class="id-warehouse"
+                                            id="id-warehouse" value="{{ $item->id }}">
                                             <td
                                                 class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
                                                 <a href="{{ route('warehouseTransfer.edit', $item->id) }}">
@@ -189,3 +203,31 @@
     </div>
 </div>
 <script src="{{ asset('js/filter.js') }}"></script>
+<script src="{{ asset('js/exports_excel.js') }}"></script>
+<script>
+    $(document).on('click', '.btn-submit', function(e) {
+        if (!$(e.target).is('input[type="checkbox"]')) e.preventDefault();
+        var buttonElement = this;
+        // Thu thập dữ liệu từ form
+        var formData = {
+            search: $('#search').val(),
+            ma: getData('#ma-phieu', this),
+            note: getData('#ghi-chu', this),
+            kho_chuyen: getStatusData(this, 'kho-chuyen'),
+            kho_nhan: getStatusData(this, 'kho-nhan'),
+            date: retrieveDateData(this, 'ngay-lap-phieu'),
+            status: getStatusData(this, 'trang-thai'),
+            sort: getSortData(buttonElement)
+        };
+        // Ẩn tùy chọn nếu cần
+        if (!$(e.target).closest('li, input[type="checkbox"]').length) {
+            $('#' + $(this).data('button-name') + '-options').hide();
+        }
+        // Gọi hàm AJAX
+        var route = "{{ route('filter-warehouseTranfer') }}"; // Thay route phù hợp
+        var nametable = 'warehouse'; // Thay tên bảng phù hợp
+        handleAjaxRequest(formData, route, nametable);
+    });
+    exportTableToExcel("#exportBtn", "#example2", "phieu_chuyen_kho.xlsx");
+
+</script>

@@ -82,13 +82,13 @@
                                         @can('admin')
                                             <th class="height-40 py-0 border-right-0" scope="col">
                                                 <span class="d-flex justify-content-start">
-                                                    <a href="#" class="sort-link btn-submit" data-sort-by="username"
+                                                    <a href="#" class="sort-link btn-submit" data-sort-by="warehouse_id"
                                                         data-sort-type="DESC">
                                                         <button class="btn-sort" type="submit">
                                                             <span class="text-14">Kho</span>
                                                         </button>
                                                     </a>
-                                                    <div class="icon" id="icon-username"></div>
+                                                    <div class="icon" id="icon-warehouse_id"></div>
                                                 </span>
                                             </th>
                                         @endcan

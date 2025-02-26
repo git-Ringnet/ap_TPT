@@ -23,8 +23,7 @@ class Customers extends Model
     protected $table = 'customers';
     public function getAllGuest($data = null)
     {
-        $guests = DB::table($this->table)
-            ->orderByDesc('id');
+        $guests = DB::table($this->table);
 
         if (!empty($data)) { // Kiểm tra $data có dữ liệu
             $guests->where(function ($query) use ($data) {
@@ -51,6 +50,8 @@ class Customers extends Model
         }
         if (isset($data['sort']) && isset($data['sort'][0])) {
             $guests = $guests->orderBy($data['sort'][0], $data['sort'][1]);
+        }else{
+            $guests = $guests->orderBy('id','desc');
         }
         return $guests->get();
     }

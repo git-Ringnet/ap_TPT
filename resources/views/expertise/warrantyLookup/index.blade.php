@@ -5,12 +5,14 @@
         <div class="content__header--inner">
             <x-search-filter :keywords="request('keywords')" :filters="[
                 'Mã hàng',
-                'Tên hàng',
+                // 'Tên hàng',
                 'Hãng',
                 'Serial',
                 'Khách hàng',
                 'Ngày xuất hàng',
                 'Bảo hành',
+                'Ngày kích hoạt BHDV',
+                'Bảo hành dịch vụ',
                 'Tình trạng',
             ]">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
@@ -20,11 +22,13 @@
                 <x-filter-checkbox :dataa='$customers' name="khach-hang" title="Khách hàng" button="khach-hang"
                     namedisplay="customer_name" />
                 <x-filter-date name="ngay-xuat-hang" title="Ngày xuất hàng" />
+                <x-filter-date name="ngay-kich-hoat-bhdv" title="Ngày kích hoạt BHDV" />
                 <x-filter-status name="tinh-trang" title="Tình trạng" :filters="[
                     ['key' => '0', 'value' => 'Còn bảo hành', 'color' => '#858585'],
                     ['key' => '1', 'value' => 'Hết bảo hành', 'color' => '#08AA36BF'],
                 ]" />
                 <x-filter-compare name="bao-hanh" title="Bảo hành" />
+                <x-filter-compare name="bao-hanh-dich-vu" title="Bảo hành dịch vụ" />
             </x-search-filter>
             <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
         </div>
@@ -99,34 +103,34 @@
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="warrantyLookup" data-sort-type="DESC">
+                                                    data-sort-by="name_warranty" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Bảo hành</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-warrantyLookup"></div>
+                                                <div class="icon" id="icon-name_warranty"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="export_return_date" data-sort-type="DESC">
+                                                    data-sort-by="return_date" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ngày kích hoạt BH dịch vụ</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-export_return_date"></div>
+                                                <div class="icon" id="icon-return_date"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="warrantyLookup" data-sort-type="DESC">
+                                                    data-sort-by="warranty_extra" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Bảo hành dịch vụ</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-warrantyLookup"></div>
+                                                <div class="icon" id="icon-warranty_extra"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
@@ -216,11 +220,12 @@
             ma: getData('#ma-hang', this),
             ten: getData('#ten-hang', this),
             brand: getData('#hang', this),
-            sn: getData('#serial', this),
             date: retrieveDateData(this, 'ngay-xuat-hang'),
             customer: getStatusData(this, 'khach-hang'),
             status: getStatusData(this, 'tinh-trang'),
             bao_hanh: retrieveComparisonData(this, 'bao-hanh'),
+            bao_hanh_dich_vu: retrieveComparisonData(this, 'bao-hanh-dich-vu'),
+            date_expired: retrieveDateData(this, 'ngay-kich-hoat-bhdv'),
             sort: getSortData(buttonElement)
         };
         // Ẩn tùy chọn nếu cần

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseTransfer extends Model
 {
@@ -41,7 +42,7 @@ class WarehouseTransfer extends Model
         $warehouseTransfer->note = $data['note'];
         $warehouseTransfer->user_id = Auth::user()->id;
         $warehouseTransfer->save();
-        
+
         return $warehouseTransfer->id;
     }
 
@@ -79,5 +80,42 @@ class WarehouseTransfer extends Model
         } else {
             return false;
         }
+    }
+    public function getAllWarehouseTransfer($data = null)
+    {
+        $warehouse = DB::table('warehouse_transfers')
+            ->leftJoin('warehouses', 'warehouses.id', 'warehouse_transfers.from_warehouse_id');
+        // Tìm kiếm chung
+        if (!empty($data['search'])) {
+            $warehouse->where(function ($query) use ($data) {
+                $query->where('warehouse_transfers.code', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('warehouse_name', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('warehouse_transfers.note', 'like', '%' . $data['search'] . '%')
+                    ->orWhere('warehouse_code', 'like', '%' . $data['search'] . '%');
+            });
+        }
+        // Lọc theo các trường cụ thể
+        $filterableFields = [
+            'ma' => 'warehouse_transfers.code',
+            'note' => 'warehouse_transfers.note',
+        ];
+        foreach ($filterableFields as $key => $field) {
+            if (!empty($data[$key])) {
+                $warehouse->where($field, 'like', '%' . $data[$key] . '%');
+            }
+        }
+        if (isset($data['status'])) {
+            $warehouse = $warehouse->whereIn('warehouse_transfers.status', $data['status']);
+        }
+        if (isset($data['kho_chuyen'])) {
+            $warehouse = $warehouse->whereIn('warehouse_transfers.from_warehouse_id', $data['kho_chuyen']);
+        }
+        if (isset($data['kho_nhan'])) {
+            $warehouse = $warehouse->whereIn('warehouse_transfers.to_warehouse_id', $data['kho_nhan']);
+        }
+        if (isset($data['sort']) && isset($data['sort'][0])) {
+            $warehouse = $warehouse->orderBy($data['sort'][0], $data['sort'][1]);
+        }
+        return $warehouse->get();
     }
 }

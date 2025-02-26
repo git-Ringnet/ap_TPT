@@ -25,7 +25,8 @@ class WarehouseTransferController extends Controller
     {
         $title = 'Phiếu chuyển kho';
         $warehouseTransfer = $this->warehouseTransfer->orderBy('id', 'desc')->get();
-        return view('expertise.warehouseTransfer.index', compact('title', 'warehouseTransfer'));
+        $warehouse = Warehouse::all();
+        return view('expertise.warehouseTransfer.index', compact('title', 'warehouseTransfer', 'warehouse'));
     }
 
     /**
@@ -119,5 +120,45 @@ class WarehouseTransferController extends Controller
         } else {
             return redirect()->route('warehouseTransfer.index')->with('warning', 'Xóa phiếu chuyển kho thất bại!');
         }
+    }
+    public function filterData(Request $request)
+    {
+        $data = $request->all();
+        $filters = [];
+        if (isset($data['ma']) && $data['ma'] !== null) {
+            $filters[] = ['value' => 'Mã: ' . $data['ma'], 'name' => 'ma', 'icon' => 'po'];
+        }
+        if (isset($data['note']) && $data['note'] !== null) {
+            $filters[] = ['value' => 'Ghi chú: ' . $data['note'], 'name' => 'ghi-chu', 'icon' => 'po'];
+        }
+        if (isset($data['date']) && $data['date'][1] !== null) {
+            $date_start = date("d/m/Y", strtotime($data['date'][0]));
+            $date_end = date("d/m/Y", strtotime($data['date'][1]));
+            $filters[] = ['value' => 'Ngày lập phiếu: từ ' . $date_start . ' đến ' . $date_end, 'name' => 'ngay-lap-phieu', 'icon' => 'date'];
+        }
+        if (isset($data['kho_chuyen']) && $data['kho_chuyen'] !== null) {
+            $filters[] = ['value' => 'Kho chuyển: ' . count($data['kho_chuyen']) . ' đã chọn', 'name' => 'kho-chuyen', 'icon' => 'user'];
+        }
+        if (isset($data['kho_nhan']) && $data['kho_nhan'] !== null) {
+            $filters[] = ['value' => 'Kho nhận: ' . count($data['kho_nhan']) . ' đã chọn', 'name' => 'kho-nhan', 'icon' => 'user'];
+        }
+        if (isset($data['status']) && $data['status'] !== null) {
+            $statusValues = [];
+            if (in_array(1, $data['status'])) {
+                $statusValues[] = '<span style="color:08AA36BF;">Hoàn thành</span>';
+            }
+            if (in_array(0, $data['status'])) {
+                $statusValues[] = '<span style="color:#dc3545;">Huỷ</span>';
+            }
+            $filters[] = ['value' => 'Trạng thái: ' . implode(', ', $statusValues), 'name' => 'trang-thai', 'icon' => 'status'];
+        }
+        if ($request->ajax()) {
+            $warehouse = $this->warehouseTransfer->getAllWarehouseTransfer($data);
+            return response()->json([
+                'data' => $warehouse,
+                'filters' => $filters,
+            ]);
+        }
+        return false;
     }
 }
