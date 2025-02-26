@@ -515,7 +515,7 @@
                                     </div>
                                 </section>
                             @endif
-                            <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll"
+                            <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll" :data-productWarranty="$productWarranty"
                                 name="CXH" />
                         </section>
                     </div>

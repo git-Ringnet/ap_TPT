@@ -175,7 +175,7 @@
                                                 {{ $item->export_return_date ? date_format(new DateTime($item->export_return_date), 'd/m/Y') : '' }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->name_warranty }}
                                             </td>
                                             <td
@@ -187,7 +187,7 @@
                                                 {{ $item->name_expire_date }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 @if ($branchId == 2 && $formType == 3)
                                                 @else
                                                     {{ $item->status_string }}

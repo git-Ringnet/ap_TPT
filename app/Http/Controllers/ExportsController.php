@@ -7,6 +7,7 @@ use App\Models\Customers;
 use App\Models\Exports;
 use App\Models\Product;
 use App\Models\ProductExport;
+use App\Models\ProductWarranties;
 use App\Models\SerialNumber;
 use App\Models\User;
 use App\Models\warrantyHistory;
@@ -50,7 +51,8 @@ class ExportsController extends Controller
         $users = User::all();
         $customers = Customers::all();
         $products = Product::all();
-        return view('expertise.export.create', compact('title', 'export_code', 'users', 'customers', 'products'));
+        $productWarranty = ProductWarranties::all();
+        return view('expertise.export.create', compact('title', 'export_code', 'users', 'customers', 'products', 'productWarranty'));
     }
 
     /**
@@ -169,7 +171,8 @@ class ExportsController extends Controller
             ->get()->groupBy('product_id');
         $productAll = Product::all();
         $exports = Exports::with(['user', 'customer'])->get();
-        return view('expertise.export.edit', compact('title', 'export', 'users', 'customers', 'productExports', 'productAll', 'exports'));
+        $productWarranty = ProductWarranties::all();
+        return view('expertise.export.edit', compact('title', 'export', 'users', 'customers', 'productExports', 'productAll', 'exports', 'productWarranty'));
     }
 
     /**

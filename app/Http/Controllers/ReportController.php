@@ -43,7 +43,8 @@ class ReportController extends Controller
         $fromDateExIm = collect([Imports::min('date_create'), Exports::min('date_create')])->filter()->min();
         $toDateExIm = collect([Imports::max('date_create'), Exports::max('date_create')])->filter()->max();
         //Báo cáo tồn kho
-        $tonKho = SerialNumber::where('status', 1)->count();
+        $tonKho = SerialNumber::whereIn('status', [1, 5])->count();
+        $hangMuon = SerialNumber::where('status', 5)->count();
         $toiHanBT = InventoryLookup::where('status', 1)->count();
         $fromDateInventory = collect([
             SerialNumber::where('status', 1)->min('created_at'),
@@ -103,6 +104,7 @@ class ReportController extends Controller
             'phieuNhap',
             'phieuXuat',
             'tonKho',
+            'hangMuon',
             'toiHanBT',
             'hangNhap',
             'hangXuat',
@@ -315,7 +317,8 @@ class ReportController extends Controller
         }
         if ($dataName == 'baoCaoTK') {
             if ($dataValue == 0) {
-                $tonKho = SerialNumber::where('status', 1)->count();
+                $tonKho = SerialNumber::whereIn('status', [1, 5])->count();
+                $hangMuon = SerialNumber::where('status', 5)->count();
                 $toiHanBT = InventoryLookup::where('status', 1)->count();
                 $fromDateInventory = collect([
                     SerialNumber::where('status', 1)->min('created_at'),
@@ -327,6 +330,7 @@ class ReportController extends Controller
                 ])->filter()->max();
                 $response = [
                     'tonKho' => $tonKho,
+                    'hangMuon' => $hangMuon,
                     'toiHanBT' => $toiHanBT,
                     'ngayBatDau' => $fromDateInventory,
                     'ngayKetThuc' => $toDateInventory
@@ -334,12 +338,14 @@ class ReportController extends Controller
             }
             if ($dataValue == 1) {
                 //Lấy dữ liệu của tháng này
-                $tonKho = SerialNumber::where('status', 1)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count();
+                $tonKho = SerialNumber::whereIn('status', [1, 5])->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count();
+                $hangMuon = SerialNumber::where('status', 5)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count();
                 $toiHanBT = InventoryLookup::where('status', 1)->whereMonth('created_at', date('m'))->whereYear('created_at', date('Y'))->count();
                 $fromDateInventory = date('Y-m-01');
                 $toDateInventory = date('Y-m-t');
                 $response = [
                     'tonKho' => $tonKho,
+                    'hangMuon' => $hangMuon,
                     'toiHanBT' => $toiHanBT,
                     'ngayBatDau' => $fromDateInventory,
                     'ngayKetThuc' => $toDateInventory
@@ -347,12 +353,14 @@ class ReportController extends Controller
             }
             if ($dataValue == 2) {
                 //Lấy dữ liệu của tháng trước
-                $tonKho = SerialNumber::where('status', 1)->whereMonth('created_at', date('m', strtotime('-1 month')))->whereYear('created_at', date('Y', strtotime('-1 month')))->count();
+                $tonKho = SerialNumber::whereIn('status', [1, 5])->whereMonth('created_at', date('m', strtotime('-1 month')))->whereYear('created_at', date('Y', strtotime('-1 month')))->count();
+                $hangMuon = SerialNumber::where('status', 5)->whereMonth('created_at', date('m', strtotime('-1 month')))->whereYear('created_at', date('Y', strtotime('-1 month')))->count();
                 $toiHanBT = InventoryLookup::where('status', 1)->whereMonth('created_at', date('m', strtotime('-1 month')))->whereYear('created_at', date('Y', strtotime('-1 month')))->count();
                 $fromDateInventory = date('Y-m-01', strtotime('first day of last month'));
                 $toDateInventory = date('Y-m-t', strtotime('last day of last month'));
                 $response = [
                     'tonKho' => $tonKho,
+                    'hangMuon' => $hangMuon,
                     'toiHanBT' => $toiHanBT,
                     'ngayBatDau' => $fromDateInventory,
                     'ngayKetThuc' => $toDateInventory
@@ -360,12 +368,14 @@ class ReportController extends Controller
             }
             if ($dataValue == 3) {
                 //lấy dữ liệu của 3 tháng trước
-                $tonKho = SerialNumber::where('status', 1)->whereMonth('created_at', date('m', strtotime('-3 month')))->whereYear('created_at', date('Y', strtotime('-3 month')))->count();
+                $tonKho = SerialNumber::whereIn('status', [1, 5])->whereMonth('created_at', date('m', strtotime('-3 month')))->whereYear('created_at', date('Y', strtotime('-3 month')))->count();
+                $hangMuon = SerialNumber::where('status', 5)->whereMonth('created_at', date('m', strtotime('-3 month')))->whereYear('created_at', date('Y', strtotime('-3 month')))->count();
                 $toiHanBT = InventoryLookup::where('status', 1)->whereMonth('created_at', date('m', strtotime('-3 month')))->whereYear('created_at', date('Y', strtotime('-3 month')))->count();
                 $fromDateInventory = date('Y-m-01', strtotime('first day of -3 months'));
                 $toDateInventory = date('Y-m-t', strtotime('last day of -1 months'));
                 $response = [
                     'tonKho' => $tonKho,
+                    'hangMuon' => $hangMuon,
                     'toiHanBT' => $toiHanBT,
                     'ngayBatDau' => $fromDateInventory,
                     'ngayKetThuc' => $toDateInventory
@@ -620,7 +630,7 @@ class ReportController extends Controller
             $phieuChuaXL = Receiving::where('state', 1)->whereBetween('created_at', [$date_start, $date_end])->count();
             $phieuQuaHan = Receiving::where('state', 2)->whereBetween('created_at', [$date_start, $date_end])->count();
             $response = [
-                'phieuTiepNhan' => $phieuTiepNhan,
+                'phieuTiepNhan' => $phieuTiepNhan, 
                 'phieuTraHang' => $phieuTraHang,
                 'phieuChuaXL' => $phieuChuaXL,
                 'phieuQuaHan' => $phieuQuaHan,
@@ -629,10 +639,12 @@ class ReportController extends Controller
             ];
         }
         if ($dataName == 'baoCaoTK') {
-            $tonKho = SerialNumber::where('status', 1)->whereBetween('created_at', [$date_start, $date_end])->count();
+            $tonKho = SerialNumber::whereIn('status', [1, 5])->whereBetween('created_at', [$date_start, $date_end])->count();
+            $hangMuon = SerialNumber::where('status', 5)->whereBetween('created_at', [$date_start, $date_end])->count();
             $toiHanBT = InventoryLookup::where('status', 1)->whereBetween('created_at', [$date_start, $date_end])->count();
             $response = [
                 'tonKho' => $tonKho,
+                'hangMuon' => $hangMuon,
                 'toiHanBT' => $toiHanBT,
                 'ngayBatDau' => $date_start,
                 'ngayKetThuc' => $date_end

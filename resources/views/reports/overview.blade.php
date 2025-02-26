@@ -459,7 +459,10 @@
                                         <span class="font-weight-bold mx-1">Hàng tồn kho</span>
                                     </div>
                                     <div class="count text-blue-light font-weight-bold hangTonKho">
-                                        {{ $tonKho }}
+                                        <span class="tonKho">{{ $tonKho }} </span>
+                                        <span class="text-14-black">(</span>
+                                        <span class="text-14-black hangMuon">{{ $hangMuon }}</span>
+                                        <span class="text-14-black">hàng mượn )</span>
                                     </div>
                                 </div>
                             </div>
@@ -1070,7 +1073,8 @@
                         .ngayBatDau));
                     $('.baoCaoTonKho .toDate').text(formatDateReport(response.details.ngayKetThuc));
                     $('.baoCaoTonKho .text-filter').text(filterTexts[dataValue] || "");
-                    $('.baoCaoTonKho .hangTonKho').text(response.details.tonKho);
+                    $('.baoCaoTonKho .hangTonKho .tonKho').text(response.details.tonKho);
+                    $('.baoCaoTonKho .hangTonKho .hangMuon').text(response.details.hangMuon);
                     $('.baoCaoTonKho .hangToiHanBT').text(response.details.toiHanBT);
                 }
                 if (dataName == "hangXN") {
@@ -1161,7 +1165,8 @@
                             .ngayBatDau));
                         container.find('.toDate').text(formatDateReport(response.details
                             .ngayKetThuc));
-                        container.find('.hangTonKho').text(response.details.tonKho);
+                        container.find('.hangTonKho .tonKho').text(response.details.tonKho);
+                        container.find('.hangTonKho .hangMuon').text(response.details.hangMuon);
                         container.find('.hangToiHanBT').text(response.details.toiHanBT);
                         $(".block-optionss").hide();
                     }

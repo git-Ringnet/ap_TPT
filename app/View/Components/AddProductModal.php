@@ -16,6 +16,7 @@ class AddProductModal extends Component
     public $dataProduct;
     public $name;
     public $page;
+    public $dataProductWarranty;
 
     /**
      * Tạo mới component.
@@ -24,12 +25,13 @@ class AddProductModal extends Component
      * @param  string  $title
      * @return void
      */
-    public function __construct($id, $title = 'Modal Title', $dataProduct = null, $name = null)
+    public function __construct($id, $title = 'Modal Title', $dataProduct = null, $name = null, $dataProductWarranty = null)
     {
         $this->id = $id;
         $this->name = $name;
         $this->title = $title;
         $this->dataProduct = $dataProduct;
+        $this->dataProductWarranty = $dataProductWarranty;
     }
 
     /**

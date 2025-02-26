@@ -77,7 +77,28 @@
                                                     </div>
                                                 </div>
                                                 <ul class="m-0 p-0 scroll-data">
+                                                    @php
+                                                        $dataProductWarranty = $dataProductWarranty ?? collect();
+                                                        $warrantyByProduct = $dataProductWarranty->groupBy(
+                                                            'product_id',
+                                                        );
+                                                    @endphp
                                                     @foreach ($dataProduct as $product_value)
+                                                        @php
+                                                            // Lấy danh sách bảo hành của sản phẩm (nếu có)
+                                                            $warrantyList =
+                                                                $warrantyByProduct[$product_value->id] ?? collect();
+
+                                                            // Định dạng lại để đảm bảo JSON đúng
+                                                            $warrantyArray = $warrantyList
+                                                                ->map(
+                                                                    fn($w) => [
+                                                                        'info' => $w->info,
+                                                                        'warranty' => $w->warranty,
+                                                                    ],
+                                                                )
+                                                                ->toArray();
+                                                        @endphp
                                                         <li class="p-2 align-items-center text-wrap border-top"
                                                             data-id="{{ $product_value->id }}">
                                                             <a href="#" title="{{ $product_value->product_code }}"
@@ -86,7 +107,7 @@
                                                                 data-name="{{ $product_value->product_name }}"
                                                                 data-brand="{{ $product_value->brand }}"
                                                                 data-id="{{ $product_value->id }}"
-                                                                data-warranty="{{ $product_value->warranty }}"
+                                                                data-warranty='@json($warrantyArray)'
                                                                 name="info-product" class="search-info">
                                                                 <span
                                                                     class="text-13-black">{{ $product_value->product_code }}</span>
