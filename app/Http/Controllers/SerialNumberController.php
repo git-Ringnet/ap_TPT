@@ -492,15 +492,14 @@ class SerialNumberController extends Controller
             $result = [];
             foreach ($serialData as $serial) {
                 $sericheck = SerialNumber::where('serial_code', $serial)->first();
+
                 if ($sericheck) {
-                    if ($sericheck->product_id == $product_id) {
-                        $result[$serial] = ['status' => 'success', 'message' => 'Số serial nội bộ.'];
-                    }
+                    $result[$serial] = ['status' => 'success', 'message' => 'Số serial nội bộ.'];
                 } else {
                     $result[$serial] = ['status' => 'external', 'message' => 'Số serial bên ngoài.'];
                 }
             }
-
+            // dd($product_id);
             return response()->json($result);
         }
         // Kiểm tra với một serial duy nhất

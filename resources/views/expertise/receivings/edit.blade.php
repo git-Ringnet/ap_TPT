@@ -187,7 +187,8 @@
                                     id="dateCreate"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style=" flex:2;"
-                                    value="{{ date_format(new DateTime($receiving->date_created), 'd/m/Y') }}" />
+                                    value="{{ date_format(new DateTime($receiving->date_created), 'd/m/Y') }}"
+                                     />
                                 <input type="hidden" value="{{ $receiving->date_created }}" name="date_created"
                                     id="hiddenDateCreate">
                             </div>
@@ -600,21 +601,6 @@
             $('[name="phone"]').val(phone);
             $('[name="contact"]').val(contact);
             $('[name="address"]').val(address);
-        });
-        flatpickr("#dateCreate", {
-            locale: "vn",
-            dateFormat: "d/m/Y",
-            onChange: function(selectedDates) {
-                // Lấy giá trị ngày đã chọn
-                if (selectedDates.length > 0) {
-                    const formattedDate = flatpickr.formatDate(
-                        selectedDates[0],
-                        "Y-m-d"
-                    );
-                    document.getElementById("hiddenDateCreate").value =
-                        formattedDate;
-                }
-            },
         });
     });
 </script>

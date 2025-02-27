@@ -332,64 +332,86 @@
             },
         });
     });
-    $(document).ready(function() {
-        $(document).on('change click', '.replacement_serial_number_id, .search-item', function(event) {
-            const $input = $(this);
-            const $row = $input.closest('tr');
-            const $serialInput = $row.find('.replacement_serial_number_id');
-            const replacementCode = $row.find('input.replacement_code').val();
-            const $checkIcon = $row.find('.check-icon');
-            const serialNumber = $serialInput.val().trim();
+    $(document).ready(function () {
+    let isChecking = false; // Biến kiểm soát việc kiểm tra số serial
 
-            console.log('Serial Number:', serialNumber);
-            console.log('Replacement Code:', replacementCode);
+    $("#btn-get-unique-products").click(function (e) {
+        if (isChecking) {
+            e.preventDefault();
+            showAutoToast("warning", "Vui lòng chờ kiểm tra số serial...");
+            return;
+        }
 
-            // Kiểm tra trùng lặp trong các ô nhập liệu khác
-            let isDuplicate = false;
-            $('.replacement_serial_number_id').each(function() {
-                const otherValue = $(this).val().trim();
-                if ($(this)[0] !== $serialInput[0] && otherValue === serialNumber &&
-                    serialNumber !== '') {
-                    isDuplicate = true;
-                    return false; // Thoát khỏi vòng lặp nếu tìm thấy trùng lặp
-                }
-            });
-
-            if (isDuplicate) {
-                $checkIcon.text('✖').css('color', 'red');
-                return; // Không thực hiện kiểm tra AJAX nếu trùng lặp
-            }
-
-            // Kiểm tra nếu các giá trị không trống và thực hiện AJAX
-            if (serialNumber !== "" && replacementCode !== "") {
-                $.ajax({
-                    url: '{{ route('checkSNReplace') }}',
-                    type: 'GET',
-                    data: {
-                        serialNumber: serialNumber,
-                        product_id: replacementCode,
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        if (response.status === 'success') {
-                            $checkIcon.text('✔').css('color', 'green').attr('title',
-                                response.message);
-                        } else if (response.status === 'error') {
-                            $checkIcon.text('✖').css('color', 'red').attr('title', response
-                                .message);
-                        }
-                    },
-                    error: function() {
-                        $checkIcon.text('?').css('color', 'orange');
-                        console.error('Có lỗi xảy ra khi kiểm tra số serial.');
-                    }
-                });
-            } else {
-                // Nếu ô trống, giữ biểu tượng mặc định hoặc không làm gì cả
-                $checkIcon.text('').css('color', 'transparent');
+        let isValid = true;
+        $("#tbody-data .check-icon").each(function () {
+            if ($(this).text().trim() === "✖") {
+                isValid = false;
+                return false; // Dừng vòng lặp nếu phát hiện lỗi
             }
         });
 
+        if (!isValid) {
+            e.preventDefault();
+            showAutoToast("warning", "Dữ liệu không hợp lệ!");
+        }
     });
+
+    $(document).on('change click', '.replacement_serial_number_id, .search-item', function (event) {
+        const $input = $(this);
+        const $row = $input.closest('tr');
+        const $serialInput = $row.find('.replacement_serial_number_id');
+        const replacementCode = $row.find('input.replacement_code').val();
+        const $checkIcon = $row.find('.check-icon');
+        const serialNumber = $serialInput.val().trim();
+
+        console.log('Serial Number:', serialNumber);
+        console.log('Replacement Code:', replacementCode);
+
+        // Kiểm tra trùng lặp trong các ô nhập liệu khác
+        let isDuplicate = false;
+        $('.replacement_serial_number_id').each(function () {
+            const otherValue = $(this).val().trim();
+            if ($(this)[0] !== $serialInput[0] && otherValue === serialNumber && serialNumber !== '') {
+                isDuplicate = true;
+                return false; // Thoát khỏi vòng lặp nếu tìm thấy trùng lặp
+            }
+        });
+
+        if (isDuplicate) {
+            $checkIcon.text('✖').css('color', 'red');
+            return; // Không thực hiện kiểm tra AJAX nếu trùng lặp
+        }
+
+        if (serialNumber !== "" && replacementCode !== "") {
+            isChecking = true; 
+            $.ajax({
+                url: '{{ route('checkSNReplace') }}',
+                type: 'GET',
+                data: {
+                    serialNumber: serialNumber,
+                    product_id: replacementCode,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        $checkIcon.text('✔').css('color', 'green').attr('title', response.message);
+                    } else if (response.status === 'error') {
+                        $checkIcon.text('✖').css('color', 'red').attr('title', response.message);
+                    }
+                },
+                error: function () {
+                    $checkIcon.text('?').css('color', 'orange');
+                    console.error('Có lỗi xảy ra khi kiểm tra số serial.');
+                },
+                complete: function () {
+                    isChecking = false; // Hoàn tất kiểm tra
+                }
+            });
+        } else {
+            $checkIcon.text('').css('color', 'transparent');
+        }
+    });
+});
+
 </script>

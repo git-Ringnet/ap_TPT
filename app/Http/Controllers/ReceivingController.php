@@ -143,8 +143,6 @@ class ReceivingController extends Controller
     {
         // Validate the request data
         $validated = $request->validate([
-            'branch_id' => 'required|min:1',
-            'branch_id.*' => 'in:1,2',
             'form_type' => 'required|min:1',
             'form_type.*' => 'in:1,2,3',
             'form_code_receiving' => 'required|string|unique:receiving,form_code_receiving,' . $id,
@@ -159,12 +157,13 @@ class ReceivingController extends Controller
             'status' => 'nullable|integer',
             'state' => 'nullable|integer',
         ]);
-
+        // dd($validated);
         // Find the receiving record to update
         $receiving = Receiving::findOrFail($id);
 
         // Update the receiving record
         $receiving->update($validated);
+        Artisan::call('receiving:update-status');
 
         DB::beginTransaction();
         try {
@@ -396,7 +395,7 @@ class ReceivingController extends Controller
                 $receiving = Receiving::findOrFail($recei);
                 $receiving->status = $status;
                 // Nếu status != 1, đặt state = 0
-                if ($status != 1 && $status != 2) {
+                if ($status != 1) {
                     $receiving->state = 0;
                 }
                 $receiving->save();

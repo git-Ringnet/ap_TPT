@@ -2621,8 +2621,9 @@ input[type="checkbox"]:checked {
     border-bottom-width: 0 !important;
 }
 
-.content-wrapper .content .list_product li:hover,.warranty-dropdown li:hover {
+.content-wrapper .content .list_product li:hover,.warranty-dropdown li:hover ,.search-list li:hover{
     background-color: #ececec;
+    cursor: pointer;
 }
 
 .content-wrapper .content .list_code li:hover,.warranty-dropdown li:hover {

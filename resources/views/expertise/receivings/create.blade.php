@@ -132,7 +132,7 @@
                                 phiếu</span>
                             <input placeholder="Nhập thông tin" autocomplete="off" type="date" id="dateCreate"
                                 class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
-                                style=" flex:2;" />
+                                style=" flex:2;" value="{{ now()->format('Y-m-d') }} }}" />
                             <input type="hidden" value="{{ now()->format('Y-m-d') }}" name="date_created"
                                 id="hiddenDateCreate">
                         </div>

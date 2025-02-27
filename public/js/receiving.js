@@ -337,6 +337,11 @@ flatpickr("#dateCreate", {
                 "Y-m-d"
             );
             document.getElementById("hiddenDateCreate").value = formattedDate;
+        } else {
+            // Nếu không chọn thì mặc định là ngày hôm nay
+            const today = new Date();
+            const formattedToday = flatpickr.formatDate(today, "Y-m-d");
+            document.getElementById("hiddenDateCreate").value = formattedToday;
         }
     },
 });
@@ -574,14 +579,14 @@ $(document).ready(function () {
             success: function (response) {
                 let valuesr = Object.values(response);
                 let values = valuesr.map((item) => item.status);
-
+                console.log(response);
+                
                 let allInternal = values.every(
                     (status) => status === "success"
                 ); // Tất cả là nội bộ
                 let allExternal = values.every(
                     (status) => status === "external"
                 ); // Tất cả là bên ngoài
-
                 if (allInternal) {
                     $("#branch_id").val(1); // Set branch_id = 1 (Nội bộ)
                 } else if (allExternal) {
@@ -593,7 +598,6 @@ $(document).ready(function () {
                     );
                     return; // Dừng lại, không submit form
                 }
-                showAutoToast("success", "Đang tạo đơn tiếp nhận");
                 $("#form-submit").submit();
             },
             error: function () {

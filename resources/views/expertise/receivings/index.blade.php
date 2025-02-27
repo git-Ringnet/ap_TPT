@@ -234,7 +234,7 @@
                                                 @endif
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 state-text{{ $item->id }}">
                                                 @if ($item->state == 1)
                                                     Chưa xử lý
                                                 @elseif($item->state == 2)
@@ -355,6 +355,7 @@
             const returndata = $(this).data('return');
             const statusText = $(this).text();
             const $td = $(`.status-text${recei}`);
+            const $state = $(`.state-text${recei}`);
             $.ajax({
                 url: '/update-status',
                 method: 'POST',
@@ -365,15 +366,17 @@
                     _token: $('meta[name="csrf-token"]').attr('content'),
                 },
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response);
                     if (response.status === 'success') {
                         $td.text(statusText);
+                        $state.text('');
                         $('input.id-data[value="' + response.id + '"]').data('status',
                             statusId);
-                        if (statusId != 1 && statusId != 2) {
+                        if (statusId != 1) {
                             $('input.id-data[value="' + response.id + '"]').closest('tr')
-                                .removeClass('bg-custom-yl');
+                            .removeClass('bg-custom-yl bg-custom-pink');
                         }
+                        showAutoToast("success", 'Cập nhật trạng thái thành công.');
                     } else {
                         showAutoToast("warning", 'Cập nhật trạng thái không thành công.');
                     }

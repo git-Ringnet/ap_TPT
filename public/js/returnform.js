@@ -181,7 +181,7 @@ function populateTableRows(products, tableSelector, dataProduct, type) {
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0 ${hideReplacement}">
                     <input type="hidden" min="0" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 replacement_code height-32 bg-input-guest-blue" id="replacement_code_${index}" name="return[${index}][replacement_code]" value="">
                     <div class="search-container">
-                        <input type="text" class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32" placeholder="Search..." />
+                        <input type="text" class="search-input border-0 pl-1 pr-2 py-1 w-100 serial_code height-32 bg-input-guest-blue" placeholder="Chọn mã hàng" />
                         <ul class="search-list border rounded">
                             ${dataProduct
                                 .map(
@@ -278,3 +278,19 @@ $(document).ready(function () {
         $item.closest(".search-list").removeClass("active");
     });
 });
+// $(document).ready(function () {
+//     $("#btn-get-unique-products").click(function (e) {
+//         // Giả lập click ra ngoài trước khi thực hiện hành động chính
+//         let isValid = true;
+//         $("#tbody-data .check-icon").each(function () {
+//             if ($(this).text().trim() === "✖") {
+//                 isValid = false;
+//                 return false; // Dừng vòng lặp
+//             }
+//         });
+//         if (!isValid) {
+//             e.preventDefault();
+//             showAutoToast("warning", "Dữ liệu không hợp lệ!");
+//         }
+//     });
+// });

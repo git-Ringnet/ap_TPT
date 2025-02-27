@@ -339,8 +339,9 @@ class ReturnFormController extends Controller
 
             // Update the return form
             $returnForm->update($validated);
-
+            // dd($request->all());
             // Delete existing product returns to avoid duplicates
+            ProductReturn::where('return_form_id', $id)->delete();
             foreach ($validated['return'] as $returnItem) {
                 $product_id = $returnItem['product_id'];
                 $quantity = $returnItem['quantity'];
@@ -356,7 +357,6 @@ class ReturnFormController extends Controller
                 if ($replacement_serial_number_id) {
                     $replacementSerial = SerialNumber::where('serial_code', $replacement_serial_number_id)
                         ->where('product_id', $replacement_code)
-                        ->whereIn('status', [1, 5])
                         ->where('warehouse_id', 2)
                         ->first();
                     if ($replacementSerial && $replacementSerial->id !== $oldReplacementSerialId) {
@@ -382,7 +382,7 @@ class ReturnFormController extends Controller
                     'extra_warranty' => $extra_warranty,
                     'notes' => $note,
                 ];
-                ProductReturn::where('return_form_id', $id)->delete();
+        
 
 
                 // Handle replacement serial number updates
