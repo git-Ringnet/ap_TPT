@@ -136,7 +136,7 @@ class QuotationController extends Controller
             'services.*.unit' => 'nullable|string',
             'services.*.brand' => 'nullable|string',
             'services.*.quantity' => 'required|integer|min:1',
-            'services.*.unit_price' => 'required|numeric|min:0',
+            'services.*.unit_price' => 'required|string|min:0',
             'services.*.tax_rate' => 'nullable|numeric|min:0|max:100',
             'services.*.note' => 'nullable|string',
         ]);
@@ -149,7 +149,7 @@ class QuotationController extends Controller
 
         // Thêm lại tất cả các dịch vụ mới
         foreach ($validated['services'] ?? [] as $service) {
-            $totalWithTax = $service['quantity'] * $service['unit_price'] * (1 + ($service['tax_rate'] ?? 0) / 100);
+            $totalWithTax = $service['quantity'] * (float)$service['unit_price'] * (1 + ($service['tax_rate'] ?? 0) / 100);
             // Tạo dịch vụ mới
             $quotation->services()->create(array_merge($service, [
                 'total' => $totalWithTax

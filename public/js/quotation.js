@@ -151,3 +151,16 @@ $(document).on(
         calculateTotals();
     }
 );
+// $(document).on("input", ".unit_price", function () {
+//     let value = $(this).val().replace(/\D/g, ""); // Loại bỏ ký tự không phải số
+//     if (value !== "") {
+//         $(this).val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ".")); // Định dạng số với dấu .
+//     }
+// });
+
+// $(document).on("blur", ".unit_price", function () {
+//     let value = $(this).val().replace(/\D/g, ""); // Loại bỏ ký tự không phải số
+//     if (value !== "") {
+//         $(this).val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND"); // Thêm đơn vị tiền VND
+//     }
+// });

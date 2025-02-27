@@ -989,7 +989,7 @@ td p {
     left: 0;
     right: 0;
     z-index: 99;
-    border-bottom: 1px solid #C6CFFC;
+    /* border-bottom: 1px solid #C6CFFC; */
     background-color: white;
 }
 
@@ -1040,7 +1040,7 @@ td p {
         left: 0;
         right: 0;
         z-index: 99;
-        border-bottom: 1px solid #C6CFFC;
+        /* border-bottom: 1px solid #C6CFFC; */
         background-color: white;
     }
     .margin-top-118 {

@@ -108,7 +108,7 @@
         <div class="content-wrapper2 px-0 py-0 margin-top-118">
             <div id="main">
                 {{-- Thông tin khách hàng --}}
-                <div class="border border-top-0">
+                <div class="border">
                     <div class="info-form">
                         <div class="bg-filter-search border-0 text-center">
                             <p class="font-weight-bold text-uppercase info-chung--heading text-center">
