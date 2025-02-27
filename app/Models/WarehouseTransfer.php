@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -84,7 +85,8 @@ class WarehouseTransfer extends Model
     public function getAllWarehouseTransfer($data = null)
     {
         $warehouse = DB::table('warehouse_transfers')
-            ->leftJoin('warehouses', 'warehouses.id', 'warehouse_transfers.from_warehouse_id');
+            ->leftJoin('warehouses', 'warehouses.id', 'warehouse_transfers.from_warehouse_id')
+            ->select('warehouse_transfers.*','warehouses.warehouse_name','warehouses.warehouse_code');
         // Tìm kiếm chung
         if (!empty($data['search'])) {
             $warehouse->where(function ($query) use ($data) {
@@ -103,6 +105,11 @@ class WarehouseTransfer extends Model
             if (!empty($data[$key])) {
                 $warehouse->where($field, 'like', '%' . $data[$key] . '%');
             }
+        }
+        if (!empty($data['date'][0]) && !empty($data['date'][1])) {
+            $dateStart = Carbon::parse($data['date'][0]);
+            $dateEnd = Carbon::parse($data['date'][1])->endOfDay();
+            $warehouse->whereBetween('transfer_date', [$dateStart, $dateEnd]);
         }
         if (isset($data['status'])) {
             $warehouse = $warehouse->whereIn('warehouse_transfers.status', $data['status']);

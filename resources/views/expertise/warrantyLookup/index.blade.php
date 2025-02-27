@@ -219,6 +219,7 @@
             search: $('#search').val(),
             ma: getData('#ma-hang', this),
             ten: getData('#ten-hang', this),
+            sn: getData('#serial', this),
             brand: getData('#hang', this),
             date: retrieveDateData(this, 'ngay-xuat-hang'),
             customer: getStatusData(this, 'khach-hang'),

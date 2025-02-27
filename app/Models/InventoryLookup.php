@@ -48,7 +48,7 @@ class InventoryLookup extends Model
             ->join('providers', 'providers.id', '=', 'inventory_lookup.provider_id')
             ->with('product', 'serialNumber', 'provider')
             ->whereHas('serialNumber', function ($query) {
-                $query->where('status', 1);
+                $query->whereIn('status',[1,5]);
             })
             ->select('inventory_lookup.*', 'serial_numbers.serial_code as sericode', 'products.*', 'providers.provider_name as providername', 'inventory_lookup.status as status', 'inventory_lookup.id as id');
         if (!empty($data['search'])) {

@@ -53,67 +53,67 @@
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="product_code" data-sort-type="DESC">
+                                                    data-sort-by="code" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Mã phiếu</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-product_code"></div>
+                                                <div class="icon" id="icon-code"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="product_name" data-sort-type="DESC">
+                                                    data-sort-by="transfer_date" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ngày lập phiếu</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-product_name"></div>
+                                                <div class="icon" id="icon-transfer_date"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="brand"
+                                                <a href="#" class="sort-link btn-submit" data-sort-by="from_warehouse_id"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Kho chuyển</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-brand"></div>
+                                                <div class="icon" id="icon-from_warehouse_id"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
-                                                <a href="#" class="sort-link btn-submit" data-sort-by="sericode"
+                                                <a href="#" class="sort-link btn-submit" data-sort-by="to_warehouse_id"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Kho nhận</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-sericode"></div>
+                                                <div class="icon" id="icon-to_warehouse_id"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="customername" data-sort-type="DESC">
+                                                    data-sort-by="status" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Trạng thái</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-customername"></div>
+                                                <div class="icon" id="icon-status"></div>
                                             </span>
                                         </th>
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
-                                                    data-sort-by="customername" data-sort-type="DESC">
+                                                    data-sort-by="note" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ghi chú</span>
                                                     </button>
                                                 </a>
-                                                <div class="icon" id="icon-customername"></div>
+                                                <div class="icon" id="icon-note"></div>
                                             </span>
                                         </th>
                                     </tr>
