@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
-                        <span class="text text-13-black m-0" style="flex: 2;">Trạng thái :</span>
+                        <span class="text text-13-black m-0" style="flex: 2;">Tình trạng :</span>
                         <div class="form-check form-check-inline mr-1">
                             <select class="form-check-input border-0 text text-13-black" name="status" id="status">
                                 <option value="1"
@@ -292,7 +292,7 @@
                                                 <td
                                                     class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
+                                                        class="border-0 pl-1 pr-2 py-1 serial w-100 height-32" readonly
                                                         placeholder="Tìm mã hàng"
                                                         value="{{ $receivedProduct->product->product_code }}"
                                                         readonly>
@@ -354,8 +354,8 @@
                                                         data-index="{{ $indexRecei }}"
                                                         value="{{ $receivedProduct->warrantyReceived[0]->id ?? '' }}">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
-                                                        name="product_id[{{ $indexRecei }}][name_warranty][]"
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32"
+                                                        name="product_id[{{ $indexRecei }}][name_warranty][]" readonly
                                                         data-index="{{ $indexRecei }}"
                                                         value="{{ $receivedProduct->warrantyReceived[0]->name_warranty ?? '' }}">
                                                     <span class="check-icon"></span>
@@ -421,7 +421,7 @@
                                                                 data-index="{{ $indexRecei }}"
                                                                 value="{{ $warrantyReceived->id }}">
                                                             <input type="text" autocomplete="off"
-                                                                class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32 bg-input-guest-blue"
+                                                                class="border-0 pl-1 pr-2 py-1 w-100 warranty-input name_warranty height-32" readonly
                                                                 name="product_id[{{ $indexRecei }}][name_warranty][]"
                                                                 data-index="{{ $indexRecei }}"
                                                                 value="{{ $warrantyReceived->name_warranty }}">

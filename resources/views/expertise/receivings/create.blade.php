@@ -328,7 +328,6 @@
                                                 fill="#6B6F76"></path>
                                         </svg>
                                     </td>
-                                    </td>
                                 </tr>
                                 <tr id="row-add-warranty" data-index="0" class="bg-white row-warranty"
                                     style="display: none" data-product-code="" data-product-id="">
