@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
 use App\Models\ProductWarranties;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -85,9 +86,22 @@ class ProductController extends Controller
     // Remove the specified product from storage
     public function destroy(Product $product)
     {
+        // Kiểm tra xem product_id có tồn tại trong các bảng liên quan không
+        $existsInRelatedTables = DB::table('product_import')->where('product_id', $product->id)->exists()
+            || DB::table('product_export')->where('product_id', $product->id)->exists()
+            || DB::table('received_products')->where('product_id', $product->id)->exists()
+            || DB::table('product_returns')->where('product_id', $product->id)->exists()
+            || DB::table('product_warranties')->where('product_id', $product->id)->exists();
+
+        if ($existsInRelatedTables) {
+            return redirect()->route('products.index')
+                ->with('warning', 'Không thể xóa sản phẩm vì nó đang được sử dụng trong hệ thống.');
+        }
+
+        // Xóa sản phẩm nếu không còn liên kết
         $product->delete();
 
-        return redirect()->route('products.index')->with('msg', 'Product deleted successfully.');
+        return redirect()->route('products.index')->with('msg', 'Sản phẩm đã được xóa thành công.');
     }
     public function filterData(Request $request)
     {
@@ -139,15 +153,15 @@ class ProductController extends Controller
         if (!$request->has('products') || empty($request->input('products'))) {
             return redirect()->route('products.index')->with('warning', 'Không có sản phẩm nào được chọn để cập nhật!');
         }
-    
+
         $products = $request->input('products');
-    
+
         foreach ($products as $productData) {
             $productData = json_decode($productData, true);
             $productId = $productData['product_id'];
             $rowData = $productData['row_data'];
             $product = Product::find($productId);
-    
+
             if ($product) {
                 $product->update([
                     'product_code' => $rowData[0], // Mã sản phẩm

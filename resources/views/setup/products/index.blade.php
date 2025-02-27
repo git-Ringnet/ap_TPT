@@ -120,13 +120,13 @@
                                             <input type="hidden" name="id-product" class="id-product"
                                                 id="id-product" value="{{ $item->id }}">
                                             <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
-                                                {{ $item->product_code }}
+                                                <a class="duongdan" href="{{ route('products.edit', $item->id) }}">
+                                                    {{ $item->product_code }}
+                                                </a>
                                             </td>
                                             <td
                                                 class="text-13-black border-bottom border py-0 border-top-0 border-left-0 max-width180">
-                                                <a class="duongdan" href="{{ route('products.edit', $item->id) }}">
-                                                    {{ $item->product_name }}
-                                                </a>
+                                                {{ $item->product_name }}
                                             </td>
                                             <td
                                                 class="text-13-black border-bottom border py-0 border-top-0 border-left-0">
@@ -207,14 +207,14 @@
                                                 <input type="hidden" name="id-product" class="id-product"
                                                     id="id-product" value="{{ $item->id }}">
                                                 <td class="text-13-black border-bottom border py-0 pl-4 border-top-0">
-                                                    {{ $item->product_code }}
+                                                    <a class="duongdan"
+                                                        href="{{ route('products.edit', $item->id) }}">
+                                                        {{ $item->product_code }}
+                                                    </a>
                                                 </td>
                                                 <td
                                                     class="text-13-black border-bottom border py-0 border-top-0 border-left-0 max-width180">
-                                                    <a class="duongdan"
-                                                        href="{{ route('products.edit', $item->id) }}">
-                                                        {{ $item->product_name }}
-                                                    </a>
+                                                    {{ $item->product_name }}
                                                 </td>
                                                 <td
                                                     class="text-13-black border-bottom border py-0 border-top-0 border-left-0">

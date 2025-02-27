@@ -90,17 +90,17 @@
                         <div class="col-md-4 m-0 p-0">
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black text-nowrap mr-3 font-weight-bold required-label"
+                                <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                     style="flex: 1.5;">Kho
                                     xuất</span>
                                 <input id="warehouse_name" placeholder="Nhập thông tin" type="text" required
-                                    onkeypress="return false;" autocomplete="off"
+                                    onkeypress="return false;" autocomplete="off" readonly
                                     value="{{ $warehouseTransfer->fromWarehouse->warehouse_name }}"
-                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="from_warehouse_id" id="warehouse_id"
                                     value="{{ $warehouseTransfer->from_warehouse_id }}">
-                                <div class="">
+                                {{-- <div class="">
                                     <div id="listWarehouse"
                                         class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
                                         style="z-index: 99;display: none;">
@@ -129,21 +129,21 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black text-nowrap mr-3 font-weight-bold required-label"
+                                <span class="text-13-black text-nowrap mr-3 font-weight-bold"
                                     style="flex: 1.5;">Kho
                                     nhận</span>
                                 <input id="warehouse_receive_name" placeholder="Nhập thông tin" type="text"
-                                    required onkeypress="return false;" autocomplete="off"
+                                    required onkeypress="return false;" autocomplete="off" readonly
                                     value="{{ $warehouseTransfer->toWarehouse->warehouse_name }}"
-                                    class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
+                                    class="text-13-black w-50 border-0 bg-input-guest py-2 px-2"
                                     style="flex:2;" />
                                 <input type="hidden" name="to_warehouse_id" id="warehouse_receive_id"
                                     value="{{ $warehouseTransfer->to_warehouse_id }}">
-                                <div class="">
+                                {{-- <div class="">
                                     <div id="listWarehouseReceive"
                                         class="bg-white position-absolute rounded list-guest shadow p-1 z-index-block"
                                         style="z-index: 99;display: none;">
@@ -172,7 +172,7 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                                     <th class="border-right note px-2 p-0 text-left" style="width: 15%;">
                                         <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
                                     </th>
-                                    <th class="border-right" style="width: 5%;"></th>
+                                    {{-- <th class="border-right" style="width: 5%;"></th> --}}
                                 </tr>
                             </thead>
                             <tbody id="tbody-product-data">
@@ -274,7 +274,7 @@
                                                     class="border-0 pl-1 pr-2 py-1 w-100 note_seri height-32 bg-input-guest-blue"
                                                     name="note_seri[]" value="{{ $item->note }}">
                                             </td>
-                                            <td class="p-2 align-top activity border-bottom border-top-0 border-right">
+                                            {{-- <td class="p-2 align-top activity border-bottom border-top-0 border-right text-center">
                                                 <svg class="delete-row" width="17" height="17"
                                                     viewBox="0 0 17 17" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -282,11 +282,11 @@
                                                         d="M13.1417 6.90625C13.4351 6.90625 13.673 7.1441 13.673 7.4375C13.673 7.47847 13.6682 7.5193 13.6589 7.55918L12.073 14.2992C11.8471 15.2591 10.9906 15.9375 10.0045 15.9375H6.99553C6.00943 15.9375 5.15288 15.2591 4.92702 14.2992L3.34113 7.55918C3.27393 7.27358 3.45098 6.98757 3.73658 6.92037C3.77645 6.91099 3.81729 6.90625 3.85826 6.90625H13.1417ZM9.03125 1.0625C10.4983 1.0625 11.6875 2.25175 11.6875 3.71875H13.8125C14.3993 3.71875 14.875 4.19445 14.875 4.78125V5.3125C14.875 5.6059 14.6371 5.84375 14.3438 5.84375H2.65625C2.36285 5.84375 2.125 5.6059 2.125 5.3125V4.78125C2.125 4.19445 2.6007 3.71875 3.1875 3.71875H5.3125C5.3125 2.25175 6.50175 1.0625 7.96875 1.0625H9.03125ZM9.03125 2.65625H7.96875C7.38195 2.65625 6.90625 3.13195 6.90625 3.71875H10.0938C10.0938 3.13195 9.61805 2.65625 9.03125 2.65625Z"
                                                         fill="#6B6F76"></path>
                                                 </svg>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                     {{-- Nút thêm --}}
-                                    <tr id="add-row-product" class="bg-white" data-product-code="SP1"
+                                    {{-- <tr id="add-row-product" class="bg-white" data-product-code="SP1"
                                         data-product-id="{{ $item->product->id }}">
                                         <td colspan="{{ $warehouseTransfer->from_warehouse_id == 2 ? 8 : 7 }}"
                                             class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
@@ -309,12 +309,12 @@
                                                 </svg>
                                             </button>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 @endforeach
                             </tbody>
                         </table>
                         <input type="hidden" name="data-test" id="data-test">
-                        <section class="content mt-2">
+                        {{-- <section class="content mt-2">
                             <div class="container-fluided">
                                 <div class="d-flex ml-4">
                                     <button type="button" data-modal-id="modal-id" data-toggle="modal"
@@ -334,7 +334,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </section>
+                        </section> --}}
                         <x-add-product-modal :id="'modal-id'" title="Thêm sản phẩm" :data-product="$productAll"
                             name="CPCK" />
                     </section>

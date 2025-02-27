@@ -388,7 +388,7 @@
                                                             </td>
                                                             @if ($isCheck)
                                                                 <td
-                                                                    class="p-2 align-top border-bottom border-top-0 border-right">
+                                                                    class="p-2 align-top border-bottom border-top-0 border-right text-center">
                                                                     <svg class="delete-row" width="17"
                                                                         height="17" viewBox="0 0 17 17"
                                                                         fill="none"
@@ -405,7 +405,7 @@
                                                             </td>
                                                             @if ($isCheck)
                                                                 <td
-                                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                                                                    class="border-right p-2 text-13 align-top border-bottom border-top-0 text-center">
                                                                     <svg class="delete-row" width="17"
                                                                         height="17" viewBox="0 0 17 17"
                                                                         fill="none"

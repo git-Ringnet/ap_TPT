@@ -140,8 +140,7 @@ class SerialNumberController extends Controller
         if ($request->nameModal == "PCK") {
             if ($request->warehouse == 1) {
                 // Kiểm tra trong bảng serial_numbers
-                $exists = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                $exists = SerialNumber::where('serial_code', $serialNumber)
                     ->where('status', 1)
                     ->exists();
                 if (!$exists) {
@@ -151,8 +150,7 @@ class SerialNumberController extends Controller
                 }
             } else if ($request->warehouse == 2) {
                 // Kiểm tra trong bảng serial_numbers
-                $exists = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                $exists = SerialNumber::where('serial_code', $serialNumber)
                     ->exists();
                 if ($exists) {
                     return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
@@ -164,8 +162,7 @@ class SerialNumberController extends Controller
         if ($request->nameModal == "CPCK") {
             if ($request->warehouse == 1) {
                 // Lấy ID của serial cần kiểm tra
-                $serial = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                $serial = SerialNumber::where('serial_code', $serialNumber)
                     ->first();
 
                 if (!$serial) {
@@ -184,26 +181,26 @@ class SerialNumberController extends Controller
                     return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);
                 }
             } else if ($request->warehouse == 2) {
-                // Lấy ID của serial cần kiểm tra
-                $serial = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                // Lấy serial trong DB
+                $serial = SerialNumber::where('serial_code', $serialNumber)
                     ->first();
 
+                // Nếu serial không tồn tại trong DB → Hợp lệ
                 if (!$serial) {
-                    return response()->json(['status' => 'error', 'message' => 'Số serial không tồn tại.']);
-                }
-
-                // Kiểm tra nếu serial có status = 1
-                $existsInSerials = $serial->status == 1;
-
-                // Kiểm tra nếu serial đã có trong WarehouseTransferItem
-                $existsInTransfer = WarehouseTransferItem::where('serial_number_id', $serial->id)->exists();
-
-                if (!$existsInSerials && !$existsInTransfer) {
-                    return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
-                } else {
                     return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);
                 }
+
+                // Kiểm tra nếu serial đã có trong WarehouseTransferItem và có transfer_id trùng với warehouseTransferId
+                $existsInTransfer = WarehouseTransferItem::where('serial_number_id', $serial->id)
+                    ->where('transfer_id', $request->warehouseTransferId) // Kiểm tra transfer_id trùng
+                    ->exists();
+
+                if ($existsInTransfer) {
+                    return response()->json(['status' => 'success', 'message' => 'Số serial hợp lệ.']);
+                }
+
+                // Nếu serial tồn tại nhưng không thuộc warehouseTransferId → Không hợp lệ
+                return response()->json(['status' => 'error', 'message' => 'Số serial không hợp lệ.']);
             }
         }
     }
@@ -214,8 +211,7 @@ class SerialNumberController extends Controller
         if ($request->nameModal == "PCK") {
             if ($request->warehouse == 2) {
                 // Kiểm tra trong bảng serial_numbers
-                $exists = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                $exists = SerialNumber::where('serial_code', $serialNumber)
                     ->where('status', 5)
                     ->exists();
                 if (!$exists) {
@@ -228,8 +224,7 @@ class SerialNumberController extends Controller
         if ($request->nameModal == "CPCK") {
             if ($request->warehouse == 2) {
                 // Lấy ID của serial cần kiểm tra
-                $serial = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serialNumber)
+                $serial = SerialNumber::where('serial_code', $serialNumber)
                     ->first();
 
                 if (!$serial) {
@@ -395,7 +390,7 @@ class SerialNumberController extends Controller
     {
         $seriRecord = SerialNumber::where('serial_code', $request->serialNumber)
             ->where('product_id', $request->product_id)
-            ->whereIn('status', [1,5])->where('warehouse_id',2)
+            ->whereIn('status', [1, 5])->where('warehouse_id', 2)
             ->first();
 
         if ($seriRecord) {

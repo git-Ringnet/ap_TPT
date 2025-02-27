@@ -46,21 +46,22 @@
                             <thead class="border-custom border-bottom">
                                 <tr class="">
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Mã hàng</th>
-                                    <th class="height-40 py-0 border pl-3" style="width: 25%;">Tên hàng</th>
+                                    <th class="height-40 py-0 border pl-3" style="width: 20%;">Tên hàng</th>
                                     <th class="height-40 py-0 border pl-3" style="width: 20%;">Hãng</th>
                                     @if ($name == 'XH' || $name == 'CXH')
-                                        <th class="height-40 py-0 border pl-3" colspan="2" style="width: 20%;">Bảo
+                                        <th class="height-40 py-0 border pl-3" colspan="2" style="width: 25%;">Bảo
                                             hành (Tháng)</th>
+                                        <th class="height-40 py-0 border pl-3" style="width: 5%;"></th>
                                     @endif
                                 </tr>
                             </thead>
                             <tbody id="body-warranty">
                                 <tr class="height-40 position-relative">
                                     <input type="hidden" name="product_id" id="product_id_input">
-                                    <td class="text-13-black border border-bottom-0 py-0 pl-3">
+                                    <td class="text-13-black border border-bottom-0 py-0">
                                         <input type="text" id="product_code_input" name="product_code_input"
                                             style="flex:2;" placeholder="Chọn thông tin" readonly
-                                            class="text-13-black w-100 border-0">
+                                            class="text-13-black w-100 border-0 bg-input-guest-blue p-2">
                                         <div class="">
                                             <div id="listProducts"
                                                 class="bg-white position-absolute rounded list-product shadow p-1 z-index-block"
@@ -454,7 +455,7 @@
             e.preventDefault();
         }
 
-        if (nameModal === "PCK") {
+        if (nameModal === "PCK" || nameModal === "CPCK") {
             let warehouse = $("#warehouse_id").val();
             let warehousereceive = $("#warehouse_receive_id").val();
             if (warehouse === "" || warehousereceive === "") {

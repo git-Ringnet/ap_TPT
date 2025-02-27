@@ -304,7 +304,7 @@
                                                 </td>
                                                 @if ($isCheck)
                                                     <td
-                                                        class="p-2 align-top activity border-bottom border-top-0 border-right">
+                                                        class="p-2 align-top activity border-bottom border-top-0 border-right text-center">
                                                         <svg class="delete-row" width="17" height="17"
                                                             viewBox="0 0 17 17" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg">
