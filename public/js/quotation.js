@@ -32,12 +32,12 @@ $(document).ready(function () {
                     name="services[${rowIndex}][brand]" value="">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" min="1" autocomplete="off"
+                <input type="number" min="1" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 quantity height-32 bg-input-guest-blue"
                     name="services[${rowIndex}][quantity]">
             </td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
-                <input type="text" step="0.01" min="0" autocomplete="off"
+                <input type="number" step="0.01" min="0" autocomplete="off"
                     class="border-0 pl-1 pr-2 py-1 w-100 unit_price height-32 bg-input-guest-blue"
                     name="services[${rowIndex}][unit_price]">
             </td>
@@ -90,13 +90,13 @@ $(document).ready(function () {
 $(document).on("input", ".quantity, .unit_price", function () {
     var $row = $(this).closest(".row-product");
     var quantity = parseFloat($row.find(".quantity").val()) || 0;
-    var unitPrice = parseFloat($row.find(".unit_price").val()) || 0;
+    var unitPrice = parseFloat($row.find(".unit_price").val())|| 0;
     var total = quantity * unitPrice;
     $row.find(".total").val(formatCurrencyVND(total));
 });
 
 function formatCurrencyVND(value) {
-    return value.toLocaleString("vi-VN") + " đ";
+    return value.toLocaleString("de-DE") + " đ";
 }
 
 function calculateTotals() {
@@ -106,7 +106,7 @@ function calculateTotals() {
     $("#tbody-data .row-product").each(function () {
         const $row = $(this);
         const quantity = parseFloat($row.find(".quantity").val()) || 0;
-        const unitPrice = parseFloat($row.find(".unit_price").val()) || 0;
+        const unitPrice = parseFloat($row.find(".unit_price").val().replace(/[,.]/g, '')) || 0;
         const taxRate = parseInt($row.find(".tax_rate").val()) || 0;
         const rowTotal = quantity * unitPrice;
         totalBeforeTax += rowTotal;
@@ -115,10 +115,10 @@ function calculateTotals() {
         } else if (taxRate === 10) {
             tax10Amount += (rowTotal * 10) / 100;
         }
-        $row.find(".total").text(rowTotal.toLocaleString("vi-VN"));
+        $row.find(".total").text(rowTotal.toLocaleString("de-DE"));
     });
     const grandTotal = totalBeforeTax + tax8Amount + tax10Amount;
-    $("#total-amount-sum").text(totalBeforeTax.toLocaleString("vi-VN"));
+    $("#total-amount-sum").text(totalBeforeTax.toLocaleString("de-DE"));
     $("#product-tax8").text(formatCurrencyVND(tax8Amount));
     $("#product-tax10").text(formatCurrencyVND(tax10Amount));
     $("#grand-total").text(formatCurrencyVND(grandTotal));
@@ -126,22 +126,22 @@ function calculateTotals() {
 
     const printSumElement = document.getElementById("print-sum");
     if (printSumElement) {
-        printSumElement.textContent = totalBeforeTax.toLocaleString("vi-VN");
+        printSumElement.textContent = totalBeforeTax.toLocaleString("de-DE");
     }
 
     const printVat8Element = document.getElementById("print-vat-8");
     if (printVat8Element) {
-        printVat8Element.textContent = tax8Amount.toLocaleString("vi-VN");
+        printVat8Element.textContent = tax8Amount.toLocaleString("de-DE");
     }
 
     const printVat10Element = document.getElementById("print-vat-10");
     if (printVat10Element) {
-        printVat10Element.textContent = tax10Amount.toLocaleString("vi-VN");
+        printVat10Element.textContent = tax10Amount.toLocaleString("de-DE");
     }
 
     const sumVatElement = document.getElementById("sum-vat");
     if (sumVatElement) {
-        sumVatElement.textContent = grandTotal.toLocaleString("vi-VN");
+        sumVatElement.textContent = grandTotal.toLocaleString("de-DE");
     }
 }
 $(document).on(
@@ -151,16 +151,3 @@ $(document).on(
         calculateTotals();
     }
 );
-// $(document).on("input", ".unit_price", function () {
-//     let value = $(this).val().replace(/\D/g, ""); // Loại bỏ ký tự không phải số
-//     if (value !== "") {
-//         $(this).val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ".")); // Định dạng số với dấu .
-//     }
-// });
-
-// $(document).on("blur", ".unit_price", function () {
-//     let value = $(this).val().replace(/\D/g, ""); // Loại bỏ ký tự không phải số
-//     if (value !== "") {
-//         $(this).val(value.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND"); // Thêm đơn vị tiền VND
-//     }
-// });

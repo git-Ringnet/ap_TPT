@@ -10,7 +10,8 @@
                     <div class="d-flex mb-2 mr-2 p-1 border rounded" style="order: 0;">
                         <span class="text text-13-black m-0" style="flex: 2;">Chọn phiếu tiếp nhận :</span>
                         <div class="form-check form-check-inline mr-1">
-                            <select class="form-check-input border-0 text text-13-black" name="reception_id" required
+                            <input type="hidden" name="reception_id" value="{{ $quotation->reception_id }}">
+                            <select class="form-check-input border-0 text text-13-black" name="reception" required
                                 disabled id="reception">
                                 <option value="">Chưa chọn phiếu</option>
                                 @foreach ($receivings as $item)
@@ -278,7 +279,7 @@
                                                     autocomplete="off"
                                                     class="border-0 pl-1 pr-2 py-1 w-100 unit_price height-32 bg-input-guest-blue"
                                                     name="services[{{ $id }}][unit_price]"
-                                                    value="{{ $item->unit_price }}">
+                                                    value="{{ number_format($item->unit_price) }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <select
@@ -299,7 +300,7 @@
                                                 <input type="text" step="0.01" min="0" readonly
                                                     class="border-0 pl-1 pr-2 py-1 w-100 total height-32"
                                                     name="services[{{ $id }}][total]"
-                                                    value="{{ $item->total }}">
+                                                    value="{{number_format($item->total) }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
@@ -338,7 +339,7 @@
                                                     d="M18 9C18 9.58187 17.5283 10.0536 16.9464 10.0536H1.05356C0.471694 10.0536 -2.07219e-07 9.58187 0 9C-7.69672e-07 8.41814 0.471695 7.94644 1.05356 7.94644H16.9464C17.5283 7.94644 18 8.41814 18 9Z"
                                                     fill="#42526E" />
                                             </svg>
-                                            <span class="text-table">Thêm sản phẩm</span>
+                                            <span class="text-table">Thêm dòng</span>
                                         </button>
                                     </div>
                                 </div>
