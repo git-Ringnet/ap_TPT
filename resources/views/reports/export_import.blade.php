@@ -3,12 +3,13 @@
 <div class="content-wrapper m-0 min-height--none p-0">
     <div class="content-header-fixed px-1">
         <div class="content__header--inner">
-            <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Số lượng nhập', 'Số lượng xuất']" :filtersTime="['Tháng', 'Quý', 'Năm']">
+            <x-search-filter :keywords="request('keywords')" :filters="['Mã hàng', 'Tên hàng', 'Số lượng nhập', 'Số lượng xuất']" :filtersTime="['Ngày','Tháng', 'Quý', 'Năm']">
                 <x-filter-text name="ma-hang" title="Mã hàng" />
                 <x-filter-text name="ten-hang" title="Tên hàng" />
                 <x-filter-compare name="so-luong-nhap" title="Số lượng nhập" />
                 <x-filter-compare name="so-luong-xuat" title="Số lượng xuất" />
                 @slot('slot1')
+                <x-filter-date name="ngay" title="Khoảng thời gian" />
                     <x-filter-month name="thang" title="Tháng" />
                     <x-filter-month name="quy" title="Quý" />
                     <x-filter-month name="nam" title="Năm" />
@@ -155,6 +156,7 @@
             type_filter: $('#type-filter').val(),
             ma: getData('#ma-hang', this),
             ten: getData('#ten-hang', this),
+            date: retrieveDateData(this, 'ngay'),
             so_luong_nhap: retrieveComparisonData(this, 'so-luong-nhap'),
             so_luong_xuat: retrieveComparisonData(this, 'so-luong-xuat'),
             sort: getSortData(buttonElement),
