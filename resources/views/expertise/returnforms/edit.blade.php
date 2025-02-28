@@ -305,7 +305,7 @@
                                         </th>
                                         <th class="border-right note px-2 p-0 text-left col-extra-warranty {{ $hideExtraWarranty }}"
                                             style="width:8%;">
-                                            <span class="text-table text-secondary">Bảo hành thêm</span>
+                                            <span class="text-table text-secondary">Bảo hành</span>
                                         </th>
                                         <th class="border-right note px-2 p-0 text-left col-note" style="width:12%;">
                                             <span class="text-table text-secondary">Ghi chú</span>

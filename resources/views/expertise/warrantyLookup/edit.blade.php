@@ -107,7 +107,7 @@
                                     <span class="text-table text-13-black font-weight-bold">Thông tin</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
-                                    <span class="text-table text-13-black font-weight-bold">Bảo hành thêm (tháng)</span>
+                                    <span class="text-table text-13-black font-weight-bold">Bảo hành dịch vụ (tháng)</span>
                                 </th>
                                 <th class="border-right px-2 p-0">
                                     <span class="text-table text-13-black font-weight-bold">Ghi chú</span>
