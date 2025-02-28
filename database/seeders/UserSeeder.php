@@ -39,23 +39,23 @@ class UserSeeder extends Seeder
         ]);
         $serviceUser->assignRole('Bảo hành');
 
-        Customers::create([
-            'customer_code' => 'kh1',
-            'customer_name' => 'kh1',
-        ]);
-        Providers::create([
-            'provider_code' => 'ncc1',
-            'provider_name' => 'ncc1',
-        ]);
-        Product::insert([
-            [
-                'product_code' => 'sp1',
-                'product_name' => 'sp1',
-            ],
-            [
-                'product_code' => 'sp2',
-                'product_name' => 'sp2',
-            ],
-        ]);
+        // Customers::create([
+        //     'customer_code' => 'kh1',
+        //     'customer_name' => 'kh1',
+        // ]);
+        // Providers::create([
+        //     'provider_code' => 'ncc1',
+        //     'provider_name' => 'ncc1',
+        // ]);
+        // Product::insert([
+        //     [
+        //         'product_code' => 'sp1',
+        //         'product_name' => 'sp1',
+        //     ],
+        //     [
+        //         'product_code' => 'sp2',
+        //         'product_name' => 'sp2',
+        //     ],
+        // ]);
     }
 }
