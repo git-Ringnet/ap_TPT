@@ -172,11 +172,13 @@
                                     {{ Auth::user()->email }}
                                 </div>
                                 <div class="logout_user">
-                                    <form class="" method="POST" action="{{ route('logout') }}">
+                                    <a href="{{ route('profile.users.edit') }}" class="test-sm text-custom">Thông tin</a>
+                                </div>
+                                <div class="logout_user">
+                                    <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <a class="text-sm text-custom" href="#"
-                                            onclick="event.preventDefault(); this.closest('form').submit();">Đăng
-                                            xuất</a>
+                                            onclick="event.preventDefault(); this.closest('form').submit();">Đăng xuất</a>
                                     </form>
                                 </div>
                             @endauth
@@ -246,12 +248,12 @@
                         </button>
                     </a>
                     @unlessrole('Bảo hành')
-                    <a href="{{ route('exports.index') }}" class="height-36">
-                        <button type="button"
-                            class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
-                            Phiếu xuất hàng
-                        </button>
-                    </a>
+                        <a href="{{ route('exports.index') }}" class="height-36">
+                            <button type="button"
+                                class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
+                                Phiếu xuất hàng
+                            </button>
+                        </a>
                     @endunlessrole
                     <a href="{{ route('inventoryLookup.index') }}" class="height-36">
                         <button type="button"

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Groups;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -27,7 +29,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $title = 'Tạo mới hàng hoá';
+        $title = 'Tạo mới nhân viên';
         $groups = Groups::where('group_type_id', 4)->get();
         $roles = Role::all();
         return view('setup.users.create', compact('title', 'groups', 'roles'));
@@ -155,5 +157,50 @@ class UserController extends Controller
             ]);
         }
         return false;
+    }
+
+
+    public function profile()
+    {
+        return view('setup.users.profile', ['user' => Auth::user()]);
+    }
+
+    /**
+     * Cập nhật thông tin cá nhân.
+     */
+    public function update_profile(Request $request)
+    {
+        // Validate dữ liệu đầu vào với thông báo lỗi tùy chỉnh
+        $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'email|max:255|unique:users,email,' . Auth::id(),
+            'password' => 'nullable|min:6|confirmed',
+        ], [
+            'name.string' => 'Họ và tên phải là một chuỗi ký tự.',
+            'name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'email.email' => 'Email không hợp lệ.',
+            'email.max' => 'Email không được vượt quá 255 ký tự.',
+            'email.unique' => 'Email đã tồn tại trong hệ thống.',
+            'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+        ]);
+
+        // Lấy user hiện tại
+        $user = Auth::user();
+
+        // Cập nhật thông tin
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // Kiểm tra nếu có nhập mật khẩu mới
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        // Lưu thay đổi
+        $user->save();
+
+        // Chuyển hướng với thông báo thành công
+        return redirect()->route('users.index')->with('msg', 'Cập nhật hồ sơ thành công.');
     }
 }

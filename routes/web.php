@@ -45,9 +45,14 @@ Route::get('/notifications/count', function () {
     return response()->json(['count' => $count]);
 });
 
+
 // Products
 Route::resource('products', ProductController::class);
 Route::resource('users', UserController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [UserController::class, 'profile'])->name('profile.users.edit');
+    Route::put('/profile/update', [UserController::class, 'update_profile'])->name('users.update.profile');
+});
 Route::resource('warehouses', WarehouseController::class);
 Route::resource('receivings', ReceivingController::class);
 Route::resource('returnforms', ReturnFormController::class);

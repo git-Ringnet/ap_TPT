@@ -2612,6 +2612,16 @@ input[type="checkbox"]:checked {
     flex: 1;
 }
 
+.logout_user a.text-custom:hover {
+    color: red;
+    font-weight: bold;
+}
+
+/* Đổi màu khi hover vào "Đăng xuất" */
+.logout_user a.text-custom:hover {
+    color: red;
+    font-weight: bold;
+}
 .main-sidebar {
     background-color: #fafbfc !important;
     width: 250px;

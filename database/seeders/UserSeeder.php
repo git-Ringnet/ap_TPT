@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
                 'name' => $userData['name'],
                 'email' => $userData['email'],
                 'phone' => $userData['phone'],
-                'password' => Hash::make('Default@123'),
+                'password' => Hash::make($userData['email']),
             ]);
 
             if (!empty($userData['role'])) {
