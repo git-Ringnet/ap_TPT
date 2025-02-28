@@ -14,6 +14,7 @@
             </x-search-filter>
             <div class="d-flex content__heading--right">
                 <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
+                @unlessrole('Kế toán')
                 <div class="row m-0">
                     <a href="{{ route('exports.create') }}" class="activity mr-3" data-name1="KH" data-des="Tạo mới">
                         <button type="button" class="custom-btn mx-1 d-flex align-items-center h-100">
@@ -29,8 +30,8 @@
                             <p class="m-0 ml-1">Tạo mới</p>
                         </button>
                     </a>
-
                 </div>
+                @endunlessrole
             </div>
         </div>
     </div>

@@ -364,7 +364,7 @@
                                                     <input type="text"
                                                         class="search border-0 pl-1 pr-2 py-1 w-100 serial_code height-32"
                                                         value="{{ $item->product_replace->product_code ?? '' }}" readonly
-                                                        placeholder="Search..." />
+                                                        placeholder="" />
                                                     <ul class="search-list border rounded">
                                                         @foreach ($dataProduct as $product)
                                                             <li class="search-item p-2 border-bottom"

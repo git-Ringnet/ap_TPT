@@ -17,12 +17,14 @@ class RoleSeeder extends Seeder
         $adminRole = Role::create(['name' => 'Admin']);
         $warehouseRole = Role::create(['name' => 'Quản lý kho']);
         $serviceRole = Role::create(['name' => 'Bảo hành']);
+        $accountantRole = Role::create(['name' => 'Kế toán']);
 
         // Danh sách quyền
         $permissions = [
             'admin',
             'quankho',
-            'dichvu'
+            'dichvu',
+            'ketoan',
         ];
         // Tạo quyền và gán quyền vào vai trò
         foreach ($permissions as $permissionName) {
@@ -37,6 +39,9 @@ class RoleSeeder extends Seeder
             } elseif ($permissionName === 'dichvu') {
                 // Gán quyền 'dichvu' cho vai trò Bảo hành
                 $serviceRole->givePermissionTo($permission);
+            } elseif ($permissionName === 'ketoan') {
+                // Gán quyền 'ketoan' cho vai trò kế toán
+                $accountantRole->givePermissionTo($permission);
             }
         }
     }

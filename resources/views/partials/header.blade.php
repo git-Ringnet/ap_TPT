@@ -53,8 +53,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <!-- Thêm các CSS chung cho toàn bộ trang -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Thêm Alpinejs -->
@@ -72,7 +72,7 @@
                     <img src="{{ asset('images/loto-tpp.png') }}" alt="" width="148px" height="54px">
                 </div>
                 <div class="d-flex content__heading--right flex-grow-1 justify-content-center">
-                    @unlessrole('Bảo hành')
+                    @hasanyrole('Admin|Quản lý kho')
                         <div class="dropdown">
                             <a class="text-white justify-content-center align-items-center mx-3 px-1 font-weight-600 navbar-head @if (!empty($activeGroup) && $activeGroup == 'systemFirst') active-navbar @endif"
                                 href="#" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -93,7 +93,7 @@
                                 @endcan
                             </div>
                         </div>
-                    @endunlessrole
+                    @endhasanyrole
                     <div class="dropdown">
                         <a class="text-white justify-content-center align-items-center mx-3 px-1 font-weight-600 navbar-head @if (!empty($activeGroup) && $activeGroup == 'manageProfess') active-navbar @endif"
                             href="#" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -102,8 +102,10 @@
                         <div class="dropdown-menu" style="">
                             <a class="dropdown-item text-13" href="{{ route('imports.index') }}">Phiếu nhập hàng
                             </a>
-                            <a class="dropdown-item text-13" href="{{ route('exports.index') }}">Phiếu xuất hàng
-                            </a>
+                            @unlessrole('Bảo hành')
+                                <a class="dropdown-item text-13" href="{{ route('exports.index') }}">Phiếu xuất hàng
+                                </a>
+                            @endunlessrole
                             <a class="dropdown-item text-13" href="{{ route('inventoryLookup.index') }}">
                                 Tra cứu tồn kho
                             </a>
@@ -119,13 +121,13 @@
                                 <a class="dropdown-item text-13" href="{{ route('returnforms.index') }}">Phiếu trả
                                     hàng
                                 </a>
+                                <a class="dropdown-item text-13" href="{{ route('warehouseTransfer.index') }}">
+                                    Phiếu chuyển kho
+                                </a>
                             @endunlessrole
-                            <a class="dropdown-item text-13" href="{{ route('warehouseTransfer.index') }}">
-                                Phiếu chuyển kho
-                            </a>
                         </div>
                     </div>
-                    @can('admin')
+                    @hasanyrole('Admin|Kế toán')
                         <div class="dropdown">
                             <a class="text-white justify-content-center align-items-center mx-3 px-1 font-weight-600 navbar-head @if (!empty($activeGroup) && $activeGroup == 'reports') active-navbar @endif"
                                 href="#" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -146,7 +148,7 @@
                                 </a>
                             </div>
                         </div>
-                    @endcan
+                    @endhasanyrole
                 </div>
                 <div class="d-flex align-items-center justify-content-end">
                     @livewire('notification-component')
@@ -243,12 +245,14 @@
                             Phiếu nhập hàng
                         </button>
                     </a>
+                    @unlessrole('Bảo hành')
                     <a href="{{ route('exports.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'exports') active @endif">
                             Phiếu xuất hàng
                         </button>
                     </a>
+                    @endunlessrole
                     <a href="{{ route('inventoryLookup.index') }}" class="height-36">
                         <button type="button"
                             class="h-100 border text-dark justify-content-center align-items-center text-13 rounded bg-white ml-2 @if (!empty($activeName) && $activeName == 'inventoryLookup') active @endif">

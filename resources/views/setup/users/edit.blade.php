@@ -99,9 +99,11 @@
                                         <option value="0" class="bg-white">Chọn chức vụ</option>
                                         @foreach ($roles as $item)
                                             <option value="{{ $item->id }}" class="bg-white"
-                                                {{ $item->id == $user->role ? 'selected' : '' }}>{{ $item->name }}
+                                                {{ $user->roles->contains('id', $item->id) ? 'selected' : '' }}>
+                                                {{ $item->name }}
                                             </option>
                                         @endforeach
+
                                     </select>
                                 </div>
                             </div>

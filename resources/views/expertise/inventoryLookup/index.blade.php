@@ -107,7 +107,7 @@
                                                 <div class="icon" id="icon-import_date"></div>
                                             </span>
                                         </th>
-                                        @can('admin')
+                                        @if(!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
                                             <th class="height-40 py-0 border-right-0" scope="col">
                                                 <span class="d-flex justify-content-start">
                                                     <a href="#" class="sort-link btn-submit"
@@ -119,7 +119,7 @@
                                                     <div class="icon" id="icon-warehouse_id"></div>
                                                 </span>
                                             </th>
-                                        @endcan
+                                        @endif
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
@@ -177,12 +177,12 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->import_date), 'd/m/Y') }}
                                             </td>
-                                            @can('admin')
+                                            @if(!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
                                                 <td
                                                     class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                     {{ $item->serialNumber->warehouse->warehouse_name }}
                                                 </td>
-                                            @endcan
+                                            @endif
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->storage_duration }} ngày
