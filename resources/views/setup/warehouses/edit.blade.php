@@ -92,5 +92,37 @@
                 </section>
             </section>
         </div>
+        <div id="title--fixed" class="bg-filter-search text-center border-0">
+            <p class="font-weight-bold text-uppercase info-chung--heading text-center">
+                SERIAL NUMBER
+            </p>
+        </div>
+        <table class="table" id="inputcontent">
+            <thead>
+                <tr style="height:44px;">
+                    <th class="border-right px-2 p-0" style="width: 8%">
+                        <span class="text-table text-13-black font-weight-bold pl-3">STT</span>
+                    </th>
+                    <th class="border-right px-2 p-0 text-left" style="width: 15%; z-index:99;">
+                        <span class="text-table text-13-black font-weight-bold">Serial Number</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tbody-product-data">
+                @php $stt = 1; @endphp
+                @foreach ($serialNumbers as $serial)
+                    <tr id="serials-data" class="row-product bg-white">
+                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0 pl-4">
+                            <input type="text" autocomplete="off" value="{{ $stt++ }}"
+                                class="border-0 pl-1 pr-2 py-1 w-100 product_code height-32" readonly="">
+                        </td>
+                        <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                            <input type="text" autocomplete="off" value="{{ $serial->serial_code }}"
+                                class="border-0 pl-1 pr-2 py-1 w-100 product_name height-32" readonly="">
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </form>

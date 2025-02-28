@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Groups;
+use App\Models\SerialNumber;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
@@ -52,7 +53,8 @@ class WarehouseController extends Controller
     public function edit(Warehouse $warehouse)
     {
         $title = 'Sửa thông tin kho';
-        return view('setup.warehouses.edit', compact('warehouse', 'title'));
+        $serialNumbers = SerialNumber::where('warehouse_id', $warehouse->id)->get();
+        return view('setup.warehouses.edit', compact('warehouse', 'title', 'serialNumbers'));
     }
 
     public function update(Request $request, Warehouse $warehouse)
