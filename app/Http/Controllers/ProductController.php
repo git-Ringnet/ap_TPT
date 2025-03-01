@@ -49,7 +49,7 @@ class ProductController extends Controller
             'product_code' => $request->input('product_code'),
             'product_name' => $request->input('product_name'),
             'brand' => $request->input('brand'),
-            'warranty' => 12,
+            'warranty' => $request->input('warranty') ?? 12,
         ]);
 
         $this->productWarranty->addProductWarranty($request->all(), $product->id);
@@ -77,7 +77,7 @@ class ProductController extends Controller
             'product_code' => $request->input('product_code'),
             'product_name' => $request->input('product_name'),
             'brand' => $request->input('brand'),
-            'warranty' => 12,
+            'warranty' => $request->input('warranty') ?? 12,
         ]);
         $this->productWarranty->updateProductWarranty($request->all(), $product->id);
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
