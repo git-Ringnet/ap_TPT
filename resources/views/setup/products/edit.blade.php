@@ -80,10 +80,10 @@
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
                                 <div class="title-info py-2 border border-left-0 border-top-0">
-                                    <p class="p-0 m-0 margin-left32 text-13">Mã hàng</p>
+                                    <p class="p-0 m-0 required-label text-danger margin-left32 text-13-red">Mã hàng</p>
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="product_code"
-                                    autocomplete="off" value="{{ $product->product_code }}"
+                                    autocomplete="off" value="{{ $product->product_code }}" required
                                     class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
@@ -104,7 +104,7 @@
                                     value="{{ $product->brand }}"
                                     class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
-                            <table class="table table-hover bg-white rounded mt-2">
+                            {{-- <table class="table table-hover bg-white rounded mt-2">
                                 <thead class="border-custom">
                                     <tr>
                                         <th class="height-40 py-0 border-right-0">Linh kiện bảo hành</th>
@@ -170,7 +170,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </section>
+                            </section> --}}
                         </div>
                     </div>
                 </section>
@@ -194,12 +194,12 @@
                 <th class="border-right px-2 p-0 text-left" style="width: 8%;">
                     <span class="text-table text-13-black font-weight-bold">Ngày nhập hàng</span>
                 </th>
-                <th class="border-right px-2 p-0" style="width: 8%;">
+                {{-- <th class="border-right px-2 p-0" style="width: 8%;">
                     <span class="text-table text-13-black font-weight-bold">Hàng tiếp nhận</span>
                 </th>
                 <th class="border-right px-2 p-0" style="width: 10%;">
                     <span class="text-table text-13-black font-weight-bold">Ngày tiếp nhận</span>
-                </th>
+                </th> --}}
             </tr>
         </thead>
         <tbody id="tbody-product-data">
@@ -221,14 +221,14 @@
                                 class="border-0 pl-1 pr-2 py-1 w-100 brand height-32" readonly="">
                         </td>
                     @endforeach
-                    <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
+                    {{-- <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                         <input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 height-32"
                             readonly="">
                     </td>
                     <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                         <input type="text" autocomplete="off"
                             class="border-0 pl-1 pr-2 py-1 w-100 serial height-32" readonly="">
-                    </td>
+                    </td> --}}
                 </tr>
             @endforeach
         </tbody>

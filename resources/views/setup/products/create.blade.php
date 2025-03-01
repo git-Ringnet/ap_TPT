@@ -74,10 +74,10 @@
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
                                 <div class="title-info py-2 border border-left-0 border-top-0">
-                                    <p class="p-0 m-0 margin-left32 text-13">Mã hàng</p>
+                                    <p class="p-0 m-0 required-label text-danger margin-left32 text-13-red">Mã hàng</p>
                                 </div>
                                 <input type="text" placeholder="Nhập thông tin" name="product_code"
-                                    autocomplete="off"
+                                    autocomplete="off" required
                                     class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
                             <div class="d-flex align-items-center height-60-mobile">
@@ -97,7 +97,7 @@
                                 <input type="text" placeholder="Nhập thông tin" name="brand" autocomplete="off"
                                     class="border border-white height-100 w-100 py-2 border-left-0 border-right-0 border-top-0 px-3 text-13-black bg-input-guest-blue">
                             </div>
-                            <table class="table table-hover bg-white rounded mt-2">
+                            {{-- <table class="table table-hover bg-white rounded mt-2">
                                 <thead class="border-custom">
                                     <tr>
                                         <th class="height-40 py-0 border-right-0">Linh kiện bảo hành</th>
@@ -140,8 +140,8 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                            <section class="content mt-2">
+                            </table> --}}
+                            {{-- <section class="content mt-2">
                                 <div class="container-fluided">
                                     <div class="d-flex ml-4">
                                         <button type="button"
@@ -160,7 +160,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </section>
+                            </section> --}}
                         </div>
                     </div>
                 </section>
