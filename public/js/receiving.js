@@ -578,15 +578,18 @@ $(document).ready(function () {
             },
             success: function (response) {
                 let valuesr = Object.values(response);
-                let values = valuesr.map((item) => item.status);
-                console.log(response);
+            
+                // Loại bỏ các object có key là "undefined"
+                let filteredValues = valuesr.filter((item, index) => Object.keys(response)[index] !== "undefined");
+            
+                // Chỉ lấy status từ các object hợp lệ
+                let values = filteredValues.map((item) => item.status);
                 
-                let allInternal = values.every(
-                    (status) => status === "success"
-                ); // Tất cả là nội bộ
-                let allExternal = values.every(
-                    (status) => status === "external"
-                ); // Tất cả là bên ngoài
+                console.log(filteredValues);
+            
+                let allInternal = values.every((status) => status === "success"); // Tất cả là nội bộ
+                let allExternal = values.every((status) => status === "external"); // Tất cả là bên ngoài
+            
                 if (allInternal) {
                     $("#branch_id").val(1); // Set branch_id = 1 (Nội bộ)
                 } else if (allExternal) {
