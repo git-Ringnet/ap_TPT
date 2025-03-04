@@ -293,7 +293,7 @@
                                                 <td
                                                     class="border-right position-relative p-2 text-13 align-top border-bottom border-top-0 pl-4">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 serial w-100 height-32" readonly
+                                                        class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
                                                         placeholder="Tìm mã hàng"
                                                         value="{{ $receivedProduct->product->product_code }}"
                                                         readonly>
@@ -336,7 +336,7 @@
                                                 <td
                                                     class="border-right p-2 text-13 align-top border-bottom position-relative border-top-0">
                                                     <input type="text" autocomplete="off"
-                                                        class="border-0 pl-1 pr-2 py-1 w-100 height-32" readonly
+                                                        class="border-0 pl-1 serial pr-2 py-1 w-100 height-32" readonly
                                                         name="product_id[{{ $indexRecei }}][serial]"
                                                         data-index="{{ $indexRecei }}"
                                                         value="{{ $receivedProduct->serial->serial_code ?? '' }}">
