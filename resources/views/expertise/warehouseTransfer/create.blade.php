@@ -47,7 +47,7 @@
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                    style="flex: 1.5;">Mã phiếu</span>
+                                    style="width: 180px;">Mã phiếu</span>
                                 <input type="text" name="code" style="flex:2;" placeholder="Nhập thông tin"
                                     required value="{{ $export_code }}"
                                     class="text-13-black w-50 border-0 bg-input-guest date_picker bg-input-guest-blue py-2 px-2">
@@ -55,7 +55,7 @@
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                    style="flex: 1.5;">Ngày lập phiếu</span>
+                                    style="width: 180px;">Ngày lập phiếu</span>
                                 <input placeholder="Nhập thông tin" autocomplete="off" required type="date"
                                     id="dateCreate"
                                     class="text-13-black w-50 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
@@ -68,7 +68,7 @@
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                    style="flex: 1.5;">Người lập phiếu</span>
+                                    style="width: 180px;">Người lập phiếu</span>
                                 <input autocomplete="off" placeholder="Nhập thông tin" required id="user_name" readonly
                                     class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;"
                                     value="{{ Auth::user()->name }}" />
@@ -76,7 +76,7 @@
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black btn-click font-weight-bold" style="flex: 1.6;">Ghi chú</span>
+                                <span class="text-13-black btn-click font-weight-bold" style="width: 195px;">Ghi chú</span>
                                 <input placeholder="Nhập thông tin" autocomplete="off" name="note"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     style="flex:2;" />
@@ -86,7 +86,7 @@
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 font-weight-bold required-label"
-                                    style="flex: 1.5;">Kho
+                                    style="width: 180px;">Kho
                                     xuất</span>
                                 <input id="warehouse_name" placeholder="Nhập thông tin" type="text" required
                                     onkeypress="return false;" autocomplete="off"
@@ -127,7 +127,7 @@
                             <div style="width: 99%;"
                                 class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                 <span class="text-13-black text-nowrap mr-3 font-weight-bold required-label"
-                                    style="flex: 1.5;">Kho
+                                    style="width: 180px;">Kho
                                     nhận</span>
                                 <input id="warehouse_receive_name" placeholder="Nhập thông tin" type="text"
                                     required onkeypress="return false;" autocomplete="off"

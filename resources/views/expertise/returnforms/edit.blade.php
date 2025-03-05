@@ -232,7 +232,7 @@
                         <div class="d-flex w-100">
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black text-nowrap mr-3" style="flex:.3;">Ghi chú</span>
+                                <span class="text-13-black text-nowrap mr-3" style="width: 120px;">Ghi chú</span>
                                 <input name="notes" placeholder="Nhập thông tin" autocomplete="off"
                                     value="{{ $returnForm->notes }}"
                                     class="text-13-black w-50 border-0 addr bg-input-guest addr bg-input-guest-blue py-2 px-2"style="flex:2;" />

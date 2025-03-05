@@ -84,7 +84,7 @@
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                        style="flex: 1.5;">Mã phiếu</span>
+                                        style="width: 180px;">Mã phiếu</span>
                                     <input type="text" name="import_code" style="flex:2;" {{ $readonly }}
                                         placeholder="{{ $placeholder }}" required value="{{ $import->import_code }}"
                                         class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} date_picker py-2 px-2">
@@ -92,7 +92,7 @@
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                        style="flex: 1.5;">Ngày lập phiếu</span>
+                                        style="width: 180px;">Ngày lập phiếu</span>
                                     <input placeholder="{{ $placeholder }}" autocomplete="off" required id="dateCreate"
                                         value="{{ date_format(new DateTime($import->date_create), 'd/m/Y') }}"
                                         type="text" {{ $readonly }}
@@ -105,7 +105,7 @@
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 required-label font-weight-bold"
-                                        style="flex: 1.5;">Người lập phiếu</span>
+                                        style="width: 180px;">Người lập phiếu</span>
                                     <input autocomplete="off" placeholder="{{ $placeholder }}" required id="user_name"
                                         value="{{ $import->name }}" readonly
                                         class="text-13-black w-50 border-0 bg-input-guest py-2 px-2" style="flex:2;" />
@@ -114,7 +114,7 @@
                                 <div
                                     class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black btn-click required-label font-weight-bold"
-                                        style="flex: 1.6;">Nhà cung cấp</span>
+                                    style="width: 195px;">Nhà cung cấp</span>
                                     <input placeholder="{{ $placeholder }}" autocomplete="off" required
                                         id="provider_name" readonly
                                         class="text-13-black w-100 border-0 bg-input-guest {{ $bg }} py-2 px-2"
@@ -164,7 +164,7 @@
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
-                                        style="flex: 1.5;">SĐT
+                                        style="width: 180px;">SĐT
                                         liên hệ</span>
                                     <input name="phone" placeholder="{{ $placeholder }}" type="number"
                                         value="{{ $import->phone }}" {{ $readonly }}
@@ -174,7 +174,7 @@
                                 <div style="width: 99%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
-                                        style="flex: 1.5;">Người liên hệ</span>
+                                        style="width: 180px;">Người liên hệ</span>
                                     <input name="contact_person" placeholder="{{ $placeholder }}" type="text"
                                         value="{{ $import->contact_person }}" {{ $readonly }}
                                         class="text-13-black w-50 border-0 bg-input-guest {{ $bg }} py-2 px-2"
@@ -185,7 +185,7 @@
                                 <div style="width: 99.7%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 align-items-center text-left text-nowrap position-relative height-44">
                                     <span class="text-13-black text-nowrap mr-3 font-weight-bold"
-                                        style="flex: 1.5;">Địa
+                                        style="width: 180px;">Địa
                                         chỉ</span>
                                     <input name="address" placeholder="{{ $placeholder }}" autocomplete="off"
                                         value="{{ $import->address }}" {{ $readonly }}
@@ -195,7 +195,7 @@
                             <div class="col-md-12 m-0 p-0">
                                 <div style="width: 99.7%;"
                                     class="d-flex justify-content-between py-2 px-3 border border-bottom-0 align-items-center text-left text-nowrap position-relative height-44">
-                                    <span class="text-13-black font-weight-bold text-nowrap mr-3" style="flex: 1.5;">
+                                    <span class="text-13-black font-weight-bold text-nowrap mr-3" style="width: 180px;">
                                         Ghi chú
                                     </span>
                                     <input

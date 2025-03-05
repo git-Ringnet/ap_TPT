@@ -11,6 +11,7 @@
                 'Khách hàng',
                 'Ngày xuất hàng',
                 'Bảo hành',
+                'Hạn bảo hành',
                 'Ngày kích hoạt BHDV',
                 'Bảo hành dịch vụ',
                 'Tình trạng',
@@ -28,6 +29,7 @@
                     ['key' => '1', 'value' => 'Hết bảo hành', 'color' => '#08AA36BF'],
                 ]" />
                 <x-filter-compare name="bao-hanh" title="Bảo hành" />
+                <x-filter-compare name="han-bao-hanh" title="Hạn bảo hành" />
                 <x-filter-compare name="bao-hanh-dich-vu" title="Bảo hành dịch vụ" />
             </x-search-filter>
             <button class="m-0 btn-outline-primary" id="exportBtn">Export Excel</button>
@@ -114,6 +116,17 @@
                                         <th class="height-40 py-0 border-right-0" scope="col">
                                             <span class="d-flex justify-content-start">
                                                 <a href="#" class="sort-link btn-submit"
+                                                    data-sort-by="name_warranty" data-sort-type="DESC">
+                                                    <button class="btn-sort" type="submit">
+                                                        <span class="text-14">Hạn bảo hành</span>
+                                                    </button>
+                                                </a>
+                                                <div class="icon" id="icon-name_warranty"></div>
+                                            </span>
+                                        </th>
+                                        <th class="height-40 py-0 border-right-0" scope="col">
+                                            <span class="d-flex justify-content-start">
+                                                <a href="#" class="sort-link btn-submit"
                                                     data-sort-by="return_date" data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
                                                         <span class="text-14">Ngày kích hoạt BH dịch vụ</span>
@@ -152,6 +165,16 @@
                                             $firstHistory = $item->warrantyHistories->first();
                                             $branchId = $firstHistory?->receiving?->branch_id ?? 0;
                                             $formType = $firstHistory?->receiving?->form_type ?? 0;
+                                            $currentDate = new DateTime();
+                                            $purchaseDate = new DateTime($item->export_return_date);
+                                            preg_match('/\d+/', $item->name_warranty, $matches);
+                                            $warrantyPeriod = isset($matches[0]) ? (int)$matches[0] : 0; 
+
+                                            $expireDate = (clone $purchaseDate)->modify("+$warrantyPeriod months");
+                                            $remainingInterval = $expireDate->diff($currentDate);
+                                            $remainingYears = floor($remainingInterval->y);
+                                            $remainingMonths = $remainingInterval->m;
+                                            $remainingDays = $remainingInterval->d;
                                         @endphp
                                         <tr class="position-relative warran-lookup-info height-40">
                                             <input type="hidden" name="id-warran-lookup" class="id-warran-lookup"
@@ -182,6 +205,13 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
                                                 {{ $item->name_warranty }}
                                             </td>
+                                            <td class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 max-width180">
+                                            @if ($remainingYears > 0)
+                                              {{ $remainingYears }} năm {{ $remainingMonths }} tháng {{ $remainingDays }} ngày
+                                              @else
+                                                {{ $remainingMonths }} tháng {{ $remainingDays }} ngày
+                                              @endif
+                                             </td>
                                             <td
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ $item->name_expire_date ? ($item->return_date ? date('d/m/Y', strtotime($item->return_date)) : '') : '' }}
@@ -225,6 +255,7 @@
             customer: getStatusData(this, 'khach-hang'),
             status: getStatusData(this, 'tinh-trang'),
             bao_hanh: retrieveComparisonData(this, 'bao-hanh'),
+            han_bao_hanh: retrieveComparisonData(this, 'han-bao-hanh'),
             bao_hanh_dich_vu: retrieveComparisonData(this, 'bao-hanh-dich-vu'),
             date_expired: retrieveDateData(this, 'ngay-kich-hoat-bhdv'),
             sort: getSortData(buttonElement)
