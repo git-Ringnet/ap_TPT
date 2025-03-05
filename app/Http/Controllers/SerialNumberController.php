@@ -90,8 +90,7 @@ class SerialNumberController extends Controller
         }
         if ($request->nameModal == "XH") {
             // Kiểm tra trong bảng serial_numbers
-            $exists = SerialNumber::where('product_id', $request->product_id)
-                ->where('serial_code', $serialNumber)
+            $exists = SerialNumber::where('serial_code', $serialNumber)
                 ->where('status', 1)
                 ->exists();
             if (!$exists) {
