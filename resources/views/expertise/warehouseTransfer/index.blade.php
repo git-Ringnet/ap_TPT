@@ -78,7 +78,7 @@
                                                 <a href="#" class="sort-link btn-submit" data-sort-by="from_warehouse_id"
                                                     data-sort-type="DESC">
                                                     <button class="btn-sort" type="submit">
-                                                        <span class="text-14">Kho chuyển</span>
+                                                        <span class="text-14">Kho xuất</span>
                                                     </button>
                                                 </a>
                                                 <div class="icon" id="icon-from_warehouse_id"></div>

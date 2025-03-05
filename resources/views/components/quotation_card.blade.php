@@ -80,7 +80,8 @@
                         <td class="border border-dark text-right">
                             {{ number_format($item->unit_price, 0, '', '.') }}
                         </td>
-                        <td class="border border-dark text-right">{{ number_format($item->quantity * $item->unit_price , 0, '', '.' ) }}</td>
+                        <td class="border border-dark text-right">
+                            {{ number_format($item->quantity * $item->unit_price, 0, '', '.') }}</td>
                     </tr>
                 @endforeach
                 <tr>
@@ -105,17 +106,27 @@
         </table>
         <div class="item">
             <h5 class="text-uppercase font-weight-bold m-0"><u>Điều khoản thương mại:</u></h5>
-            <p class="m-0 text-header-print">*Giá trên bao gồm phí VAT</p>
-            <p class="m-0 text-header-print">*Thời gian bảo hành bo mạch: 03 tháng</p>
-            <p class="m-0 text-header-print">*Thời gian bảo hành ắc quy: 12 tháng</p>
-            <p class="m-0 text-header-print">*Thanh toán: Thanh toán bằng chuyển khoản 100% sau khi xác nhận đơn hàng
-            </p>
+            @if ($terms->content)
+                <div class="terms-content text-header-print">
+                    {!! nl2br(e($terms->content)) !!}
+                </div>
+            @else
+                <div class="terms-content text-header-print">
+                    <p class="m-0 text-header-print">*Giá trên bao gồm phí VAT</p>
+                    <p class="m-0 text-header-print">*Thời gian bảo hành bo mạch: 03 tháng</p>
+                    <p class="m-0 text-header-print">*Thời gian bảo hành ắc quy: 12 tháng</p>
+                    <p class="m-0 text-header-print">*Thanh toán: Thanh toán bằng chuyển khoản 100% sau khi xác nhận đơn
+                        hàng
+                    </p>
+                </div>
+            @endif
             <p class="m-0">*Thông tin chuyển khoản:</p>
             <h5 class="text-uppercase font-weight-bold">CÔNG TY TNHH TM DV THIÊN PHÁT TIẾN</h5>
             <p class="m-0">- Số tài khoản: 147703659 mở tại Ngân Hàng ACB - Phòng Giao Dịch Nguyễn Sơn</p>
             <p class="m-0">- Số tài khoản: 0421000465858 mở tại Ngân Hàng VCB, Chi Nhánh Phú Thọ, Tp HCM</p>
-            <p class="m-0">* Để biết thêm chi tiết, xin Quý Khách vui lòng liên hệ với: <span
-                    class="text-header-print">Phúc - 098 346 8473</span></p>
+            <p class="m-0">* Để biết thêm chi tiết, xin Quý Khách vui lòng liên hệ với:
+                <span class="text-header-print">{{ Auth::user()->name }} - {{ Auth::user()->phone }}</span>
+            </p>
             <p class="m-0">* Lưu ý : Hiệu lực báo giá trong vòng 15 ngày</p>
             <p class="m-0">Rất mong nhận được sự ủng hộ và hợp tác của Quý khách</p>
         </div>

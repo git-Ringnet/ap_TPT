@@ -18,16 +18,14 @@ class SerialNumberController extends Controller
         $sn = SerialNumber::where('serial_code', $serial)->first();
         if ($request->nameModal == "CNH") {
             if ($sn) {
-                $exists = ProductImport::where('product_id', $productId)
-                    ->where('sn_id', $sn->id)
+                $exists = ProductImport::where('sn_id', $sn->id)
                     ->where('import_id', '!=', $request->import_id)
                     ->exists();
             }
         }
         if ($request->nameModal == "XH") {
             // Kiểm tra trong bảng serial_numbers
-            $exists = SerialNumber::where('product_id', $productId)
-                ->where('serial_code', $serial)
+            $exists = SerialNumber::where('serial_code', $serial)
                 ->where('status', 1)
                 ->exists();
         }
@@ -38,8 +36,7 @@ class SerialNumberController extends Controller
                     ->where('export_id', $request->import_id)
                     ->exists();
                 if (!$exists) {
-                    $exists = SerialNumber::where('product_id', $productId)
-                        ->where('serial_code', $serial)
+                    $exists = SerialNumber::where('serial_code', $serial)
                         ->where('status', 1)
                         ->exists();
                 }
@@ -49,25 +46,21 @@ class SerialNumberController extends Controller
         }
         if ($request->nameModal == "NH") {
             // Kiểm tra trong bảng serial_numbers
-            $exists = SerialNumber::where('product_id', $productId)
-                ->where('serial_code', $serial)
+            $exists = SerialNumber::where('serial_code', $serial)
                 ->exists();
         }
         if ($request->nameModal == "PCK") {
             if ($request->warehouse_id == 1) {
-                $exists = SerialNumber::where('product_id', $productId)
-                    ->where('serial_code', $serial)
+                $exists = SerialNumber::where('serial_code', $serial)
                     ->where('status', 1)
                     ->exists();
             }
             if ($request->warehouse_id == 2) {
                 $serial_borrow = $request->input('serial_borrow');
-                $existsSerial = SerialNumber::where('product_id', $productId)
-                    ->where('serial_code', $serial)
+                $existsSerial = SerialNumber::where('serial_code', $serial)
                     ->doesntExist();
 
-                $existsSerialBorrow = SerialNumber::where('product_id', $request->product_id)
-                    ->where('serial_code', $serial_borrow)
+                $existsSerialBorrow = SerialNumber::where('serial_code', $serial_borrow)
                     ->where('status', 5)
                     ->exists();
 

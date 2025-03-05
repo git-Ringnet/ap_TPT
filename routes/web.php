@@ -154,4 +154,7 @@ Route::get('/filterReportPeriodTime', [ReportController::class, 'filterReportPer
 //Warehouse transfer
 Route::resource('/warehouseTransfer', WarehouseTransferController::class);
 
+//
+Route::post('/save-terms', [QuotationController::class, 'saveTerms'])->name('save-terms');
+
 require __DIR__ . '/auth.php';

@@ -37,6 +37,20 @@
                                 <p class="m-0 p-0 text-dark">Hủy</p>
                             </button>
                         </a>
+                        <button type="button" class="btn-destroy btn-light mx-1 d-flex align-items-center h-100"
+                            data-toggle="modal" data-target="#staticBackdrop">
+                            <svg class="mx-1" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" height="16" width="16"
+                                version="1.1" id="Capa_1" viewBox="0 0 348.882 348.882" xml:space="preserve">
+                                <g>
+                                    <path
+                                        d="M333.988,11.758l-0.42-0.383C325.538,4.04,315.129,0,304.258,0c-12.187,0-23.888,5.159-32.104,14.153L116.803,184.231   c-1.416,1.55-2.49,3.379-3.154,5.37l-18.267,54.762c-2.112,6.331-1.052,13.333,2.835,18.729c3.918,5.438,10.23,8.685,16.886,8.685   c0,0,0.001,0,0.001,0c2.879,0,5.693-0.592,8.362-1.76l52.89-23.138c1.923-0.841,3.648-2.076,5.063-3.626L336.771,73.176   C352.937,55.479,351.69,27.929,333.988,11.758z M130.381,234.247l10.719-32.134l0.904-0.99l20.316,18.556l-0.904,0.99   L130.381,234.247z M314.621,52.943L182.553,197.53l-20.316-18.556L294.305,34.386c2.583-2.828,6.118-4.386,9.954-4.386   c3.365,0,6.588,1.252,9.082,3.53l0.419,0.383C319.244,38.922,319.63,47.459,314.621,52.943z" />
+                                    <path
+                                        d="M303.85,138.388c-8.284,0-15,6.716-15,15v127.347c0,21.034-17.113,38.147-38.147,38.147H68.904   c-21.035,0-38.147-17.113-38.147-38.147V100.413c0-21.034,17.113-38.147,38.147-38.147h131.587c8.284,0,15-6.716,15-15   s-6.716-15-15-15H68.904c-37.577,0-68.147,30.571-68.147,68.147v180.321c0,37.576,30.571,68.147,68.147,68.147h181.798   c37.576,0,68.147-30.571,68.147-68.147V153.388C318.85,145.104,312.134,138.388,303.85,138.388z" />
+                                </g>
+                            </svg>
+                            <p class="m-0 p-0 text-dark">Cập nhật điều khoản</p>
+                        </button>
                         <button type="button" id="printButton"
                             class="btn-destroy btn-light mx-1 d-flex align-items-center h-100">
                             <svg class="mx-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -300,7 +314,7 @@
                                                 <input type="text" step="0.01" min="0" readonly
                                                     class="border-0 pl-1 pr-2 py-1 w-100 total height-32"
                                                     name="services[{{ $id }}][total]"
-                                                    value="{{number_format($item->total) }}">
+                                                    value="{{ number_format($item->total) }}">
                                             </td>
                                             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
                                                 <input type="text" autocomplete="off"
@@ -380,9 +394,10 @@
             {{-- View mini --}}
             <x-view_mini :guestOrProvider="$customers" :users="$users" name="BG" :data="$data"></x-view_mini>
         </div>
+        <x-modal_terms_quotation :terms="$terms" />
     </div>
 </form>
-<x-quotation_card :quotation="$quotation" :quotationServices="$quotationServices"></x-quotation_card>
+<x-quotation_card :quotation="$quotation" :quotationServices="$quotationServices" :terms="$terms"></x-quotation_card>
 <script src="{{ asset('js/quotation.js') }}"></script>
 <script>
     $(document).ready(function() {

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\warrantyHistory;
 use App\Models\warrantyLookup;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -90,6 +91,18 @@ class ExportsController extends Controller
                             $warrantyName = $warranty[0] ?? null; // Tên bảo hành
                             $warrantyMonth = $warranty[1] ?? 0;   // Số tháng bảo hành
 
+                            // Tạo đối tượng DateTime từ ngày xuất kho
+                            $date = new DateTime($request->date_create);
+                            $day = (int)$date->format('d');
+
+                            // Cộng số tháng bảo hành
+                            $date->modify("+$warrantyMonth months");
+
+                            // Nếu ngày gốc là 29, 30, 31 nhưng tháng mới không có ngày đó, đặt về ngày cuối tháng
+                            if ((int)$date->format('d') !== $day) {
+                                $date->modify('last day of last month');
+                            }
+
                             warrantyLookup::create([
                                 'product_id' => $serial['product_id'],
                                 'sn_id' => $sn->id,
@@ -98,7 +111,7 @@ class ExportsController extends Controller
                                 'warranty' => $warrantyMonth,
                                 'name_warranty' => $warrantyName ?? "Trọn bộ",
                                 'status' => 0,
-                                'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyMonth . ' months')),
+                                'warranty_expire_date' => $date->format('Y-m-d'),
                             ]);
                         }
                     }
@@ -264,7 +277,16 @@ class ExportsController extends Controller
                         // Duyệt qua các bảo hành trong mảng warranty
                         foreach ($data['warranty'] as $warrantyItem) {
                             $nameWarranty = $warrantyItem[0];
-                            $warrantyPeriod = $warrantyItem[1];
+                            $warrantyPeriod = (int) $warrantyItem[1];
+
+                            // Tính toán ngày hết hạn bảo hành chính xác
+                            $startDate = Carbon::parse($request->date_create);
+                            $warrantyExpireDate = $startDate->addMonthsNoOverflow($warrantyPeriod);
+
+                            // Kiểm tra nếu ngày hết hạn nhỏ hơn ngày bắt đầu (do bị dồn về cuối tháng)
+                            if ($warrantyExpireDate->day < $startDate->day) {
+                                $warrantyExpireDate = $warrantyExpireDate->endOfMonth();
+                            }
 
                             // Tìm kiếm WarrantyLookup dựa trên sn_id và name_warranty
                             $existingWarranty = WarrantyLookup::where('sn_id', $snId)
@@ -281,14 +303,14 @@ class ExportsController extends Controller
                                     'export_return_date' => $request->date_create,
                                     'warranty' => $warrantyPeriod,
                                     'status' => 0,
-                                    'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyPeriod . ' months')),
+                                    'warranty_expire_date' => $warrantyExpireDate->format('Y-m-d'),
                                 ]);
                             } else {
                                 // Nếu đã tồn tại, cập nhật thông tin
                                 $existingWarranty->update([
                                     'warranty' => $warrantyPeriod,
                                     'name_warranty' => $nameWarranty,
-                                    'warranty_expire_date' => date('Y-m-d', strtotime($request->date_create . ' + ' . $warrantyPeriod . ' months')),
+                                    'warranty_expire_date' => $warrantyExpireDate->format('Y-m-d'),
                                 ]);
                             }
                         }

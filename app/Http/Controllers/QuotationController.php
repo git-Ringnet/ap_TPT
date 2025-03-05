@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use App\Models\Quotation;
+use App\Models\quotation_form;
 use App\Models\QuotationService;
 use App\Models\Receiving;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuotationController extends Controller
 {
@@ -112,8 +114,9 @@ class QuotationController extends Controller
         $customers = Customers::all();
         $users = User::all();
         $data = Quotation::all();
+        $terms = quotation_form::where('user_id', Auth::id())->first();
 
-        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices', 'customers', 'users', 'data'));
+        return view('expertise.quotations.edit', compact('quotation', 'title', 'receivings', 'quotationServices', 'customers', 'users', 'data', 'terms'));
     }
 
 
@@ -212,5 +215,24 @@ class QuotationController extends Controller
             ]);
         }
         return false;
+    }
+    public function saveTerms(Request $request)
+    {
+        $user = Auth::user();
+
+        $exist = quotation_form::where('user_id', $user->id)->first();
+
+        if (!$exist) {
+            // Nếu chưa có, tạo mới
+            quotation_form::create([
+                'content' => $request->content,
+                'user_id' => $user->id
+            ]);
+        } else {
+            // Nếu có rồi, cập nhật điều khoản
+            $exist->update(['content' => $request->content]);
+        }
+
+        return response()->json(['msg' => 'Lưu điều khoản thành công!']);
     }
 }

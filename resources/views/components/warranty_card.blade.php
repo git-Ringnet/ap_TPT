@@ -51,7 +51,7 @@
                             <td class="border border-dark">{{ $item->product->brand }}</td>
                             <td class="border border-dark">1</td>
                             <td class="border border-dark">{{ $item->serialNumber->serial_code }}</td>
-                            <td class="border border-dark">
+                            <td class="border border-dark max-width180">
                                 @php
                                     // Kiểm tra nếu warranty là chuỗi và chuyển nó thành mảng
                                     if (is_string($item->warranty)) {
@@ -78,10 +78,10 @@
                 @endforeach
             </tbody>
         </table>
-        <p class="info font-italic font-weight-bold">
-            Ghi chú:
-            <span class="dotted-line"></span>
-        </p>
+        <span class="info font-italic font-weight-bold">Ghi chú:</span>
+        @php
+            echo $export->note == null ? '<span class="dotted-line"></span>' : $export->note;
+        @endphp
         <div class="footer d-flex justify-content-between">
             <div class="sign text-center">
                 <p class="font-weight-bold m-0">Khách hàng</p>

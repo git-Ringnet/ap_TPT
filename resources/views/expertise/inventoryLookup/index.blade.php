@@ -107,7 +107,7 @@
                                                 <div class="icon" id="icon-import_date"></div>
                                             </span>
                                         </th>
-                                        @if(!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
+                                        @if (!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
                                             <th class="height-40 py-0 border-right-0" scope="col">
                                                 <span class="d-flex justify-content-start">
                                                     <a href="#" class="sort-link btn-submit"
@@ -165,6 +165,9 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 <a href="{{ route('inventoryLookup.edit', $item->id) }}">
                                                     {{ $item->serialNumber->serial_code ?? '' }}
+                                                    @if ($item->serialNumber->status == 5)
+                                                        <span class="text-13-black">(Hàng mượn)</span>
+                                                    @endif
                                                 </a>
                                             </td>
                                             <td
@@ -177,7 +180,7 @@
                                                 class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                 {{ date_format(new DateTime($item->import_date), 'd/m/Y') }}
                                             </td>
-                                            @if(!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
+                                            @if (!auth()->user()->hasAnyRole(['Quản lý kho', 'Bảo hành']))
                                                 <td
                                                     class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
                                                     {{ $item->serialNumber->warehouse->warehouse_name }}
