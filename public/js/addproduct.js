@@ -589,8 +589,8 @@ function createSerialRow(
         class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
         name="warranty[]" value="${product.warranty || ''}"
         step="1"
-        oninput="this.value = this.value.replace(/^0+(?=\d)/, '')"
-        onkeydown="if (event.key === '.' || event.key === ',') event.preventDefault();">
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+       onkeydown="if(event.key === '.' || event.key === ',') event.preventDefault();" >
 </td>
 
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0">
@@ -630,7 +630,9 @@ function createSerialRow(
                         class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue"
                         name="warranty[]" value="${
                             warrantyItem.product_warranty_input || ""
-                        }">
+                        }" step="1"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                       onkeydown="if(event.key === '.' || event.key === ',') event.preventDefault();">
                 </td>
                 <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
                 <td class="p-2 align-top activity border-bottom border-top-0 border-right text-center">
@@ -1044,7 +1046,8 @@ $("#add-warranty").click(function (e) {
         </td>
         <td class="text-13-black border border-bottom-0 py-0 border-white">
             <input type="number" id="product_warranty_input" name="product_warranty_input" style="flex:2;" class="text-13-black w-100 border-0 bg-input-guest-blue p-2"  step="1"
-                                        oninput="this.value = this.value.replace(/\D|^0+|\.|,/g, '')">>
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+       onkeydown="if(event.key === '.' || event.key === ',') event.preventDefault();">
         </td>
         <td class="text-13-black border border-bottom-0 py-0 border-white delete-warranty text-center">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1071,7 +1074,9 @@ $(document).on("click", ".add-warranty-row", function () {
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0"><input type="text" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 name_warranty height-32 bg-input-guest-blue" name="name_warranty_product[]"></td>
-            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"><input type="number" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue" name="warranty[]" ></td>
+            <td class="border-right p-2 text-13 align-top border-bottom border-top-0"><input type="number" autocomplete="off" class="border-0 pl-1 pr-2 py-1 w-100 warranty height-32 bg-input-guest-blue" name="warranty[]"  step="1"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+       onkeydown="if(event.key === '.' || event.key === ',') event.preventDefault();"></td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0"></td>
             <td class="border-right p-2 text-13 align-top border-bottom border-top-0 text-center">
                 <svg class="delete-row" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">

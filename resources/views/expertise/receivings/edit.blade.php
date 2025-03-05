@@ -194,7 +194,7 @@
                             </div>
                             <div
                                 class="d-flex w-100 justify-content-between py-2 px-3 border border-bottom-0 border-right-0 align-items-center text-left text-nowrap position-relative height-44">
-                                <span class="text-13-black btn-click" style="flex: 1.6;"> Người liên hệ </span>
+                                <span class="text-13-black btn-click" style="width:195px"> Người liên hệ </span>
                                 <input name="contact_person" placeholder="Nhập thông tin" autocomplete="off"
                                     class="text-13-black w-100 border-0 bg-input-guest bg-input-guest-blue py-2 px-2"
                                     value="{{ $receiving->contact_person }}" style="flex:2;" />

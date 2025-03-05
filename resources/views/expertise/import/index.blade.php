@@ -123,7 +123,7 @@
                                             <input type="hidden" name="id-import" class="id-import" id="id-import"
                                                 value="{{ $item->id }}">
                                             <td
-                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0 wu=">
                                                 <a href="{{ route('imports.edit', $item->id) }}">
                                                     {{ $item->import_code }}
                                                 </a>
@@ -147,7 +147,7 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 note-text">
                                                 {{ $item->note }}
                                             </td>
                                             <td

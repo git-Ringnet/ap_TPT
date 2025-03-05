@@ -151,7 +151,7 @@
                                                 @endif
                                             </td>
                                             <td
-                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0 max-width180">
+                                                class="text-13-black border-right border-bottom border-top-0 border-right-0 py-0 max-width180 note-text">
                                                 {{ $item->note }}
                                             </td>
                                             <td

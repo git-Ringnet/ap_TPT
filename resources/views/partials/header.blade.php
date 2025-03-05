@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
     <!-- Việt css -->
     <link rel="stylesheet" href="{{ asset('dist/css/css.css') }}">
+    <!-- css custom note -->
+    <link rel="stylesheet" href="{{ asset('dist/css/custom.css') }}">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- jQuery -->

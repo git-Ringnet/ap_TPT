@@ -244,7 +244,7 @@
                                                 @endif
                                             </td>
                                             <td
-                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0">
+                                                class="text-13-black border border-left-0 border-bottom border-top-0 border-right-0 py-0 note-text">
                                                 {{ $item->notes }}
                                             </td>
                                             <td class="position-absolute m-0 p-0 bg-hover-icon icon-center">
